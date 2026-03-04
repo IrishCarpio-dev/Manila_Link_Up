@@ -1,1 +1,31 @@
-/build
+# --- Android Studio & Java ---
+.gradle/
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+local.properties
+*.iml
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# --- Secrets (Firebase) ---
+# IMPORTANT: Keep your keys off GitHub!
+google-services.json
+
+# --- Mac Specific ---
+.DS_Store
+
+# --- Windows Specific ---
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# --- Logs & Temp ---
+*.log
+*.temp
+*.tmp
