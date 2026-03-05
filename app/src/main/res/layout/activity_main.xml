@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -18,7 +19,7 @@
             android:layout_width="125dp"
             android:layout_height="125dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/logo" />
+            tools:src="@drawable/logo" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -26,13 +27,13 @@
             android:layout_gravity="center"
             android:layout_margin="3dp"
             android:fontFamily="sans-serif-black"
-            android:text="Manila LinkUp"
+            tools:text="Manila LinkUp"
             android:textSize="30sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your City. Your Career. Connected."
+            tools:text="Your City. Your Career. Connected."
             android:textSize="15sp" />
 
     </LinearLayout>
