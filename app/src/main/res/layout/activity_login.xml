@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/design_default_color_background"
@@ -34,8 +33,8 @@
             android:layout_below="@id/image_view_logo"
             android:fontFamily="sans-serif-black"
             android:gravity="center"
-            tools:text="Login Now"
-            tools:textSize="30dp" />
+            android:text="Login Now"
+            android:textSize="30dp" />
 
         <TextView
             android:id="@+id/text_view_backInLinkUp"
@@ -44,7 +43,7 @@
             android:layout_below="@id/text_view_login"
             android:fontFamily="sans-serif"
             android:gravity="center"
-            tools:text="Back in the LinkUp. Let's get to work." />
+            android:text="Back in the LinkUp. Let's get to work." />
 
         <TextView
             android:id="@+id/text_view_email"
@@ -54,7 +53,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="55dp"
             android:fontFamily="sans-serif-black"
-            tools:text="Email"
+            android:text="Email"
             android:textSize="16sp" />
 
 
@@ -67,7 +66,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="30dp"
-            tools:hint="Email Address"
+            android:hint="Email Address"
             app:boxBackgroundColor="#F5F5F5"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
@@ -90,8 +89,8 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="25dp"
             android:fontFamily="sans-serif-black"
-            tools:text="Password"
-            tools:textSize="16sp" />
+            android:text="Password"
+            android:textSize="16sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout_password"
@@ -102,7 +101,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="30dp"
-            tools:hint="Enter Password"
+            android:hint="Enter Password"
             app:boxBackgroundColor="#F5F5F5"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
@@ -126,7 +125,7 @@
             android:layout_marginStart="40dp"
             android:buttonTint="#0D47A1"
             android:fontFamily="sans-serif-medium"
-            tools:text="Remember Me"
+            android:text="Remember Me"
             android:textSize="13sp" />
 
         <TextView
@@ -138,7 +137,7 @@
             android:layout_marginTop="13dp"
             android:layout_toEndOf="@id/check_box_remember_me"
             android:fontFamily="sans-serif-medium"
-            tools:text="Forget Password"
+            android:text="Forget Password"
             android:textColor="#0D47A1"
             android:textSize="15sp" />
 
@@ -151,7 +150,7 @@
             android:layout_marginTop="50dp"
             android:layout_marginEnd="100dp"
             android:layout_marginBottom="8dp"
-            tools:text="Login"
+            android:text="Login"
             app:backgroundTint="#0D47A1"
             app:cornerRadius="12dp" />
 
@@ -162,7 +161,7 @@
             android:layout_below="@id/material_button_login_now_2"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
-            tools:text="Or" />
+            android:text="Or" />
 
         <ImageView
             android:id="@+id/image_view_login_google"
@@ -189,7 +188,7 @@
             android:layout_marginStart="110dp"
             android:layout_marginTop="30dp"
             android:fontFamily="sans-serif-medium"
-            tools:text="Don't Have an Account?" />
+            android:text="Don't Have an Account?" />
 
         <TextView
             android:id="@+id/text_view_login_sign_up"
@@ -200,7 +199,7 @@
             android:layout_marginTop="30dp"
             android:layout_toEndOf="@id/text_view_login_sign_up_account"
             android:fontFamily="sans-serif-medium"
-            tools:text="Sign Up"
+            android:text="Sign Up"
             android:textColor="#0D47A1" />
     </RelativeLayout>
 
