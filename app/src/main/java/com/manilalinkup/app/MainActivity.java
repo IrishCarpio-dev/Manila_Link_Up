@@ -33,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        signupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent signUpActivityintent = new Intent(MainActivity.this, SignUpActivity.class );
+                startActivity(signUpActivityintent);
+            }
+        });
+
 
     }
 }

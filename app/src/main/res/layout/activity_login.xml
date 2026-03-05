@@ -12,9 +12,9 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/material_toolbar"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="wrap_content"
             android:background="@color/design_default_color_background"
             app:titleTextColor="@color/white" />
 
@@ -22,7 +22,7 @@
             android:id="@+id/image_view_logo"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_below="@id/material_toolbar"
+            android:layout_below="@id/toolbar"
             android:layout_marginStart="20dp"
             android:src="@drawable/logo" />
 
