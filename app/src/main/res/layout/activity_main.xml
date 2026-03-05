@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -19,7 +18,7 @@
             android:layout_width="125dp"
             android:layout_height="125dp"
             android:scaleType="centerCrop"
-            tools:src="@drawable/logo" />
+            android:src="@drawable/logo" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,13 +26,13 @@
             android:layout_gravity="center"
             android:layout_margin="3dp"
             android:fontFamily="sans-serif-black"
-            tools:text="Manila LinkUp"
+            android:text="Manila LinkUp"
             android:textSize="30sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Your City. Your Career. Connected."
+            android:text="Your City. Your Career. Connected."
             android:textSize="15sp" />
 
     </LinearLayout>
@@ -45,7 +44,7 @@
         android:layout_marginStart="100dp"
         android:layout_marginEnd="100dp"
         android:layout_marginBottom="8dp"
-        tools:text="Login"
+        android:text="Login"
         app:backgroundTint="#0D47A1"
         app:cornerRadius="12dp" />
 
@@ -56,7 +55,7 @@
         android:layout_marginStart="100dp"
         android:layout_marginEnd="100dp"
         android:layout_marginBottom="100dp"
-        tools:text="Sign up"
+        android:text="Sign up"
         app:backgroundTint="@color/material_dynamic_neutral60"
         app:cornerRadius="12dp" />
 
