@@ -12,10 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ManilaLinkUp">
         <activity
+            android:name=".OTPVerificationActivity"
+            android:label="OTP Verification"
+            android:parentActivityName=".SignUpActivity"
+            android:exported="false" />
+        <activity
             android:name=".GetStarted"
             android:exported="false"
             android:label="Let's Get Started"
-            android:parentActivityName=".SignUpActivity"/>
+            android:parentActivityName=".SignUpActivity" />
         <activity
             android:name=".SignUpActivity"
             android:exported="false"

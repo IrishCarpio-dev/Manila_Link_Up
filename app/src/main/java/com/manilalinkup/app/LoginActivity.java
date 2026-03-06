@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                     passwordInput.requestFocus();
                     isValid = false;
                 } else{
-                    Intent loginNowActivityIntent = new Intent(LoginActivity.this, GetStarted.class);
+                    Intent loginNowActivityIntent = new Intent(LoginActivity.this, OTPVerificationActivity.class);
                     startActivity(loginNowActivityIntent);
                     Toast.makeText(LoginActivity.this,"Logging you in. One moment... in time ;)", Toast.LENGTH_LONG).show();
                 }
