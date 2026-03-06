@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/design_default_color_background"
     android:fillViewport="true"
     android:fitsSystemWindows="true">
@@ -175,21 +175,21 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="30dp"
             android:hint="Enter your Mobile Number"
-            app:prefixText="+63"
-            app:prefixTextColor="@color/black"
             app:boxBackgroundColor="#F5F5F5"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
             app:boxCornerRadiusTopStart="12dp"
             app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp">
+            app:boxStrokeWidthFocused="0dp"
+            app:prefixText="+63"
+            app:prefixTextColor="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="10"
-                android:inputType="phone" />
+                android:inputType="phone"
+                android:maxLength="10" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -253,7 +253,6 @@
             android:text="Send OTP"
             app:backgroundTint="#0D47A1"
             app:cornerRadius="12dp" />
-
 
 
     </RelativeLayout>

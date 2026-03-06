@@ -31,5 +31,13 @@ public class GetStarted extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        jobSeekerCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent jobSeekerActivityIntent = new Intent(GetStarted.this, SignUpActivity.class);
+                startActivity(jobSeekerActivityIntent);
+            }
+        });
+
     }
 }
