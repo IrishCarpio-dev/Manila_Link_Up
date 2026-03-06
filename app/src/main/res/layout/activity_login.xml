@@ -33,7 +33,7 @@
             android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:text="Login Now"
-            android:textSize="30dp" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/text_view_backInLinkUp"
@@ -75,6 +75,7 @@
             app:boxStrokeWidthFocused="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_email_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress" />
@@ -111,6 +112,7 @@
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_password_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword" />
