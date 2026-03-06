@@ -33,7 +33,7 @@
             android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:text="Sign Up"
-            android:textSize="30dp" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/text_view_backInLinkUp"
