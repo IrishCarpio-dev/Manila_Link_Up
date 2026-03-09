@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -25,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText passwordInput;
     TextInputLayout emailLayout;
     TextInputLayout passwordLayout;
+    TextView createPassword;
 
 
     @SuppressLint("MissingInflatedId")
@@ -38,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.text_input_password_input);
         emailLayout = findViewById(R.id.text_input_layout_email_address);
         passwordLayout = findViewById(R.id.text_input_layout_password);
+        createPassword = findViewById(R.id.text_view_forget_password);
 
 
         toolbar = findViewById(R.id.toolbar);
@@ -75,6 +78,14 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this,"Logging you in. One moment... in time ;)", Toast.LENGTH_LONG).show();
                 }
 
+            }
+        });
+
+        createPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent createPasswordActivityIntent = new Intent(LoginActivity.this, OTPVerificationActivity.class);
+                startActivity(createPasswordActivityIntent);
             }
         });
 
