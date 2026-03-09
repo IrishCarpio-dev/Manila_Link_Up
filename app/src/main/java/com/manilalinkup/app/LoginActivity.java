@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else{
                     Intent loginNowActivityIntent = new Intent(LoginActivity.this, OTPVerificationActivity.class);
                     startActivity(loginNowActivityIntent);
-                    Toast.makeText(LoginActivity.this,"Logging you in. One moment... in time ;)", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this,"Verification Code sent.", Toast.LENGTH_SHORT).show();
                 }
 
             }
