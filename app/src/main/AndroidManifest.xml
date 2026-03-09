@@ -12,10 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ManilaLinkUp">
         <activity
+            android:name=".CreateProfile"
+            android:exported="false" />
+        <activity
             android:name=".EmployerSIgnUp"
             android:exported="false"
             android:label="Employer Sign Up"
-            android:parentActivityName=".GetStarted"/>
+            android:parentActivityName=".GetStarted" />
         <activity
             android:name=".OTPVerificationActivity"
             android:exported="false"
