@@ -1,10 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileJobSeekerActivity">
+    android:background="@color/design_default_color_background"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/design_default_color_background" />
+
+        <ImageView
+            android:id="@+id/image_view_seeker_profile"
+            android:layout_width="98dp"
+            android:layout_height="98dp"
+            android:layout_below="@id/toolbar"
+            android:layout_marginStart="158dp"
+            android:src="@drawable/insert_photo" />
+
+        <TextView
+            android:id="@+id/text_view_upload_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image_view_seeker_profile"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="34dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Upload Profile Picture"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/text_view_upload_clearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_view_upload_profile"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif-black"
+            android:text="Upload Clearance"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/text_view_clearance_instruction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_view_upload_clearance"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="14dp"
+            android:fontFamily="sans-serif"
+            android:text="(Ex. Nbi, Police,Barangay Clearance)"
+            android:textSize="12sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/material_button_upload_clearance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_view_upload_profile"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="55dp"
+            android:layout_marginBottom="14dp"
+            android:layout_toEndOf="@id/text_view_clearance_instruction"
+            android:text="Upload"
+            android:fontFamily="sans-serif-black"
+            app:backgroundTint="#0D47A1"
+            app:cornerRadius="12dp"
+
+            app:icon="@drawable/arrowup2"
+            app:iconGravity="textStart"
+            app:iconSize="20dp"
+            app:iconTint="#FFFFFF"/>
+
+
+        <TextView
+            android:id="@+id/text_view_upload_valid_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_view_clearance_instruction"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif-black"
+            android:text="Upload Valid ID"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/text_view_validid_instruction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_view_upload_valid_id"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="sans-serif"
+            android:text="(Ex. Driver's License, Passport,"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/text_view_validid_instruction_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_view_validid_instruction"
+            android:layout_marginStart="27dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="sans-serif"
+            android:text="(UMID, Postal ID, PhilHealth ID)"
+            android:textSize="12sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/material_button_upload_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/material_button_upload_clearance"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="55dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toEndOf="@id/text_view_clearance_instruction"
+            android:text="Upload"
+            android:fontFamily="sans-serif-black"
+            app:backgroundTint="#0D47A1"
+            app:cornerRadius="12dp"
+
+            app:icon="@drawable/arrowup2"
+            app:iconGravity="textStart"
+            app:iconSize="20dp"
+            app:iconTint="#FFFFFF"/>
+
+
+    </RelativeLayout>
+
+
+</ScrollView>
