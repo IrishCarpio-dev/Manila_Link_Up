@@ -13,6 +13,8 @@
         android:theme="@style/Theme.ManilaLinkUp">
         <activity
             android:name=".CreateProfile"
+            android:label="Edit Profile"
+            android:parentActivityName=".OTPVerificationActivity"
             android:exported="false" />
         <activity
             android:name=".EmployerSIgnUp"

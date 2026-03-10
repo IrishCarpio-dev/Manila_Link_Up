@@ -33,7 +33,7 @@
             android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:text="Sign Up"
-            android:textSize="30sp" />
+            android:textSize="21sp" />
 
         <TextView
             android:id="@+id/text_view_backInLinkUp"
@@ -42,8 +42,8 @@
             android:layout_below="@id/text_view_login"
             android:fontFamily="sans-serif"
             android:gravity="center"
-            android:textSize="15sp"
-            android:text="Find the skill you need where you live." />
+            android:text="Find the skill you need where you live."
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/text_view_full_name"
@@ -54,7 +54,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="sans-serif-black"
             android:text="Full Name/Business"
-            android:textSize="16sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/text_view_below_full_name"
@@ -65,7 +65,7 @@
             android:layout_marginTop="5dp"
             android:fontFamily="sans-serif"
             android:text="For your name, lastname, firstname"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -84,7 +84,10 @@
             app:boxCornerRadiusTopEnd="12dp"
             app:boxCornerRadiusTopStart="12dp"
             app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp">
+            app:boxStrokeWidthFocused="0dp"
+            app:expandedHintTextAppearance="@style/ExpandedHintSize"
+            app:hintEnabled="true"
+            app:hintTextAppearance="@style/HintTextSize">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"

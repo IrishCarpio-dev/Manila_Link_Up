@@ -1,10 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateProfile">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/design_default_color_background"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/design_default_color_background" />
+
+        <ProgressBar
+            android:id="@+id/profile_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_below="@id/toolbar"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:max="100"
+            android:progress="10"
+            android:progressBackgroundTint="@color/material_dynamic_neutral80" />
+
+        <ImageView
+            android:id="@+id/image_view_upload_profile"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_below="@+id/profile_progress_bar"
+            android:layout_marginStart="150dp"
+            android:src="@drawable/insert_photo" />
+
+        <TextView
+            android:id="@+id/text_view_upload_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image_view_upload_profile"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Upload Profile Photo"
+            android:textSize="16sp"/>
+
+
+
+
+    </RelativeLayout>
+
+
+</ScrollView>

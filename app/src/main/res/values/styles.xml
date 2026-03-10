@@ -1,0 +1,9 @@
+<resources>
+    <style name="HintTextSize" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="ExpandedHintSize" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textSize">14sp</item>
+    </style>
+</resources>
