@@ -13,7 +13,9 @@
         android:theme="@style/Theme.ManilaLinkUp">
         <activity
             android:name=".ProfileJobSeekerActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Edit Profile for Job Seeker"
+            android:parentActivityName=".OTPVerificationActivity"/>
         <activity
             android:name=".EmployerSIgnUp"
             android:exported="false"

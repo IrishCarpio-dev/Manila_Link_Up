@@ -1,8 +1,10 @@
 package com.manilalinkup.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
@@ -12,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 
 public class OTPVerificationActivity extends AppCompatActivity {
 
@@ -20,6 +23,7 @@ public class OTPVerificationActivity extends AppCompatActivity {
     EditText b2;
     EditText b3;
     EditText b4;
+    MaterialButton verify;
 
 
     @Override
@@ -31,6 +35,7 @@ public class OTPVerificationActivity extends AppCompatActivity {
         b2= findViewById(R.id.edit_text_otp_box2);
         b3 = findViewById(R.id.edit_text_otp_box3);
         b4 = findViewById(R.id.edit_text_otp_box4);
+        verify = findViewById(R.id.material_button_verify);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -55,6 +60,14 @@ public class OTPVerificationActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void afterTextChanged(Editable s) {}
+        });
+
+        verify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent VerifyOTPActivityIntent = new Intent(OTPVerificationActivity.this, ProfileJobSeekerActivity.class);
+                startActivity(VerifyOTPActivityIntent);
+            }
         });
     }
 }

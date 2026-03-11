@@ -123,6 +123,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"
+        android:id="@+id/material_button_verify"
         android:layout_height="64dp"
         android:layout_marginStart="100dp"
         android:layout_marginTop="40dp"
