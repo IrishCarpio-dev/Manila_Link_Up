@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/design_default_color_background"
     android:fillViewport="true"
-    android:padding="20dp">
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -54,7 +54,8 @@
             android:layout_marginTop="30dp"
             android:text="Upload Clearance"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginStart="25dp"/>
 
         <TextView
             android:id="@+id/uploadClearanceExtaxt"
@@ -62,7 +63,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/uploadClearancetext"
             android:text="(Ex. NBI, Police, \nBarangay Clearance)"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:layout_marginStart="25dp"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/uploadClearancebtn"
@@ -73,7 +75,8 @@
             android:text="Upload"
             android:textStyle="bold"
             app:backgroundTint="#0D47A1"
-            app:icon="@drawable/baseline_arrow_upward_24" />
+            app:icon="@drawable/baseline_arrow_upward_24"
+            android:layout_marginEnd="25dp"/>
 
         <!-- Upload ID -->
 
@@ -85,7 +88,8 @@
             android:layout_marginTop="30dp"
             android:text="Upload Valid ID"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginStart="25dp"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/uploadIDbtn"
@@ -96,7 +100,8 @@
             android:text="Upload"
             android:textStyle="bold"
             app:backgroundTint="#0D47A1"
-            app:icon="@drawable/baseline_arrow_upward_24" />
+            app:icon="@drawable/baseline_arrow_upward_24"
+            android:layout_marginEnd="25dp"/>
 
         <!-- Preferred Location -->
 
@@ -107,7 +112,8 @@
             android:layout_below="@id/uploadvalidIDtext"
             android:layout_marginTop="30dp"
             android:text="Preferred Location"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginStart="25dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/pref_location_input"
@@ -122,7 +128,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:focusable="false" />
+                android:focusable="false"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,7 +143,9 @@
             android:layout_below="@id/pref_location_input"
             android:layout_marginTop="20dp"
             android:text="Date of Birth"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_DOB"
@@ -150,7 +160,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:focusable="false" />
+                android:focusable="false"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -163,7 +175,9 @@
             android:layout_below="@id/text_input_DOB"
             android:layout_marginTop="20dp"
             android:text="Salary Type"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"/>
 
         <RadioGroup
             android:id="@+id/salaryTypeGroup"
@@ -176,31 +190,41 @@
                 android:id="@+id/radioHour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Per Hour" />
+                android:text="Per Hour"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"/>
 
             <RadioButton
                 android:id="@+id/radioDay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Per Day" />
+                android:text="Per Day"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"/>
 
             <RadioButton
                 android:id="@+id/radioWeek"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Per Week" />
+                android:text="Per Week"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"/>
 
             <RadioButton
                 android:id="@+id/radioMonth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Per Month" />
+                android:text="Per Month"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"/>
 
             <RadioButton
                 android:id="@+id/radioProject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Per Project" />
+                android:text="Per Project"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"/>
 
         </RadioGroup>
 
@@ -213,14 +237,18 @@
             android:layout_below="@id/salaryTypeGroup"
             android:layout_marginTop="15dp"
             android:text="Salary Range"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"/>
 
         <RadioGroup
             android:id="@+id/salaryRangeGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/salaryRangeTitle"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"/>
 
         <!-- Save Button -->
 
@@ -232,7 +260,10 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:text="Save"
-            app:backgroundTint="#0D47A1" />
+            app:backgroundTint="#0D47A1"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            />
 
     </RelativeLayout>
 
