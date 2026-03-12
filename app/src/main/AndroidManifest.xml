@@ -58,7 +58,7 @@
             android:name=".ProfessionalIdentity"
             android:label="Professional Identity"
             android:parentActivityName=".MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
 
         <!-- SMS Broadcast Receiver for OTP -->
         <receiver

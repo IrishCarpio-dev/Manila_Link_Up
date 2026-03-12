@@ -1,5 +1,7 @@
 package com.manilalinkup.app;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,12 +12,15 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 
 public class OTPVerificationActivity extends AppCompatActivity {
 
     MaterialToolbar toolbar;
     EditText b1, b2, b3, b4;
+    MaterialButton verifyButton;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +32,8 @@ public class OTPVerificationActivity extends AppCompatActivity {
         b3 = findViewById(R.id.edit_text_otp_box3);
         b4 = findViewById(R.id.edit_text_otp_box4);
 
+        verifyButton = findViewById(R.id.verifyButton);
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -36,16 +43,41 @@ public class OTPVerificationActivity extends AppCompatActivity {
         setupOtpBox(b2, b1, b3);
         setupOtpBox(b3, b2, b4);
         setupOtpBox(b4, b3, null);
+
+        /*
+        VERIFY BUTTON
+         */
+
+        verifyButton.setOnClickListener(v -> {
+
+            String otp =
+                    b1.getText().toString() +
+                            b2.getText().toString() +
+                            b3.getText().toString() +
+                            b4.getText().toString();
+
+            if(otp.length() == 4){
+
+                // OTP verified → go to Professional Identity page
+                Intent intent = new Intent(OTPVerificationActivity.this, ProfessionalIdentity.class);
+                startActivity(intent);
+
+                finish(); // prevent going back to OTP screen
+
+            }
+
+        });
     }
 
     private void setupOtpBox(EditText current, EditText previous, EditText next) {
 
         current.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void afterTextChanged(Editable s) {
 
                 if (s.length() == 1 && next != null) {
-                    next.requestFocus(); // move forward
+                    next.requestFocus();
                 }
 
             }
@@ -61,7 +93,7 @@ public class OTPVerificationActivity extends AppCompatActivity {
                     current.getText().toString().isEmpty() &&
                     previous != null) {
 
-                previous.requestFocus(); // move back
+                previous.requestFocus();
                 previous.setSelection(previous.getText().length());
                 return true;
             }
