@@ -26,39 +26,39 @@
         <!-- Other activities -->
         <activity
             android:name=".OTPVerificationActivity"
+            android:exported="false"
             android:label="OTP Verification"
-            android:parentActivityName=".SignUpActivity"
-            android:exported="false" />
+            android:parentActivityName=".SignUpActivity" />
 
         <activity
             android:name=".GetStarted"
+            android:exported="false"
             android:label="Let's Get Started"
-            android:parentActivityName=".SignUpActivity"
-            android:exported="false" />
+            android:parentActivityName=".SignUpActivity" />
 
         <activity
             android:name=".SignUpActivity"
+            android:exported="false"
             android:label="Sign Up"
-            android:parentActivityName=".MainActivity"
-            android:exported="false" />
+            android:parentActivityName=".MainActivity" />
 
         <activity
             android:name=".LoginActivity"
+            android:exported="false"
             android:label="Login to Manila LinkUp"
-            android:parentActivityName=".MainActivity"
-            android:exported="false" />
+            android:parentActivityName=".MainActivity" />
 
         <activity
             android:name=".EmployerSignUp"
+            android:exported="false"
             android:label="Employer Sign Up"
-            android:parentActivityName=".MainActivity"
-            android:exported="false"/>
+            android:parentActivityName=".MainActivity" />
 
         <activity
             android:name=".ProfessionalIdentity"
+            android:exported="false"
             android:label="Professional Identity"
-            android:parentActivityName=".MainActivity"
-            android:exported="false" />
+            android:parentActivityName=".MainActivity" />
 
     </application>
 
