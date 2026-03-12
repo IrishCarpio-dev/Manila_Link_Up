@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "10086820203",
+    "project_id": "manila-link-up",
+    "storage_bucket": "manila-link-up.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10086820203:android:75cf38a37e3ab88c96042e",
+        "android_client_info": {
+          "package_name": "com.manilalinkup.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWdnGPb2PWfJOiDgEjSMc5CVeilXE8yis"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

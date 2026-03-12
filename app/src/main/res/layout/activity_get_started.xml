@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+<<<<<<< Updated upstream
 
     android:background="@color/design_default_color_background"
     android:fitsSystemWindows="true">
@@ -159,5 +160,79 @@
         android:fontFamily="sans-serif-medium"
         android:text="Log in."
         android:textColor="#0D47A1" />
+=======
+    android:background="@android:color/white"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/material_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/design_default_color_background"
+        app:navigationIcon="@drawable/arrow_left_size"
+        app:titleTextColor="@color/white" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp">
+
+        <ImageView
+            android:id="@+id/image_view_logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:maxWidth="200dp"
+            android:maxHeight="140dp"
+            android:layout_marginBottom="0dp"
+            android:src="@drawable/magni" />
+
+        <TextView
+            android:id="@+id/text_view_all_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:fontFamily="sans-serif-black"
+            android:gravity="center"
+            android:text="You're all set!"
+            android:textColor="#000000"
+            android:textSize="26sp" />
+
+        <TextView
+            android:id="@+id/text_view_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Find your place in the city"
+            android:textColor="#666666"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/material_button_get_started"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="150dp"
+        android:minWidth="200dp"
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Get Started"
+        android:textSize="15sp"
+        app:backgroundTint="#0D47A1"
+        app:cornerRadius="12dp" />
+>>>>>>> Stashed changes
 
 </RelativeLayout>

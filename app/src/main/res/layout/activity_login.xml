@@ -19,11 +19,19 @@
 
         <ImageView
             android:id="@+id/image_view_logo"
+<<<<<<< Updated upstream
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_below="@id/toolbar"
             android:layout_marginStart="20dp"
             android:src="@drawable/logo" />
+=======
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/material_toolbar"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/magni" />
+>>>>>>> Stashed changes
 
         <TextView
             android:id="@+id/text_view_login"
@@ -49,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_view_backInLinkUp"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="35dp"
             android:layout_marginTop="55dp"
             android:fontFamily="sans-serif-black"
             android:text="Email"
@@ -86,7 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_input_layout_email_address"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="35dp"
             android:layout_marginTop="25dp"
             android:fontFamily="sans-serif-black"
             android:text="Password"

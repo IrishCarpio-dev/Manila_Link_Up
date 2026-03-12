@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "10086820203",
+    "project_id": "manila-link-up",
+    "storage_bucket": "manila-link-up.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10086820203:android:75cf38a37e3ab88c96042e",
+        "android_client_info": {
+          "package_name": "com.manilalinkup.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "10086820203-ndncjms46tc3t454da20bf6ivucje59n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.manilalinkup.app",
+            "certificate_hash": "493b7a35f3401ab257d88211a8a7fb55dbd4f4d6"
+          }
+        },
+        {
+          "client_id": "10086820203-1cuebo8juj35cm58armb6pnh1nc8tlse.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWdnGPb2PWfJOiDgEjSMc5CVeilXE8yis"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "10086820203-1cuebo8juj35cm58armb6pnh1nc8tlse.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
