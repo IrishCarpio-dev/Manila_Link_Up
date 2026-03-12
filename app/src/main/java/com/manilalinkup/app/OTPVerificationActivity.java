@@ -62,12 +62,5 @@ public class OTPVerificationActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-        verify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent VerifyOTPActivityIntent = new Intent(OTPVerificationActivity.this, ProfileJobSeekerActivity.class);
-                startActivity(VerifyOTPActivityIntent);
-            }
-        });
     }
 }
