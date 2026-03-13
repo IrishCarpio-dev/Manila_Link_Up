@@ -277,7 +277,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="sans-serif-medium"
             android:layout_centerHorizontal="true"
-            android:text="OTP will be sent to your mobile number" />
+            android:text="An verification code will be sent through your email" />
 
 
         <com.google.android.material.button.MaterialButton
