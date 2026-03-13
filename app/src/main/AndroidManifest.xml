@@ -15,9 +15,12 @@
         android:theme="@style/Theme.ManilaLinkUp">
         <activity
             android:name=".AllSetActivity"
+            android:parentActivityName=".EditSeekerProfileActivity"
             android:exported="false" />
         <activity
             android:name=".EditSeekerProfileActivity"
+            android:label="Profile Seeker"
+            android:parentActivityName=".LoginActivity"
             android:exported="false" />
         <activity
             android:name=".EmployerSIgnUp"

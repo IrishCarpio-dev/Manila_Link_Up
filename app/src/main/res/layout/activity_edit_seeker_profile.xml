@@ -61,14 +61,14 @@
             android:id="@+id/btnUploadClearance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
             android:layout_alignTop="@id/lblClearance"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="30dp"
             android:backgroundTint="#283593"
             android:drawableStart="@android:drawable/stat_sys_upload"
+            android:text="Upload"
             app:cornerRadius="12dp"
-            app:icon="@drawable/arrowup2"
-            android:text="Upload" />
+            app:icon="@drawable/arrowup2" />
 
         <TextView
             android:id="@+id/lblID"
@@ -99,11 +99,11 @@
             android:layout_alignTop="@id/lblID"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="30dp"
-            app:cornerRadius="12dp"
-            app:icon="@drawable/arrowup2"
             android:backgroundTint="#283593"
             android:drawableStart="@android:drawable/stat_sys_upload"
-            android:text="Upload" />
+            android:text="Upload"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/arrowup2" />
 
         <TextView
             android:id="@+id/lblLocation"
@@ -124,9 +124,9 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="30dp"
+            android:background="#F0F0F0"
             android:hint="Enter your location"
             android:importantForAccessibility="yes"
-            android:background="#F0F0F0"
             android:paddingLeft="12dp" />
 
         <TextView
@@ -149,7 +149,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="30dp"
             android:background="#F0F0F0"
-
             android:hint="MM / DD /YR"
             android:paddingLeft="12dp" />
 
@@ -167,24 +166,25 @@
         <RadioGroup
             android:id="@+id/rgSalaryType"
             android:layout_width="match_parent"
-            android:layout_marginEnd="30dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblSalary"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="4dp"
-            android:background="#F5F5F5"
-            android:padding="8dp">
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="30dp"
+            android:background="#F9F9F9"
+            android:padding="12dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Choose salary type"
-                android:textSize="15sp" />
+                android:layout_marginBottom="4dp"
+                android:text="Choose salary type" />
 
             <RadioButton
                 android:id="@+id/rbHour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="Per Hour" />
 
             <RadioButton
@@ -200,70 +200,39 @@
                 android:text="Per Month" />
         </RadioGroup>
 
-        <RadioGroup
-            android:id="@+id/rgSalaryRange"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/lblRange"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/rgSalaryType"
             android:layout_marginStart="30dp"
             android:layout_marginTop="16dp"
+            android:text="Salary Range"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSalaryRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lblRange"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="30dp"
-            android:layout_marginBottom="24dp"
-            android:background="#F5F5F5"
-            android:padding="8dp">
+            android:background="#F9F9F9"
+            android:minHeight="100dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Salary Range"
-                android:textSize="15sp" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Below 50/Hour" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="50 - 100/Hour" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="100 - 150/Hour" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="150 - 200/Hour" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="200 - 300/Hour" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="300 - 500/Hour" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="500+/Hour" />
-        </RadioGroup>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/material_button_verify"
+            android:id="@+id/material_button_save"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:layout_below="@id/rgSalaryRange"
+            android:layout_below="@id/rvSalaryRange"
             android:layout_marginStart="100dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="100dp"
             android:layout_marginBottom="8dp"
-            android:text="Verify"
+            android:text="Save"
             android:textSize="20sp"
             app:backgroundTint="#0D47A1"
             app:cornerRadius="12dp" />

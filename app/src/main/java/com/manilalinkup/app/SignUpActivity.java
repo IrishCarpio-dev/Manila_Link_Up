@@ -83,14 +83,24 @@ public class SignUpActivity extends AppCompatActivity {
                 mAuth.createUserWithEmailAndPassword(emailAddressInput, createPasswordInput)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                // Send verification link
+                                // 1. Send verification link
                                 mAuth.getCurrentUser().sendEmailVerification();
 
-                                // CALL YOUR RETROFIT METHOD HERE (to save to Laravel/Firebase DB)
-                                // sendProfileToLaravel(mAuth.getCurrentUser().getUid(), fName, lName, email, phone);
+                                // 2. Send profile to Laravel immediately so the DB record exists
+                                sendProfileToLaravel(
+                                        mAuth.getCurrentUser().getUid(),
+                                        firstnameInput,
+                                        lastnameInput,
+                                        emailAddressInput,
+                                        mobileNumberInput
+                                );
 
-                                Toast.makeText(SignUpActivity.this, "Check your email!", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(SignUpActivity.this, OTPVerificationActivity.class));
+                                // 3. Inform user and go to Login
+                                Toast.makeText(SignUpActivity.this, "Registration successful! Please verify your email before logging in.", Toast.LENGTH_LONG).show();
+
+                                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish(); // Close SignUpActivity so they can't go back
                             } else {
                                 Toast.makeText(SignUpActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             }
@@ -108,8 +118,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         ApiService apiService = retrofit.create(ApiService.class);
 
-        // Matching your SeekerRequest constructor with your specific variable names
-        // For fields not in your UI yet (Address, Birthdate, Salary), I used placeholders
         SeekerRequest request = new SeekerRequest(
                 uid,
                 firstnameInput,
