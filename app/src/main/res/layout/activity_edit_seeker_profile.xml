@@ -221,13 +221,25 @@
             android:layout_marginEnd="30dp"
             android:background="#F9F9F9"
             android:minHeight="100dp" />
+        
+        <EditText
+            android:id="@+id/etCustomSalary"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@id/rvSalaryRange"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:hint="(Want something specific? Type you salary here!)"
+            android:background="#F9F9F9"
+            android:inputType="number"
+            android:textSize="14sp"/>
 
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/material_button_save"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:layout_below="@id/rvSalaryRange"
+            android:layout_below="@id/etCustomSalary"
             android:layout_marginStart="100dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="100dp"
