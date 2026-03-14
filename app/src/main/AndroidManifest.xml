@@ -15,7 +15,8 @@
         android:theme="@style/Theme.ManilaLinkUp">
         <activity
             android:name=".SeekerJobPostActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Employer Name"/>
         <activity
             android:name=".AllSetActivity"
             android:exported="false"
