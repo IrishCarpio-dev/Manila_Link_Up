@@ -33,7 +33,7 @@
         android:layout_alignParentBottom="true"
         android:background="#1B3E9C"
         app:itemIconTint="@color/white"
-        app:labelVisibilityMode="unlabeled"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu_icons" />
 
     <LinearLayout
