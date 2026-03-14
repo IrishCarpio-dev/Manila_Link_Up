@@ -14,14 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ManilaLinkUp">
         <activity
-            android:name=".AllSetActivity"
-            android:parentActivityName=".EditSeekerProfileActivity"
+            android:name=".SeekerJobPostActivity"
             android:exported="false" />
         <activity
+            android:name=".AllSetActivity"
+            android:exported="false"
+            android:parentActivityName=".EditSeekerProfileActivity" />
+        <activity
             android:name=".EditSeekerProfileActivity"
+            android:exported="false"
             android:label="Profile Seeker"
-            android:parentActivityName=".LoginActivity"
-            android:exported="false" />
+            android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".EmployerSIgnUp"
             android:exported="false"
