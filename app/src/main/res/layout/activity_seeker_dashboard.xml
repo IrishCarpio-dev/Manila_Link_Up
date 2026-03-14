@@ -1,10 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SeekerDashboardActivity">
+    android:background="@color/design_default_color_background"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#1B3E9C"
+        app:itemIconTint="@color/bottom_nav_icon_colors"
+        app:itemTextColor="@color/bottom_nav_icon_colors"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu_icons" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_dashboard_top_seeker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#1B3E9C"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/textview_greeting_seeker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Good morning, "
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Find your next opportunity"
+                android:padding="10dp"
+                android:drawablePadding="10dp"
+                android:drawableStart="@drawable/search_icon"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/search_bar_background" />
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>

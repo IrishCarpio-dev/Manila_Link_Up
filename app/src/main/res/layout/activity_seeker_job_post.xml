@@ -18,6 +18,7 @@
             android:id="@+id/text_view_employer_name_job_post"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@id/toolbar"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:textColor="@color/white"
@@ -29,10 +30,11 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="#1B3E9C"
-        app:itemIconTint="@color/white"
+        app:itemIconTint="@color/bottom_nav_icon_colors"
+        app:itemTextColor="@color/bottom_nav_icon_colors"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu_icons" />
 
@@ -55,7 +57,7 @@
             android:backgroundTint="#EEEEEE"
             android:text="Save"
             android:textAllCaps="false"
-            android:textColor="@color/black"
+            android:textColor="#212121"
             app:cornerRadius="8dp"
             app:elevation="8dp" />
 
@@ -149,6 +151,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-black"
                         android:textSize="18sp"
+                        android:textColor="#212121"
                         tools:text="Employer Job Title" />
 
                     <TextView
@@ -156,8 +159,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/text_view_employer_job_title_placeholder"
-                        android:fontFamily="sans-serif-light"
+                        android:fontFamily="sans-serif"
                         android:textSize="12sp"
+                        android:textColor="#616161"
                         tools:text="Employer Name" />
 
                     <RelativeLayout
@@ -184,6 +188,7 @@
                             android:layout_toEndOf="@id/location_logo"
                             android:fontFamily="sans-serif"
                             android:textSize="14sp"
+                            android:textColor="#616161"
                             tools:text="Binondo, Manila" />
 
                         <ImageView
@@ -201,6 +206,7 @@
                             android:layout_below="@id/text_view_location_placeholder"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="4dp"
+                            android:textColor="#616161"
                             android:layout_toEndOf="@id/money_logo"
                             android:fontFamily="sans-serif"
                             android:textSize="14sp"
@@ -224,6 +230,7 @@
                             android:layout_toEndOf="@id/calendar_logo"
                             android:fontFamily="sans-serif"
                             android:textSize="14sp"
+                            android:textColor="#616161"
                             tools:text="Apr. 4-8, 2026" />
 
                     </RelativeLayout>
@@ -241,6 +248,7 @@
             <TextView
                 android:id="@+id/text_view_job_description_placeholder"
                 android:layout_width="match_parent"
+                android:textColor="#616161"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/card_view_employer_info"
                 android:layout_margin="16dp"
