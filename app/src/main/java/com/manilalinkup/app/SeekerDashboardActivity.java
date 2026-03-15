@@ -7,14 +7,66 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
+
+import java.util.List;
 
 public class SeekerDashboardActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerViewJobPost;
+    private JobPostDashboardAdapter adapterJobPost;
+    private List<JobPostDashboardModel> jobListJobCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_seeker_dashboard);
+
+        recyclerViewJobPost = findViewById(R.id.recycler_view_job_posts_dashboard);
+        recyclerViewJobPost.setLayoutManager(new LinearLayoutManager(this));
+
+        jobListJobCard = new ArrayList<>();
+
+        mockData();
+
+        adapterJobPost = new JobPostDashboardAdapter(jobListJobCard);
+        recyclerViewJobPost.setAdapter(adapterJobPost);
+
+    }
+
+    private void mockData() {
+        jobListJobCard.add(new JobPostDashboardModel(
+                "Events/Catering Helper",
+                "Eng Bee Tin",
+                "Binondo, Manila",
+                "March 30, 2026",
+                R.drawable.chipsstarters,
+                "3 days ago"
+        ));
+
+        jobListJobCard.add(new JobPostDashboardModel(
+                "Cafe Barista",
+                "Don Kopi",
+                "Malate, Manila",
+                "Full Time",
+                R.drawable.chipsstarters,
+                "7 days ago"
+        ));
+
+        jobListJobCard.add(new JobPostDashboardModel(
+                "Store Assistant",
+                "Quick Smart Express",
+                "Quiapo, Manila",
+                "M | W | F",
+                R.drawable.chipsstarters,
+                "10 days ago"
+        ));
+        if (adapterJobPost != null) {
+            adapterJobPost.notifyDataSetChanged();
+        }
 
     }
 }
