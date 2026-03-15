@@ -34,7 +34,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
             android:text="Upload Profile Photo"
-            android:textColor="@android:color/black" />
+            android:textColor="#212121" />
 
         <TextView
             android:id="@+id/lblClearance"
@@ -44,7 +44,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="32dp"
             android:text="Upload clearance"
-            android:textColor="@android:color/black"
+            android:textColor="#212121"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -78,7 +78,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="16dp"
             android:text="Upload Valid ID"
-            android:textColor="@android:color/black"
+            android:textColor="#212121"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -113,6 +113,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="24dp"
             android:text="Preferred Location"
+            android:textColor="#212121"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -137,6 +138,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="16dp"
             android:text="Date of Birth"
+            android:textColor="#212121"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -160,6 +162,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="16dp"
             android:text="Preferred Salary"
+            android:textColor="#212121"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -178,7 +181,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:text="Choose salary type" />
+                android:text="Choose salary type"
+                android:textColor="#616161" />
 
             <RadioButton
                 android:id="@+id/rbHour"
@@ -208,6 +212,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="16dp"
             android:text="Salary Range"
+            android:textColor="#212121"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -220,8 +225,9 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="30dp"
             android:background="#F9F9F9"
-            android:minHeight="100dp" />
-        
+            android:minHeight="100dp"
+            android:textColor="#212121" />
+
         <EditText
             android:id="@+id/etCustomSalary"
             android:layout_width="match_parent"
@@ -229,10 +235,10 @@
             android:layout_below="@id/rvSalaryRange"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            android:hint="(Want something specific? Type you salary here!)"
             android:background="#F9F9F9"
+            android:hint="(Want something specific? Type you salary here!)"
             android:inputType="number"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
 
         <com.google.android.material.button.MaterialButton

@@ -107,7 +107,8 @@
                         android:layout_height="50dp"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentBottom="true"
-                        app:cardCornerRadius="0dp"
+                        app:cardCornerRadius="25dp"
+                        app:cardPreventCornerOverlap="false"
                         app:cardElevation="8dp">
 
                         <ImageView
@@ -125,7 +126,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
                         android:contentDescription="Report"
-                        android:scaleType="centerCrop"
+                        android:scaleType="centerInside"
                         android:src="@drawable/report_caution_logo" />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
