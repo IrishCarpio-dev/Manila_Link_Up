@@ -33,6 +33,7 @@
             android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:text="Login Now"
+            android:textColor="#212121"
             android:textSize="30sp" />
 
         <TextView
@@ -42,7 +43,8 @@
             android:layout_below="@id/text_view_login"
             android:fontFamily="sans-serif"
             android:gravity="center"
-            android:text="Back in the LinkUp. Let's get to work." />
+            android:text="Back in the LinkUp. Let's get to work."
+            android:textColor="#616161" />
 
         <TextView
             android:id="@+id/text_view_email"
@@ -53,6 +55,7 @@
             android:layout_marginTop="55dp"
             android:fontFamily="sans-serif-black"
             android:text="Email"
+            android:textColor="#212121"
             android:textSize="16sp" />
 
 
@@ -90,6 +93,7 @@
             android:layout_marginTop="25dp"
             android:fontFamily="sans-serif-black"
             android:text="Password"
+            android:textColor="#212121"
             android:textSize="16sp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -127,6 +131,7 @@
             android:checked="true"
             android:fontFamily="sans-serif-medium"
             android:text="Remember Me"
+            android:textColor="#212121"
             android:textSize="13sp"
             app:buttonTint="#0D47A1" />
 
@@ -190,7 +195,8 @@
             android:layout_marginStart="110dp"
             android:layout_marginTop="30dp"
             android:fontFamily="sans-serif-medium"
-            android:text="Don't Have an Account?" />
+            android:text="Don't Have an Account?"
+            android:textColor="#212121" />
 
         <TextView
             android:id="@+id/text_view_login_sign_up"

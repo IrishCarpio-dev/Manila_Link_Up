@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,6 +13,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ManilaLinkUp">
+        <activity
+            android:name=".SeekerDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SeekerJobPostActivity"
+            android:exported="false"
+            android:label="Employer Name" />
+        <activity
+            android:name=".AllSetActivity"
+            android:exported="false"
+            android:parentActivityName=".EditSeekerProfileActivity" />
+        <activity
+            android:name=".EditSeekerProfileActivity"
+            android:exported="false"
+            android:label="Profile Seeker"
+            android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".EmployerSIgnUp"
             android:exported="false"

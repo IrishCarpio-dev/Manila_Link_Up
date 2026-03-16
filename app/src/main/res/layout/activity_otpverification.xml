@@ -33,7 +33,7 @@
         android:layout_marginEnd="32dp"
         android:fontFamily="sans-serif"
         android:gravity="center"
-        android:text="Please enter the verification code sent to your number."
+        android:text="Please enter the verification code sent to your email address."
         android:textSize="18sp" />
 
     <LinearLayout
