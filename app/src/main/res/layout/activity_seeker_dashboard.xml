@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#1B3E9C"
+        android:background="@color/white"
         app:itemIconTint="@color/bottom_nav_icon_colors"
         app:itemTextColor="@color/bottom_nav_icon_colors"
         app:labelVisibilityMode="labeled"
@@ -76,12 +76,13 @@
         android:fontFamily="sans-serif-medium"
         android:textColor="#212121"
         android:textSize="18sp"
-        tools:text="Recommendations" />
+        android:text="Recommendations" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_job_posts_dashboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation_view"
         android:layout_below="@id/text_view_recommendations"
         tools:listitem="@layout/item_job_post_card">
 

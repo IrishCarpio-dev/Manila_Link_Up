@@ -1,5 +1,6 @@
 package com.manilalinkup.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,11 +50,11 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
             }
         });
 
-        // 4. Set Click Listener (This matches the call you have)
+        // 4. Set Click Listener
         btnSave.setOnClickListener(v -> saveToFirebase());
+
     }
 
-    // --- NEW METHOD: This fixes the red "saveToFirebase()" error ---
     private void saveToFirebase() {
         // Determine the type (String)
         int selectedTypeId = rgSalaryType.getCheckedRadioButtonId();
@@ -81,11 +82,22 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
             return;
         }
 
-        // For now, let's toast the result to prove it works
-        String message = "Saving: Type=" + salaryType + " | Value=" + salaryValue;
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Profile Updated Successfully!", Toast.LENGTH_SHORT).show();
 
-        // TODO: Insert your Firebase DatabaseReference code here
+        // 2. Navigation Logic
+        // Intent(Current Screen Context, Destination Class)
+        Intent intent = new Intent(EditSeekerProfileActivity.this, SeekerDashboardActivity.class);
+
+        // 3. Optional: Clear the Activity Task
+        // This prevents the user from going back to the Edit Profile screen when they press the back button from the dashboard
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        startActivity(intent);
+
+        // 4. Close this activity
+        finish();
+
+        // TODO: Insert Firebase DatabaseReference code here
     }
 
     // --- Helper Methods for Data ---

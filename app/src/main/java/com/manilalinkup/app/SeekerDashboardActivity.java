@@ -52,7 +52,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 "Don Kopi",
                 "Malate, Manila",
                 "Full Time",
-                R.drawable.chipsstarters,
+                R.drawable.mockdata_engbeeten,
                 "7 days ago"
         ));
 
@@ -61,9 +61,19 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 "Quick Smart Express",
                 "Quiapo, Manila",
                 "M | W | F",
-                R.drawable.chipsstarters,
+                R.drawable.sarisaristore,
                 "10 days ago"
         ));
+
+        jobListJobCard.add(new JobPostDashboardModel(
+                "Artist Assistant",
+                "BINI Mika's Company",
+                "GMA, Manila",
+                "T | Th | F",
+                R.drawable.mikaemployer,
+                "1 day ago"
+        ));
+
         if (adapterJobPost != null) {
             adapterJobPost.notifyDataSetChanged();
         }
