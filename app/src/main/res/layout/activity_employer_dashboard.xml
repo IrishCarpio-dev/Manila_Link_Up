@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/design_default_color_background"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        app:itemIconTint="@color/bottom_nav_icon_colors"
+        app:itemTextColor="@color/bottom_nav_icon_colors"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_employer_icons" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_dashboard_top_employer"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        app:cardBackgroundColor="#1B3E9C">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="145dp"
+                android:layout_height="145dp"
+                android:layout_gravity="end|bottom"
+                android:alpha="0.25"
+                android:src="@drawable/bgheartadjustment" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="24dp">
+
+                <TextView
+                    android:id="@+id/textview_greeting_employer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Good morning, "
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/textview_greeting_name_employer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Employer Name"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_post_new_job"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/card_view_dashboard_top_employer"
+        android:layout_margin="11dp"
+        android:layout_centerInParent="true"
+        android:backgroundTint="#1A4A96"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="14dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/image_view_bag_icon"
+                android:layout_width="30dp"
+                android:layout_height="31dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="6dp"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/bag_icon" />
+
+            <TextView
+                android:id="@+id/text_view_new_job"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/image_view_bag_icon"
+                android:fontFamily="sans-serif-medium"
+                android:text="Post a New Job"
+                android:textColor="@color/white"
+                android:textSize="19dp" />
+
+            <TextView
+                android:id="@+id/text_view_new_job_quote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_view_new_job"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/image_view_bag_icon"
+                android:fontFamily="sans-serif"
+                android:text="Find your local employee today"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/text_view_employer_job_posts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/card_view_post_new_job"
+        android:layout_margin="8dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="My Job Posts"
+        android:textColor="#212121"
+        android:textSize="18sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recycler_view_employer_own_posts"
+        android:layout_above="@id/bottom_navigation_view"
+        android:layout_below="@id/text_view_employer_job_posts"
+        tools:listitem="@layout/item_employer_dashboard_job_post_card">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+</RelativeLayout>
