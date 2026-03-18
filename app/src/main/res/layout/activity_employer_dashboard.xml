@@ -66,8 +66,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/card_view_dashboard_top_employer"
-        android:layout_margin="11dp"
         android:layout_centerInParent="true"
+        android:layout_margin="11dp"
         android:backgroundTint="#1A4A96"
         app:cardCornerRadius="8dp"
         app:cardElevation="14dp">
@@ -82,8 +82,8 @@
                 android:id="@+id/image_view_bag_icon"
                 android:layout_width="30dp"
                 android:layout_height="31dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="6dp"
+                android:layout_marginTop="10dp"
                 android:scaleType="centerCrop"
                 tools:src="@drawable/bag_icon" />
 
@@ -126,9 +126,9 @@
         android:textSize="18sp" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_employer_own_posts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recycler_view_employer_own_posts"
         android:layout_above="@id/bottom_navigation_view"
         android:layout_below="@id/text_view_employer_job_posts"
         tools:listitem="@layout/item_employer_dashboard_job_post_card">
