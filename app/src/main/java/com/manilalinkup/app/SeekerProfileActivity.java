@@ -1,14 +1,19 @@
 package com.manilalinkup.app;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -34,6 +39,27 @@ public class SeekerProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+
+        bottomNavigationView.setSelectedItemId(R.id.nav_home);
+
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+
+                if (id == R.id.nav_home) {
+                    Intent intent = new Intent(SeekerProfileActivity.this, SeekerDashboardActivity.class);
+                    startActivity(intent);
+                    return true;
+                } else if (id == R.id.nav_profile) {
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
         // 1. Initialize Views
         mainScrollView = findViewById(R.id.main_scroll_view);
         tabLayout = findViewById(R.id.profile_tabs);
@@ -48,6 +74,8 @@ public class SeekerProfileActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
     }
 
     private void populateExampleData() {
