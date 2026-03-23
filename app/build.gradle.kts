@@ -5,9 +5,7 @@ plugins {
 
 android {
     namespace = "com.manilalinkup.app"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.manilalinkup.app"
