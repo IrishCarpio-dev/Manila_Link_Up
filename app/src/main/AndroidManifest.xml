@@ -14,7 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ManilaLinkUp">
         <activity
+<<<<<<< HEAD
             android:name=".SaveSeekerActivity"
+=======
+            android:name=".EmployerAddJobActivity"
+>>>>>>> 14a35b27164e9ae4015c8f86ee57787f57f9d513
             android:exported="false" />
         <activity
             android:name=".EmployerDashboard"
