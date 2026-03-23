@@ -97,9 +97,18 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:padding="11dp"
-                    tools:background="@drawable/card_gradient_bg">
+                    android:layout_height="100dp">
+
+                    <ImageView
+                        android:id="@+id/image_view_employer_cover_photo_placeholder"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/card_gradient_bg"
+                        tools:src="@drawable/coverphotosamp">
+
+
+                    </ImageView>
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/card_view_logo_container"
@@ -107,9 +116,10 @@
                         android:layout_height="50dp"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentBottom="true"
+                        android:layout_margin="16dp"
                         app:cardCornerRadius="25dp"
-                        app:cardPreventCornerOverlap="false"
-                        app:cardElevation="8dp">
+                        app:cardElevation="8dp"
+                        app:cardPreventCornerOverlap="false">
 
                         <ImageView
                             android:id="@+id/image_view_employee_profile_picture_placeholder"
@@ -117,6 +127,7 @@
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
                             tools:src="@drawable/chipsstarters" />
+
                     </androidx.cardview.widget.CardView>
 
                     <ImageView
@@ -125,6 +136,7 @@
                         android:layout_height="24dp"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
+                        android:layout_margin="13dp"
                         android:contentDescription="Report"
                         android:scaleType="centerInside"
                         android:src="@drawable/report_caution_logo" />
@@ -151,8 +163,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-black"
-                        android:textSize="18sp"
                         android:textColor="#212121"
+                        android:textSize="18sp"
                         tools:text="Employer Job Title" />
 
                     <TextView
@@ -161,8 +173,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/text_view_employer_job_title_placeholder"
                         android:fontFamily="sans-serif"
-                        android:textSize="12sp"
                         android:textColor="#616161"
+                        android:textSize="12sp"
                         tools:text="Employer Name" />
 
                     <RelativeLayout
@@ -188,8 +200,8 @@
                             android:layout_marginStart="8dp"
                             android:layout_toEndOf="@id/location_logo"
                             android:fontFamily="sans-serif"
-                            android:textSize="14sp"
                             android:textColor="#616161"
+                            android:textSize="14sp"
                             tools:text="Binondo, Manila" />
 
                         <ImageView
@@ -207,9 +219,9 @@
                             android:layout_below="@id/text_view_location_placeholder"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="4dp"
-                            android:textColor="#616161"
                             android:layout_toEndOf="@id/money_logo"
                             android:fontFamily="sans-serif"
+                            android:textColor="#616161"
                             android:textSize="14sp"
                             tools:text="P700/day" />
 
@@ -230,8 +242,8 @@
                             android:layout_marginTop="4dp"
                             android:layout_toEndOf="@id/calendar_logo"
                             android:fontFamily="sans-serif"
-                            android:textSize="14sp"
                             android:textColor="#616161"
+                            android:textSize="14sp"
                             tools:text="Apr. 4-8, 2026" />
 
                     </RelativeLayout>
@@ -249,10 +261,10 @@
             <TextView
                 android:id="@+id/text_view_job_description_placeholder"
                 android:layout_width="match_parent"
-                android:textColor="#616161"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/card_view_employer_info"
                 android:layout_margin="16dp"
+                android:textColor="#616161"
                 tools:text="Job Description will go here" />
 
         </RelativeLayout>

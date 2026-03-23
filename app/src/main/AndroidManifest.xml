@@ -14,6 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ManilaLinkUp">
         <activity
+            android:name=".EmployerAddJobActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EmployerDashboard"
+            android:exported="false" />
+        <activity
             android:name=".SeekerDashboardActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
