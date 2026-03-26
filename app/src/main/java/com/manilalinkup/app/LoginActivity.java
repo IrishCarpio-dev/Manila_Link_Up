@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
         forgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent createPasswordActivityIntent = new Intent(LoginActivity.this, OTPVerificationActivity.class);
+                Intent createPasswordActivityIntent = new Intent(LoginActivity.this, EmployerDashboard.class);
                 startActivity(createPasswordActivityIntent);
             }
         });

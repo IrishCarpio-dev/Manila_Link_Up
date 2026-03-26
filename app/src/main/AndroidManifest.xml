@@ -40,7 +40,7 @@
             android:label="Profile Seeker"
             android:parentActivityName=".LoginActivity" />
         <activity
-            android:name=".EmployerSIgnUp"
+            android:name=".EmployerSignUp"
             android:exported="false"
             android:label="Employer Sign Up"
             android:parentActivityName=".GetStarted" />

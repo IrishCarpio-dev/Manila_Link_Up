@@ -7,14 +7,11 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 
-public class EmployerSIgnUp extends AppCompatActivity {
+public class EmployerSignUp extends AppCompatActivity {
 
     MaterialToolbar toolbar;
     MaterialButton sendOTP;
@@ -34,9 +31,9 @@ public class EmployerSIgnUp extends AppCompatActivity {
         sendOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sendOTPEmployerActivityIntent = new Intent(EmployerSIgnUp.this, OTPVerificationActivity.class);
+                Intent sendOTPEmployerActivityIntent = new Intent(EmployerSignUp.this, EmployerDashboard.class);
                 startActivity(sendOTPEmployerActivityIntent);
-                Toast.makeText(EmployerSIgnUp.this,"Verification Code sent.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EmployerSignUp.this,"Verification Code sent.", Toast.LENGTH_SHORT).show();
             }
         });
     }
