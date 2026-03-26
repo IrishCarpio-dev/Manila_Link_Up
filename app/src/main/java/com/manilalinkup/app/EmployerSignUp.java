@@ -21,7 +21,7 @@ public class EmployerSignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_employer_sign_up);
-        sendOTP = findViewById(R.id.material_button_send_otp);
+        sendOTP = findViewById(R.id.material_button_send_email_link);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
