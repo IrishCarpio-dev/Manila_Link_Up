@@ -36,7 +36,6 @@ public class SeekerChatTabAdapter extends RecyclerView.Adapter<SeekerChatTabAdap
         holder.bind(seekerChatModelList.get(position));
     }
     static class SeekerChatViewHolder extends RecyclerView.ViewHolder {
-
         private ImageView employerProfilePicture;
         private TextView employerName;
         private TextView messagePreview;
