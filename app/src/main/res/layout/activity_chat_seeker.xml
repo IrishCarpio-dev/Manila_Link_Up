@@ -16,7 +16,7 @@
         app:itemIconTint="@color/bottom_nav_icon_colors"
         app:itemTextColor="@color/bottom_nav_icon_colors"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_nav_employer_icons" />
+        app:menu="@menu/bottom_nav_menu_icons" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view_dashboard_top_employer"
@@ -36,18 +36,23 @@
                 android:src="@drawable/bgheartadjustment" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:padding="24dp">
+                android:gravity="center_vertical"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="12dp">>
 
                 <TextView
                     android:id="@+id/textview_greeting_employer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Notifications"
                     android:fontFamily="sans-serif-medium"
+                    android:text="Messages"
                     android:textColor="@color/white"
+                    android:includeFontPadding="false"
                     android:textSize="21sp" />
 
             </LinearLayout>
@@ -55,15 +60,12 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_employer_own_posts"
+        android:id="@+id/recycler_view_seeker_chat_tab"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation_view"
         android:layout_below="@id/card_view_dashboard_top_employer"
-        tools:listitem="@layout/item_notifications_employer_card">
-
+        tools:listitem="@layout/item_messages_seeker_card">
     </androidx.recyclerview.widget.RecyclerView>
-
-
 
 </RelativeLayout>

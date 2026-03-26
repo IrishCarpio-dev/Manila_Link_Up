@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ManilaLinkUp">
         <activity
+            android:name=".ChatSeekerActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditEmployerProfileActivity"
             android:exported="false" />
         <activity
