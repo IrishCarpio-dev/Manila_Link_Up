@@ -49,7 +49,7 @@
             tools:text="Message details goes here" />
 
         <TextView
-            android:id="@+id/text_view_notif_timestamp"
+            android:id="@+id/text_view_chat_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

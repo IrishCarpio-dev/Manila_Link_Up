@@ -43,7 +43,7 @@
                 android:paddingStart="24dp"
                 android:paddingEnd="24dp"
                 android:paddingTop="24dp"
-                android:paddingBottom="12dp">>
+                android:paddingBottom="12dp">
 
                 <TextView
                     android:id="@+id/textview_greeting_employer"

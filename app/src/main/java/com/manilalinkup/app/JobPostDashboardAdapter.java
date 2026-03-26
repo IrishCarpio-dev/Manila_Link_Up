@@ -35,12 +35,12 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
     }
 
     static class JobPostDashboardViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView employer_pfp;
-        private final TextView job_title;
-        private final TextView employer_name;
-        private final TextView job_location;
-        private final TextView job_duration;
-        private final TextView how_long_job_was_posted;
+        private ImageView employer_pfp;
+        private TextView job_title;
+        private TextView employer_name;
+        private TextView job_location;
+        private TextView job_duration;
+        private TextView how_long_job_was_posted;
         public JobPostDashboardViewHolder(@NonNull View itemView) {
             super(itemView);
             employer_pfp = itemView.findViewById(R.id.item_card_employer_profile_picture_placeholder);
