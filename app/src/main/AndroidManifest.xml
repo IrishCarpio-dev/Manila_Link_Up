@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ManilaLinkUp">
         <activity
+            android:name=".EmployerNotificationsActivity"
+            android:exported="false" />
+        <activity
             android:name=".EmployerAddJobActivity"
             android:exported="false" />
         <activity
@@ -37,7 +40,7 @@
             android:label="Profile Seeker"
             android:parentActivityName=".LoginActivity" />
         <activity
-            android:name=".EmployerSIgnUp"
+            android:name=".EmployerSignUp"
             android:exported="false"
             android:label="Employer Sign Up"
             android:parentActivityName=".GetStarted" />
@@ -66,7 +69,6 @@
             android:exported="false"
             android:label="Seeker Profile"
             android:parentActivityName=".SeekerDashboardActivity" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true">

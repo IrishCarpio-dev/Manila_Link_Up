@@ -47,7 +47,7 @@ public class GetStarted extends AppCompatActivity {
         employerCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent jobSeekerActivityIntent = new Intent(GetStarted.this, EmployerDashboard.class);
+                Intent jobSeekerActivityIntent = new Intent(GetStarted.this, EmployerSignUp.class);
                 startActivity(jobSeekerActivityIntent);
             }
         });
