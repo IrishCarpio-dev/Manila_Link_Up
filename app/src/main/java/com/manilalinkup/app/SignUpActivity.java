@@ -78,7 +78,7 @@ public class SignUpActivity extends AppCompatActivity {
                     createPassword.setError("Password must be at least 8 characters");
                     return;
                 }
-                // 4. THE ACTION: If validation passes, start Firebase
+                // If validation passes, start Firebase
                 mAuth.createUserWithEmailAndPassword(emailAddressInput, createPasswordInput)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
@@ -111,7 +111,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void sendProfileToLaravel(String uid, String firstnameInput, String lastnameInput, String emailAddressInput, String mobileNumberInput) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.8/") // Replaced with your actual IPv4
+                .baseUrl("http://192.168.1.8/") // Replaced with actual IPv4
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

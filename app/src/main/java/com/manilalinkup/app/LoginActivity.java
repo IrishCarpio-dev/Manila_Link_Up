@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +21,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
-
+    private android.app.ProgressDialog progressDialog;
     private com.google.firebase.auth.FirebaseAuth mAuth;
     MaterialToolbar toolbar;
     MaterialButton loginNowButton;
@@ -29,6 +30,9 @@ public class LoginActivity extends AppCompatActivity {
     TextInputLayout emailLayout;
     TextInputLayout passwordLayout;
     TextView forgetPassword;
+
+    //for testing Dashboards - Irish
+    ImageView googleLogin;
 
 
     @SuppressLint("MissingInflatedId")
@@ -44,16 +48,30 @@ public class LoginActivity extends AppCompatActivity {
         passwordLayout = findViewById(R.id.text_input_layout_password);
         forgetPassword = findViewById(R.id.text_view_forget_password);
 
+        // For testing Dashboards - Irish
+        googleLogin = findViewById(R.id.image_view_login_google);
+        googleLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent testIntents = new Intent(LoginActivity.this, EmployerDashboard.class);
+                startActivity(testIntents);
+            }
+        });
+
+
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        progressDialog = new android.app.ProgressDialog(this);
+        progressDialog.setMessage("Verifying account...");
+        progressDialog.setCancelable(false); // Prevents user from dismissing it by clicking outside
+
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
         loginNowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
                 String email = emailInput.getText().toString().trim();
                 String password = passwordInput.getText().toString().trim();
@@ -84,41 +102,88 @@ public class LoginActivity extends AppCompatActivity {
                 // Start the Firebase Login (The app waits for this result)
                 Toast.makeText(LoginActivity.this, "Authenticating...", Toast.LENGTH_SHORT).show();
 
+                progressDialog.show();
+
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 FirebaseUser user = mAuth.getCurrentUser();
-
-                                user.reload().addOnCompleteListener(reloadTask -> {
-                                    if (user.isEmailVerified()) {
-                                        Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-
-                                        Intent intent = new Intent(LoginActivity.this, EditSeekerProfileActivity.class);
-                                        // Clear the activity stack so they can't go back to Login
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
-                                        finish();
-                                    } else {
-                                        Toast.makeText(LoginActivity.this, "Please verify your email first!", Toast.LENGTH_LONG).show();
-                                        mAuth.signOut();
-                                    }
-                                });
+                                if (user != null) {
+                                    user.reload().addOnCompleteListener(reloadTask -> {
+                                        if (user.isEmailVerified()) {
+                                            // NEW: Don't jump to an activity yet. Check the role first!
+                                            checkUserRole(user.getUid());
+                                        } else {
+                                            progressDialog.dismiss();
+                                            Toast.makeText(LoginActivity.this, "Please verify your email first!", Toast.LENGTH_LONG).show();
+                                            mAuth.signOut();
+                                        }
+                                    });
+                                }
                             } else {
-                                // Wrong password or email
+                                progressDialog.dismiss();
                                 Toast.makeText(LoginActivity.this, "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
 
             }
         });
+    }
 
-        forgetPassword.setOnClickListener(new View.OnClickListener() {
+    private void checkUserRole(String uid) {
+        com.google.firebase.database.DatabaseReference dbRef = com.google.firebase.database.FirebaseDatabase.getInstance().getReference();
+
+        dbRef.child("seekers").child(uid).addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                Intent createPasswordActivityIntent = new Intent(LoginActivity.this, EmployerDashboard.class);
-                startActivity(createPasswordActivityIntent);
+            public void onDataChange(com.google.firebase.database.DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    progressDialog.dismiss();
+                    startActivity(new Intent(LoginActivity.this, SeekerDashboardActivity.class));
+                    finish();
+                } else {
+                    // If not found in seekers, check employers
+                    checkEmployerNode(uid, dbRef);
+                }
+            }
+
+            @Override
+            public void onCancelled(com.google.firebase.database.DatabaseError error) {
+                // IF PERMISSION DENIED: It just means this user isn't a Seeker.
+                // Don't show an error toast yet; just move to the next check!
+                if (error.getCode() == com.google.firebase.database.DatabaseError.PERMISSION_DENIED) {
+                    checkEmployerNode(uid, dbRef);
+                } else {
+                    progressDialog.dismiss();
+                    Toast.makeText(LoginActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
 
+    // Separate method to keep code clean
+    private void checkEmployerNode(String uid, com.google.firebase.database.DatabaseReference dbRef) {
+        dbRef.child("employers").child(uid).addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+            @Override
+            public void onDataChange(com.google.firebase.database.DataSnapshot snapshot) {
+                progressDialog.dismiss();
+                if (snapshot.exists()) {
+                    startActivity(new Intent(LoginActivity.this, EmployerDashboard.class));
+                    finish();
+                } else {
+                    // Now we can safely say the user is truly not found anywhere
+                    Toast.makeText(LoginActivity.this, "User profile not found in our system.", Toast.LENGTH_LONG).show();
+                    mAuth.signOut();
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onCancelled(com.google.firebase.database.DatabaseError error) {
+                progressDialog.dismiss();
+                // If both checks return Permission Denied, something is wrong with the Rules or UID
+                Toast.makeText(LoginActivity.this, "Access Denied. Please contact support.", Toast.LENGTH_SHORT).show();
+                mAuth.signOut();
+            }
+        });
     }
 }

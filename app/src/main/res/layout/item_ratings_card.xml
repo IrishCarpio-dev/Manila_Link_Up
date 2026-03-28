@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="#F5F5F5"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/item_card_rating_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="sans-serif"
+            android:textColor="#212121"
+            android:textSize="14sp"
+            tools:text="Message preview of the rater goes here" />
+
+        <TextView
+            android:id="@+id/item_card_rater_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_card_rating_message"
+            android:layout_marginStart="6dp"
+            android:layout_toEndOf="@id/item_card_rating_bar"
+            android:fontFamily="sans-serif"
+            android:textColor="#616161"
+            android:textSize="12sp"
+            tools:text="Rater name goes here" />
+
+        <RatingBar
+            android:id="@+id/item_card_rating_bar"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_card_rating_message"
+            android:progressBackgroundTint="#C0C0C0"
+            android:progressTint="#FFB300"
+            tools:rating="4.5f" />
+
+
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>

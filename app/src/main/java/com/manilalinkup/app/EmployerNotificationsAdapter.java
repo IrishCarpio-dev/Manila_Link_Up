@@ -38,10 +38,10 @@ public class EmployerNotificationsAdapter extends RecyclerView.Adapter<EmployerN
 
     static class EmployerNotificationsViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView imageType;
-        TextView notifTitle;
-        TextView descriptionTitle;
-        TextView notifTimeStamp;
+        private ImageView imageType;
+        private TextView notifTitle;
+        private TextView descriptionTitle;
+        private TextView notifTimeStamp;
         public EmployerNotificationsViewHolder(@NonNull View itemView) {
             super(itemView);
             imageType = itemView.findViewById(R.id.item_card_notif_image_type);
