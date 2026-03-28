@@ -10,6 +10,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class ChatSeekerActivity extends AppCompatActivity {
     private RecyclerView recyclerViewChat;
     private SeekerChatTabAdapter seekerChatTabAdapter;
     private List<SeekerChatModel> seekerChatModelList;
+    BottomNavigationView bottomNavigationViewEmployer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,7 @@ public class ChatSeekerActivity extends AppCompatActivity {
 
         seekerChatTabAdapter = new SeekerChatTabAdapter(seekerChatModelList);
         recyclerViewChat.setAdapter(seekerChatTabAdapter);
+
 
     }
 }
