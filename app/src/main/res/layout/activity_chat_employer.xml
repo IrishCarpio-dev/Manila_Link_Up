@@ -36,17 +36,22 @@
                 android:src="@drawable/bgheartadjustment" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="24dp">
+                android:paddingStart="24dp"
+                android:paddingTop="24dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="12dp">
 
                 <TextView
-                    android:id="@+id/textview_greeting_employer"
+                    android:id="@+id/text_view_messages_top_right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
-                    android:text="Notifications"
+                    android:includeFontPadding="false"
+                    android:text="Messages"
                     android:textColor="@color/white"
                     android:textSize="21sp" />
 
@@ -55,15 +60,12 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_employer_own_posts"
+        android:id="@+id/recycler_view_seeker_chat_tab"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation_view"
         android:layout_below="@id/card_view_dashboard_top_employer"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_notifications_employer_card">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
+        tools:listitem="@layout/item_messages_employer_card" />
 
 </RelativeLayout>

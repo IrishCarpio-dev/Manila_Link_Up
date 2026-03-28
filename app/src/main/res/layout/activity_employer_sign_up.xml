@@ -48,7 +48,7 @@
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/text_view_full_name"
+            android:id="@+id/text_view_employer_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_view_backInLinkUp"
@@ -63,7 +63,7 @@
             android:id="@+id/text_view_below_full_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/text_view_full_name"
+            android:layout_below="@id/text_view_employer_name"
             android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
             android:fontFamily="sans-serif"
@@ -72,7 +72,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_layout_first_name"
+            android:id="@+id/text_input_layout_employer_name"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
             android:id="@+id/text_view_email_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/text_input_layout_first_name"
+            android:layout_below="@id/text_input_layout_employer_name"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-black"
@@ -109,7 +109,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_layout_email_address"
+            android:id="@+id/text_input_layout_email_address_employer"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
             android:id="@+id/text_view_phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/text_input_layout_email_address"
+            android:layout_below="@id/text_input_layout_email_address_employer"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-black"
@@ -146,7 +146,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_layout_phone_number"
+            android:id="@+id/text_input_layout_phone_number_employer"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
             android:id="@+id/text_create_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/text_input_layout_phone_number"
+            android:layout_below="@id/text_input_layout_phone_number_employer"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-black"
@@ -187,7 +187,7 @@
             android:textSize="16sp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_create_password"
+            android:id="@+id/text_input_create_password_employer"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -215,7 +215,7 @@
             android:id="@+id/text_confirm_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/text_input_create_password"
+            android:layout_below="@id/text_input_create_password_employer"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-black"
@@ -223,7 +223,7 @@
             android:textSize="16sp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_confirm_password"
+            android:id="@+id/text_input_confirm_password_employer"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -253,16 +253,16 @@
             android:id="@+id/text_view_otp_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/text_input_confirm_password"
+            android:layout_below="@id/text_input_confirm_password_employer"
             android:layout_marginTop="16dp"
             android:layout_centerInParent="true"
             android:fontFamily="sans-serif-medium"
-            android:text="Please check you email for the verification link"
+            android:text="A verification link will be sent through your email"
             android:textColor="#212121" />
 
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/material_button_send_otp"
+            android:id="@+id/material_button_send_email_link_employer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_view_otp_message"
@@ -270,7 +270,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="100dp"
             android:layout_marginBottom="8dp"
-            android:text="Send OTP"
+            android:text="Send Email"
             app:backgroundTint="#0D47A1"
             app:cornerRadius="12dp" />
 
