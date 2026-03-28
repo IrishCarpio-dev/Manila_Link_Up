@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ManilaLinkUp">
         <activity
+            android:name=".EmployerProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ChatEmployerActivity"
             android:exported="false" />
         <activity
@@ -53,11 +56,6 @@
             android:exported="false"
             android:label="Employer Sign Up"
             android:parentActivityName=".GetStarted" />
-        <activity
-            android:name=".OTPVerificationActivity"
-            android:exported="false"
-            android:label="OTP Verification"
-            android:parentActivityName=".SignUpActivity" />
         <activity
             android:name=".GetStarted"
             android:exported="false"

@@ -17,7 +17,8 @@
         app:itemIconTint="@color/bottom_nav_icon_colors"
         app:itemTextColor="@color/bottom_nav_icon_colors"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_nav_employer_icons" />
+        app:menu="@menu/bottom_nav_employer_icons"
+        app:elevation="10dp"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view_dashboard_top_employer"

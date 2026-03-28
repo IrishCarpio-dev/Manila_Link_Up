@@ -20,7 +20,7 @@ public class EmployerNotificationsActivity extends AppCompatActivity {
     private RecyclerView recyclerViewNotifications;
     private EmployerNotificationsAdapter adapterNotif;
     private List<EmployerNotificationsModel> notifListCard;
-    private BottomNavigationView bottomNavigationViewNotif;
+    BottomNavigationView bottomNavigationViewEmployer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +36,8 @@ public class EmployerNotificationsActivity extends AppCompatActivity {
         adapterNotif = new EmployerNotificationsAdapter(notifListCard);
         recyclerViewNotifications.setAdapter(adapterNotif);
 
-        bottomNavigationViewNotif = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationViewNotif.setSelectedItemId(R.id.nav_notifications);
+        bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_notifications);
+
 
     }
 }
