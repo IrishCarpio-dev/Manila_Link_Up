@@ -77,6 +77,11 @@
             android:label="Seeker Profile"
             android:parentActivityName=".SeekerDashboardActivity" />
         <activity
+            android:name=".SettingsSeekerActivity"
+            android:label="Settings"
+            android:exported="false"
+            android:parentActivityName=".SeekerProfileActivity"/>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
