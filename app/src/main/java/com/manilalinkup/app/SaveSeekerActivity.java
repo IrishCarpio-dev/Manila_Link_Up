@@ -1,83 +1,91 @@
 package com.manilalinkup.app;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.*;
-import android.widget.*;
-import androidx.annotation.NonNull;
+import android.view.View;
+
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.*;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import java.util.*;
 
-// 1. PINAKASIMPLENG STORAGE & MODEL
-class JobPost {
-    String title, company, date;
-    JobPost(String t, String c, String d) { title = t; company = c; date = d; }
-}
-
-class JobData {
-    public static List<JobPost> savedJobsList = new ArrayList<>();
-}
-
-// 2. MAIN ACTIVITY
 public class SaveSeekerActivity extends AppCompatActivity {
+
+    RecyclerView recyclerView;
+    View emptyState;
+    BottomNavigationView bottomNavigationView;
+
+
+    SavedJobsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_seeker_job_post); // Gamit ang binigay mong XML name
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_save_seeker);
 
-        // A. BACK BUTTON LOGIC
-        View btnBack = findViewById(R.id.btn_back);
-        if (btnBack != null) btnBack.setOnClickListener(v -> finish());
+        recyclerView = findViewById(R.id.rv_saved_jobs);
+        emptyState = findViewById(R.id.empty_state_layout);
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
 
-        // B. BOTTOM NAVIGATION HIGHLIGHT
-        BottomNavigationView nav = findViewById(R.id.bottom_navigation_view);
-        if (nav != null) nav.setSelectedItemId(R.id.nav_my_activity);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // C. RECYCLERVIEW SETUP
-        RecyclerView rv = findViewById(R.id.rv_saved_jobs);
-        if (rv != null) {
-            rv.setLayoutManager(new LinearLayoutManager(this));
-            rv.setAdapter(new MyAdapter(JobData.savedJobsList));
+        // INITIALIZE ONCE
+        adapter = new SavedJobsAdapter(SavedJobs.savedList);
+        
+        // Handle removal of saved jobs
+        adapter.setOnRemoveClickListener(job -> {
+            SavedJobs.savedList.remove(job);
+            loadSavedJobs();
+        });
+        
+        recyclerView.setAdapter(adapter);
+
+        loadSavedJobs();
+
+        bottomNavigationView.setSelectedItemId(R.id.nav_my_activity);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.nav_home) {
+                Intent intent = new Intent(this, SeekerDashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+                return true;
+
+            } else if (id == R.id.nav_my_activity) {
+                return true;
+
+            } else if (id == R.id.nav_profile) {
+                Intent intent = new Intent(this, SeekerProfileActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+                return true;
+            }
+
+            return false;
+        });
+    }
+
+    private void loadSavedJobs() {
+        if (SavedJobs.savedList.isEmpty()) {
+            emptyState.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            emptyState.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            adapter.notifyDataSetChanged();
         }
     }
 
-    // 3. ADAPTER (Sa loob para gumana agad)
-    class MyAdapter extends RecyclerView.Adapter<MyAdapter.VH> {
-        List<JobPost> list;
-        MyAdapter(List<JobPost> l) { list = l; }
-
-        @NonNull @Override
-        public VH onCreateViewHolder(@NonNull ViewGroup p, int vt) {
-            View v = LayoutInflater.from(p.getContext()).inflate(R.layout.item_saved_job, p, false);
-            return new VH(v);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull VH h, int pos) {
-            JobPost j = list.get(pos);
-            h.t.setText(j.title);
-            h.c.setText(j.company);
-            h.d.setText("Save on : " + j.date);
-            h.x.setOnClickListener(v -> {
-                list.remove(pos);
-                notifyItemRemoved(pos);
-                Toast.makeText(SaveSeekerActivity.this, "Removed", Toast.LENGTH_SHORT).show();
-            });
-        }
-
-        @Override public int getItemCount() { return list.size(); }
-
-        class VH extends RecyclerView.ViewHolder {
-            TextView t, c, d; ImageView x;
-            VH(View i) {
-                super(i);
-                t = i.findViewById(R.id.tv_title);
-                c = i.findViewById(R.id.tv_company);
-                d = i.findViewById(R.id.tv_save_date);
-                x = i.findViewById(R.id.btn_remove);
-            }
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadSavedJobs(); // auto refresh
     }
 }

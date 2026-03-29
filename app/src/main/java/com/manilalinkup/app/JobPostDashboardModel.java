@@ -1,5 +1,7 @@
 package com.manilalinkup.app;
 
+import java.util.Objects;
+
 public class JobPostDashboardModel {
     String jobTitle, employerName, jobPostLocation, job_duration,howLongJobIsPosted;
     int employerProfilePicture;
@@ -35,5 +37,19 @@ public class JobPostDashboardModel {
         this.job_duration = job_duration;
         this.employerProfilePicture = employerProfilePicture;
         this.howLongJobIsPosted = howLongJobIsPosted;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JobPostDashboardModel that = (JobPostDashboardModel) o;
+        return Objects.equals(jobTitle, that.jobTitle) &&
+                Objects.equals(employerName, that.employerName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(jobTitle, employerName);
     }
 }
