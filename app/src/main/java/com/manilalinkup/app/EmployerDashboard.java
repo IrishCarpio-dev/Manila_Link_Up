@@ -55,11 +55,6 @@ public class EmployerDashboard extends AppCompatActivity {
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
-                } else if (id == R.id.nav_add_job) {
-                    Intent intent = new Intent(EmployerDashboard.this, EmployerAddJobActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    return true;
                 } else if (id == R.id.nav_notifications) {
                     Intent intent = new Intent(EmployerDashboard.this, EmployerNotificationsActivity.class);
                     startActivity(intent);
