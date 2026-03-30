@@ -23,13 +23,10 @@ public class SeekerProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seeker_profile);
 
-        // 1. Initialize UI Elements from XML
         initializeViews();
 
-        // 2. Setup Navigation
         setupBottomNavigation();
 
-        // 3. Setup Click Listeners
         setupClickListeners();
     }
 
@@ -71,6 +68,5 @@ public class SeekerProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Theme-check logic removed as the feature is no longer supported.
     }
 }

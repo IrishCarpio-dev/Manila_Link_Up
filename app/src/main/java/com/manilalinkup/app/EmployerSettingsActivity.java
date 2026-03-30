@@ -64,14 +64,10 @@ public class EmployerSettingsActivity extends AppCompatActivity {
                 .setMessage("Are you sure you want to log out from Manila LinkUp?")
                 .setPositiveButton("Logout", (dialog, which) -> {
 
-                    // 1. Log out from Firebase
                     mAuth.signOut();
 
-                    // 2. Redirect to MainActivity
                     Intent intent = new Intent(EmployerSettingsActivity.this, MainActivity.class);
 
-                    // 3. Clear the Activity Stack
-                    // This ensures the user can't press 'Back' to get back to the Profile
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                     startActivity(intent);

@@ -24,7 +24,6 @@ public class SeekerSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_seeker);
 
-        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
         initializeViews();
@@ -43,12 +42,10 @@ public class SeekerSettingsActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        // Navigation Listeners
         btnEditProfile.setOnClickListener(v -> showToast("Opening Edit Profile..."));
         btnVerification.setOnClickListener(v -> showToast("Opening ID Verification..."));
         btnPrivacy.setOnClickListener(v -> showToast("Opening Privacy Controls..."));
 
-        // Push Notifications toggle
         switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> {
             showToast("Notifications " + (isChecked ? "Enabled" : "Disabled"));
         });
@@ -66,15 +63,12 @@ public class SeekerSettingsActivity extends AppCompatActivity {
                 .setTitle("Logout")
                 .setMessage("Are you sure you want to log out from Manila LinkUp?")
                 .setPositiveButton("Logout", (dialog, which) -> {
-                    // 1. Sign out from Firebase
                     mAuth.signOut();
 
-                    // 2. Clear stack and go to MainActivity
                     Intent intent = new Intent(SeekerSettingsActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
 
-                    // 3. Close this activity
                     finish();
 
                     showToast("Logged out successfully");
@@ -82,7 +76,6 @@ public class SeekerSettingsActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel", null)
                 .show();
     }
-
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
