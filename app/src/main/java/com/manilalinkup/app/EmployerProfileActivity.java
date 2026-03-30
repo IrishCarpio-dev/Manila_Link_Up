@@ -57,8 +57,7 @@ public class EmployerProfileActivity extends AppCompatActivity {
         bottomNavigationViewEmployer.setOnItemSelectedListener(menuItem ->  {
             if(menuItem.getItemId() == R.id.nav_home){
                 startActivity(new Intent(EmployerProfileActivity.this, EmployerDashboard.class));
-                // Adding transition consistency
-                overridePendingTransition(0, 0);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 return true;
             }
             return true;
