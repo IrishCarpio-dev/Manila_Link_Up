@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/header_settings"
+        android:id="@+id/header_settings_employer"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         app:cardBackgroundColor="#1B3E9C"
@@ -31,7 +31,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/header_settings"
+        android:layout_below="@id/header_settings_employer"
         android:paddingBottom="24dp"
         android:clipToPadding="false">
 
@@ -131,7 +131,7 @@
                             android:layout_centerVertical="true"
                             android:textColor="?attr/colorOnSurface"/>
                         <Switch
-                            android:id="@+id/switch_notifications"
+                            android:id="@+id/switch_notifications_employer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -171,7 +171,7 @@
                         android:layout_height="wrap_content"
                         android:padding="16dp"
                         android:text="Help Center &amp; FAQs"
-                            android:drawableEnd="@drawable/ic_chevron_right"
+                        android:drawableEnd="@drawable/ic_chevron_right"
                         android:background="?attr/selectableItemBackground"
                         android:textColor="?attr/colorOnSurface"/>
 

@@ -2,12 +2,10 @@ package com.manilalinkup.app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView; // Added import
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,17 +21,29 @@ public class EmployerProfileActivity extends AppCompatActivity {
     private List<RatingsProfileModel> ratingProfileList;
     BottomNavigationView bottomNavigationViewEmployer;
 
+    // 1. Declare the Settings Icon
+    private ImageView settingsIcon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_employer_profile);
 
+        // 2. Initialize the Settings Icon
+        settingsIcon = findViewById(R.id.image_view_employer_settings_icon);
+
+        // 3. Set the Click Listener for Settings
+        settingsIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(EmployerProfileActivity.this, EmployerSettingsActivity.class);
+            startActivity(intent);
+        });
+
         recyclerView = findViewById(R.id.recycler_view_ratings_card);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        //dummy data
+        // dummy data
         ratingProfileList = new ArrayList<>();
         ratingProfileList.add(new RatingsProfileModel("Mahusay na employer! Mabuhay ka! ", "Juan Dela Cruz", 5.0f));
         ratingProfileList.add(new RatingsProfileModel("Clear instructions and fast payment.", "Maria Clara", 4.5f));
@@ -47,11 +57,11 @@ public class EmployerProfileActivity extends AppCompatActivity {
         bottomNavigationViewEmployer.setOnItemSelectedListener(menuItem ->  {
             if(menuItem.getItemId() == R.id.nav_home){
                 startActivity(new Intent(EmployerProfileActivity.this, EmployerDashboard.class));
+                // Adding transition consistency
+                overridePendingTransition(0, 0);
                 return true;
             }
             return true;
         });
-
-
     }
 }

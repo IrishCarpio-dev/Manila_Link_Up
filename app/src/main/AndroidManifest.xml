@@ -77,10 +77,15 @@
             android:label="Seeker Profile"
             android:parentActivityName=".SeekerDashboardActivity" />
         <activity
-            android:name=".SettingsSeekerActivity"
+            android:name=".SeekerSettingsActivity"
             android:label="Settings"
             android:exported="false"
             android:parentActivityName=".SeekerProfileActivity"/>
+        <activity
+            android:name=".EmployerSettingsActivity"
+            android:label="Settings"
+            android:exported="false"
+            android:parentActivityName=".EmployerProfileActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

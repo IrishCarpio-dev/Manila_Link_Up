@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +21,6 @@ public class SeekerProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // This connects the Java file to your layout
         setContentView(R.layout.activity_seeker_profile);
 
         // 1. Initialize UI Elements from XML
@@ -37,7 +35,7 @@ public class SeekerProfileActivity extends AppCompatActivity {
 
     private void initializeViews() {
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-        settingsIcon = findViewById(R.id.image_view_settings_icon);
+        settingsIcon = findViewById(R.id.image_view_seeker_settings_icon);
         summaryEditText = findViewById(R.id.editText_summary);
 
         // Ensure the correct tab is highlighted in the bottom nav
@@ -51,13 +49,11 @@ public class SeekerProfileActivity extends AppCompatActivity {
                 int id = item.getItemId();
 
                 if (id == R.id.nav_home) {
-                    // Navigate back to Dashboard
                     startActivity(new Intent(SeekerProfileActivity.this, SeekerDashboardActivity.class));
-                    overridePendingTransition(0, 0); // Remove animation for smoother feel
+                    overridePendingTransition(0, 0);
                     finish();
                     return true;
                 } else if (id == R.id.nav_profile) {
-                    // Already here
                     return true;
                 }
                 return false;
@@ -66,14 +62,15 @@ public class SeekerProfileActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        // Settings Icon Click
         settingsIcon.setOnClickListener(v -> {
-            // Replace 'SettingsActivity' with the actual name of your settings class
-            Intent intent = new Intent(SeekerProfileActivity.this, SettingsSeekerActivity.class);
+            Intent intent = new Intent(SeekerProfileActivity.this, SeekerSettingsActivity.class);
             startActivity(intent);
         });
+    }
 
-        // Example: Handle the Summary text change if needed
-        // String userBio = summaryEditText.getText().toString();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Theme-check logic removed as the feature is no longer supported.
     }
 }

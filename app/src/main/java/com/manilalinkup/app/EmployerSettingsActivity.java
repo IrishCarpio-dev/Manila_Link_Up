@@ -1,7 +1,7 @@
 package com.manilalinkup.app;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent; // Added
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Switch;
@@ -9,31 +9,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 
-public class SettingsSeekerActivity extends AppCompatActivity {
+import com.google.firebase.auth.FirebaseAuth; // Added
+
+public class EmployerSettingsActivity extends AppCompatActivity {
 
     private TextView btnEditProfile, btnVerification, btnPrivacy;
-    private Switch switchNotifications, switchDarkMode;
+    private Switch switchNotifications;
     private TextView btnHelpCenter, btnTerms, btnAbout;
     private Button btnLogout;
-
-    // Constants for SharedPreferences
-    private static final String PREFS_NAME = "theme_prefs";
-    private static final String KEY_IS_DARK_MODE = "isDarkMode";
+    private FirebaseAuth mAuth; // Added
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_seeker);
 
+        mAuth = FirebaseAuth.getInstance(); // Initialize Firebase Auth
+
         initializeViews();
-
-        // Load the saved theme state to set the Switch position correctly
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        boolean isDarkModeActive = prefs.getBoolean(KEY_IS_DARK_MODE, false);
-        switchDarkMode.setChecked(isDarkModeActive);
-
         setupClickListeners();
     }
 
@@ -42,7 +36,6 @@ public class SettingsSeekerActivity extends AppCompatActivity {
         btnVerification = findViewById(R.id.btn_verification);
         btnPrivacy = findViewById(R.id.btn_privacy);
         switchNotifications = findViewById(R.id.switch_notifications);
-        switchDarkMode = findViewById(R.id.switch_dark_mode);
         btnHelpCenter = findViewById(R.id.btn_help_center);
         btnTerms = findViewById(R.id.btn_terms);
         btnAbout = findViewById(R.id.btn_about);
@@ -50,24 +43,6 @@ public class SettingsSeekerActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        // Dark Mode Logic
-        switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // 1. Save the choice to SharedPreferences
-            SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-            editor.putBoolean(KEY_IS_DARK_MODE, isChecked);
-            editor.apply();
-
-            // 2. Apply the theme globally
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            }
-
-            showToast("Dark Mode " + (isChecked ? "Enabled" : "Disabled"));
-        });
-
-        // Other Navigation (Placeholders)
         btnEditProfile.setOnClickListener(v -> showToast("Opening Edit Profile..."));
         btnVerification.setOnClickListener(v -> showToast("Opening ID Verification..."));
         btnPrivacy.setOnClickListener(v -> showToast("Opening Privacy Controls..."));
@@ -88,8 +63,21 @@ public class SettingsSeekerActivity extends AppCompatActivity {
                 .setTitle("Logout")
                 .setMessage("Are you sure you want to log out from Manila LinkUp?")
                 .setPositiveButton("Logout", (dialog, which) -> {
-                    showToast("Logged out successfully");
+
+                    // 1. Log out from Firebase
+                    mAuth.signOut();
+
+                    // 2. Redirect to MainActivity
+                    Intent intent = new Intent(EmployerSettingsActivity.this, MainActivity.class);
+
+                    // 3. Clear the Activity Stack
+                    // This ensures the user can't press 'Back' to get back to the Profile
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                    startActivity(intent);
                     finish();
+
+                    showToast("Logged out successfully");
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
