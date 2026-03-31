@@ -18,12 +18,11 @@
             android:id="@+id/text_view_employer_name_job_post"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@id/toolbar"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="16sp"
-            tools:text="Employer Name" />
+            android:text="Employer Name" />
 
     </com.google.android.material.appbar.MaterialToolbar>
 
