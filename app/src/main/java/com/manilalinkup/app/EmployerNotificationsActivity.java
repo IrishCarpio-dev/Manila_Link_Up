@@ -43,7 +43,19 @@ public class EmployerNotificationsActivity extends AppCompatActivity {
         bottomNavigationViewEmployer.setOnItemSelectedListener(menuItem ->  {
             if(menuItem.getItemId() == R.id.nav_home){
                 startActivity(new Intent(EmployerNotificationsActivity.this, EmployerDashboard.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_add_job){
+                startActivity(new Intent(EmployerNotificationsActivity.this, EmployerAddJobActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_chat) {
+                startActivity(new Intent(EmployerNotificationsActivity.this, ChatEmployerActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_profile) {
+                startActivity(new Intent(EmployerNotificationsActivity.this, EmployerProfileActivity.class));
+                overridePendingTransition(0, 0);
                 return true;
             }
             return true;
