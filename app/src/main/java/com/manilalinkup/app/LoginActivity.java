@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         progressDialog = new android.app.ProgressDialog(this);

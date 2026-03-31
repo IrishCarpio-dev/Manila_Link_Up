@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:strokeColor="#BDBDBD"
+    app:strokeWidth="1.5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/text_view_archived_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Barista (Full Time)"
+            android:textColor="#212121"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_view_status_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_view_archived_title"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_expire_pill"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            tools:text="EXPIRED (2 days ago)"
+            android:textColor="#E65100"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/layout_insight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_view_status_badge"
+            android:layout_marginTop="16dp"
+            android:background="#F5F5F5"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:src="@drawable/people_notif_icon"
+                app:tint="#757575" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/text_view_insights_text"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Insight: 8 applicants were waiting for review."
+                android:textColor="#616161"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_insight"
+            android:layout_marginTop="16dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_delete_archived"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:textColor="#D32F2F" />
+
+            <Button
+                android:id="@+id/button_edit_archived"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:textColor="#1B3E9C" />
+
+            <Button
+                android:id="@+id/button_repost_archived"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="#1B3E9C"
+                android:text="Repost"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -2,6 +2,7 @@ package com.manilalinkup.app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ public class EmployerProfileActivity extends AppCompatActivity {
     private RatingsProfileAdapter adapterRating;
     private List<RatingsProfileModel> ratingProfileList;
     BottomNavigationView bottomNavigationViewEmployer;
+    MaterialButton viewArchivedJobs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,15 @@ public class EmployerProfileActivity extends AppCompatActivity {
             return true;
         });
 
+        viewArchivedJobs = findViewById(R.id.button_view_archive_jobs);
+        viewArchivedJobs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EmployerProfileActivity.this, EmployerViewArchivedJobs.class);
+                startActivity(intent);
+
+            }
+        });
 
     }
 }
