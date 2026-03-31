@@ -19,6 +19,21 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
+import com.manilalinkup.app.R;
+import com.manilalinkup.app.UserProfileModel;
+import com.manilalinkup.app.ApiService;
+import com.manilalinkup.app.AuthInterceptor;
+
+import org.json.JSONObject;
+
+import java.util.Optional;
+
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
     private android.app.ProgressDialog progressDialog;
@@ -113,7 +128,12 @@ public class LoginActivity extends AppCompatActivity {
                                     user.reload().addOnCompleteListener(reloadTask -> {
                                         if (user.isEmailVerified()) {
                                             // NEW: Don't jump to an activity yet. Check the role first!
-                                            checkUserRole(user.getUid());
+                                            user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+                                                if (tokenTask.isSuccessful()) {
+                                                    String idToken = tokenTask.getResult().getToken();
+                                                    checkUserRole(idToken);
+                                                }
+                                            });
                                         } else {
                                             progressDialog.dismiss();
                                             Toast.makeText(LoginActivity.this, "Please verify your email first!", Toast.LENGTH_LONG).show();
@@ -131,59 +151,88 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void checkUserRole(String uid) {
-        com.google.firebase.database.DatabaseReference dbRef = com.google.firebase.database.FirebaseDatabase.getInstance().getReference();
+    private void checkUserRole(String token) {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new AuthInterceptor(token))
+                .build();
 
-        dbRef.child("seekers").child(uid).addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8000/") // Replaced with actual IPv4
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build();
+
+        ApiService apiService = retrofit.create(ApiService.class);
+
+        apiService.getUserProfile().enqueue(new Callback<UserProfileModel>() {
             @Override
-            public void onDataChange(com.google.firebase.database.DataSnapshot snapshot) {
-                if (snapshot.exists()) {
+            public void onResponse(Call<UserProfileModel> call, Response<UserProfileModel> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().seekers != null) {
+                        // User is a seeker
+                        progressDialog.dismiss();
+
+                        Boolean isProfileSet = Optional.ofNullable(response.body().seekers.isProfileSet).orElse(false);
+
+                        if (isProfileSet) {
+                            startActivity(new Intent(LoginActivity.this, SeekerDashboardActivity.class));
+                            finish();
+                        } else {
+                            startActivity(new Intent(LoginActivity.this, EditSeekerProfileActivity.class));
+                            finish();
+                        }
+                    } else if (response.body().employers != null) {
+                        // User is an employer
+                        progressDialog.dismiss();
+
+                        Boolean isProfileSet = Optional.ofNullable(response.body().employers.isProfileSet).orElse(false);
+
+                        if (isProfileSet) {
+                            startActivity(new Intent(LoginActivity.this, EmployerDashboard.class));
+                            finish();
+                        } else {
+                            startActivity(new Intent(LoginActivity.this, EditEmployerProfileActivity.class));
+                            finish();
+                        }
+                    } else {
+                        progressDialog.dismiss();
+                        mAuth.signOut();
+                        Toast.makeText(LoginActivity.this, "User profile not found in our system.", Toast.LENGTH_LONG).show();
+                    }
+                } else {
                     progressDialog.dismiss();
-                    startActivity(new Intent(LoginActivity.this, SeekerDashboardActivity.class));
-                    finish();
-                } else {
-                    // If not found in seekers, check employers
-                    checkEmployerNode(uid, dbRef);
-                }
-            }
-
-            @Override
-            public void onCancelled(com.google.firebase.database.DatabaseError error) {
-                // IF PERMISSION DENIED: It just means this user isn't a Seeker.
-                // Don't show an error toast yet; just move to the next check!
-                if (error.getCode() == com.google.firebase.database.DatabaseError.PERMISSION_DENIED) {
-                    checkEmployerNode(uid, dbRef);
-                } else {
-                    progressDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    // Separate method to keep code clean
-    private void checkEmployerNode(String uid, com.google.firebase.database.DatabaseReference dbRef) {
-        dbRef.child("employers").child(uid).addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
-            @Override
-            public void onDataChange(com.google.firebase.database.DataSnapshot snapshot) {
-                progressDialog.dismiss();
-                if (snapshot.exists()) {
-                    startActivity(new Intent(LoginActivity.this, EmployerDashboard.class));
-                    finish();
-                } else {
-                    // Now we can safely say the user is truly not found anywhere
-                    Toast.makeText(LoginActivity.this, "User profile not found in our system.", Toast.LENGTH_LONG).show();
                     mAuth.signOut();
-                    progressDialog.dismiss();
+                    try {
+                        String errorJson = response.errorBody().string();
+
+                        JSONObject jObjError = new JSONObject(errorJson);
+                        String message = jObjError.getString("error");
+
+                        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(LoginActivity.this, "An unexpected error occurred", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
             @Override
-            public void onCancelled(com.google.firebase.database.DatabaseError error) {
+            public void onFailure(Call<UserProfileModel> call, Throwable t) {
                 progressDialog.dismiss();
-                // If both checks return Permission Denied, something is wrong with the Rules or UID
-                Toast.makeText(LoginActivity.this, "Access Denied. Please contact support.", Toast.LENGTH_SHORT).show();
                 mAuth.signOut();
+
+                String errorMessage = "Unknown error";
+
+                if (t instanceof java.net.ConnectException) {
+                    errorMessage = "Connection Refused: Is artisan serve running on 0.0.0.0?";
+                } else if (t instanceof java.net.SocketTimeoutException) {
+                    errorMessage = "Connection Timeout: Server took too long to respond.";
+                } else if (t instanceof java.net.UnknownHostException) {
+                    errorMessage = "Check your Base URL IP address!";
+                } else {
+                    errorMessage = t.getMessage();
+                }
+
+                Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
             }
         });
     }
