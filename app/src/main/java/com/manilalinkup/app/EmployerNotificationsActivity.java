@@ -57,6 +57,10 @@ public class EmployerNotificationsActivity extends AppCompatActivity {
                 startActivity(new Intent(EmployerNotificationsActivity.this, EmployerProfileActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
+            }if(menuItem.getItemId() == R.id.nav_add_job){
+                startActivity(new Intent(EmployerNotificationsActivity.this, EmployerAddJobActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                return true;
             }
             return true;
         });
