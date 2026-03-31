@@ -115,9 +115,6 @@ public class LoginActivity extends AppCompatActivity {
                     return; // Stop here
                 }
 
-                // Start the Firebase Login (The app waits for this result)
-                Toast.makeText(LoginActivity.this, "Authenticating...", Toast.LENGTH_SHORT).show();
-
                 progressDialog.show();
 
                 mAuth.signInWithEmailAndPassword(email, password)
@@ -136,8 +133,8 @@ public class LoginActivity extends AppCompatActivity {
                                             });
                                         } else {
                                             progressDialog.dismiss();
-                                            Toast.makeText(LoginActivity.this, "Please verify your email first!", Toast.LENGTH_LONG).show();
                                             mAuth.signOut();
+                                            Toast.makeText(LoginActivity.this, "Please verify your email first!", Toast.LENGTH_LONG).show();
                                         }
                                     });
                                 }
@@ -167,11 +164,10 @@ public class LoginActivity extends AppCompatActivity {
         apiService.getUserProfile().enqueue(new Callback<UserProfileModel>() {
             @Override
             public void onResponse(Call<UserProfileModel> call, Response<UserProfileModel> response) {
+                progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     if (response.body().seekers != null) {
                         // User is a seeker
-                        progressDialog.dismiss();
-
                         Boolean isProfileSet = Optional.ofNullable(response.body().seekers.isProfileSet).orElse(false);
 
                         if (isProfileSet) {
@@ -183,8 +179,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     } else if (response.body().employers != null) {
                         // User is an employer
-                        progressDialog.dismiss();
-
                         Boolean isProfileSet = Optional.ofNullable(response.body().employers.isProfileSet).orElse(false);
 
                         if (isProfileSet) {
@@ -195,23 +189,12 @@ public class LoginActivity extends AppCompatActivity {
                             finish();
                         }
                     } else {
-                        progressDialog.dismiss();
                         mAuth.signOut();
                         Toast.makeText(LoginActivity.this, "User profile not found in our system.", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    progressDialog.dismiss();
                     mAuth.signOut();
-                    try {
-                        String errorJson = response.errorBody().string();
-
-                        JSONObject jObjError = new JSONObject(errorJson);
-                        String message = jObjError.getString("error");
-
-                        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(LoginActivity.this, "An unexpected error occurred", Toast.LENGTH_SHORT).show();
-                    }
+                    ErrorUtils.showErrorMessage(LoginActivity.this, response.errorBody());
                 }
             }
 
@@ -220,19 +203,7 @@ public class LoginActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 mAuth.signOut();
 
-                String errorMessage = "Unknown error";
-
-                if (t instanceof java.net.ConnectException) {
-                    errorMessage = "Connection Refused: Is artisan serve running on 0.0.0.0?";
-                } else if (t instanceof java.net.SocketTimeoutException) {
-                    errorMessage = "Connection Timeout: Server took too long to respond.";
-                } else if (t instanceof java.net.UnknownHostException) {
-                    errorMessage = "Check your Base URL IP address!";
-                } else {
-                    errorMessage = t.getMessage();
-                }
-
-                Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                ErrorUtils.showThrowableError(LoginActivity.this, t);
             }
         });
     }
