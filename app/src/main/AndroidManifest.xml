@@ -20,6 +20,24 @@
             android:exported="true" />
 
         <activity
+            android:name=".EmployerProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatEmployerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatSeekerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditEmployerProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EmployerNotificationsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EmployerAddJobActivity"
+            android:exported="false" />
+        <activity
             android:name=".EmployerDashboard"
             android:exported="false" />
 
@@ -45,7 +63,7 @@
             android:parentActivityName=".LoginActivity" />
 
         <activity
-            android:name=".EmployerSIgnUp"
+            android:name=".EmployerSignUp"
             android:exported="false"
             android:label="Employer Sign Up"
             android:parentActivityName=".GetStarted" />

@@ -7,63 +7,59 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import okhttp3.ResponseBody;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-public class SignUpActivity extends AppCompatActivity {
+public class EmployerSignUp extends AppCompatActivity {
     private com.google.firebase.auth.FirebaseAuth mAuth;
     MaterialToolbar toolbar;
     MaterialButton sendOTP;
-    TextInputLayout firstName;
-    TextInputLayout lastname;
+    TextInputLayout employerName;
     TextInputLayout emailAddress;
     TextInputLayout mobileNumber;
     TextInputLayout createPassword;
     TextInputLayout confirmPassword;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_employer_sign_up);
+
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
-        sendOTP = findViewById(R.id.material_button_send_otp);
-        firstName = findViewById(R.id.text_input_layout_first_name);
-        lastname = findViewById(R.id.text_input_layout_last_name);
-        emailAddress = findViewById(R.id.text_input_layout_email_address);
-        mobileNumber = findViewById(R.id.text_input_layout_phone_number);
-        createPassword = findViewById(R.id.text_input_create_password);
-        confirmPassword = findViewById(R.id.text_input_confirm_password);
+        sendOTP = findViewById(R.id.material_button_send_email_link_employer);
+        employerName = findViewById(R.id.text_input_layout_employer_name);
+        emailAddress = findViewById(R.id.text_input_layout_email_address_employer);
+        mobileNumber = findViewById(R.id.text_input_layout_phone_number_employer);
+        createPassword = findViewById(R.id.text_input_create_password_employer);
+        confirmPassword = findViewById(R.id.text_input_confirm_password_employer);
 
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         sendOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String firstnameInput = firstName.getEditText().getText().toString().trim();
-                String lastnameInput = lastname.getEditText().getText().toString().trim();
+                String employerNameInput = employerName.getEditText().getText().toString().trim();
                 String mobileNumberInput = mobileNumber.getEditText().getText().toString().trim();
                 String emailAddressInput = emailAddress.getEditText().getText().toString().trim();
                 String createPasswordInput = createPassword.getEditText().getText().toString().trim();
                 String confirmPasswordInput = confirmPassword.getEditText().getText().toString().trim();
 
                 if (emailAddressInput.isEmpty() || createPasswordInput.isEmpty() || confirmPasswordInput.isEmpty()) {
-                    Toast.makeText(SignUpActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EmployerSignUp.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!createPasswordInput.equals(confirmPasswordInput)) {
@@ -78,6 +74,7 @@ public class SignUpActivity extends AppCompatActivity {
                     createPassword.setError("Password must be at least 8 characters");
                     return;
                 }
+
                 // If validation passes, start Firebase
                 mAuth.createUserWithEmailAndPassword(emailAddressInput, createPasswordInput)
                         .addOnCompleteListener(task -> {
@@ -88,28 +85,28 @@ public class SignUpActivity extends AppCompatActivity {
                                 // 2. Send profile to Laravel immediately so the DB record exists
                                 sendProfileToLaravel(
                                         mAuth.getCurrentUser().getUid(),
-                                        firstnameInput,
-                                        lastnameInput,
+                                        employerNameInput,
                                         emailAddressInput,
                                         mobileNumberInput
                                 );
 
                                 // 3. Inform user and go to Login
-                                Toast.makeText(SignUpActivity.this, "Registration successful! Please verify your email before logging in.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(EmployerSignUp.this, "Registration successful! Please verify your email before logging in.", Toast.LENGTH_LONG).show();
 
-                                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                                Intent intent = new Intent(EmployerSignUp.this, LoginActivity.class);
                                 startActivity(intent);
-                                finish(); // Close SignUpActivity so they can't go back
+                                finish(); // Close EmployerSignUp so they can't go back
                             } else {
-                                Toast.makeText(SignUpActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(EmployerSignUp.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
-            }
 
+
+            }
         });
     }
 
-    private void sendProfileToLaravel(String uid, String firstnameInput, String lastnameInput, String emailAddressInput, String mobileNumberInput) {
+    private void sendProfileToLaravel(String uid, String employerName,String email, String phoneNumber) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://192.168.1.8/") // Replaced with actual IPv4
                 .addConverterFactory(GsonConverterFactory.create())
@@ -117,23 +114,21 @@ public class SignUpActivity extends AppCompatActivity {
 
         ApiService apiService = retrofit.create(ApiService.class);
 
-        SeekerRequest request = new SeekerRequest(
+        EmployerRequest request = new EmployerRequest(
                 uid,
-                firstnameInput,
-                lastnameInput,
-                emailAddressInput,
-                "Not set",        // Placeholder for Address
-                "Not set",        // Placeholder for Birthdate
-                "Manila",         // Placeholder for Location
-                mobileNumberInput,
-                0,                // Placeholder for Salary
-                "default_url",    // Placeholder for Profile Picture
-                "pending",        // Placeholder for Clearance
-                1,                // Status: 1 (Active)
-                0                 // Verified: 0 (No)
-        );
+                employerName,
+                phoneNumber,
+                email,
 
-        apiService.registerSeeker(request).enqueue(new Callback<ResponseBody>() {
+                "Manila",
+                "May 3, 2004",
+                "Paco, Manila,",
+                "url profile picture",
+                "url",
+                1,
+                0);
+
+        apiService.registerEmployer(request).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
@@ -149,4 +144,5 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
+
 }

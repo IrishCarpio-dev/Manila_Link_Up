@@ -22,7 +22,8 @@ We are currently studying Computer Science and this project was developed as a r
 - Android Studio
 - RecyclerView
 - Material Design Components
-- Firebase (otp) 
+- Firebase Auth & Firestore
+- Laravel
 
 ---
 

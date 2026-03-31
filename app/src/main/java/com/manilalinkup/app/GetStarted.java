@@ -47,7 +47,7 @@ public class GetStarted extends AppCompatActivity {
         employerCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent jobSeekerActivityIntent = new Intent(GetStarted.this, EmployerDashboard.class);
+                Intent jobSeekerActivityIntent = new Intent(GetStarted.this, EmployerSignUp.class);
                 startActivity(jobSeekerActivityIntent);
             }
         });
@@ -55,7 +55,7 @@ public class GetStarted extends AppCompatActivity {
         backToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backToLoginActivityIntent = new Intent(GetStarted.this, MainActivity.class);
+                Intent backToLoginActivityIntent = new Intent(GetStarted.this, LoginActivity.class);
                 startActivity(backToLoginActivityIntent);
                 Toast.makeText(GetStarted.this, "Please try logging in.", Toast.LENGTH_LONG).show();;
             }

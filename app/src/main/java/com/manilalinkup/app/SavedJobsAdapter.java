@@ -10,18 +10,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class SavedJobsAdapter extends RecyclerView.Adapter<SavedJobsAdapter.ViewHolder> {
-    private List<JobPostDashboardModel> savedJobs;
+    private List<SeekerJobModel> savedJobs;
     private OnRemoveClickListener listener;
 
     public interface OnRemoveClickListener {
-        void onRemoveClick(JobPostDashboardModel job);
+        void onRemoveClick(SeekerJobModel job);
     }
 
     public void setOnRemoveClickListener(OnRemoveClickListener listener) {
         this.listener = listener;
     }
 
-    public SavedJobsAdapter(List<JobPostDashboardModel> savedJobs) {
+    public SavedJobsAdapter(List<SeekerJobModel> savedJobs) {
         this.savedJobs = savedJobs;
     }
 
@@ -34,13 +34,13 @@ public class SavedJobsAdapter extends RecyclerView.Adapter<SavedJobsAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        JobPostDashboardModel job = savedJobs.get(position);
+        SeekerJobModel job = savedJobs.get(position);
         holder.jobTitle.setText(job.getJobTitle());
         holder.employerName.setText(job.getEmployerName());
-        holder.location.setText(job.getJobPostLocation());
-        holder.duration.setText(job.getJob_duration());
+        holder.location.setText(job.getJobLocation());
+        holder.duration.setText(job.getJobDuration());
         holder.pfp.setImageResource(job.getEmployerProfilePicture());
-        holder.howLongAgo.setText(job.getHowLongJobIsPosted());
+        holder.howLongAgo.setText(job.getTimePosted());
 
         if (listener != null) {
             holder.removeBtn.setOnClickListener(v -> listener.onRemoveClick(job));
@@ -48,7 +48,9 @@ public class SavedJobsAdapter extends RecyclerView.Adapter<SavedJobsAdapter.View
     }
 
     @Override
-    public int getItemCount() { return savedJobs.size(); }
+    public int getItemCount() {
+        return savedJobs.size();
+    }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView jobTitle, employerName, location, duration, howLongAgo;

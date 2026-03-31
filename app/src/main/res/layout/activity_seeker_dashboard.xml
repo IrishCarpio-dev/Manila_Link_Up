@@ -98,6 +98,7 @@
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation_view"
         android:layout_below="@id/text_view_recommendations"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_job_post_card">
 
     </androidx.recyclerview.widget.RecyclerView>

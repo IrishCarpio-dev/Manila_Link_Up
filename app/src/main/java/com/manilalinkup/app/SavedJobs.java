@@ -4,5 +4,5 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SavedJobs {
-    public static List<JobPostDashboardModel> savedList = new ArrayList<>();
+    public static List<SeekerJobModel> savedList = new ArrayList<>();
 }
