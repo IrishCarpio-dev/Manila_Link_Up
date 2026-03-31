@@ -307,7 +307,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_view_archive_jobs_message"
                 android:layout_marginHorizontal="30dp"
-                android:text="View Archive Jobs"
+                android:text="View Archived Jobs"
                 android:textAllCaps="false"
                 android:textColor="#1B3E9C"
                 app:backgroundTint="#F4F7F9"

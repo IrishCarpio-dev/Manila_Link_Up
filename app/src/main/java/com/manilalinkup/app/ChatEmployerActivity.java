@@ -44,9 +44,22 @@ public class ChatEmployerActivity extends AppCompatActivity {
 
             if(menuItem.getItemId() == R.id.nav_home){
                 startActivity(new Intent(ChatEmployerActivity.this, EmployerDashboard.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_notifications) {
+                startActivity(new Intent(ChatEmployerActivity.this, EmployerNotificationsActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_add_job) {
+                startActivity(new Intent(ChatEmployerActivity.this, EmployerAddJobActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_profile) {
+                startActivity(new Intent(ChatEmployerActivity.this, EmployerProfileActivity.class));
+                overridePendingTransition(0, 0);
                 return true;
             }
+
             return true;
         });
     }

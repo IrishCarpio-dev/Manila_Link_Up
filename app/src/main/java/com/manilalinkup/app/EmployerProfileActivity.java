@@ -49,6 +49,18 @@ public class EmployerProfileActivity extends AppCompatActivity {
                 startActivity(new Intent(EmployerProfileActivity.this, EmployerDashboard.class));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 return true;
+            }else if(menuItem.getItemId() == R.id.nav_notifications) {
+                startActivity(new Intent(EmployerProfileActivity.this, EmployerNotificationsActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_add_job) {
+                startActivity(new Intent(EmployerProfileActivity.this, EmployerAddJobActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_chat) {
+                startActivity(new Intent(EmployerProfileActivity.this, ChatEmployerActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
             }
             return true;
         });
