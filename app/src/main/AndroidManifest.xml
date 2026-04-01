@@ -14,29 +14,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ManilaLinkUp">
 
-        <!-- changed exported=true for testing - Irish -->
         <activity
             android:name=".SaveSeekerActivity"
             android:exported="true" />
 
         <activity
-            android:name=".SavedJobs"
-            android:exported="false" />
-
-        <activity
             android:name=".EmployerViewArchivedJobs"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".EmployerViewJobPost"
             android:exported="false" />
         <activity
             android:name=".EmployerListOfApplicants"
-            android:exported="false" />
-        <activity
-            android:name=".EmployerViewArchivedJobs"
-            android:exported="false" />
-        <activity
-            android:name=".EmployerViewJobPost"
             android:exported="false" />
         <activity
             android:name=".EmployerProfileActivity"
@@ -61,7 +50,7 @@
             android:exported="true" />
         <activity
             android:name=".SeekerDashboardActivity"
-            android:exported="false"
+            android:exported="true"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SeekerJobPostActivity"
@@ -98,7 +87,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SeekerProfileActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="Seeker Profile"
             android:parentActivityName=".SeekerDashboardActivity" />
         <activity

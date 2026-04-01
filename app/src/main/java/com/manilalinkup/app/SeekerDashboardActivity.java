@@ -18,9 +18,10 @@ import java.util.List;
 
 public class SeekerDashboardActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private SeekerJobAdapter homeAdapter;
-    private List<SeekerJobModel> homeJobList;
+    private RecyclerView recyclerViewJobPost;
+    private JobPostDashboardAdapter adapterJobPost;
+    private List<JobPostDashboardModel> jobListJobCard;
+    // Added for navigation
     private BottomNavigationView bottomNavigationView;
 
     @Override
@@ -29,18 +30,17 @@ public class SeekerDashboardActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_seeker_dashboard);
 
-        recyclerView = findViewById(R.id.recycler_view_job_posts_dashboard);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewJobPost = findViewById(R.id.recycler_view_job_posts_dashboard);
+        recyclerViewJobPost.setLayoutManager(new LinearLayoutManager(this));
 
-        homeJobList = new ArrayList<>();
+        jobListJobCard = new ArrayList<>();
         mockData();
 
-        homeAdapter = new SeekerJobAdapter(homeJobList);
-        recyclerView.setAdapter(homeAdapter);
         adapterJobPost = new JobPostDashboardAdapter(jobListJobCard, false);
         recyclerViewJobPost.setAdapter(adapterJobPost);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -50,15 +50,10 @@ public class SeekerDashboardActivity extends AppCompatActivity {
 
                 if (id == R.id.nav_home) {
                     return true;
-                } else if (id == R.id.nav_my_activity) {
-                    Intent intent = new Intent(SeekerDashboardActivity.this, SaveSeekerActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                    return true;
                 } else if (id == R.id.nav_profile) {
                     Intent intent = new Intent(SeekerDashboardActivity.this, SeekerProfileActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(0, 0);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     return true;
                 }
 
@@ -68,7 +63,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
     }
 
     private void mockData() {
-        homeJobList.add(new SeekerJobModel(
+        jobListJobCard.add(new JobPostDashboardModel(
                 "Events/Catering Helper",
                 "Eng Bee Tin",
                 "Binondo, Manila",
@@ -77,7 +72,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 "3 days ago"
         ));
 
-        homeJobList.add(new SeekerJobModel(
+        jobListJobCard.add(new JobPostDashboardModel(
                 "Cafe Barista",
                 "Don Kopi",
                 "Malate, Manila",
@@ -86,7 +81,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 "7 days ago"
         ));
 
-        homeJobList.add(new SeekerJobModel(
+        jobListJobCard.add(new JobPostDashboardModel(
                 "Store Assistant",
                 "Quick Smart Express",
                 "Quiapo, Manila",
@@ -95,7 +90,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 "10 days ago"
         ));
 
-        homeJobList.add(new SeekerJobModel(
+        jobListJobCard.add(new JobPostDashboardModel(
                 "Artist Assistant",
                 "BINI Mika's Company",
                 "GMA, Manila",
@@ -103,5 +98,9 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 R.drawable.mikaemployer,
                 "1 day ago"
         ));
+
+        if (adapterJobPost != null) {
+            adapterJobPost.notifyDataSetChanged();
+        }
     }
 }
