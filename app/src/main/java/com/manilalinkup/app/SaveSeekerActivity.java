@@ -33,14 +33,14 @@ public class SaveSeekerActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // INITIALIZE ONCE
-        adapter = new SavedJobsAdapter(SavedJobs.savedList);
-        
+        adapter = new SavedJobsAdapter(SavedJobsData.savedList);
+
         // Handle removal of saved jobs
         adapter.setOnRemoveClickListener(job -> {
-            SavedJobs.savedList.remove(job);
+            SavedJobsData.savedList.remove(job);
             loadSavedJobs();
         });
-        
+
         recyclerView.setAdapter(adapter);
 
         loadSavedJobs();
@@ -73,7 +73,7 @@ public class SaveSeekerActivity extends AppCompatActivity {
     }
 
     private void loadSavedJobs() {
-        if (SavedJobs.savedList.isEmpty()) {
+        if (SavedJobsData.savedList.isEmpty()) {
             emptyState.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         } else {
