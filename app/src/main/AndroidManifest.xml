@@ -17,16 +17,15 @@
         <activity
             android:name=".SaveSeekerActivity"
             android:exported="true" />
-
         <activity
             android:name=".EmployerViewArchivedJobs"
             android:exported="false" />
         <activity
             android:name=".EmployerViewJobPost"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".EmployerListOfApplicants"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".EmployerProfileActivity"
             android:exported="false" />
