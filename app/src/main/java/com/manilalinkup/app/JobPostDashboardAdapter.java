@@ -12,9 +12,11 @@ import java.util.List;
 public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboardAdapter.JobPostDashboardViewHolder> {
 
     private final List<JobPostDashboardModel> jobPostDashboardModelList;
+    boolean isProfileView;
 
-    public JobPostDashboardAdapter(List<JobPostDashboardModel> jobPostDashboardModelList) {
+    public JobPostDashboardAdapter(List<JobPostDashboardModel> jobPostDashboardModelList, boolean isProfileView) {
         this.jobPostDashboardModelList = jobPostDashboardModelList;
+        this.isProfileView = isProfileView;
     }
 
     @Override
@@ -25,7 +27,10 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
     @NonNull
     @Override
     public JobPostDashboardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_job_post_card, parent, false);
+//        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_job_post_card, parent, false);
+        int layoutId = isProfileView ? R.layout.item_employer_job_list_profile : R.layout.item_job_post_card;
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         return new JobPostDashboardViewHolder(view);
     }
 
@@ -52,16 +57,29 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
         }
 
         public void bind(JobPostDashboardModel jobBind){
-            employer_pfp.setImageResource(jobBind.employerProfilePicture);
-            job_title.setText(jobBind.jobTitle);
-            employer_name.setText(jobBind.employerName);
-            job_location.setText(jobBind.jobPostLocation);
-            job_duration.setText(jobBind.job_duration);
-            how_long_job_was_posted.setText(jobBind.howLongJobIsPosted);
+
+            if (employer_pfp != null) {
+                employer_pfp.setImageResource(jobBind.employerProfilePicture);
+            }
+            if (employer_name != null) {
+                employer_name.setText(jobBind.employerName);
+            }
+
+            if (job_title != null) {
+                job_title.setText(jobBind.jobTitle);
+            }
+
+            if (job_location != null) {
+                job_location.setText(jobBind.jobPostLocation);
+            }
+
+            if (job_duration != null) {
+                job_duration.setText(jobBind.job_duration);
+            }
+
+            if (how_long_job_was_posted != null) {
+                how_long_job_was_posted.setText(jobBind.howLongJobIsPosted);
+            }
         }
     }
 }
-
-
-
-

@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
-public class SeekerJobPostActivity extends AppCompatActivity {
+public class EmployerListOfApplicants extends AppCompatActivity {
 
     MaterialToolbar toolbar;
 
@@ -18,7 +18,7 @@ public class SeekerJobPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_seeker_job_post);
+        setContentView(R.layout.activity_employer_list_of_applicants);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
