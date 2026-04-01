@@ -12,17 +12,18 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#1B3E9C">
+        android:background="#1B3E9C"
+        app:navigationIconTint="@color/white">
 
         <TextView
             android:id="@+id/text_view_employer_name_job_post"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:fontFamily="sans-serif-medium"
-            android:gravity="center"
+            android:text="Employer Name XML"
             android:textColor="@color/white"
-            android:textSize="16sp"
-            android:text="Employer Name Irish" />
+            android:textSize="16sp" />
 
     </com.google.android.material.appbar.MaterialToolbar>
 
@@ -103,8 +104,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/coverphotosamp">
-                    </ImageView>
+                        android:src="@drawable/coverphotosamp"></ImageView>
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/card_view_logo_container"
@@ -159,9 +159,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-black"
+                        android:text="Employer Job Title"
                         android:textColor="#212121"
-                        android:textSize="18sp"
-                        android:text="Employer Job Title" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/text_view_employer_name_placeholder"
@@ -169,9 +169,9 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/text_view_employer_job_title_placeholder"
                         android:fontFamily="sans-serif"
+                        android:text="Employer Name"
                         android:textColor="#616161"
-                        android:textSize="12sp"
-                        android:text="Employer Name" />
+                        android:textSize="12sp" />
 
                     <RelativeLayout
                         android:id="@+id/relative_layout_details_job_post"
@@ -196,9 +196,9 @@
                             android:layout_marginStart="8dp"
                             android:layout_toEndOf="@id/location_logo"
                             android:fontFamily="sans-serif"
+                            android:text="Binondo, Manila"
                             android:textColor="#616161"
-                            android:textSize="14sp"
-                            android:text="Binondo, Manila" />
+                            android:textSize="14sp" />
 
                         <ImageView
                             android:id="@+id/money_logo"
@@ -238,9 +238,9 @@
                             android:layout_marginTop="4dp"
                             android:layout_toEndOf="@id/calendar_logo"
                             android:fontFamily="sans-serif"
+                            android:text="Apr. 4-8, 2026"
                             android:textColor="#616161"
-                            android:textSize="14sp"
-                            android:text="Apr. 4-8, 2026" />
+                            android:textSize="14sp" />
 
                     </RelativeLayout>
 
@@ -260,8 +260,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/card_view_employer_info"
                 android:layout_margin="16dp"
-                android:textColor="#616161"
-                android:text="Job Description will go here" />
+                android:text="Job Description will go here"
+                android:textColor="#616161" />
 
         </RelativeLayout>
 

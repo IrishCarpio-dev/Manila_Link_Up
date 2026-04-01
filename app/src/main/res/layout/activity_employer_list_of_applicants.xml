@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-medium"
-            android:text="My Archived Jobs"
+            android:text="Lists of Applicants"
             android:textColor="@color/white"
             android:textSize="16sp"/>
 
@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="12dp"
-                android:text="Archived posts are hidden from job seekers but can be reposted at any time."
+                android:text="Select the best applicant(s) suited for your job. \n-Review their Profile \n-Click ACCEPT to proceed with chat\n-Tell the Seeker your hiring process."
                 android:textSize="16sp"
                 android:textStyle="italic" />
 
@@ -51,7 +51,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/text_view_archive_jobs_description"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_employer_view_archived_jobs">
+                tools:listitem="@layout/item_list_of_applicants">
 
             </androidx.recyclerview.widget.RecyclerView>
 

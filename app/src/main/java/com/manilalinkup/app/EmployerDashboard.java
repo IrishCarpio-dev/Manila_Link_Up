@@ -38,7 +38,7 @@ public class EmployerDashboard extends AppCompatActivity {
         jobListJobCard = new ArrayList<>();
         mockData();
 
-        adapterJobPost = new JobPostDashboardAdapter(jobListJobCard);
+        adapterJobPost = new JobPostDashboardAdapter(jobListJobCard, false);
         recyclerViewJobPost.setAdapter(adapterJobPost);
 
 
