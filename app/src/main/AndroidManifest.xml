@@ -13,12 +13,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ManilaLinkUp">
-
-        <!-- KEEP THIS (YOUR ACTIVITY) -->
-        <activity
-            android:name=".SaveSeekerActivity"
-            android:exported="true" />
-
         <activity
             android:name=".EmployerProfileActivity"
             android:exported="false" />
@@ -40,76 +34,57 @@
         <activity
             android:name=".EmployerDashboard"
             android:exported="false" />
-
         <activity
             android:name=".SeekerDashboardActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
-
         <activity
             android:name=".SeekerJobPostActivity"
             android:exported="false"
             android:label="Employer Name" />
-
         <activity
             android:name=".AllSetActivity"
             android:exported="false"
             android:parentActivityName=".EditSeekerProfileActivity" />
-
         <activity
             android:name=".EditSeekerProfileActivity"
             android:exported="false"
             android:label="Profile Seeker"
             android:parentActivityName=".LoginActivity" />
-
         <activity
             android:name=".EmployerSignUp"
             android:exported="false"
             android:label="Employer Sign Up"
             android:parentActivityName=".GetStarted" />
-
-        <activity
-            android:name=".OTPVerificationActivity"
-            android:exported="false"
-            android:label="OTP Verification"
-            android:parentActivityName=".SignUpActivity" />
-
         <activity
             android:name=".GetStarted"
             android:exported="false"
             android:label="Lets Get Started"
             android:parentActivityName=".SignUpActivity" />
-
         <activity
             android:name=".SignUpActivity"
             android:exported="false"
             android:label="Sign Up"
             android:parentActivityName=".MainActivity" />
-
         <activity
             android:name=".LoginActivity"
             android:exported="false"
             android:label="Login to Manila LinkUp"
             android:parentActivityName=".MainActivity" />
-
         <activity
             android:name=".SeekerProfileActivity"
             android:exported="false"
             android:label="Seeker Profile"
             android:parentActivityName=".SeekerDashboardActivity" />
-
-        <!-- MAIN LAUNCHER -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
     </application>
 
 </manifest>

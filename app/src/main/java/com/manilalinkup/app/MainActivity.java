@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     MaterialButton loginButton;
     MaterialButton signupButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
