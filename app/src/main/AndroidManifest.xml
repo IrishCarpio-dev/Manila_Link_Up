@@ -13,6 +13,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ManilaLinkUp">
+
+        <!-- changed exported=true for testing - Irish -->
+        <activity
+            android:name=".SaveSeekerActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".SavedJobs"
+            android:exported="false" />
+
+        <activity
+            android:name=".EmployerViewArchivedJobs"
+            android:exported="true" />
+        <activity
+            android:name=".EmployerViewJobPost"
+            android:exported="false" />
         <activity
             android:name=".EmployerListOfApplicants"
             android:exported="false" />
@@ -49,7 +65,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SeekerJobPostActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="Employer Name" />
         <activity
             android:name=".AllSetActivity"
@@ -111,7 +127,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

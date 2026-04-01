@@ -83,7 +83,3 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
         }
     }
 }
-
-
-
-
