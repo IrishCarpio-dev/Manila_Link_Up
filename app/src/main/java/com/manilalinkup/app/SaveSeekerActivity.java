@@ -60,6 +60,13 @@ public class SaveSeekerActivity extends AppCompatActivity {
             } else if (id == R.id.nav_my_activity) {
                 return true;
 
+            } else if (id == R.id.nav_chat) {
+                Intent intent = new Intent(this, ChatSeekerActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+                return true;
+
             } else if (id == R.id.nav_profile) {
                 Intent intent = new Intent(this, SeekerProfileActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -87,5 +94,6 @@ public class SaveSeekerActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadSavedJobs(); // auto refresh
+        bottomNavigationView.setSelectedItemId(R.id.nav_my_activity);
     }
 }
