@@ -134,7 +134,6 @@ public class LoginActivity extends AppCompatActivity {
                                 if (user != null) {
                                     user.reload().addOnCompleteListener(reloadTask -> {
                                         if (user.isEmailVerified()) {
-                                            // NEW: Don't jump to an activity yet. Check the role first!
                                             user.getIdToken(true).addOnCompleteListener(tokenTask -> {
                                                 if (tokenTask.isSuccessful()) {
                                                     String idToken = tokenTask.getResult().getToken();

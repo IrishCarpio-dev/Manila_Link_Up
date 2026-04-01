@@ -1,6 +1,7 @@
 package com.manilalinkup.app;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,6 +27,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -55,6 +59,9 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
     private Button replaceClearanceButton;
     private Button uploadIdButton;
     private Button replaceIdButton;
+    private EditText etBirthDate;
+    private final Calendar aCalendar = Calendar.getInstance();
+    private String formattedDateForApi = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +77,7 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
         replaceClearanceButton = findViewById(R.id.btnReplaceClearance);
         uploadIdButton = findViewById(R.id.btnUploadID);
         replaceIdButton = findViewById(R.id.btnReplaceID);
+        etBirthDate = findViewById(R.id.etDOB);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -82,6 +90,25 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
 
         // Use .attachAddressAutocomplete() for complete address autocomplete
         AddressAutocompleteHelper.attachDistrictAutocomplete(locationInput);
+
+        DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, day) -> {
+            aCalendar.set(Calendar.YEAR, year);
+            aCalendar.set(Calendar.MONTH, month);
+            aCalendar.set(Calendar.DAY_OF_MONTH, day);
+            updateLabel();
+        };
+
+        etBirthDate.setOnClickListener(v -> {
+            DatePickerDialog dialog = new DatePickerDialog(EditEmployerProfileActivity.this,
+                    dateSetListener,
+                    aCalendar.get(Calendar.YEAR),
+                    aCalendar.get(Calendar.MONTH),
+                    aCalendar.get(Calendar.DAY_OF_MONTH));
+
+            // Optional: Prevent selecting future dates for birthdays
+            dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+            dialog.show();
+        });
 
         profileImage = findViewById(R.id.image_view_insert_photo);
         btnRemove = findViewById(R.id.btn_remove_photo);
@@ -133,6 +160,13 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
         });
     }
 
+    private void updateLabel() {
+        String myFormat = "yyyy-MM-dd";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
+
+        formattedDateForApi = dateFormat.format(aCalendar.getTime());
+        etBirthDate.setText(formattedDateForApi);
+    }
     private void selectPhoto() {
         String[] options = {"Take Photo", "Choose from Gallery"};
         new AlertDialog.Builder(this)
@@ -276,7 +310,7 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
             return;
         }
 
-        RequestBody birthDate = MultipartRequestBodyHelper.createPartFromString("01/01/2001");
+        RequestBody birthDate = MultipartRequestBodyHelper.createPartFromString(etBirthDate.getText().toString());
         RequestBody location = MultipartRequestBodyHelper.createPartFromString(locationInput.getText().toString());
 
         apiService.setupEmployerProfile(
