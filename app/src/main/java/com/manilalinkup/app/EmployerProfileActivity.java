@@ -6,9 +6,6 @@ import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,9 +17,12 @@ import java.util.List;
 
 public class EmployerProfileActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerViewRatings;
+    private RecyclerView recyclerViewAllJobsPosted;
     private RatingsProfileAdapter adapterRating;
+    private JobPostDashboardAdapter adapterAllJobPost;
     private List<RatingsProfileModel> ratingProfileList;
+    private List<JobPostDashboardModel> allJobsPostedList;
     BottomNavigationView bottomNavigationViewEmployer;
     MaterialButton viewArchivedJobs;
 
@@ -32,9 +32,11 @@ public class EmployerProfileActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_employer_profile);
 
-        recyclerView = findViewById(R.id.recycler_view_ratings_card);
+        recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
+        recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerViewRatings.setLayoutManager(layoutManager);
+        recyclerViewRatings.setLayoutManager(layoutManager);
 
         //dummy data
         ratingProfileList = new ArrayList<>();
@@ -43,7 +45,41 @@ public class EmployerProfileActivity extends AppCompatActivity {
         ratingProfileList.add(new RatingsProfileModel("Watta nice.", "Simoun Ibarra", 4.0f));
 
         adapterRating = new RatingsProfileAdapter(ratingProfileList);
-        recyclerView.setAdapter(adapterRating);
+        recyclerViewRatings.setAdapter(adapterRating);
+
+        //For the recycler all jobs posted
+        recyclerViewAllJobsPosted = findViewById(R.id.recycler_view_employer_jobs_posted);
+        recyclerViewAllJobsPosted.setLayoutManager(new LinearLayoutManager(this));
+
+        allJobsPostedList = new ArrayList<JobPostDashboardModel>();
+        allJobsPostedList.add(new JobPostDashboardModel(
+                "Barista",
+                "Irish Cafe",
+                "Makati City",
+                "Full-time",
+                R.drawable.frieren,
+                "2h ago"
+        ));
+        allJobsPostedList.add(new JobPostDashboardModel(
+                "Cat Sitter",
+                "Castillo Family",
+                "Sta.Ana, MAnila",
+                "M | W | F",
+                R.drawable.frieren,
+                "8h ago"
+        ));
+        allJobsPostedList.add(new JobPostDashboardModel(
+                "Store Assistant",
+                "Nena Castro",
+                "San Andres Bukid, MAnila",
+                "Every Monday",
+                R.drawable.frieren,
+                "8h ago"
+        ));
+
+
+        adapterAllJobPost = new JobPostDashboardAdapter(allJobsPostedList, true);
+        recyclerViewAllJobsPosted.setAdapter(adapterAllJobPost);
 
         bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
         bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_profile);

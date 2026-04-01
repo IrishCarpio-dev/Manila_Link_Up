@@ -13,16 +13,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ManilaLinkUp">
-<!--        changed exported=true for testing - Irish-->
         <activity
             android:name=".EmployerViewArchivedJobs"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".EmployerViewJobPost"
             android:exported="false" />
         <activity
             android:name=".EmployerProfileActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ChatEmployerActivity"
             android:exported="false" />
@@ -47,7 +46,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SeekerJobPostActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="Employer Name" />
         <activity
             android:name=".AllSetActivity"
