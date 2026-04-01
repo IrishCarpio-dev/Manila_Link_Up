@@ -1,18 +1,18 @@
 package com.manilalinkup.app;
 
 public class EmployerRequest {
-    String employerName;
+    String fullName;
     String email;
-    String phoneNumber;
+    String mobileNumber;
 
     public EmployerRequest(
-            String employerName,
+            String fullName,
             String email,
-            String phoneNumber
+            String mobileNumber
     ) {
-        this.employerName = employerName;
+        this.fullName = fullName;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.mobileNumber = mobileNumber;
     }
 
 }
