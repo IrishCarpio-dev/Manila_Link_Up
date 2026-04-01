@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ManilaLinkUp">
         <activity
+            android:name=".EmployerListOfApplicants"
+            android:exported="false" />
+        <activity
             android:name=".EmployerViewArchivedJobs"
             android:exported="false" />
         <activity
@@ -87,6 +90,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
