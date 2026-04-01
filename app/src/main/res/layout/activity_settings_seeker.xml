@@ -61,12 +61,52 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Email Address"
+                            android:textSize="12sp"
+                            android:textColor="#757575"/>
+                        <TextView
+                            android:id="@+id/tv_user_email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="user@example.com"
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorOnSurface"/>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F0F0F0"/>
+
                     <TextView
                         android:id="@+id/btn_edit_profile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="16dp"
                         android:text="Edit Profile Information"
+                        android:drawableEnd="@drawable/ic_chevron_right"
+                        android:background="?attr/selectableItemBackground"
+                        android:textColor="?attr/colorOnSurface"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F0F0F0"/>
+
+                    <TextView
+                        android:id="@+id/btn_change_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="Change Password"
                         android:drawableEnd="@drawable/ic_chevron_right"
                         android:background="?attr/selectableItemBackground"
                         android:textColor="?attr/colorOnSurface"/>
@@ -86,7 +126,10 @@
                         android:background="?attr/selectableItemBackground"
                         android:textColor="?attr/colorOnSurface"/>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F0F0F0"/>
 
                     <TextView
                         android:id="@+id/btn_privacy"
@@ -140,7 +183,8 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp" android:background="#F0F0F0"/>
+                        android:layout_height="1dp"
+                        android:background="#F0F0F0"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -171,11 +215,14 @@
                         android:layout_height="wrap_content"
                         android:padding="16dp"
                         android:text="Help Center &amp; FAQs"
-                            android:drawableEnd="@drawable/ic_chevron_right"
+                        android:drawableEnd="@drawable/ic_chevron_right"
                         android:background="?attr/selectableItemBackground"
                         android:textColor="?attr/colorOnSurface"/>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F0F0F0"/>
 
                     <TextView
                         android:id="@+id/btn_terms"
@@ -187,7 +234,10 @@
                         android:background="?attr/selectableItemBackground"
                         android:textColor="?attr/colorOnSurface"/>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F0F0F0"/>
 
                     <TextView
                         android:id="@+id/btn_about"
