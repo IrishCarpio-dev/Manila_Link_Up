@@ -14,6 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ManilaLinkUp">
 
+        <!-- changed exported=true for testing - Irish -->
         <activity
             android:name=".SaveSeekerActivity"
             android:exported="true" />
