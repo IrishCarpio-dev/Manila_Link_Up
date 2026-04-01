@@ -21,7 +21,7 @@
             android:exported="false" />
         <activity
             android:name=".EmployerProfileActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".ChatEmployerActivity"
             android:exported="false" />
@@ -39,7 +39,7 @@
             android:exported="false" />
         <activity
             android:name=".EmployerDashboard"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".SeekerDashboardActivity"
             android:exported="false"
