@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:pp="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
@@ -26,63 +27,86 @@
             android:src="@drawable/frieren"
             app:shapeAppearanceOverlay="@style/CircleImage" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/applicant_full_name"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/name_block_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-condensed-medium"
-                android:text="Juan Dela Cruz"
-                android:textColor="#2C2C2C"
-                android:textSize="18sp"
-                />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/applicant_first_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:text="Juan"
+                    android:textColor="#2C2C2C"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/applicant_last_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:text="Dela Cruz"
+                    android:textColor="#2C2C2C"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/applicant_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/name_block_container"
+                android:layout_marginTop="2dp"
                 android:text="24 years old"
                 android:textColor="#757575"
                 android:textSize="14sp" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/location_block_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_below="@id/applicant_age"
+                android:layout_marginTop="6dp">
 
-                <ImageView
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:src="@drawable/location3" />
-
-                <TextView
-                    android:id="@+id/applicant_location"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="Sampaloc, Manila"
-                    android:textColor="#757575"
-                    android:textSize="13sp" />
-            </LinearLayout>
-        </LinearLayout>
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/location3" />
+
+                    <TextView
+                        android:id="@+id/applicant_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="Sampaloc, Manila"
+                        android:textColor="#757575"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </RelativeLayout>
+        </RelativeLayout>
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
-            android:rotation="0"
             android:src="@android:drawable/ic_media_play"
             app:tint="#E0E0E0"
-            pp:tint="#424242" />
+            tools:tint="#424242" />
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
