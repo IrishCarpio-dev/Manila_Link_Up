@@ -90,8 +90,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="110dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/card_gradient_bg"
-                    tools:src="@drawable/coverphotosamp" />
+                    android:src="@drawable/coverphotosamp" />
 
 
                 <androidx.cardview.widget.CardView
@@ -309,7 +308,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_view_archive_jobs_message"
                 android:layout_marginHorizontal="30dp"
-                android:text="View Archive Jobs"
+                android:text="View Archived Jobs"
                 android:textAllCaps="false"
                 android:textColor="#1B3E9C"
                 app:backgroundTint="#F4F7F9"

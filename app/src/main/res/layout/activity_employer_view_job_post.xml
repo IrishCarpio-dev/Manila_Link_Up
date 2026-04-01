@@ -22,7 +22,7 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:text="Employer Name Irish" />
+            android:text="Employer Name" />
 
     </com.google.android.material.appbar.MaterialToolbar>
 
@@ -44,31 +44,19 @@
         android:layout_above="@id/bottom_navigation_view"
         android:background="@android:color/transparent"
         android:orientation="horizontal"
-        android:padding="8dp"
-        android:weightSum="2">
+        android:paddingStart="48dp"
+        android:paddingEnd="48dp"
+        android:weightSum="1">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_save"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:backgroundTint="#EEEEEE"
-            android:text="Save"
-            android:textAllCaps="false"
-            android:textColor="#212121"
-            app:cornerRadius="8dp"
-            app:elevation="8dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_apply"
-            android:layout_width="0dp"
+            android:id="@+id/button_view_applicants"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
-            android:layout_weight="1"
             android:backgroundTint="#1B3E9C"
-            android:text="Apply"
-            android:textAllCaps="false"
+            android:text="View Applicants"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
             android:textColor="@color/white"
             app:cornerRadius="8dp"
             app:elevation="8dp" />
@@ -103,7 +91,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/coverphotosamp">
+                        android:src="@drawable/card_gradient_bg"
+                        tools:src="@drawable/coverphotosamp">
+
+
                     </ImageView>
 
                     <androidx.cardview.widget.CardView
@@ -122,7 +113,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/chipsstarters" />
+                            tools:src="@drawable/chipsstarters" />
 
                     </androidx.cardview.widget.CardView>
 
@@ -161,7 +152,7 @@
                         android:fontFamily="sans-serif-black"
                         android:textColor="#212121"
                         android:textSize="18sp"
-                        android:text="Employer Job Title" />
+                        tools:text="Employer Job Title" />
 
                     <TextView
                         android:id="@+id/text_view_employer_name_placeholder"
@@ -171,7 +162,7 @@
                         android:fontFamily="sans-serif"
                         android:textColor="#616161"
                         android:textSize="12sp"
-                        android:text="Employer Name" />
+                        tools:text="Employer Name" />
 
                     <RelativeLayout
                         android:id="@+id/relative_layout_details_job_post"
@@ -198,7 +189,7 @@
                             android:fontFamily="sans-serif"
                             android:textColor="#616161"
                             android:textSize="14sp"
-                            android:text="Binondo, Manila" />
+                            tools:text="Binondo, Manila" />
 
                         <ImageView
                             android:id="@+id/money_logo"
@@ -240,7 +231,7 @@
                             android:fontFamily="sans-serif"
                             android:textColor="#616161"
                             android:textSize="14sp"
-                            android:text="Apr. 4-8, 2026" />
+                            tools:text="Apr. 4-8, 2026" />
 
                     </RelativeLayout>
 
@@ -249,7 +240,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="2d ago" />
+                        tools:text="2d ago" />
 
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
@@ -261,8 +252,7 @@
                 android:layout_below="@id/card_view_employer_info"
                 android:layout_margin="16dp"
                 android:textColor="#616161"
-                android:text="Job Description will go here" />
-
+                tools:text="Job Description will go here" />
         </RelativeLayout>
 
     </ScrollView>
