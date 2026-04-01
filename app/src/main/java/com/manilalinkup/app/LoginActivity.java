@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         progressDialog = new android.app.ProgressDialog(this);
-        progressDialog.setMessage("Verifying account...");
+        progressDialog.setMessage("Logging in...");
         progressDialog.setCancelable(false); // Prevents user from dismissing it by clicking outside
 
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
