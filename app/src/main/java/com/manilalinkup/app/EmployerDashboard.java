@@ -38,7 +38,7 @@ public class EmployerDashboard extends AppCompatActivity {
         jobListJobCard = new ArrayList<>();
         mockData();
 
-        adapterJobPost = new JobPostDashboardAdapter(jobListJobCard);
+        adapterJobPost = new JobPostDashboardAdapter(jobListJobCard, false);
         recyclerViewJobPost.setAdapter(adapterJobPost);
 
 
@@ -53,22 +53,22 @@ public class EmployerDashboard extends AppCompatActivity {
                 } else if (id == R.id.nav_profile) {
                     Intent intent = new Intent(EmployerDashboard.this, EmployerProfileActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    overridePendingTransition(0, 0);
                     return true;
                 } else if (id == R.id.nav_notifications) {
                     Intent intent = new Intent(EmployerDashboard.this, EmployerNotificationsActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    overridePendingTransition(0, 0);
                     return true;
                 } else if (id == R.id.nav_add_job) {
                     Intent intent = new Intent(EmployerDashboard.this, EmployerAddJobActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    overridePendingTransition(0, 0);
                     return true;
                 } else if (id == R.id.nav_chat) {
                     Intent intent = new Intent(EmployerDashboard.this, ChatEmployerActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    overridePendingTransition(0, 0);
                     return true;
                 }
 

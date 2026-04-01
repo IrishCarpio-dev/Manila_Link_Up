@@ -37,6 +37,8 @@ public class SeekerDashboardActivity extends AppCompatActivity {
 
         homeAdapter = new SeekerJobAdapter(homeJobList);
         recyclerView.setAdapter(homeAdapter);
+        adapterJobPost = new JobPostDashboardAdapter(jobListJobCard, false);
+        recyclerViewJobPost.setAdapter(adapterJobPost);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setSelectedItemId(R.id.nav_home);

@@ -10,9 +10,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
@@ -33,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //for testing Dashboards - Irish
     ImageView googleLogin;
+    ImageView facebookLogin; // Added for Facebook shortcut
 
 
     @SuppressLint("MissingInflatedId")
@@ -58,10 +56,23 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // For testing Seeker Dashboard via Facebook shortcut
+        facebookLogin = findViewById(R.id.image_view_login_facebook);
+        facebookLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Direct jump to Seeker Dashboard
+                Intent intent = new Intent(LoginActivity.this, SeekerDashboardActivity.class);
+                startActivity(intent);
+                finish(); // Optional: closes login screen so back button doesn't return here
+            }
+        });
+
 
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         progressDialog = new android.app.ProgressDialog(this);
