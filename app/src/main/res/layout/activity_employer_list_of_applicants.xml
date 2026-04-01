@@ -36,20 +36,62 @@
             android:layout_height="wrap_content"
             android:padding="12dp">
 
-            <TextView
-                android:id="@+id/text_view_archive_jobs_description"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_employer_instructions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:text="Select the best applicant(s) suited for your job. \n-Review their Profile \n-Click ACCEPT to proceed with chat\n-Tell the Seeker your hiring process."
-                android:textSize="16sp"
-                android:textStyle="italic" />
+                android:layout_margin="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E0E0E0"
+                app:cardBackgroundColor="#F8F9FA">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_dialog_info"
+                        app:tint="@color/material_dynamic_primary50"
+                        android:layout_marginEnd="12dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="How to Hire"
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                            android:textColor="#424242"
+                            android:layout_marginBottom="4dp"/>
+
+                        <TextView
+                            android:id="@+id/text_view_archive_jobs_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Select the best applicant(s) suited for your job:\n\n• Review their Profile\n• Click ACCEPT to start a chat\n• Discuss your hiring process"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="4dp"
+                            android:textColor="#616161" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_employer_archived_jobs"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/text_view_archive_jobs_description"
+                android:layout_below="@id/card_employer_instructions"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_list_of_applicants">
 
