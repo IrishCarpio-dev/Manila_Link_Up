@@ -84,6 +84,27 @@
             android:label="Seeker Profile"
             android:parentActivityName=".SeekerDashboardActivity" />
         <activity
+            android:name=".SeekerSettingsActivity"
+            android:label="Seeker Settings"
+            android:exported="false"
+            android:parentActivityName=".SeekerProfileActivity"/>
+        <activity
+            android:name=".EmployerSettingsActivity"
+            android:label="Employer Settings"
+            android:exported="false"
+            android:parentActivityName=".EmployerProfileActivity"/>
+        <activity
+            android:name=".SeekerVerifyIdentityActivity"
+            android:label="Verify Identity"
+            android:exported="false"
+            android:parentActivityName=".SeekerSettingsActivity"/>
+        <activity
+            android:name=".SeekerPrivacyControlsActivity"
+            android:label="Privacy Controls"
+            android:exported="false"
+            android:parentActivityName=".SeekerSettingsActivity"/>
+
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
