@@ -7,12 +7,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmployerListOfApplicants extends AppCompatActivity {
 
     MaterialToolbar toolbar;
+    RecyclerView applicantsRecyclerView;
+    EmployerApplicantsAdapter applicantsAdapter;
+    List<EmployerApplicantsModel> applicantsModelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,5 +39,19 @@ public class EmployerListOfApplicants extends AppCompatActivity {
             getOnBackPressedDispatcher().onBackPressed();
         });
 
+
+        applicantsRecyclerView = findViewById(R.id.recycler_view_applicants);
+        applicantsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        applicantsModelList = new ArrayList<>();
+        applicantsModelList.add(new EmployerApplicantsModel(R.drawable.frieren, "Frieren", "Chan", 1014, "Sampaloc, Manila"));
+        applicantsModelList.add(new EmployerApplicantsModel(R.drawable.mikaemployer, "Mika", "Biniya", 22, "Quezon City"));
+        applicantsModelList.add(new EmployerApplicantsModel(R.drawable.profpic_mock2, "Stark", "Luna", 18, "Binondo, Manila"));
+        applicantsModelList.add(new EmployerApplicantsModel(R.drawable.seeker_prof_mock1, "Fern", "Rizal", 26, "Calamba, Laguna"));
+        applicantsModelList.add(new EmployerApplicantsModel(R.drawable.profpicmock3, "Himmel", "Aquino", 96, "Tandang Sora, QC"));
+        applicantsModelList.add(new EmployerApplicantsModel(R.drawable.profile_logo, "Gabriela", "Silang", 25, "Vigan, Ilocos Sur"));
+
+        applicantsAdapter = new EmployerApplicantsAdapter(applicantsModelList);
+        applicantsRecyclerView.setAdapter(applicantsAdapter);
     }
 }
