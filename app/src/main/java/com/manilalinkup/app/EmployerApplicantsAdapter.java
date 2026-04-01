@@ -57,7 +57,7 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
             profilePhoto.setImageResource(employerApplicantsModel.profilePhoto);
             firstname.setText(employerApplicantsModel.firstname);
             lastname.setText(employerApplicantsModel.lastname);
-            age.setText(employerApplicantsModel.age);
+            age.setText(String.valueOf(employerApplicantsModel.age) + " years old");
             location.setText(employerApplicantsModel.location);
 
         }

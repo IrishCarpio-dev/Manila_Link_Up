@@ -26,7 +26,7 @@
             android:exported="false" />
         <activity
             android:name=".EmployerListOfApplicants"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".EmployerProfileActivity"
             android:exported="false" />
@@ -47,14 +47,14 @@
             android:exported="false" />
         <activity
             android:name=".EmployerDashboard"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".SeekerDashboardActivity"
-            android:exported="true"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SeekerJobPostActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="Employer Name" />
         <activity
             android:name=".AllSetActivity"
@@ -87,7 +87,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SeekerProfileActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="Seeker Profile"
             android:parentActivityName=".SeekerDashboardActivity" />
         <activity
