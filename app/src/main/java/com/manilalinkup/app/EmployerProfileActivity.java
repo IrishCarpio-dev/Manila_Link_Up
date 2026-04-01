@@ -3,9 +3,13 @@ package com.manilalinkup.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView; // Added import
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,8 +27,11 @@ public class EmployerProfileActivity extends AppCompatActivity {
     private JobPostDashboardAdapter adapterAllJobPost;
     private List<RatingsProfileModel> ratingProfileList;
     private List<JobPostDashboardModel> allJobsPostedList;
-    BottomNavigationView bottomNavigationViewEmployer;
     MaterialButton viewArchivedJobs;
+    BottomNavigationView bottomNavigationViewEmployer;
+
+    // 1. Declare the Settings Icon
+    private ImageView settingsIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +40,16 @@ public class EmployerProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_employer_profile);
 
         recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
+        recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
+        // 2. Initialize the Settings Icon
+        settingsIcon = findViewById(R.id.image_view_employer_settings_icon);
+
+        // 3. Set the Click Listener for Settings
+        settingsIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(EmployerProfileActivity.this, EmployerSettingsActivity.class);
+            startActivity(intent);
+        });
+
         recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerViewRatings.setLayoutManager(layoutManager);
