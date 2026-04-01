@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed-medium"
-                    android:text="Juan"
+                    tools:text="Frieren"
                     android:textColor="#2C2C2C"
                     android:textSize="18sp" />
 
@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:fontFamily="sans-serif-condensed-medium"
-                    android:text="Dela Cruz"
+                    tools:text="Chan"
                     android:textColor="#2C2C2C"
                     android:textSize="18sp" />
             </LinearLayout>
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/name_block_container"
                 android:layout_marginTop="2dp"
-                android:text="24 years old"
+                tools:text="24 years old"
                 android:textColor="#757575"
                 android:textSize="14sp" />
 

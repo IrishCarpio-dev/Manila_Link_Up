@@ -7,12 +7,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+
+import java.util.List;
 
 public class EmployerListOfApplicants extends AppCompatActivity {
 
     MaterialToolbar toolbar;
+    RecyclerView applicantsRecyclerView;
+    EmployerApplicantsAdapter applicantsAdapter;
+    List<EmployerApplicantsModel> applicantsModelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +36,8 @@ public class EmployerListOfApplicants extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> {
             getOnBackPressedDispatcher().onBackPressed();
         });
+
+
 
     }
 }
