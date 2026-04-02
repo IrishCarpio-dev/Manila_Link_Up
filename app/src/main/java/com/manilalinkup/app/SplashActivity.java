@@ -50,17 +50,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void checkUserRole(String token) {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new AuthInterceptor(token))
-                .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8000/") // Replaced with actual IPv4
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build();
-
-        ApiService apiService = retrofit.create(ApiService.class);
+        ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
         apiService.getUserProfile().enqueue(new Callback<UserProfileModel>() {
             @Override

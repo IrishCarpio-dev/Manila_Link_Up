@@ -119,17 +119,7 @@ public class EmployerSignUp extends AppCompatActivity {
     }
 
     private void sendProfileToLaravel(String token, String employerName, String email, String phoneNumber) {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new AuthInterceptor(token))
-                .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8000/") // Replaced with actual IPv4
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build();
-
-        ApiService apiService = retrofit.create(ApiService.class);
+        ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
         EmployerRequest request = new EmployerRequest(
                 employerName,

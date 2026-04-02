@@ -335,15 +335,7 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
             RequestBody birthDate,
             RequestBody location
     ) {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new AuthInterceptor(token))
-                .build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build();
-        apiService = retrofit.create(ApiService.class);
+        apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
         apiService.setupEmployerProfile(
                 profilePhoto,
