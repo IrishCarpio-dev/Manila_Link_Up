@@ -31,7 +31,6 @@ public class DistrictAdapter extends RecyclerView.Adapter<DistrictAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // You can reuse the same item_location.xml or a simple TextView
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_location, parent, false);
         return new ViewHolder(v);
     }

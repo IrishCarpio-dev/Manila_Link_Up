@@ -109,7 +109,6 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
                     aCalendar.get(Calendar.MONTH),
                     aCalendar.get(Calendar.DAY_OF_MONTH));
 
-            // Optional: Prevent selecting future dates for birthdays
             dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
             dialog.show();
         });

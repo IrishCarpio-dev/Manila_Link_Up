@@ -56,7 +56,7 @@ public class EmployerSignUp extends AppCompatActivity {
 
         progressDialog = new android.app.ProgressDialog(this);
         progressDialog.setMessage("Signing up...");
-        progressDialog.setCancelable(false); // Prevents user from dismissing it by clicking outside
+        progressDialog.setCancelable(false);
 
         sendOTP.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,11 +72,10 @@ public class EmployerSignUp extends AppCompatActivity {
                     return;
                 }
                 if (!createPasswordInput.equals(confirmPasswordInput)) {
-                    // Show error on the layout so the user sees it clearly
                     confirmPassword.setError("Passwords do not match");
                     return;
                 } else {
-                    confirmPassword.setError(null); // Clear error if they match
+                    confirmPassword.setError(null);
                 }
 
                 if (createPasswordInput.length() < 8) {
@@ -84,21 +83,18 @@ public class EmployerSignUp extends AppCompatActivity {
                     return;
                 }
 
-                // If validation passes, start Firebase
-
                 progressDialog.show();
 
                 mAuth.createUserWithEmailAndPassword(emailAddressInput, createPasswordInput)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                // 1. Send verification link
                                 mAuth.getCurrentUser().sendEmailVerification();
 
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 user.getIdToken(true).addOnCompleteListener(tokenTask -> {
                                     if (tokenTask.isSuccessful()) {
                                         String idToken = tokenTask.getResult().getToken();
-                                        // 2. Send profile to Laravel immediately so the DB record exists
+
                                         sendProfileToLaravel(
                                                 idToken,
                                                 employerNameInput,
@@ -137,7 +133,7 @@ public class EmployerSignUp extends AppCompatActivity {
 
                     Intent intent = new Intent(EmployerSignUp.this, LoginActivity.class);
                     startActivity(intent);
-                    finish(); // Close EmployerSignUp so they can't go back
+                    finish();
                 } else {
                     ErrorUtils.showErrorMessage(EmployerSignUp.this, response.errorBody());
                 }

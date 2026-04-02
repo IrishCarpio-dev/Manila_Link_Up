@@ -22,7 +22,6 @@ public class PhotonClient {
     }
 
     public void search(String query, Callback<PhotonResponseModel> callback) {
-        // limit 5, language English
         service.getAddress(
                 query,
                 5,

@@ -5,8 +5,6 @@ public enum ImageUploadSelection {
 
     private final int code;
 
-
-    // Constructor must be private or package-private
     ImageUploadSelection(int code) {
         this.code = code;
     }

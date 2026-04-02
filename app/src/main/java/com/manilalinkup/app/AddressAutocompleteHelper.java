@@ -81,7 +81,6 @@ public class AddressAutocompleteHelper {
         rv.setLayoutManager(new LinearLayoutManager(context));
         rv.setAdapter(adapter);
 
-        // 2. Attach Listener
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
