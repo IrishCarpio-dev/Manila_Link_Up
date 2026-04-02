@@ -37,7 +37,7 @@ public class SplashActivity extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
 
         if (user == null) {
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
         } else {
             user.getIdToken(true).addOnCompleteListener(tokenTask -> {
                 if (tokenTask.isSuccessful()) {
