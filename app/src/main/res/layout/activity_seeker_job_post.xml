@@ -51,7 +51,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_save"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="54dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:backgroundTint="#EEEEEE"
@@ -59,12 +59,14 @@
             android:textAllCaps="false"
             android:textColor="#212121"
             app:cornerRadius="8dp"
-            app:elevation="8dp" />
+            app:elevation="4dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#BDBDBD"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_apply"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="54dp"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:backgroundTint="#1B3E9C"
@@ -72,7 +74,9 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:cornerRadius="8dp"
-            app:elevation="8dp" />
+            app:elevation="4dp"
+            app:strokeWidth="1.5dp"
+            app:strokeColor="#142D70" />
 
     </LinearLayout>
 

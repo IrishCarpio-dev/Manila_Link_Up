@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F7F9"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1B3E9C"
+        app:navigationIconTint="@color/white">
+
+        <TextView
+            android:id="@+id/text_view_seeker_name_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-medium"
+            android:text="Seeker Name"
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <LinearLayout
+        android:id="@+id/button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:background="@android:color/transparent"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        android:weightSum="2">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_accept_seeker"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#EEEEEE"
+            android:text="ACCEPT"
+            android:textAllCaps="false"
+            android:textColor="#4CAF50"
+            app:cornerRadius="8dp"
+            app:elevation="4dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#BDBDBD"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_reject_seeker"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#1B3E9C"
+            android:text="REJECT"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:cornerRadius="8dp"
+            app:elevation="4dp"
+            app:strokeWidth="1.5dp"
+            app:strokeColor="#142D70" />
+    </LinearLayout>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_view_type_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="2dp"
+        android:layout_alignParentBottom="true"
+        app:strokeColor="#F0F0F0"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:id="@+id/type_a_message_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="4dp">
+
+            <EditText
+                android:id="@+id/edit_chat_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="Type a message..."
+                android:minHeight="48dp"
+                android:textColor="#212121"
+                android:textSize="15sp" />
+
+            <ImageButton
+                android:id="@+id/btn_send_message"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_send"
+                app:tint="#424242" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F4F7F9"
+        android:layout_above="@id/type_a_message_container"
+        android:layout_below="@id/button_container">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_chat_messages"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_below="@id/button_container"
+                android:layout_above="@id/edit_chat_message"
+                android:clipToPadding="false"
+                android:padding="8dp" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>
