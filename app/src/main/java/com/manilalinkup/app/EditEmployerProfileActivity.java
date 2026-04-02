@@ -2,6 +2,7 @@ package com.manilalinkup.app;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -161,11 +162,11 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
     }
 
     private void updateLabel() {
-        String myFormat = "yyyy-MM-dd";
-        SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
+        SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        formattedDateForApi = apiDateFormat.format(aCalendar.getTime());
 
-        formattedDateForApi = dateFormat.format(aCalendar.getTime());
-        etBirthDate.setText(formattedDateForApi);
+        SimpleDateFormat displayDateFormat = new SimpleDateFormat("MMM d, yyyy", Locale.US);
+        etBirthDate.setText(displayDateFormat.format(aCalendar.getTime()));
     }
     private void selectPhoto() {
         String[] options = {"Take Photo", "Choose from Gallery"};
@@ -268,15 +269,15 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
     }
 
     private void setupProfile(String token) {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new AuthInterceptor(token))
-                .build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build();
-        apiService = retrofit.create(ApiService.class);
+        if (formattedDateForApi.isBlank()) {
+            Toast.makeText(this, "Please fill Birth Date field.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (locationInput.getText().toString().isBlank()) {
+            Toast.makeText(this, "Please fill Location field.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         MultipartBody.Part profilePhoto = null;
         MultipartBody.Part clearance = null;
@@ -313,6 +314,34 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
         RequestBody birthDate = MultipartRequestBodyHelper.createPartFromString(etBirthDate.getText().toString());
         RequestBody location = MultipartRequestBodyHelper.createPartFromString(locationInput.getText().toString());
 
+        sendProfileToApi(
+                token,
+                profilePhoto,
+                clearance,
+                validId,
+                birthDate,
+                location
+        );
+    }
+
+    private void sendProfileToApi(
+            String token,
+            MultipartBody.Part profilePhoto,
+            MultipartBody.Part clearance,
+            MultipartBody.Part validId,
+            RequestBody birthDate,
+            RequestBody location
+    ) {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new AuthInterceptor(token))
+                .build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build();
+        apiService = retrofit.create(ApiService.class);
+
         apiService.setupEmployerProfile(
                 profilePhoto,
                 clearance,
@@ -324,7 +353,8 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful()) {
-                    Toast.makeText(EditEmployerProfileActivity.this, "Profile Updated!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(EditEmployerProfileActivity.this, EmployerDashboard.class));
+                    finish();
                 } else {
                     ErrorUtils.showErrorMessage(EditEmployerProfileActivity.this, response.errorBody());
                 }
