@@ -7,10 +7,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private static Retrofit retrofit = null;
-
-    // TODO: Change BASE_URL to actual server domain
-    private static final String BASE_URL = "http://10.0.2.2:8000/api/";
+    private static final String BASE_URL = "http://10.0.2.2:8000/"; // TODO: Change BASE_URL to actual server domain
 
     public static Retrofit getClient(String token) {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -33,14 +30,10 @@ public class RetrofitClient {
                 })
                 .build();
 
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .client(okHttpClient)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
-
-        return retrofit;
+        return new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
     }
 }
