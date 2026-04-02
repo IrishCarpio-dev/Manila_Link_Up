@@ -45,9 +45,9 @@
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:backgroundTint="#EEEEEE"
-            android:text="ACCEPT"
+            android:text="REJECT"
             android:textAllCaps="false"
-            android:textColor="#4CAF50"
+            android:textColor="#E53935"
             app:cornerRadius="8dp"
             app:elevation="4dp"
             app:strokeWidth="1dp"
@@ -60,7 +60,7 @@
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:backgroundTint="#1B3E9C"
-            android:text="REJECT"
+            android:text="ACCEPT"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:cornerRadius="8dp"
@@ -126,12 +126,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_chat_messages"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_below="@id/button_container"
-                android:layout_above="@id/edit_chat_message"
+                android:layout_height="match_parent"
+                android:layout_below="@id/toolbar"
                 android:clipToPadding="false"
-                android:padding="8dp" />
+                android:padding="8dp"/>
 
         </RelativeLayout>
     </ScrollView>

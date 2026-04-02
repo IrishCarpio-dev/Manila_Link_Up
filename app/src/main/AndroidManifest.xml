@@ -15,7 +15,7 @@
         android:theme="@style/Theme.ManilaLinkUp">
         <activity
             android:name=".ChatThreadEmployer"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".SaveSeekerActivity"
             android:exported="false" />
