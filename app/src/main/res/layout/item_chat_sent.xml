@@ -21,7 +21,7 @@
             android:padding="12dp">
 
             <TextView
-                android:id="@+id/text_message_body"
+                android:id="@+id/text_message_body_sent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="That's great! When can you start?"
@@ -29,11 +29,11 @@
                 android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/text_message_time"
+                android:id="@+id/text_message_time_sent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text_message_body"
-                android:layout_alignStart="@id/text_message_body"
+                android:layout_below="@id/text_message_body_sent"
+                android:layout_alignStart="@id/text_message_body_sent"
                 android:layout_marginTop="4dp"
                 android:text="10:01 AM"
                 android:textColor="#B3FFFFFF"

@@ -21,7 +21,7 @@
             android:padding="12dp">
 
             <TextView
-                android:id="@+id/text_message_body"
+                android:id="@+id/text_message_body_received"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="Hello! I am interested in the position."
@@ -29,11 +29,11 @@
                 android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/text_message_time"
+                android:id="@+id/text_message_time_received"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text_message_body"
-                android:layout_alignStart="@id/text_message_body"
+                android:layout_below="@id/text_message_body_received"
+                android:layout_alignStart="@id/text_message_body_received"
                 android:layout_marginTop="4dp"
                 tools:text="10:00 AM"
                 android:textColor="#757575"
