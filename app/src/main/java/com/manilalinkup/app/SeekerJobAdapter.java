@@ -33,8 +33,8 @@ public class SeekerJobAdapter extends RecyclerView.Adapter<SeekerJobAdapter.Seek
         holder.bind(job);
         
         holder.saveBtn.setOnClickListener(v -> {
-            if (!SavedJobsData.savedList.contains(job)) {
-                SavedJobsData.savedList.add(job);
+            if (!SaveSeekerActivity.savedList.contains(job)) {
+                SaveSeekerActivity.savedList.add(job);
                 Toast.makeText(v.getContext(), "Job Saved", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(v.getContext(), "Already Saved", Toast.LENGTH_SHORT).show();
