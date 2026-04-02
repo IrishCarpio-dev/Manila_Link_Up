@@ -38,6 +38,7 @@ public class SplashActivity extends AppCompatActivity {
 
         if (user == null) {
             startActivity(new Intent(this, MainActivity.class));
+            finish();
         } else {
             user.getIdToken(true).addOnCompleteListener(tokenTask -> {
                 if (tokenTask.isSuccessful()) {
@@ -46,7 +47,6 @@ public class SplashActivity extends AppCompatActivity {
                 }
             });
         }
-        finish();
     }
 
     private void checkUserRole(String token) {
