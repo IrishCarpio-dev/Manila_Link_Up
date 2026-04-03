@@ -29,6 +29,7 @@ public class EmployerProfileActivity extends AppCompatActivity {
     private List<JobPostDashboardModel> allJobsPostedList;
     MaterialButton viewArchivedJobs;
     BottomNavigationView bottomNavigationViewEmployer;
+    ImageView viewAllRatings;
 
     // 1. Declare the Settings Icon
     private ImageView settingsIcon;
@@ -119,6 +120,15 @@ public class EmployerProfileActivity extends AppCompatActivity {
                 return true;
             }
             return true;
+        });
+
+        viewAllRatings = findViewById(R.id.item_card_see_more_ratings_arrow);
+        viewAllRatings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EmployerProfileActivity.this, EmployerViewAllRatings.class);
+                startActivity(intent);
+            }
         });
 
         viewArchivedJobs = findViewById(R.id.button_view_archive_jobs);
