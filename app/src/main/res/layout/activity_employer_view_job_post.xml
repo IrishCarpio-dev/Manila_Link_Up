@@ -27,26 +27,15 @@
 
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white"
-        app:itemIconTint="@color/bottom_nav_icon_colors"
-        app:itemTextColor="@color/bottom_nav_icon_colors"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_nav_employer_icons" />
-
     <LinearLayout
         android:id="@+id/layout_save_apply_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/bottom_navigation_view"
+        android:layout_alignParentBottom="true"
         android:background="@android:color/transparent"
         android:orientation="horizontal"
-        android:paddingStart="48dp"
-        android:paddingEnd="48dp"
+        android:paddingHorizontal="48dp"
+        android:paddingBottom="8dp"
         android:weightSum="1">
 
         <com.google.android.material.button.MaterialButton
