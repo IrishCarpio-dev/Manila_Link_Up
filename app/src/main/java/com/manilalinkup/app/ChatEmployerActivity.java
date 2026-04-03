@@ -34,7 +34,12 @@ public class ChatEmployerActivity extends AppCompatActivity {
         employerChatModelList = new ArrayList<>();
         mockChatData();
 
-        employerChatTabAdapter = new EmployerChatTabAdapter(employerChatModelList);
+        employerChatTabAdapter = new EmployerChatTabAdapter(employerChatModelList, chat -> {
+            Intent intent = new Intent(ChatEmployerActivity.this, ChatThreadEmployer.class );
+            intent.putExtra("SEEKER_UID", chat.getUid());
+            intent.putExtra("SEEKER_NAME", chat.getSeekerName());
+            startActivity(intent);
+        });
         recyclerViewChat.setAdapter(employerChatTabAdapter);
 
 
@@ -70,7 +75,8 @@ public class ChatEmployerActivity extends AppCompatActivity {
                 R.drawable.frieren, // Replace with your actual drawable
                 "Frieren Chan",
                 "Hello! Is the Barista position still open?",
-                "10:45 AM"
+                "10:45 AM",
+                "uid_001"
         ));
 
         // 2. A follow-up message
@@ -78,7 +84,8 @@ public class ChatEmployerActivity extends AppCompatActivity {
                 R.drawable.seeker_prof_mock1,
                 "Fern Frieren",
                 "I have sent my resume to your email. Thank you!",
-                "Yesterday"
+                "Yesterday",
+                "uid_002"
         ));
 
         // 3. An older conversation
@@ -86,7 +93,8 @@ public class ChatEmployerActivity extends AppCompatActivity {
                 R.drawable.profpic_mock2,
                 "Stark Rizal",
                 "When can I start the orientation?",
-                "Mar 25"
+                "Mar 25",
+                "uid_003"
         ));
 
         // 4. Another inquiry
@@ -94,7 +102,8 @@ public class ChatEmployerActivity extends AppCompatActivity {
                 R.drawable.profpicmock3,
                 "Himmel Bonifacio",
                 "Is the salary paid weekly or monthly?",
-                "Mar 24"
+                "Mar 24",
+                "uid_004"
         ));
 
     }
