@@ -3,10 +3,12 @@ package com.manilalinkup.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -25,6 +27,7 @@ public class EmployerDashboard extends AppCompatActivity {
     private JobPostDashboardAdapter adapterJobPost;
     private List<JobPostDashboardModel> jobListJobCard;
     BottomNavigationView bottomNavigationViewEmployer;
+    CardView addJobButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,15 @@ public class EmployerDashboard extends AppCompatActivity {
         });
         recyclerViewJobPost.setAdapter(adapterJobPost);
 
+        addJobButton = findViewById(R.id.card_view_post_new_job);
+        addJobButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EmployerDashboard.this, EmployerAddJobActivity.class);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+            }
+        });
 
         bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_home);
         bottomNavigationViewEmployer.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
