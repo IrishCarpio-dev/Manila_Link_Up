@@ -96,7 +96,14 @@ public class EmployerProfileActivity extends AppCompatActivity {
         ));
 
 
-        adapterAllJobPost = new JobPostDashboardAdapter(allJobsPostedList, true);
+        adapterAllJobPost = new JobPostDashboardAdapter(allJobsPostedList, true, new JobPostDashboardAdapter.OnJobClickListener() {
+            @Override
+            public void onJobClick(JobPostDashboardModel job) {
+                Intent intent = new Intent(EmployerProfileActivity.this, EmployerViewJobPost.class);
+                //not yet tested - irish
+                startActivity(intent);
+            }
+        });
         recyclerViewAllJobsPosted.setAdapter(adapterAllJobPost);
 
         bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
@@ -104,7 +111,7 @@ public class EmployerProfileActivity extends AppCompatActivity {
         bottomNavigationViewEmployer.setOnItemSelectedListener(menuItem ->  {
             if(menuItem.getItemId() == R.id.nav_home){
                 startActivity(new Intent(EmployerProfileActivity.this, EmployerDashboard.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                overridePendingTransition(0, 0);
                 return true;
             }else if(menuItem.getItemId() == R.id.nav_notifications) {
                 startActivity(new Intent(EmployerProfileActivity.this, EmployerNotificationsActivity.class));

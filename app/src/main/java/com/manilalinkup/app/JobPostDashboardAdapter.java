@@ -10,13 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboardAdapter.JobPostDashboardViewHolder> {
-
+    public interface OnJobClickListener {
+        void onJobClick(JobPostDashboardModel job);
+    }
     private final List<JobPostDashboardModel> jobPostDashboardModelList;
+    OnJobClickListener listener;
     boolean isProfileView;
 
-    public JobPostDashboardAdapter(List<JobPostDashboardModel> jobPostDashboardModelList, boolean isProfileView) {
+    public JobPostDashboardAdapter(List<JobPostDashboardModel> jobPostDashboardModelList, boolean isProfileView, OnJobClickListener listener) {
         this.jobPostDashboardModelList = jobPostDashboardModelList;
         this.isProfileView = isProfileView;
+        this.listener = listener;
     }
 
     @Override
@@ -36,7 +40,8 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
 
     @Override
     public void onBindViewHolder(@NonNull JobPostDashboardViewHolder holder, int position) {
-        holder.bind(jobPostDashboardModelList.get(position));
+        JobPostDashboardModel currentJob = jobPostDashboardModelList.get(position);
+        holder.bind(currentJob, listener);
     }
 
     static class JobPostDashboardViewHolder extends RecyclerView.ViewHolder {
@@ -56,7 +61,7 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
             how_long_job_was_posted = itemView.findViewById(R.id.item_card_how_long_job_post_posted_placeholder);
         }
 
-        public void bind(JobPostDashboardModel jobBind){
+        public void bind(JobPostDashboardModel jobBind, OnJobClickListener listener){
 
             if (employer_pfp != null) {
                 employer_pfp.setImageResource(jobBind.employerProfilePicture);
@@ -80,6 +85,12 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
             if (how_long_job_was_posted != null) {
                 how_long_job_was_posted.setText(jobBind.howLongJobIsPosted);
             }
+            itemView.setOnClickListener(v -> {
+                if(listener != null){
+                    listener.onJobClick(jobBind);
+                }
+            });
+
         }
     }
 }

@@ -15,11 +15,16 @@ import java.util.List;
 public class EmployerChatTabAdapter extends RecyclerView.Adapter<EmployerChatTabAdapter.EmployerChatViewHolder> {
 
     private List<EmployerChatModel> employerChatModelList;
+    private OnChatClickListener listener;
 
-    public EmployerChatTabAdapter(List<EmployerChatModel> employerChatModelList) {
-        this.employerChatModelList = employerChatModelList;
+    public interface OnChatClickListener {
+        void onChatClick(EmployerChatModel chat);
     }
 
+    public EmployerChatTabAdapter(List<EmployerChatModel> employerChatModelList, OnChatClickListener listener) {
+        this.employerChatModelList = employerChatModelList;
+        this.listener = listener;
+    }
 
     @Override
     public int getItemCount() {
@@ -35,7 +40,7 @@ public class EmployerChatTabAdapter extends RecyclerView.Adapter<EmployerChatTab
 
     @Override
     public void onBindViewHolder(@NonNull EmployerChatViewHolder holder, int position) {
-        holder.bind(employerChatModelList.get(position));
+        holder.bind(employerChatModelList.get(position), listener);
     }
 
     static class  EmployerChatViewHolder extends RecyclerView.ViewHolder {
@@ -53,11 +58,17 @@ public class EmployerChatTabAdapter extends RecyclerView.Adapter<EmployerChatTab
 
         }
 
-        public void bind(EmployerChatModel employerChatModel){
+        public void bind(EmployerChatModel employerChatModel, OnChatClickListener listener){
             seekerProfilePicture.setImageResource(employerChatModel.seekerImage);
             seekerName.setText(employerChatModel.seekerName);
             messagePreview.setText(employerChatModel.messagePreview);
             messageTimeStamp.setText(employerChatModel.messageTimeStamp);
+
+            itemView.setOnClickListener(v -> {
+                if(listener != null){
+                    listener.onChatClick(employerChatModel);
+                }
+            });
         }
 
     }
