@@ -38,7 +38,15 @@ public class EmployerDashboard extends AppCompatActivity {
         jobListJobCard = new ArrayList<>();
         mockData();
 
-        adapterJobPost = new JobPostDashboardAdapter(jobListJobCard, false);
+        adapterJobPost = new JobPostDashboardAdapter(jobListJobCard, false, new JobPostDashboardAdapter.OnJobClickListener() {
+            @Override
+            public void onJobClick(JobPostDashboardModel job) {
+                Intent intent = new Intent(EmployerDashboard.this, EmployerViewJobPost.class);
+                intent.putExtra("JOB_TITLE", job.getJobTitle());
+                intent.putExtra("EMPLOYER_NAME", job.getEmployerName());
+                startActivity(intent);
+            }
+        });
         recyclerViewJobPost.setAdapter(adapterJobPost);
 
 

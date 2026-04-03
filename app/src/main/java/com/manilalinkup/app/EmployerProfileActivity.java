@@ -96,7 +96,14 @@ public class EmployerProfileActivity extends AppCompatActivity {
         ));
 
 
-        adapterAllJobPost = new JobPostDashboardAdapter(allJobsPostedList, true);
+        adapterAllJobPost = new JobPostDashboardAdapter(allJobsPostedList, true, new JobPostDashboardAdapter.OnJobClickListener() {
+            @Override
+            public void onJobClick(JobPostDashboardModel job) {
+                Intent intent = new Intent(EmployerProfileActivity.this, EmployerViewJobPost.class);
+                //not yet tested - irish
+                startActivity(intent);
+            }
+        });
         recyclerViewAllJobsPosted.setAdapter(adapterAllJobPost);
 
         bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
