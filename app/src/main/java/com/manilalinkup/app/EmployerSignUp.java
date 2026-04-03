@@ -11,7 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseUser;
 
+import org.json.JSONObject;
+
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,6 +24,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class EmployerSignUp extends AppCompatActivity {
+    private android.app.ProgressDialog progressDialog;
     private com.google.firebase.auth.FirebaseAuth mAuth;
     MaterialToolbar toolbar;
     MaterialButton sendOTP;
@@ -49,6 +54,10 @@ public class EmployerSignUp extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        progressDialog = new android.app.ProgressDialog(this);
+        progressDialog.setMessage("Signing up...");
+        progressDialog.setCancelable(false);
+
         sendOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,11 +72,10 @@ public class EmployerSignUp extends AppCompatActivity {
                     return;
                 }
                 if (!createPasswordInput.equals(confirmPasswordInput)) {
-                    // Show error on the layout so the user sees it clearly
                     confirmPassword.setError("Passwords do not match");
                     return;
                 } else {
-                    confirmPassword.setError(null); // Clear error if they match
+                    confirmPassword.setError(null);
                 }
 
                 if (createPasswordInput.length() < 8) {
@@ -75,28 +83,28 @@ public class EmployerSignUp extends AppCompatActivity {
                     return;
                 }
 
-                // If validation passes, start Firebase
+                progressDialog.show();
+
                 mAuth.createUserWithEmailAndPassword(emailAddressInput, createPasswordInput)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                // 1. Send verification link
                                 mAuth.getCurrentUser().sendEmailVerification();
 
-                                // 2. Send profile to Laravel immediately so the DB record exists
-                                sendProfileToLaravel(
-                                        mAuth.getCurrentUser().getUid(),
-                                        employerNameInput,
-                                        emailAddressInput,
-                                        mobileNumberInput
-                                );
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+                                    if (tokenTask.isSuccessful()) {
+                                        String idToken = tokenTask.getResult().getToken();
 
-                                // 3. Inform user and go to Login
-                                Toast.makeText(EmployerSignUp.this, "Registration successful! Please verify your email before logging in.", Toast.LENGTH_LONG).show();
-
-                                Intent intent = new Intent(EmployerSignUp.this, LoginActivity.class);
-                                startActivity(intent);
-                                finish(); // Close EmployerSignUp so they can't go back
+                                        sendProfileToLaravel(
+                                                idToken,
+                                                employerNameInput,
+                                                emailAddressInput,
+                                                mobileNumberInput
+                                        );
+                                    }
+                                });
                             } else {
+                                progressDialog.dismiss();
                                 Toast.makeText(EmployerSignUp.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
@@ -106,41 +114,35 @@ public class EmployerSignUp extends AppCompatActivity {
         });
     }
 
-    private void sendProfileToLaravel(String uid, String employerName,String email, String phoneNumber) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.8/") // Replaced with actual IPv4
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiService apiService = retrofit.create(ApiService.class);
+    private void sendProfileToLaravel(String token, String employerName, String email, String phoneNumber) {
+        ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
         EmployerRequest request = new EmployerRequest(
-                uid,
                 employerName,
-                phoneNumber,
                 email,
-
-                "Manila",
-                "May 3, 2004",
-                "Paco, Manila,",
-                "url profile picture",
-                "url",
-                1,
-                0);
+                phoneNumber
+        );
 
         apiService.registerEmployer(request).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progressDialog.dismiss();
+
                 if (response.isSuccessful()) {
-                    android.util.Log.d("API_SUCCESS", "Data sent to Laravel successfully");
+                    Toast.makeText(EmployerSignUp.this, "Registration successful! Please verify your email before logging in.", Toast.LENGTH_LONG).show();
+
+                    Intent intent = new Intent(EmployerSignUp.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
                 } else {
-                    android.util.Log.e("API_ERROR", "Response Code: " + response.code());
+                    ErrorUtils.showErrorMessage(EmployerSignUp.this, response.errorBody());
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                android.util.Log.e("API_FAILURE", "Check Connection: " + t.getMessage());
+                progressDialog.dismiss();
+                ErrorUtils.showThrowableError(EmployerSignUp.this, t);
             }
         });
     }
