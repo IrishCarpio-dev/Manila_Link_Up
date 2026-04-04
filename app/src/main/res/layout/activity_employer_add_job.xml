@@ -62,40 +62,24 @@
     </androidx.cardview.widget.CardView>
 
 
-    <LinearLayout
-        android:id="@+id/layout_post_job_button"
-        android:layout_width="match_parent"
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/button_post_job"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/bottom_navigation_view"
-        android:background="@android:color/transparent"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        android:weightSum="2">
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_post_job"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/bottom_navigation_view"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:backgroundTint="#1B3E9C"
-            android:elevation="16dp"
-            android:text="Post Job"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:cornerRadius="8dp" />
-
-    </LinearLayout>
+        android:layout_centerInParent="true"
+        android:layout_margin="8dp"
+        android:text="Post Job"
+        android:textColor="@color/white"
+        app:backgroundTint="#1B3E9C"
+        app:elevation="8dp"
+        app:icon="@android:drawable/ic_input_add"
+        app:iconTint="@color/white" />
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/layout_post_job_button"
         android:layout_below="@id/card_view_dashboard_top_employer">
 
         <RelativeLayout
@@ -132,7 +116,7 @@
                 android:layout_below="@id/text_view_employer_job_title"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:hint="e.g Pet Sitter, House Cleaner, Tindero"
+                android:hint="e.g. Pet Sitter, House Cleaner, Tindero"
                 app:boxBackgroundColor="#F5F5F5"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
@@ -148,13 +132,48 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/text_view_employer_job_location"
+                android:id="@+id/text_view_employer_job_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_input_layout_job_title"
                 android:layout_margin="8dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="Job Duration"
+                android:textColor="#212121"
+                android:textSize="16sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout_job_duration"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_view_employer_job_duration"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="e.g. Apr. 7-21, 2026, M | W | F, Every Saturday"
+                app:boxBackgroundColor="#F5F5F5"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <TextView
+                android:id="@+id/text_view_employer_job_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_input_layout_job_duration"
+                android:layout_margin="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Job Location"
                 android:textColor="#212121"
                 android:textSize="16sp" />
 
@@ -166,7 +185,7 @@
                 android:layout_below="@id/text_view_employer_job_location"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:hint="e.g Apr. 7-21, 2026, M | W | F, Every Saturday"
+                android:hint="e.g. Sta.Ana, Manila, Sampaloc, Manila"
                 app:boxBackgroundColor="#F5F5F5"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
