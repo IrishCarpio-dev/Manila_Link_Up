@@ -16,7 +16,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".EmployerViewAllRatings"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".SplashActivity"
             android:exported="true"
@@ -29,34 +29,34 @@
         </activity>
         <activity
             android:name=".ChatThreadEmployer"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".SaveSeekerActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".EmployerViewArchivedJobs"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".EmployerViewJobPost"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".EmployerListOfApplicants"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".EmployerProfileActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ChatEmployerActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ChatSeekerActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".EditEmployerProfileActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".EmployerNotificationsActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".EmployerAddJobActivity"
             android:exported="false" />
@@ -65,64 +65,64 @@
             android:exported="false" />
         <activity
             android:name=".SeekerDashboardActivity"
-            android:exported="false"
+            android:exported="true"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SeekerJobPostActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="Employer Name" />
         <activity
             android:name=".AllSetActivity"
-            android:exported="false"
+            android:exported="true"
             android:parentActivityName=".EditSeekerProfileActivity" />
         <activity
             android:name=".EditSeekerProfileActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="Profile Seeker"
             android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".EmployerSignUp"
-            android:exported="false"
+            android:exported="true"
             android:label="Employer Sign Up"
             android:parentActivityName=".GetStarted" />
         <activity
             android:name=".GetStarted"
-            android:exported="false"
+            android:exported="true"
             android:label="Lets Get Started"
             android:parentActivityName=".SignUpActivity" />
         <activity
             android:name=".SignUpActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="Sign Up"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".LoginActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="Login to Manila LinkUp"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SeekerProfileActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="Seeker Profile"
             android:parentActivityName=".SeekerDashboardActivity" />
         <activity
             android:name=".SeekerSettingsActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="Seeker Settings"
             android:parentActivityName=".SeekerProfileActivity" />
         <activity
             android:name=".EmployerSettingsActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="Employer Settings"
             android:parentActivityName=".EmployerProfileActivity" />
         <activity
             android:name=".SeekerVerifyIdentityActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="Verify Identity"
             android:parentActivityName=".SeekerSettingsActivity" />
         <activity
             android:name=".SeekerPrivacyControlsActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="Privacy Controls"
             android:parentActivityName=".SeekerSettingsActivity" />
         <activity
