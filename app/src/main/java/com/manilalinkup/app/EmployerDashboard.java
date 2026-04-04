@@ -3,10 +3,12 @@ package com.manilalinkup.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -25,6 +27,7 @@ public class EmployerDashboard extends AppCompatActivity {
     private JobPostDashboardAdapter adapterJobPost;
     private List<JobPostDashboardModel> jobListJobCard;
     BottomNavigationView bottomNavigationViewEmployer;
+    CardView addJobButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +41,26 @@ public class EmployerDashboard extends AppCompatActivity {
         jobListJobCard = new ArrayList<>();
         mockData();
 
-        adapterJobPost = new JobPostDashboardAdapter(jobListJobCard);
+        adapterJobPost = new JobPostDashboardAdapter(jobListJobCard, false, new JobPostDashboardAdapter.OnJobClickListener() {
+            @Override
+            public void onJobClick(JobPostDashboardModel job) {
+                Intent intent = new Intent(EmployerDashboard.this, EmployerViewJobPost.class);
+                intent.putExtra("JOB_TITLE", job.getJobTitle());
+                intent.putExtra("EMPLOYER_NAME", job.getEmployerName());
+                startActivity(intent);
+            }
+        });
         recyclerViewJobPost.setAdapter(adapterJobPost);
 
+        addJobButton = findViewById(R.id.card_view_post_new_job);
+        addJobButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EmployerDashboard.this, EmployerAddJobActivity.class);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+            }
+        });
 
         bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_home);
         bottomNavigationViewEmployer.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -53,22 +73,22 @@ public class EmployerDashboard extends AppCompatActivity {
                 } else if (id == R.id.nav_profile) {
                     Intent intent = new Intent(EmployerDashboard.this, EmployerProfileActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    overridePendingTransition(0, 0);
                     return true;
                 } else if (id == R.id.nav_notifications) {
                     Intent intent = new Intent(EmployerDashboard.this, EmployerNotificationsActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    overridePendingTransition(0, 0);
                     return true;
                 } else if (id == R.id.nav_add_job) {
                     Intent intent = new Intent(EmployerDashboard.this, EmployerAddJobActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    overridePendingTransition(0, 0);
                     return true;
                 } else if (id == R.id.nav_chat) {
                     Intent intent = new Intent(EmployerDashboard.this, ChatEmployerActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    overridePendingTransition(0, 0);
                     return true;
                 }
 

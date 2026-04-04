@@ -36,7 +36,14 @@ public class SeekerDashboardActivity extends AppCompatActivity {
         jobListJobCard = new ArrayList<>();
         mockData();
 
-        adapterJobPost = new JobPostDashboardAdapter(jobListJobCard);
+        adapterJobPost = new JobPostDashboardAdapter(jobListJobCard, false, new JobPostDashboardAdapter.OnJobClickListener() {
+            @Override
+            public void onJobClick(JobPostDashboardModel job) {
+                Intent intent = new Intent(SeekerDashboardActivity.this, SeekerJobPostActivity.class);
+                //not yet tested - irish
+                startActivity(intent);
+            }
+        });
         recyclerViewJobPost.setAdapter(adapterJobPost);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);

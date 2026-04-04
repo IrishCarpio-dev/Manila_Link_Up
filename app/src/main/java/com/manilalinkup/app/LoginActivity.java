@@ -10,15 +10,21 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Optional;
+
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
     private android.app.ProgressDialog progressDialog;
@@ -33,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //for testing Dashboards - Irish
     ImageView googleLogin;
+    ImageView facebookLogin; // Added for Facebook shortcut
 
 
     @SuppressLint("MissingInflatedId")
@@ -58,14 +65,27 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // For testing Seeker Dashboard via Facebook shortcut
+        facebookLogin = findViewById(R.id.image_view_login_facebook);
+        facebookLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Direct jump to Seeker Dashboard
+                Intent intent = new Intent(LoginActivity.this, SeekerDashboardActivity.class);
+                startActivity(intent);
+                finish(); // Optional: closes login screen so back button doesn't return here
+            }
+        });
+
 
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         progressDialog = new android.app.ProgressDialog(this);
-        progressDialog.setMessage("Verifying account...");
+        progressDialog.setMessage("Logging in...");
         progressDialog.setCancelable(false); // Prevents user from dismissing it by clicking outside
 
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
@@ -99,9 +119,6 @@ public class LoginActivity extends AppCompatActivity {
                     return; // Stop here
                 }
 
-                // Start the Firebase Login (The app waits for this result)
-                Toast.makeText(LoginActivity.this, "Authenticating...", Toast.LENGTH_SHORT).show();
-
                 progressDialog.show();
 
                 mAuth.signInWithEmailAndPassword(email, password)
@@ -111,12 +128,16 @@ public class LoginActivity extends AppCompatActivity {
                                 if (user != null) {
                                     user.reload().addOnCompleteListener(reloadTask -> {
                                         if (user.isEmailVerified()) {
-                                            // NEW: Don't jump to an activity yet. Check the role first!
-                                            checkUserRole(user.getUid());
+                                            user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+                                                if (tokenTask.isSuccessful()) {
+                                                    String idToken = tokenTask.getResult().getToken();
+                                                    checkUserRole(idToken);
+                                                }
+                                            });
                                         } else {
                                             progressDialog.dismiss();
-                                            Toast.makeText(LoginActivity.this, "Please verify your email first!", Toast.LENGTH_LONG).show();
                                             mAuth.signOut();
+                                            Toast.makeText(LoginActivity.this, "Please verify your email first!", Toast.LENGTH_LONG).show();
                                         }
                                     });
                                 }
@@ -130,59 +151,52 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void checkUserRole(String uid) {
-        com.google.firebase.database.DatabaseReference dbRef = com.google.firebase.database.FirebaseDatabase.getInstance().getReference();
+    private void checkUserRole(String token) {
+        ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
-        dbRef.child("seekers").child(uid).addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+        apiService.getUserProfile().enqueue(new Callback<UserProfileModel>() {
             @Override
-            public void onDataChange(com.google.firebase.database.DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    progressDialog.dismiss();
-                    startActivity(new Intent(LoginActivity.this, SeekerDashboardActivity.class));
-                    finish();
-                } else {
-                    // If not found in seekers, check employers
-                    checkEmployerNode(uid, dbRef);
-                }
-            }
-
-            @Override
-            public void onCancelled(com.google.firebase.database.DatabaseError error) {
-                // IF PERMISSION DENIED: It just means this user isn't a Seeker.
-                // Don't show an error toast yet; just move to the next check!
-                if (error.getCode() == com.google.firebase.database.DatabaseError.PERMISSION_DENIED) {
-                    checkEmployerNode(uid, dbRef);
-                } else {
-                    progressDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    // Separate method to keep code clean
-    private void checkEmployerNode(String uid, com.google.firebase.database.DatabaseReference dbRef) {
-        dbRef.child("employers").child(uid).addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
-            @Override
-            public void onDataChange(com.google.firebase.database.DataSnapshot snapshot) {
+            public void onResponse(Call<UserProfileModel> call, Response<UserProfileModel> response) {
                 progressDialog.dismiss();
-                if (snapshot.exists()) {
-                    startActivity(new Intent(LoginActivity.this, EmployerDashboard.class));
-                    finish();
+                if (response.isSuccessful()) {
+                    if (response.body().seekers != null) {
+                        // User is a seeker
+                        Boolean isProfileSet = Optional.ofNullable(response.body().seekers.isProfileSet).orElse(false);
+
+                        if (isProfileSet) {
+                            startActivity(new Intent(LoginActivity.this, SeekerDashboardActivity.class));
+                            finish();
+                        } else {
+                            startActivity(new Intent(LoginActivity.this, EditSeekerProfileActivity.class));
+                            finish();
+                        }
+                    } else if (response.body().employers != null) {
+                        // User is an employer
+                        Boolean isProfileSet = Optional.ofNullable(response.body().employers.isProfileSet).orElse(false);
+
+                        if (isProfileSet) {
+                            startActivity(new Intent(LoginActivity.this, EmployerDashboard.class));
+                            finish();
+                        } else {
+                            startActivity(new Intent(LoginActivity.this, EditEmployerProfileActivity.class));
+                            finish();
+                        }
+                    } else {
+                        mAuth.signOut();
+                        Toast.makeText(LoginActivity.this, "User profile not found in our system.", Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    // Now we can safely say the user is truly not found anywhere
-                    Toast.makeText(LoginActivity.this, "User profile not found in our system.", Toast.LENGTH_LONG).show();
                     mAuth.signOut();
-                    progressDialog.dismiss();
+                    ErrorUtils.showErrorMessage(LoginActivity.this, response.errorBody());
                 }
             }
 
             @Override
-            public void onCancelled(com.google.firebase.database.DatabaseError error) {
+            public void onFailure(Call<UserProfileModel> call, Throwable t) {
                 progressDialog.dismiss();
-                // If both checks return Permission Denied, something is wrong with the Rules or UID
-                Toast.makeText(LoginActivity.this, "Access Denied. Please contact support.", Toast.LENGTH_SHORT).show();
                 mAuth.signOut();
+
+                ErrorUtils.showThrowableError(LoginActivity.this, t);
             }
         });
     }

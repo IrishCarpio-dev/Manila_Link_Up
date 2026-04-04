@@ -50,6 +50,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         sendOTP.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +112,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void sendProfileToLaravel(String uid, String firstnameInput, String lastnameInput, String emailAddressInput, String mobileNumberInput) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.8/") // Replaced with actual IPv4
+                .baseUrl("http://172.31.243.113/") // Replaced with actual IPv4
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

@@ -10,11 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboardAdapter.JobPostDashboardViewHolder> {
-
+    public interface OnJobClickListener {
+        void onJobClick(JobPostDashboardModel job);
+    }
     private final List<JobPostDashboardModel> jobPostDashboardModelList;
+    OnJobClickListener listener;
+    boolean isProfileView;
 
-    public JobPostDashboardAdapter(List<JobPostDashboardModel> jobPostDashboardModelList) {
+    public JobPostDashboardAdapter(List<JobPostDashboardModel> jobPostDashboardModelList, boolean isProfileView, OnJobClickListener listener) {
         this.jobPostDashboardModelList = jobPostDashboardModelList;
+        this.isProfileView = isProfileView;
+        this.listener = listener;
     }
 
     @Override
@@ -25,13 +31,17 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
     @NonNull
     @Override
     public JobPostDashboardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_job_post_card, parent, false);
+//        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_job_post_card, parent, false);
+        int layoutId = isProfileView ? R.layout.item_employer_job_list_profile : R.layout.item_job_post_card;
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         return new JobPostDashboardViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull JobPostDashboardViewHolder holder, int position) {
-        holder.bind(jobPostDashboardModelList.get(position));
+        JobPostDashboardModel currentJob = jobPostDashboardModelList.get(position);
+        holder.bind(currentJob, listener);
     }
 
     static class JobPostDashboardViewHolder extends RecyclerView.ViewHolder {
@@ -51,17 +61,36 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
             how_long_job_was_posted = itemView.findViewById(R.id.item_card_how_long_job_post_posted_placeholder);
         }
 
-        public void bind(JobPostDashboardModel jobBind){
-            employer_pfp.setImageResource(jobBind.employerProfilePicture);
-            job_title.setText(jobBind.jobTitle);
-            employer_name.setText(jobBind.employerName);
-            job_location.setText(jobBind.jobPostLocation);
-            job_duration.setText(jobBind.job_duration);
-            how_long_job_was_posted.setText(jobBind.howLongJobIsPosted);
+        public void bind(JobPostDashboardModel jobBind, OnJobClickListener listener){
+
+            if (employer_pfp != null) {
+                employer_pfp.setImageResource(jobBind.employerProfilePicture);
+            }
+            if (employer_name != null) {
+                employer_name.setText(jobBind.employerName);
+            }
+
+            if (job_title != null) {
+                job_title.setText(jobBind.jobTitle);
+            }
+
+            if (job_location != null) {
+                job_location.setText(jobBind.jobPostLocation);
+            }
+
+            if (job_duration != null) {
+                job_duration.setText(jobBind.job_duration);
+            }
+
+            if (how_long_job_was_posted != null) {
+                how_long_job_was_posted.setText(jobBind.howLongJobIsPosted);
+            }
+            itemView.setOnClickListener(v -> {
+                if(listener != null){
+                    listener.onJobClick(jobBind);
+                }
+            });
+
         }
     }
 }
-
-
-
-
