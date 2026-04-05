@@ -42,7 +42,6 @@ We are currently studying Computer Science and this project was developed as a r
 - Rhovique Caling
 - Loraine Gulo
 - Dino Dumanon
-- Monica Del Rosario
 
 ---
 
