@@ -11,17 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SaveSeekerActivity extends AppCompatActivity {
-
-    // In-memory storage for saved jobs
-    public static List<SeekerJobModel> savedList = new ArrayList<>();
 
     RecyclerView recyclerView;
     View emptyState;
     BottomNavigationView bottomNavigationView;
+
+
     SavedJobsAdapter adapter;
 
     @Override
@@ -36,12 +32,12 @@ public class SaveSeekerActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Use the list defined in this class
-        adapter = new SavedJobsAdapter(savedList);
+        // INITIALIZE ONCE
+        adapter = new SavedJobsAdapter(SavedJobsData.savedList);
 
         // Handle removal of saved jobs
         adapter.setOnRemoveClickListener(job -> {
-            savedList.remove(job);
+            SavedJobsData.savedList.remove(job);
             loadSavedJobs();
         });
 
@@ -84,7 +80,7 @@ public class SaveSeekerActivity extends AppCompatActivity {
     }
 
     private void loadSavedJobs() {
-        if (savedList.isEmpty()) {
+        if (SavedJobsData.savedList.isEmpty()) {
             emptyState.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         } else {

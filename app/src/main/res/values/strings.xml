@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Manila Link Up</string>
+
+    <string-array name="philippine_ids">
+        <item>Select ID Type</item>
+        <item>PhilID (National ID)</item>
+        <item>UMID</item>
+        <item>Driver\'s License</item>
+        <item>Passport</item>
+        <item>Voter\'s ID</item>
+        <item>Postal ID</item>
+    </string-array>
 </resources>
