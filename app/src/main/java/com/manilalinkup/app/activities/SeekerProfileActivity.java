@@ -23,17 +23,12 @@ import java.util.List;
 
 public class SeekerProfileActivity extends AppCompatActivity {
 
-    // Feedbacks RecyclerView
     private RecyclerView recyclerViewRatings;
     private RatingsProfileAdapter adapterRating;
     private List<RatingsProfileModel> ratingProfileList;
-
-    // Work Experience RecyclerView
     private RecyclerView recyclerViewExperience;
     private ExperienceAdapter adapterExperience;
     private List<ExperienceModel> experienceList;
-
-    // UI Components
     private BottomNavigationView bottomNavigationView;
     private ImageView settingsIcon;
     private TextInputEditText summaryEditText;
@@ -41,7 +36,6 @@ public class SeekerProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Ensure this layout contains the revised order: Summary -> Feedbacks -> Experience
         setContentView(R.layout.activity_seeker_profile);
 
         initializeViews();
@@ -52,26 +46,18 @@ public class SeekerProfileActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        // Top Header and Summary
         settingsIcon = findViewById(R.id.image_view_seeker_settings_icon);
         summaryEditText = findViewById(R.id.editText_summary);
 
-        // Navigation
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
 
-        // RecyclerViews
         recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
         recyclerViewExperience = findViewById(R.id.recycler_view_experience);
 
-        // Highlight the Profile tab in the bottom bar
         bottomNavigationView.setSelectedItemId(R.id.nav_profile);
     }
 
-    /**
-     * Sets up the Horizontal Feedbacks RecyclerView
-     */
     private void setupFeedbacksRecyclerView() {
-        // Horizontal layout as specified in the XML
         LinearLayoutManager horizontalLayout = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerViewRatings.setLayoutManager(horizontalLayout);
 
@@ -84,11 +70,8 @@ public class SeekerProfileActivity extends AppCompatActivity {
         recyclerViewRatings.setAdapter(adapterRating);
     }
 
-    /**
-     * Sets up the Vertical Work Experience RecyclerView
-     */
+
     private void setupExperienceRecyclerView() {
-        // Vertical layout (default) for the list of experiences at the bottom
         recyclerViewExperience.setLayoutManager(new LinearLayoutManager(this));
 
         experienceList = new ArrayList<>();
@@ -105,7 +88,6 @@ public class SeekerProfileActivity extends AppCompatActivity {
             int id = item.getItemId();
 
             if (id == R.id.nav_home) {
-                // Navigate back to Dashboard
                 startActivity(new Intent(this, SeekerDashboardActivity.class));
                 overridePendingTransition(0, 0);
                 finish();
@@ -118,13 +100,11 @@ public class SeekerProfileActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        // Settings Icon in Header
         settingsIcon.setOnClickListener(v -> {
             Intent intent = new Intent(SeekerProfileActivity.this, SeekerSettingsActivity.class);
             startActivity(intent);
         });
 
-        // Summary Interaction (Optional: Handle when user starts typing)
         summaryEditText.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
                 // Potential place to save data to Firebase

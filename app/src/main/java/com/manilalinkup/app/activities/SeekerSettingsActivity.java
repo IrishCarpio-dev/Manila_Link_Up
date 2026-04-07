@@ -81,7 +81,6 @@ public class SeekerSettingsActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
 
-        // 1. Edit Profile
         btnEditProfile.setOnClickListener(v -> {
             showSensitiveActionWarning(
                     "Edit Profile",
@@ -92,7 +91,6 @@ public class SeekerSettingsActivity extends AppCompatActivity {
             );
         });
 
-        // 2. Change Password (Email Reset Logic)
         btnChangePassword.setOnClickListener(v -> {
             showSensitiveActionWarning(
                     "Change Password",
@@ -101,7 +99,6 @@ public class SeekerSettingsActivity extends AppCompatActivity {
             );
         });
 
-        // 3. Verification
         btnVerification.setOnClickListener(v -> {
             showSensitiveActionWarning(
                     "Verify Identity",
@@ -112,33 +109,26 @@ public class SeekerSettingsActivity extends AppCompatActivity {
             );
         });
 
-        // 4. Privacy Controls
         btnPrivacy.setOnClickListener(v -> {
             Intent intent = new Intent(this, SeekerPrivacyControlsActivity.class);
             startActivity(intent);
         });
-
-        // 5. Notifications Switch
         switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> {
             showToast("Notifications " + (isChecked ? "Enabled" : "Disabled"));
         });
 
-        // 6. Help Center
         btnHelpCenter.setOnClickListener(v -> {
             startActivity(new Intent(this, HelpCenterActivity.class));
         });
 
-        // 7. Terms of Service
         btnTerms.setOnClickListener(v -> {
             startActivity(new Intent(this, TermsOfServiceActivity.class));
         });
 
-        // 8. About Manila LinkUp
         btnAbout.setOnClickListener(v -> {
             startActivity(new Intent(this, AboutActivity.class));
         });
 
-        // 9. Logout
         btnLogout.setOnClickListener(v -> showLogoutConfirmation());
     }
 

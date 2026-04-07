@@ -141,6 +141,11 @@
             android:label="Business Verification (BIR/SEC)"
             android:exported="false"
             android:parentActivityName="activities.EmployerSettingsActivity"/>
+        <activity
+            android:name=".activities.SeekerDocumentVaultActivity"
+            android:label="Document Vault"
+            android:exported="false"
+            android:parentActivityName=".activities.SeekerSettingsActivity"/>
 
         <activity
             android:name=".activities.MainActivity"

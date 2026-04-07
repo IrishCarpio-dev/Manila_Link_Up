@@ -41,7 +41,6 @@ public class EmployerBusinessVerificationActivity extends AppCompatActivity {
     private Uri mainDocUri;
     private boolean isPickingMain = true;
 
-    // Unified Photo Picker
     private final ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                 if (uri != null) {
@@ -51,10 +50,16 @@ public class EmployerBusinessVerificationActivity extends AppCompatActivity {
                         imgMainPreview.setVisibility(View.VISIBLE);
                         uploadPlaceholder.setVisibility(View.GONE);
                     } else {
+                        // Creating a unique name for the supporting document
                         String name = "Support_Doc_" + (supportingDocList.size() + 1);
                         supportingDocList.add(new CredentialModel(name, uri));
+
+                        // Notify the adapter of the new item
                         adapter.notifyItemInserted(supportingDocList.size() - 1);
+                        recyclerSupporting.scrollToPosition(supportingDocList.size() - 1);
                     }
+                } else {
+                    Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -86,22 +91,33 @@ public class EmployerBusinessVerificationActivity extends AppCompatActivity {
         types.add("BIR Form 2303 (COR)");
         types.add("SEC Registration");
         types.add("DTI Certificate");
+        types.add("Mayor's Permit");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, types);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerDocType.setAdapter(adapter);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDocType.setAdapter(spinnerAdapter);
     }
 
     private void setupRecyclerView() {
         supportingDocList = new ArrayList<>();
-        adapter = new CredentialAdapter(supportingDocList);
+
+        /* FIXED: Passing 'true' as the second parameter because this
+           is the upload screen where items should be editable/removable.
+        */
+        adapter = new CredentialAdapter(supportingDocList, true);
+
         recyclerSupporting.setLayoutManager(new LinearLayoutManager(this));
         recyclerSupporting.setAdapter(adapter);
+
+        // Disable nested scrolling to ensure smooth scrolling inside the parent ScrollView
+        recyclerSupporting.setNestedScrollingEnabled(false);
     }
 
     private void setupListeners() {
-        btnBack.setOnClickListener(v -> finish());
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
 
         btnUploadMain.setOnClickListener(v -> {
             isPickingMain = true;
@@ -115,9 +131,9 @@ public class EmployerBusinessVerificationActivity extends AppCompatActivity {
 
         btnSubmit.setOnClickListener(v -> {
             if (spinnerDocType.getSelectedItemPosition() == 0) {
-                Toast.makeText(this, "Select a document type", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please select a primary document type", Toast.LENGTH_SHORT).show();
             } else if (mainDocUri == null) {
-                Toast.makeText(this, "Upload your primary business document", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please upload your primary business document", Toast.LENGTH_SHORT).show();
             } else {
                 showConfirmDialog();
             }
@@ -133,9 +149,10 @@ public class EmployerBusinessVerificationActivity extends AppCompatActivity {
     private void showConfirmDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Submit Verification")
-                .setMessage("Manila LinkUp will review your business documents. This takes 1-3 days.")
-                .setPositiveButton("Submit", (d, w) -> {
-                    Toast.makeText(this, "Application Submitted", Toast.LENGTH_LONG).show();
+                .setMessage("Manila LinkUp will review your business documents. This usually takes 1-3 business days.")
+                .setPositiveButton("Submit", (dialog, which) -> {
+                    // Here you would typically upload files to Firebase Storage
+                    Toast.makeText(this, "Business Verification Submitted", Toast.LENGTH_LONG).show();
                     finish();
                 })
                 .setNegativeButton("Cancel", null)

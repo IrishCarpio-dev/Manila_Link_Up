@@ -29,11 +29,9 @@ public class HelpCenterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help_center);
 
-        // 1. Initialize Views
         btnContactSupport = findViewById(R.id.btn_contact_support);
         recyclerFaq = findViewById(R.id.recycler_faq);
 
-        // 2. Setup RecyclerView
         recyclerFaq.setLayoutManager(new LinearLayoutManager(this));
 
         faqList = new ArrayList<>();
@@ -42,7 +40,6 @@ public class HelpCenterActivity extends AppCompatActivity {
         faqAdapter = new FAQAdapter(faqList);
         recyclerFaq.setAdapter(faqAdapter);
 
-        // 3. Click Listeners
         btnContactSupport.setOnClickListener(v -> composeEmail());
 
     }

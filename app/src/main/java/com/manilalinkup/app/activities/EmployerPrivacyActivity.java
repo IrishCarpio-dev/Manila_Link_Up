@@ -42,19 +42,14 @@ public class EmployerPrivacyActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        // Back Button
         btnBack.setOnClickListener(v -> finish());
 
-        // Visibility Toggle
         switchVisibility.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String msg = isChecked ? "Company is now discoverable" : "Company is now hidden from search";
             showToast(msg);
-            // In a real app, update 'isVisible' field in Firestore here
         });
 
-        // View Documents
         btnViewDocs.setOnClickListener(v -> {
-            // Navigate to the verification page we created earlier
             Intent intent = new Intent(this, EmployerBusinessVerificationActivity.class);
             startActivity(intent);
         });
@@ -72,7 +67,6 @@ public class EmployerPrivacyActivity extends AppCompatActivity {
                         .setNegativeButton("Cancel", null)
                         .show());
 
-        // Delete Account
         btnDeleteAccount.setOnClickListener(v -> showDeleteAccountDialog());
     }
 

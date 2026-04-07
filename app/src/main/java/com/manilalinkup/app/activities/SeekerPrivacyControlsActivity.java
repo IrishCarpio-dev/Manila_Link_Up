@@ -1,6 +1,8 @@
 package com.manilalinkup.app.activities;
 
+import android.content.Intent; // Needed for navigation
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -16,10 +18,12 @@ public class SeekerPrivacyControlsActivity extends AppCompatActivity {
     private Switch switchPublicProfile;
     private TextView btnDownloadData, btnClearHistory, btnDeleteAccount;
 
+    // 1. Add the variable for the Document Vault button
+    private TextView btnViewDocs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Ensure this filename matches your XML filename exactly!
         setContentView(R.layout.activity_seeker_privacy_and_data_controls);
 
         initializeViews();
@@ -27,19 +31,25 @@ public class SeekerPrivacyControlsActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        // FIXED: Added the initialization for btnBack
         btnBack = findViewById(R.id.btn_back_privacy);
-
         switchPublicProfile = findViewById(R.id.switch_public_profile);
         btnDownloadData = findViewById(R.id.btn_download_data);
         btnClearHistory = findViewById(R.id.btn_clear_history);
         btnDeleteAccount = findViewById(R.id.btn_delete_account);
+
+        btnViewDocs = findViewById(R.id.btn_view_uploaded_docs);
     }
 
     private void setupListeners() {
-        // FIXED: Added a null check to prevent the crash shown in your screenshot
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
+        }
+
+        if (btnViewDocs != null) {
+            btnViewDocs.setOnClickListener(v -> {
+                Intent intent = new Intent(this, SeekerDocumentVaultActivity.class);
+                startActivity(intent);
+            });
         }
 
         if (switchPublicProfile != null) {

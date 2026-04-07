@@ -19,14 +19,14 @@ public class EmployerSettingsActivity extends AppCompatActivity {
     private Switch switchNotifications;
     private TextView btnHelpCenter, btnTerms, btnAbout;
     private Button btnLogout;
-    private FirebaseAuth mAuth; // Added
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_seeker);
 
-        mAuth = FirebaseAuth.getInstance(); // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
         initializeViews();
         setupClickListeners();
@@ -63,27 +63,22 @@ public class EmployerSettingsActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Verification
         btnVerification.setOnClickListener(v -> {
             startActivity(new Intent(this, EmployerBusinessVerificationActivity.class));
         });
 
-        // Help Center
         btnHelpCenter.setOnClickListener(v -> {
             startActivity(new Intent(this, HelpCenterActivity.class));
         });
 
-        // Terms of Service
         btnTerms.setOnClickListener(v -> {
             startActivity(new Intent(this, TermsOfServiceActivity.class));
         });
 
-        // About Manila LinkUp
         btnAbout.setOnClickListener(v -> {
             startActivity(new Intent(this, AboutActivity.class));
         });
 
-        // 9. Logout
         btnLogout.setOnClickListener(v -> showLogoutConfirmation());
     }
 

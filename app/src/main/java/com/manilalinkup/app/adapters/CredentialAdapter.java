@@ -16,9 +16,12 @@ import java.util.List;
 public class CredentialAdapter extends RecyclerView.Adapter<CredentialAdapter.ViewHolder> {
 
     private List<CredentialModel> credentialList;
+    private boolean isEditable;
 
-    public CredentialAdapter(List<CredentialModel> list) {
+    // Updated constructor
+    public CredentialAdapter(List<CredentialModel> list, boolean isEditable) {
         this.credentialList = list;
+        this.isEditable = isEditable;
     }
 
     @NonNull
@@ -33,16 +36,19 @@ public class CredentialAdapter extends RecyclerView.Adapter<CredentialAdapter.Vi
         CredentialModel item = credentialList.get(position);
         holder.tvFileName.setText(item.getFileName());
 
-        // Delete Logic
-        holder.btnRemove.setOnClickListener(v -> {
-            int currentPos = holder.getAdapterPosition();
-            if (currentPos != RecyclerView.NO_POSITION) {
-                credentialList.remove(currentPos);
-                notifyItemRemoved(currentPos);
-                // Update following items to refresh their positions
-                notifyItemRangeChanged(currentPos, credentialList.size());
-            }
-        });
+        if (isEditable) {
+            holder.btnRemove.setVisibility(View.VISIBLE);
+            holder.btnRemove.setOnClickListener(v -> {
+                int currentPos = holder.getAdapterPosition();
+                if (currentPos != RecyclerView.NO_POSITION) {
+                    credentialList.remove(currentPos);
+                    notifyItemRemoved(currentPos);
+                    notifyItemRangeChanged(currentPos, credentialList.size());
+                }
+            });
+        } else {
+            holder.btnRemove.setVisibility(View.GONE);
+        }
     }
 
     @Override

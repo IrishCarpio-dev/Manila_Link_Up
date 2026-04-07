@@ -1,5 +1,6 @@
 package com.manilalinkup.app.activities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -35,9 +36,7 @@ public class SeekerVerifyIdentityActivity extends AppCompatActivity {
     private ImageView imgIdPreview;
     private Button btnSubmit;
     private View uploadPlaceholderLayout;
-    private TextView btnViewDocs; // Added declaration
-
-    // Step 3 (Additional Credentials)
+    private TextView btnViewDocs;
     private TextView btnAddNewCredential;
     private RecyclerView recyclerCredentials;
     private CredentialAdapter credentialAdapter;
@@ -58,6 +57,7 @@ public class SeekerVerifyIdentityActivity extends AppCompatActivity {
                         String fileName = "Credential_" + (credentialList.size() + 1);
                         credentialList.add(new CredentialModel(fileName, uri));
 
+                        // Notify adapter and scroll to bottom
                         credentialAdapter.notifyItemInserted(credentialList.size() - 1);
                         recyclerCredentials.scrollToPosition(credentialList.size() - 1);
 
@@ -88,8 +88,6 @@ public class SeekerVerifyIdentityActivity extends AppCompatActivity {
         btnAddNewCredential = findViewById(R.id.btn_add_credential);
         recyclerCredentials = findViewById(R.id.recycler_credentials);
         uploadPlaceholderLayout = findViewById(R.id.upload_placeholder);
-
-        // Ensure this ID exists in your XML or initialize it properly
         btnViewDocs = findViewById(R.id.btn_view_uploaded_docs);
     }
 
@@ -104,19 +102,20 @@ public class SeekerVerifyIdentityActivity extends AppCompatActivity {
         idTypes.add("Postal ID");
         idTypes.add("NBI Clearance");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
                 idTypes
         );
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerIdType.setAdapter(adapter);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerIdType.setAdapter(spinnerAdapter);
     }
 
     private void setupRecyclerView() {
         credentialList = new ArrayList<>();
-        credentialAdapter = new CredentialAdapter(credentialList);
+
+        credentialAdapter = new CredentialAdapter(credentialList, true);
 
         recyclerCredentials.setLayoutManager(new LinearLayoutManager(this));
         recyclerCredentials.setAdapter(credentialAdapter);
@@ -143,9 +142,8 @@ public class SeekerVerifyIdentityActivity extends AppCompatActivity {
 
         if (btnViewDocs != null) {
             btnViewDocs.setOnClickListener(v -> {
-                Toast.makeText(this, "Redirecting to your document vault...", Toast.LENGTH_SHORT).show();
-                // Intent intent = new Intent(this, SeekerDocumentVaultActivity.class);
-                // startActivity(intent);
+                Intent intent = new Intent(this, SeekerDocumentVaultActivity.class);
+                startActivity(intent);
             });
         }
     }
@@ -155,7 +153,6 @@ public class SeekerVerifyIdentityActivity extends AppCompatActivity {
                 .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                 .build());
     }
-
     private void validateAndSubmit() {
         if (spinnerIdType.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "Please select an ID type", Toast.LENGTH_SHORT).show();
@@ -176,6 +173,7 @@ public class SeekerVerifyIdentityActivity extends AppCompatActivity {
     }
 
     private void performUpload() {
+        // Logic to upload to Firebase would go here
         Toast.makeText(this, "Verification Submitted! Manila LinkUp is reviewing your documents.", Toast.LENGTH_LONG).show();
         finish();
     }
