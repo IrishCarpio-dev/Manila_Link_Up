@@ -27,12 +27,17 @@ We are currently studying Computer Science and this project was developed as a r
 
 ---
 
-## Project Structure
+## Project Architecture
 
-- Activities (UI Screens)
-- Adapters (RecyclerView)
-- Models (Data Classes)
-- Layout XML Files
+- The application follows the Model-View-Adapter (MVA) pattern to ensure scalability:
+
+- Activities & Fragments: Handles the lifecycle and UI logic (e.g., EmployerDashboard, ChatThreadActivity).
+
+- Adapters: Custom complex adapters (e.g., ChatAdapter, EmployerAllRatingsAdapter) for dynamic data rendering.
+
+- Models: Strongly-typed data classes (e.g., ChatModel, JobPostDashboardModel) ensuring data integrity.
+
+- Resources: Highly customized XML layouts using RelativeLayout, LinearLayout and ConstraintLayout for pixel-perfect design.
 
 ---
 
@@ -42,10 +47,9 @@ We are currently studying Computer Science and this project was developed as a r
 - Rhovique Caling
 - Loraine Gulo
 - Dino Dumanon
-- Monica Del Rosario
 
 ---
 
 ## Purpose
 
-This application aims to simplify local hiring within small communities by providing a centralized and accessible mobile platform.
+In the bustling environment of Manila, finding trustworthy local help or quick income opportunities can be difficult. ManilaLinkUp simplifies this by leveraging mobile technology to foster community trust and economic opportunity at the neighborhood level.
