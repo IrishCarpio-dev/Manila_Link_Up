@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation_view"
+        android:id="@+id/bottom_navigation_view_seeker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -16,10 +16,10 @@
         app:itemIconTint="@color/bottom_nav_icon_colors"
         app:itemTextColor="@color/bottom_nav_icon_colors"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_nav_employer_icons" />
+        app:menu="@menu/bottom_nav_menu_icons" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_view_dashboard_top_employer"
+        android:id="@+id/card_view_dashboard_top_seeker"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         app:cardBackgroundColor="#1B3E9C">
@@ -42,7 +42,7 @@
                 android:padding="24dp">
 
                 <TextView
-                    android:id="@+id/textview_greeting_employer"
+                    android:id="@+id/textview_greeting_seeker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
@@ -58,8 +58,8 @@
         android:id="@+id/recycler_view_seeker_notifications"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_navigation_view"
-        android:layout_below="@id/card_view_dashboard_top_employer"
+        android:layout_above="@id/bottom_navigation_view_seeker"
+        android:layout_below="@id/card_view_dashboard_top_seeker"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_notifications_employer_card">
 

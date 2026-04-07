@@ -1,4 +1,4 @@
-package com.manilalinkup.app;
+package com.manilalinkup.app.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,16 +9,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.manilalinkup.app.adapters.EmployerNotificationsAdapter;
+import com.manilalinkup.app.models.EmployerNotificationsModel;
+import com.manilalinkup.app.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SeekerNotificationActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private EmployerNotificationsAdapter adapter;
-    private List<EmployerNotificationsModel> notificationList;
-    private BottomNavigationView bottomNavigationView;
+    private RecyclerView recyclerViewNotifications;
+    private EmployerNotificationsAdapter adapterNotif;
+    private List<EmployerNotificationsModel> notifListCard;
+    private BottomNavigationView bottomNavigationViewSeeker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,59 +29,73 @@ public class SeekerNotificationActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_seeker_notification);
 
-        recyclerView = findViewById(R.id.recycler_view_seeker_notifications);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewNotifications = findViewById(R.id.recycler_view_seeker_notifications);
+        recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(this));
 
-        notificationList = new ArrayList<>();
-        loadNotifications();
+        notifListCard = new ArrayList<>();
+        mockNotifDta();
 
-        adapter = new EmployerNotificationsAdapter(notificationList);
-        recyclerView.setAdapter(adapter);
+        adapterNotif = new EmployerNotificationsAdapter(notifListCard);
+        recyclerViewNotifications.setAdapter(adapterNotif);
 
-        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-
-        
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.nav_home) {
-                startActivity(new Intent(this, SeekerDashboardActivity.class));
+        bottomNavigationViewSeeker = findViewById(R.id.bottom_navigation_view_seeker);
+        bottomNavigationViewSeeker.setSelectedItemId(R.id.nav_notifications);
+        bottomNavigationViewSeeker.setOnItemSelectedListener(menuItem ->  {
+            int id = menuItem.getItemId();
+            if(id == R.id.nav_home){
+                startActivity(new Intent(SeekerNotificationActivity.this, SeekerDashboardActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
-            } else if (id == R.id.nav_my_activity) {
-                startActivity(new Intent(this, SaveSeekerActivity.class));
+            } else if(id == R.id.nav_chat) {
+                startActivity(new Intent(SeekerNotificationActivity.this, ChatSeekerActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
-            } else if (id == R.id.nav_chat) {
-                startActivity(new Intent(this, ChatSeekerActivity.class));
+            } else if(id == R.id.nav_profile) {
+                startActivity(new Intent(SeekerNotificationActivity.this, SeekerProfileActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
-            } else if (id == R.id.nav_profile) {
-                startActivity(new Intent(this, SeekerProfileActivity.class));
-                overridePendingTransition(0, 0);
+            } else if(id == R.id.nav_activity) {
+                // Placeholder for Seeker Activity
                 return true;
             }
-            return false;
+            return true;
         });
+
+
     }
 
-    private void loadNotifications() {
-        notificationList.add(new EmployerNotificationsModel(
+    private void mockNotifDta() {
+        // 1. Applicant Notification
+        notifListCard.add(new EmployerNotificationsModel(
                 R.drawable.people_notif_icon,
-                "Application Update",
-                "Your application for 'Events/Catering Helper' has been viewed.",
-                "10 mins ago"
+                "New Applicant: Service Crew",
+                "Juan Dela Cruz applied for your Binondo branch.",
+                "2 mins ago"
         ));
-        notificationList.add(new EmployerNotificationsModel(
+
+        // 2. Message/Chat Notification
+        notifListCard.add(new EmployerNotificationsModel(
                 R.drawable.chat_notif_icon,
-                "New Message",
-                "Don Kopi sent you a message regarding your application.",
-                "2 hours ago"
+                "Inquiry from Maria",
+                "\"Is the Barista position still available?\"",
+                "1 hour ago"
         ));
-        notificationList.add(new EmployerNotificationsModel(
+
+        // 3. Reminder/System Notification
+        notifListCard.add(new EmployerNotificationsModel(
                 R.drawable.schedule_notif_icontwo,
-                "Interview Scheduled",
-                "You have an interview tomorrow at 10:00 AM.",
-                "5 hours ago"
+                "Urgent: Complete Profile",
+                "Add your business permit to verify your account.",
+                "3 hours ago"
         ));
+
+        // 4. Job Post Update
+        notifListCard.add(new EmployerNotificationsModel(
+                R.drawable.people_notif_icon,
+                "New Applicant: Delivery Rider",
+                "Mark Santos submitted his resume for Malate.",
+                "Yesterday"
+        ));
+
     }
 }
