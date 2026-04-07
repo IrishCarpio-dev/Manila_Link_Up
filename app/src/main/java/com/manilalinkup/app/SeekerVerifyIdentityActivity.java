@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -15,24 +17,49 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SeekerVerifyIdentityActivity extends AppCompatActivity {
 
+    // General UI
+    private ImageView btnBack;
     private Spinner spinnerIdType;
     private CardView btnUploadId;
     private ImageView imgIdPreview;
     private Button btnSubmit;
     private View uploadPlaceholderLayout;
+    private TextView btnViewDocs; // Added declaration
 
-    private Uri selectedImageUri;
+    // Step 3 (Additional Credentials)
+    private TextView btnAddNewCredential;
+    private RecyclerView recyclerCredentials;
+    private CredentialAdapter credentialAdapter;
+    private List<CredentialModel> credentialList;
+
+    private Uri selectedIdUri;
+    private boolean pickingMainId = true;
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                 if (uri != null) {
-                    selectedImageUri = uri;
-                    imgIdPreview.setImageURI(uri);
-                    imgIdPreview.setVisibility(View.VISIBLE);
-                    uploadPlaceholderLayout.setVisibility(View.GONE);
+                    if (pickingMainId) {
+                        selectedIdUri = uri;
+                        imgIdPreview.setImageURI(uri);
+                        imgIdPreview.setVisibility(View.VISIBLE);
+                        uploadPlaceholderLayout.setVisibility(View.GONE);
+                    } else {
+                        String fileName = "Credential_" + (credentialList.size() + 1);
+                        credentialList.add(new CredentialModel(fileName, uri));
+
+                        credentialAdapter.notifyItemInserted(credentialList.size() - 1);
+                        recyclerCredentials.scrollToPosition(credentialList.size() - 1);
+
+                        Toast.makeText(this, "Document attached", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
                 }
@@ -44,58 +71,109 @@ public class SeekerVerifyIdentityActivity extends AppCompatActivity {
         setContentView(R.layout.activity_seeker_verify_identity);
 
         initializeViews();
+        setupIdSpinner();
+        setupRecyclerView();
         setupListeners();
     }
 
     private void initializeViews() {
+        btnBack = findViewById(R.id.btn_back_verify);
         spinnerIdType = findViewById(R.id.spinner_id_type);
         btnUploadId = findViewById(R.id.btn_upload_id);
         imgIdPreview = findViewById(R.id.img_id_preview);
         btnSubmit = findViewById(R.id.btn_submit_verification);
+        btnAddNewCredential = findViewById(R.id.btn_add_credential);
+        recyclerCredentials = findViewById(R.id.recycler_credentials);
+        uploadPlaceholderLayout = findViewById(R.id.upload_placeholder);
 
-        // This is the LinearLayout inside the CardView containing the camera icon/text
-        uploadPlaceholderLayout = btnUploadId.getChildAt(0);
+        // Ensure this ID exists in your XML or initialize it properly
+        btnViewDocs = findViewById(R.id.btn_view_uploaded_docs);
+    }
+
+    private void setupIdSpinner() {
+        List<String> idTypes = new ArrayList<>();
+        idTypes.add("-- Select ID Type --");
+        idTypes.add("UMID");
+        idTypes.add("Driver's License");
+        idTypes.add("Philippine Passport");
+        idTypes.add("PhilID (National ID)");
+        idTypes.add("PRC ID");
+        idTypes.add("Postal ID");
+        idTypes.add("NBI Clearance");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                idTypes
+        );
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerIdType.setAdapter(adapter);
+    }
+
+    private void setupRecyclerView() {
+        credentialList = new ArrayList<>();
+        credentialAdapter = new CredentialAdapter(credentialList);
+
+        recyclerCredentials.setLayoutManager(new LinearLayoutManager(this));
+        recyclerCredentials.setAdapter(credentialAdapter);
+
+        recyclerCredentials.setNestedScrollingEnabled(false);
     }
 
     private void setupListeners() {
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
 
         btnUploadId.setOnClickListener(v -> {
-            pickMedia.launch(new PickVisualMediaRequest.Builder()
-                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                    .build());
+            pickingMainId = true;
+            launchPicker();
         });
 
-        // Submit Button
+        btnAddNewCredential.setOnClickListener(v -> {
+            pickingMainId = false;
+            launchPicker();
+        });
+
         btnSubmit.setOnClickListener(v -> validateAndSubmit());
+
+        if (btnViewDocs != null) {
+            btnViewDocs.setOnClickListener(v -> {
+                Toast.makeText(this, "Redirecting to your document vault...", Toast.LENGTH_SHORT).show();
+                // Intent intent = new Intent(this, SeekerDocumentVaultActivity.class);
+                // startActivity(intent);
+            });
+        }
+    }
+
+    private void launchPicker() {
+        pickMedia.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build());
     }
 
     private void validateAndSubmit() {
-        String selectedId = spinnerIdType.getSelectedItem().toString();
-
         if (spinnerIdType.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "Please select an ID type", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (selectedImageUri == null) {
+        if (selectedIdUri == null) {
             Toast.makeText(this, "Please upload a photo of your ID", Toast.LENGTH_SHORT).show();
             return;
         }
 
         new AlertDialog.Builder(this)
                 .setTitle("Confirm Submission")
-                .setMessage("Are you sure all details on your " + selectedId + " are clear and readable? This process cannot be undone once submitted.")
-                .setPositiveButton("Submit", (dialog, which) -> {
-                    performUpload();
-                })
-                .setNegativeButton("Review Again", null)
+                .setMessage("Submit your identity verification for review? This usually takes 24-48 hours.")
+                .setPositiveButton("Submit", (dialog, which) -> performUpload())
+                .setNegativeButton("Cancel", null)
                 .show();
     }
 
     private void performUpload() {
-        Toast.makeText(this, "Verification Submitted! Please wait 24-48 hours for review.", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        Toast.makeText(this, "Verification Submitted! Manila LinkUp is reviewing your documents.", Toast.LENGTH_LONG).show();
         finish();
     }
 }

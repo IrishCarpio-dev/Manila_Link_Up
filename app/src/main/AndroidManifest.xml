@@ -118,6 +118,29 @@
             android:label="Privacy Controls"
             android:exported="false"
             android:parentActivityName=".SeekerSettingsActivity"/>
+        <activity
+            android:name=".HelpCenterActivity"
+            android:label="Help Center"
+            android:exported="false" />
+        <activity
+            android:name=".TermsOfServiceActivity"
+            android:label="Terms of Service"
+            android:exported="false" />
+        <activity android:name=".AboutActivity"
+            android:label="About Manila LinkUp"
+            android:exported="false" />
+        <activity
+            android:name=".EmployerPrivacyActivity"
+            android:label="Privacy &amp; Data Controls"
+            android:exported="false"
+            android:parentActivityName=".EmployerSettingsActivity"/>
+        <activity
+            android:name=".EmployerBusinessVerificationActivity"
+            android:label="Business Verification (BIR/SEC)"
+            android:exported="false"
+            android:parentActivityName=".EmployerSettingsActivity"/>
+
+
 
         <activity
             android:name=".MainActivity"

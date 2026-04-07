@@ -66,59 +66,11 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp"/>
 
-            <androidx.cardview.widget.CardView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_faq"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                android:layout_marginBottom="12dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="How do I apply for a gig?"
-                        android:textStyle="bold"
-                        android:textColor="#333333"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Browse the 'Gigs' tab, click on a post that interests you, and tap 'Apply'. Make sure your profile is verified first!"
-                        android:textSize="13sp"
-                        android:textColor="#757575"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                android:layout_marginBottom="12dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Why was my ID verification rejected?"
-                        android:textStyle="bold"
-                        android:textColor="#333333"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Verification usually fails if the photo is blurry, the ID is expired, or the name doesn't match your profile. Please try again with a clear photo."
-                        android:textSize="13sp"
-                        android:textColor="#757575"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                android:nestedScrollingEnabled="false" />
 
             <TextView
                 android:layout_width="wrap_content"

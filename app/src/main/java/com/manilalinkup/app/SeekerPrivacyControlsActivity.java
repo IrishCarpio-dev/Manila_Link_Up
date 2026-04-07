@@ -10,57 +10,75 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SeekerPrivacyControlsActivity extends AppCompatActivity {
 
+    private ImageView btnBack;
     private Switch switchPublicProfile;
-    private TextView btnDownloadData, btnDeleteAccount;
+    private TextView btnDownloadData, btnClearHistory, btnDeleteAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_seeker_privacy_controls);
+        // Ensure this filename matches your XML filename exactly!
+        setContentView(R.layout.activity_seeker_privacy_and_data_controls);
 
         initializeViews();
         setupListeners();
     }
 
     private void initializeViews() {
+        // FIXED: Added the initialization for btnBack
+        btnBack = findViewById(R.id.btn_back_privacy);
+
         switchPublicProfile = findViewById(R.id.switch_public_profile);
         btnDownloadData = findViewById(R.id.btn_download_data);
+        btnClearHistory = findViewById(R.id.btn_clear_history);
         btnDeleteAccount = findViewById(R.id.btn_delete_account);
     }
 
     private void setupListeners() {
+        // FIXED: Added a null check to prevent the crash shown in your screenshot
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
 
-        switchPublicProfile.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            String status = isChecked ? "Visible" : "Hidden";
-            showToast("Profile is now " + status);
-        });
+        if (switchPublicProfile != null) {
+            switchPublicProfile.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                String message = isChecked ? "Profile is now Public" : "Profile is now Private";
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            });
+        }
 
-        btnDownloadData.setOnClickListener(v -> {
-            new AlertDialog.Builder(this)
-                    .setTitle("Data Export")
-                    .setMessage("We will prepare a copy of your personal data and send it to your registered email. This may take up to 24 hours.")
-                    .setPositiveButton("Request", (dialog, which) -> showToast("Request Sent"))
-                    .setNegativeButton("Cancel", null)
-                    .show();
-        });
+        if (btnDownloadData != null) {
+            btnDownloadData.setOnClickListener(v -> {
+                Toast.makeText(this, "Preparing your data archive. Check your email soon.", Toast.LENGTH_LONG).show();
+            });
+        }
 
-        btnDeleteAccount.setOnClickListener(v -> showDeleteConfirmation());
-    }
+        if (btnClearHistory != null) {
+            btnClearHistory.setOnClickListener(v -> {
+                new AlertDialog.Builder(this)
+                        .setTitle("Clear History")
+                        .setMessage("Are you sure you want to clear your job search history?")
+                        .setPositiveButton("Clear", (dialog, which) -> {
+                            Toast.makeText(this, "History cleared", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            });
+        }
 
-    private void showDeleteConfirmation() {
-        new AlertDialog.Builder(this)
-                .setTitle("Delete Account?")
-                .setMessage("This action is permanent. All your profile data, gig history, and verifications will be wiped from Manila LinkUp. Are you absolutely sure?")
-                .setIcon(android.R.drawable.ic_delete)
-                .setPositiveButton("DELETE PERMANENTLY", (dialog, which) -> {
-                    // TODO: Firebase user.delete() logic
-                    showToast("Account deletion request initiated.");
-                })
-                .setNegativeButton("Keep My Account", null)
-                .show();
-    }
-
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        if (btnDeleteAccount != null) {
+            btnDeleteAccount.setOnClickListener(v -> {
+                new AlertDialog.Builder(this)
+                        .setTitle("Delete Account")
+                        .setMessage("This action is permanent. Proceed?")
+                        .setPositiveButton("Delete Forever", (dialog, which) -> {
+                            Toast.makeText(this, "Account deletion request submitted.", Toast.LENGTH_LONG).show();
+                            finishAffinity();
+                        })
+                        .setNegativeButton("Keep Account", null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            });
+        }
     }
 }
