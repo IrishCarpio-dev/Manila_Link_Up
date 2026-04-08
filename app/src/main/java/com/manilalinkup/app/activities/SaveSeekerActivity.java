@@ -1,5 +1,6 @@
 package com.manilalinkup.app.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -29,12 +30,39 @@ public class SaveSeekerActivity extends AppCompatActivity {
     private AppliedJobsAdapter appliedAdapter;
     private List<JobPostDashboardModel> savedList;
     private List<JobPostDashboardModel> appliedList;
+    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_save_seeker);
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        bottomNavigationView.setSelectedItemId(R.id.nav_activity_seeker);
+        bottomNavigationView.setOnItemSelectedListener(menuItem ->  {
+
+            if(menuItem.getItemId() == R.id.nav_home_seeker){
+                startActivity(new Intent(SaveSeekerActivity.this, SeekerDashboardActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_notifications_seeker) {
+                //will change once notification activity has been added
+                startActivity(new Intent(SaveSeekerActivity.this, EmployerNotificationsActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_chat_seeker) {
+                //will change once chatSeeker activity has been added
+                startActivity(new Intent(SaveSeekerActivity.this, ChatEmployerActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_profile_seeker) {
+                startActivity(new Intent(SaveSeekerActivity.this, SeekerProfileActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }
+            return true;
+        });
 
         recyclerView = findViewById(R.id.recycler_view_employer_own_posts);
         emptyState = findViewById(R.id.empty_state_layout);
@@ -132,6 +160,18 @@ public class SaveSeekerActivity extends AppCompatActivity {
             }
         });
 
-        appliedAdapter = new AppliedJobsAdapter(appliedList);
+        appliedAdapter = new AppliedJobsAdapter(appliedList, new AppliedJobsAdapter.OnAppliedJobClickListener() {
+            @Override
+            public void onJobClick(JobPostDashboardModel job) {
+                Intent intent = new Intent(SaveSeekerActivity.this, AppliedJobPostActivity.class);
+
+                intent.putExtra("JOB_TITLE", job.getJobTitle());
+                intent.putExtra("EMPLOYER_NAME", job.getEmployerName());
+                intent.putExtra("LOCATION", job.getJobPostLocation());
+                intent.putExtra("PFP_URL", job.getEmployerProfilePicture());
+
+                startActivity(intent);
+            }
+        });
     }
 }

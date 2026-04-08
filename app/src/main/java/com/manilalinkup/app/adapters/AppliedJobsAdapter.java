@@ -9,15 +9,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.manilalinkup.app.R;
-import com.manilalinkup.app.models.JobPostDashboardModel; // Reusing model for now
+import com.manilalinkup.app.models.JobPostDashboardModel;
 import java.util.List;
 
 public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.AppliedViewHolder> {
-
+    public interface OnAppliedJobClickListener {
+        void onJobClick(JobPostDashboardModel job);
+    }
     private List<JobPostDashboardModel> appliedJobs;
+    private OnAppliedJobClickListener listener;
 
-    public AppliedJobsAdapter(List<JobPostDashboardModel> appliedJobs) {
+    public AppliedJobsAdapter(List<JobPostDashboardModel> appliedJobs, OnAppliedJobClickListener listener) {
         this.appliedJobs = appliedJobs;
+        this.listener = listener;
     }
 
     @NonNull
@@ -63,6 +67,12 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
                 .load(job.getEmployerProfilePicture())
                 .circleCrop()
                 .into(holder.employerLogo);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onJobClick(job);
+            }
+        });
     }
     @Override
     public int getItemCount() { return appliedJobs.size(); }
