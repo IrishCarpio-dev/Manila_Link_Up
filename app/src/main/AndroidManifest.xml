@@ -32,7 +32,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.SaveSeekerActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".activities.EmployerViewArchivedJobs"
             android:exported="false" />
@@ -65,7 +65,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.SeekerDashboardActivity"
-            android:exported="true"
+            android:exported="false"
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.SeekerJobPostActivity"
