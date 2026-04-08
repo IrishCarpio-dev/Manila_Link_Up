@@ -31,7 +31,6 @@ public class EmployerDashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_employer_dashboard);
-        bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
 
         recyclerViewJobPost = findViewById(R.id.recycler_view_employer_own_posts);
         recyclerViewJobPost.setLayoutManager(new LinearLayoutManager(this));
@@ -51,10 +50,9 @@ public class EmployerDashboard extends AppCompatActivity {
             }
         });
 
-
         recyclerViewJobPost.setAdapter(adapterJobPost);
 
-
+        bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
         bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_home);
         bottomNavigationViewEmployer.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override

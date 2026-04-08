@@ -24,7 +24,6 @@ public class SeekerDashboardActivity extends AppCompatActivity {
     private RecyclerView recyclerViewJobPost;
     private JobPostDashboardAdapter adapterJobPost;
     private List<JobPostDashboardModel> jobListJobCard;
-    // Added for navigation
     private BottomNavigationView bottomNavigationView;
 
     @Override
@@ -52,21 +51,36 @@ public class SeekerDashboardActivity extends AppCompatActivity {
         });
         recyclerViewJobPost.setAdapter(adapterJobPost);
 
-        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-
-        bottomNavigationView.setSelectedItemId(R.id.nav_home);
-
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view_seeker);
+        bottomNavigationView.setSelectedItemId(R.id.nav_home_seeker);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
 
-                if (id == R.id.nav_home) {
+                if (id == R.id.nav_home_seeker) {
                     return true;
-                } else if (id == R.id.nav_profile) {
+                } else if (id == R.id.nav_profile_seeker) {
                     Intent intent = new Intent(SeekerDashboardActivity.this, SeekerProfileActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    overridePendingTransition(0, 0);
+                    return true;
+                }else if (id == R.id.nav_notifications_seeker) {
+                    //Will set to SeekerNotifications pa, pending task for loraine
+                    Intent intent = new Intent(SeekerDashboardActivity.this, EmployerNotificationsActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    return true;
+                }else if (id == R.id.nav_activity_seeker) {
+                    Intent intent = new Intent(SeekerDashboardActivity.this, SaveSeekerActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    return true;
+                }else if (id == R.id.nav_chat_seeker) {
+                    //Will still create chat for Seeker
+                    Intent intent = new Intent(SeekerDashboardActivity.this, ChatEmployerActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
                     return true;
                 }
 
