@@ -39,17 +39,20 @@
         android:weightSum="1">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_view_applicants"
+            android:id="@+id/button_cancel_application"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:backgroundTint="#1B3E9C"
-            android:text="View Applicants"
+            android:layout_height="55dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="12dp"
+            android:text="Cancel Application"
+            android:textAllCaps="false"
+            android:textColor="#D32F2F"
             android:textSize="16sp"
-            android:layout_marginBottom="8dp"
-            android:textColor="@color/white"
-            app:cornerRadius="8dp"
-            app:elevation="8dp" />
+            app:cornerRadius="12dp"
+            app:strokeColor="#D32F2F"
+            app:strokeWidth="1.5dp"
+            app:rippleColor="#15D32F2F" />
 
     </LinearLayout>
 
@@ -146,6 +149,20 @@
                         android:text="Employer Job Title" />
 
                     <TextView
+                        android:id="@+id/applied_status_badge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="4dp"
+                        android:text="UNDER REVIEW"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="#212121"
+                        android:background="@drawable/bg_status_pending" />
+
+                    <TextView
                         android:id="@+id/text_view_employer_name_placeholder"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -227,11 +244,13 @@
                     </RelativeLayout>
 
                     <TextView
-                        android:id="@+id/text_view_how_long_job_post_posted_placeholder"
+                        android:id="@+id/applied_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:text="2d ago" />
+                        android:layout_below="@id/relative_layout_details_job_post"
+                        android:text="Applied: Apr 08, 2026"
+                        android:textSize="12sp"
+                        android:textColor="#9E9E9E" />
 
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
