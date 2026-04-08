@@ -2,9 +2,9 @@ package com.manilalinkup.app.models;
 
 public class JobPostDashboardModel {
     String jobTitle, employerName, jobPostLocation, job_duration,howLongJobIsPosted;
-    int employerProfilePicture;
+    String employerProfilePicture;
 
-    public JobPostDashboardModel(String jobTitle, String employerName, String jobPostLocation, String job_duration, int employerProfilePicture ,String howLongJobIsPosted) {
+    public JobPostDashboardModel(String jobTitle, String employerName, String jobPostLocation, String job_duration, String employerProfilePicture ,String howLongJobIsPosted) {
         this.jobTitle = jobTitle;
         this.employerName = employerName;
         this.jobPostLocation = jobPostLocation;
@@ -29,7 +29,7 @@ public class JobPostDashboardModel {
         return job_duration;
     }
 
-    public int getEmployerProfilePicture() {
+    public String getEmployerProfilePicture() {
         return employerProfilePicture;
     }
 
