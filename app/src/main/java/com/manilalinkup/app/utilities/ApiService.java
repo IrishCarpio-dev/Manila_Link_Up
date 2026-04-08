@@ -1,6 +1,11 @@
 package com.manilalinkup.app.utilities;
 
+import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.ArchiveJobRequest;
+import com.manilalinkup.app.models.CreateJobRequest;
 import com.manilalinkup.app.models.EmployerRequest;
+import com.manilalinkup.app.models.GetJobsRequest;
+import com.manilalinkup.app.models.JobModel;
 import com.manilalinkup.app.models.SeekerRequest;
 import com.manilalinkup.app.models.UserProfileModel;
 
@@ -33,4 +38,14 @@ public interface ApiService {
 
     @GET("api/user/profile")
     Call<UserProfileModel> getUserProfile();
+
+    // Jobs
+    @POST("api/jobs")
+    Call<ResponseBody> createJob(@Body CreateJobRequest createJobRequest);
+
+    @POST("api/jobs/list")
+    Call<ApiResponse<JobModel>> getJobs(@Body GetJobsRequest getJobsRequest);
+
+    @POST("api/jobs/archive")
+    Call<ResponseBody> archiveJob(@Body ArchiveJobRequest archiveJobRequest);
 }
