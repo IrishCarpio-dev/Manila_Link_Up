@@ -31,7 +31,6 @@ public class EmployerDashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_employer_dashboard);
-        bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
 
         recyclerViewJobPost = findViewById(R.id.recycler_view_employer_own_posts);
         recyclerViewJobPost.setLayoutManager(new LinearLayoutManager(this));
@@ -46,10 +45,14 @@ public class EmployerDashboard extends AppCompatActivity {
                 intent.putExtra("EMPLOYER_NAME", job.getEmployerName());
                 startActivity(intent);
             }
+            @Override
+            public void onRemoveClick(JobPostDashboardModel job, int position) {
+            }
         });
+
         recyclerViewJobPost.setAdapter(adapterJobPost);
 
-
+        bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
         bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_home);
         bottomNavigationViewEmployer.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -92,7 +95,7 @@ public class EmployerDashboard extends AppCompatActivity {
                 "Eng Bee Tin",
                 "Binondo, Manila",
                 "March 30, 2026",
-                R.drawable.chipsstarters,
+                "https://en.wikipedia.org/wiki/Eng_Bee_Tin",
                 "3 days ago"
         ));
         jobListJobCard.add(new JobPostDashboardModel(
@@ -100,7 +103,7 @@ public class EmployerDashboard extends AppCompatActivity {
                 "Don Kopi",
                 "Malate, Manila",
                 "Full Time",
-                R.drawable.mockdata_engbeeten,
+                "https://www.freepik.com/vectors/coffee-shop-logo-design",
                 "7 days ago"
         ));
 
@@ -109,7 +112,7 @@ public class EmployerDashboard extends AppCompatActivity {
                 "Quick Smart Express",
                 "Quiapo, Manila",
                 "M | W | F",
-                R.drawable.sarisaristore,
+                "https://venngage.com/templates/logos/market-store-creative-logo-fc8535df-be09-4c80-8ea5-a69a34b2318e",
                 "10 days ago"
         ));
 
@@ -118,7 +121,7 @@ public class EmployerDashboard extends AppCompatActivity {
                 "BINI Mika's Company",
                 "GMA, Manila",
                 "T | Th | F",
-                R.drawable.mikaemployer,
+                "https://www.thebeautyedit.ph/people/bini-members-and-their-beauty-looks/",
                 "1 day ago"
         ));
 

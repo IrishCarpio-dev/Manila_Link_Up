@@ -24,7 +24,6 @@ public class SeekerDashboardActivity extends AppCompatActivity {
     private RecyclerView recyclerViewJobPost;
     private JobPostDashboardAdapter adapterJobPost;
     private List<JobPostDashboardModel> jobListJobCard;
-    // Added for navigation
     private BottomNavigationView bottomNavigationView;
 
     @Override
@@ -46,24 +45,42 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 //not yet tested - irish
                 startActivity(intent);
             }
+            @Override
+            public void onRemoveClick(JobPostDashboardModel job, int position) {
+            }
         });
         recyclerViewJobPost.setAdapter(adapterJobPost);
 
-        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-
-        bottomNavigationView.setSelectedItemId(R.id.nav_home);
-
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view_seeker);
+        bottomNavigationView.setSelectedItemId(R.id.nav_home_seeker);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
 
-                if (id == R.id.nav_home) {
+                if (id == R.id.nav_home_seeker) {
                     return true;
-                } else if (id == R.id.nav_profile) {
+                } else if (id == R.id.nav_profile_seeker) {
                     Intent intent = new Intent(SeekerDashboardActivity.this, SeekerProfileActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    overridePendingTransition(0, 0);
+                    return true;
+                }else if (id == R.id.nav_notifications_seeker) {
+                    //Will set to SeekerNotifications pa, pending task for loraine
+                    Intent intent = new Intent(SeekerDashboardActivity.this, EmployerNotificationsActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    return true;
+                }else if (id == R.id.nav_activity_seeker) {
+                    Intent intent = new Intent(SeekerDashboardActivity.this, SaveSeekerActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    return true;
+                }else if (id == R.id.nav_chat_seeker) {
+                    //Will still create chat for Seeker
+                    Intent intent = new Intent(SeekerDashboardActivity.this, ChatEmployerActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
                     return true;
                 }
 
@@ -78,16 +95,15 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 "Eng Bee Tin",
                 "Binondo, Manila",
                 "March 30, 2026",
-                R.drawable.chipsstarters,
+                "https://en.wikipedia.org/wiki/Eng_Bee_Tin",
                 "3 days ago"
         ));
-
         jobListJobCard.add(new JobPostDashboardModel(
                 "Cafe Barista",
                 "Don Kopi",
                 "Malate, Manila",
                 "Full Time",
-                R.drawable.mockdata_engbeeten,
+                "https://www.freepik.com/vectors/coffee-shop-logo-design",
                 "7 days ago"
         ));
 
@@ -96,7 +112,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 "Quick Smart Express",
                 "Quiapo, Manila",
                 "M | W | F",
-                R.drawable.sarisaristore,
+                "https://venngage.com/templates/logos/market-store-creative-logo-fc8535df-be09-4c80-8ea5-a69a34b2318e",
                 "10 days ago"
         ));
 
@@ -105,7 +121,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 "BINI Mika's Company",
                 "GMA, Manila",
                 "T | Th | F",
-                R.drawable.mikaemployer,
+                "https://www.thebeautyedit.ph/people/bini-members-and-their-beauty-looks/",
                 "1 day ago"
         ));
 

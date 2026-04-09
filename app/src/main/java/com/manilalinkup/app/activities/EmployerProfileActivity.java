@@ -67,28 +67,38 @@ public class EmployerProfileActivity extends AppCompatActivity {
 
         allJobsPostedList = new ArrayList<JobPostDashboardModel>();
         allJobsPostedList.add(new JobPostDashboardModel(
-                "Barista",
-                "Irish Cafe",
-                "Makati City",
-                "Full-time",
-                R.drawable.frieren,
-                "2h ago"
+                "Events/Catering Helper",
+                "Eng Bee Tin",
+                "Binondo, Manila",
+                "March 30, 2026",
+                "https://en.wikipedia.org/wiki/Eng_Bee_Tin",
+                "3 days ago"
         ));
         allJobsPostedList.add(new JobPostDashboardModel(
-                "Cat Sitter",
-                "Castillo Family",
-                "Sta.Ana, MAnila",
-                "M | W | F",
-                R.drawable.frieren,
-                "8h ago"
+                "Cafe Barista",
+                "Don Kopi",
+                "Malate, Manila",
+                "Full Time",
+                "https://www.freepik.com/vectors/coffee-shop-logo-design",
+                "7 days ago"
         ));
+
         allJobsPostedList.add(new JobPostDashboardModel(
                 "Store Assistant",
-                "Nena Castro",
-                "San Andres Bukid, MAnila",
-                "Every Monday",
-                R.drawable.frieren,
-                "8h ago"
+                "Quick Smart Express",
+                "Quiapo, Manila",
+                "M | W | F",
+                "https://venngage.com/templates/logos/market-store-creative-logo-fc8535df-be09-4c80-8ea5-a69a34b2318e",
+                "10 days ago"
+        ));
+
+        allJobsPostedList.add(new JobPostDashboardModel(
+                "Artist Assistant",
+                "BINI Mika's Company",
+                "GMA, Manila",
+                "T | Th | F",
+                "https://www.thebeautyedit.ph/people/bini-members-and-their-beauty-looks/",
+                "1 day ago"
         ));
 
 
@@ -98,6 +108,9 @@ public class EmployerProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(EmployerProfileActivity.this, EmployerViewJobPost.class);
                 //not yet tested - irish
                 startActivity(intent);
+            }
+            @Override
+            public void onRemoveClick(JobPostDashboardModel job, int position) {
             }
         });
         recyclerViewAllJobsPosted.setAdapter(adapterAllJobPost);
