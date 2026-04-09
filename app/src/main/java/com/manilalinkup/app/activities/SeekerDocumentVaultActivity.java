@@ -52,15 +52,23 @@ public class SeekerDocumentVaultActivity extends AppCompatActivity {
         recyclerOtherDocs.setLayoutManager(new LinearLayoutManager(this));
         recyclerOtherDocs.setAdapter(adapter);
 
+        // Prevents scrolling conflicts if the layout is inside a ScrollView
         recyclerOtherDocs.setNestedScrollingEnabled(false);
     }
 
     private void loadDocuments() {
-        tvIdType.setText("Philippine Passport");
+        // Example: Primary ID Display
+        tvIdType.setText("Philippine Passport - VERIFIED");
 
-        credentialList.add(new CredentialModel("NBI Clearance.pdf", null));
-        credentialList.add(new CredentialModel("Barangay Certificate.jpg", null));
-        credentialList.add(new CredentialModel("UMID_Front.png", null));
+        // Clear list to avoid duplicates on reload
+        credentialList.clear();
+
+        /* UPDATED: Using the new constructor in CredentialModel
+           Passing (FileName, Status)
+        */
+        credentialList.add(new CredentialModel("NBI Clearance.pdf", "VERIFIED"));
+        credentialList.add(new CredentialModel("Barangay Certificate.jpg", "PENDING"));
+        credentialList.add(new CredentialModel("UMID_Front.png", "REJECTED"));
 
         adapter.notifyDataSetChanged();
     }

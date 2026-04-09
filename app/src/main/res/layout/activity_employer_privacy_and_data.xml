@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F7FB"
-    android:fillViewport="true"
     android:fitsSystemWindows="true">
 
     <androidx.cardview.widget.CardView
@@ -43,7 +43,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/header_privacy">
+        android:layout_below="@id/header_privacy"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -90,7 +91,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Allow job seekers to browse your company page and active listings."
+                                android:text="Allow job seekers to browse your company page."
                                 android:textSize="12sp"
                                 android:textColor="#757575"/>
                         </LinearLayout>
@@ -108,7 +109,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Legal &amp; Compliance"
+                android:text="Legal &amp; Business Verification"
                 android:textColor="#1B3E9C"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"/>
@@ -125,43 +126,41 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <RelativeLayout
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Verification Status per Document"
+                        android:textSize="12sp"
+                        android:textColor="#757575"
+                        android:layout_marginBottom="12dp"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_business_docs_status"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Business Verification"
-                            android:textColor="#333333"
-                            android:textStyle="bold" />
+                        android:nestedScrollingEnabled="false"
+                        tools:listitem="@layout/item_credential" />
 
-                        <TextView
-                            android:id="@+id/tv_employer_verify_status"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:text="VERIFIED"
-                            android:textColor="#2ECC71"
-                            android:textStyle="bold"
-                            android:textSize="12sp" />
-                    </RelativeLayout>
-
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0" android:layout_marginBottom="12dp"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F0F0F0"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="12dp"/>
 
                     <TextView
-                        android:id="@+id/btn_view_business_docs"
+                        android:id="@+id/btn_upload_new_legal_doc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Manage Legal Documents (BIR/SEC)"
+                        android:text="Upload Additional Document"
                         android:drawableStart="@drawable/ic_help"
                         android:drawablePadding="12dp"
                         android:drawableEnd="@drawable/ic_chevron_right"
                         android:textColor="#1B3E9C"
                         android:gravity="center_vertical"
                         android:background="?attr/selectableItemBackground"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"/>
+                        android:padding="8dp"
+                        android:textStyle="bold"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
