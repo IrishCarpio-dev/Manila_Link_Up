@@ -10,15 +10,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.manilalinkup.app.activities.ChatSeekerActivity;
+import com.manilalinkup.app.activities.SeekerDashboardActivity;
+import com.manilalinkup.app.activities.SeekerNotificationActivity;
+import com.manilalinkup.app.activities.SeekerProfileActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SaveSeekerActivity extends AppCompatActivity {
+
+    public static List<SeekerJobModel> savedList = new ArrayList<>();
 
     RecyclerView recyclerView;
     View emptyState;
     BottomNavigationView bottomNavigationView;
 
-
-    SavedJobsAdapter adapter;
+    SeekerJobAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,19 +41,13 @@ public class SaveSeekerActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // INITIALIZE ONCE
-        adapter = new SavedJobsAdapter(SavedJobsData.savedList);
-
-        // Handle removal of saved jobs
-        adapter.setOnRemoveClickListener(job -> {
-            SavedJobsData.savedList.remove(job);
-            loadSavedJobs();
-        });
+        adapter = new SeekerJobAdapter(savedList);
 
         recyclerView.setAdapter(adapter);
 
         loadSavedJobs();
 
-        bottomNavigationView.setSelectedItemId(R.id.nav_my_activity);
+        bottomNavigationView.setSelectedItemId(R.id.nav_activity);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -57,7 +59,14 @@ public class SaveSeekerActivity extends AppCompatActivity {
                 overridePendingTransition(0, 0);
                 return true;
 
-            } else if (id == R.id.nav_my_activity) {
+            } else if (id == R.id.nav_notifications) {
+                Intent intent = new Intent(this, SeekerNotificationActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+                return true;
+
+            } else if (id == R.id.nav_activity) {
                 return true;
 
             } else if (id == R.id.nav_chat) {
@@ -80,7 +89,7 @@ public class SaveSeekerActivity extends AppCompatActivity {
     }
 
     private void loadSavedJobs() {
-        if (SavedJobsData.savedList.isEmpty()) {
+        if (savedList.isEmpty()) {
             emptyState.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         } else {
@@ -94,6 +103,6 @@ public class SaveSeekerActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadSavedJobs(); // auto refresh
-        bottomNavigationView.setSelectedItemId(R.id.nav_my_activity);
+        bottomNavigationView.setSelectedItemId(R.id.nav_activity);
     }
 }
