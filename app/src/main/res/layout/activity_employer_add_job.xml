@@ -126,45 +126,11 @@
                 app:boxStrokeWidthFocused="0dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_job_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:id="@+id/text_view_employer_job_duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_input_layout_job_title"
-                android:layout_margin="8dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Job Duration"
-                android:textColor="#212121"
-                android:textSize="16sp" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_job_duration"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_view_employer_job_duration"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:hint="e.g. Apr. 7-21, 2026, M | W | F, Every Saturday"
-                app:boxBackgroundColor="#F5F5F5"
-                app:boxCornerRadiusBottomEnd="8dp"
-                app:boxCornerRadiusBottomStart="8dp"
-                app:boxCornerRadiusTopEnd="8dp"
-                app:boxCornerRadiusTopStart="8dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
-
 
             <TextView
                 android:id="@+id/text_view_employer_job_location"
@@ -195,6 +161,7 @@
                 app:boxStrokeWidthFocused="0dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_job_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
@@ -231,6 +198,7 @@
                 app:helperText="Describe responsibilities, requirements, schedule, etc.">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_job_description"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:gravity="top|start"
@@ -240,61 +208,150 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/text_view_expires_at"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/_text_input_job_description"
-                android:layout_margin="16dp">
+                android:layout_margin="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Expires At"
+                android:textColor="#212121"
+                android:textSize="16sp" />
 
-                <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout_expires_at"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_view_expires_at"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Select expiry date"
+                app:boxBackgroundColor="#F5F5F5"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_expires_at"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:focusable="false"
+                    android:inputType="none" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                        android:layout_width="0dp"
-                        android:layout_height="56dp"
-                        android:layout_margin="4dp"
-                        android:layout_weight="1"
-                        android:hint="Salary (₱)"
-                        app:boxBackgroundColor="#F5F5F5"
-                        app:boxStrokeWidth="0dp">
+            </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edit_text_salary"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="number" />
-                    </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/text_view_salary_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_input_layout_expires_at"
+                android:layout_margin="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Salary (₱)"
+                android:textColor="#212121"
+                android:textSize="16sp" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                        android:layout_width="0dp"
-                        android:layout_height="56dp"
-                        android:layout_weight="1"
-                        android:hint="Rate"
-                        app:boxBackgroundColor="#F5F5F5"
-                        app:boxStrokeWidth="0dp"
-                        app:endIconMode="dropdown_menu"
-                        app:helperText="Per hour, day, month, or year">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout_salary"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_view_salary_label"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="e.g. 500"
+                app:boxBackgroundColor="#F5F5F5"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp">
 
-                        <AutoCompleteTextView
-                            android:id="@+id/auto_complete_rate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="none"
-                            android:minHeight="48dp"
-                            android:paddingStart="16dp"
-                            android:paddingTop="16dp"
-                            android:paddingBottom="16dp" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_text_salary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/text_view_duration_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_input_layout_salary"
+                android:layout_margin="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Duration"
+                android:textColor="#212121"
+                android:textSize="16sp" />
 
-                </LinearLayout>
-            </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/layout_duration_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_view_duration_label"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1"
+                    android:hint="e.g. 2"
+                    app:boxBackgroundColor="#F5F5F5"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_duration_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:hint="Unit"
+                    app:boxBackgroundColor="#F5F5F5"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:endIconMode="dropdown_menu">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/auto_complete_rate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:minHeight="48dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
         </RelativeLayout>
     </ScrollView>
 
