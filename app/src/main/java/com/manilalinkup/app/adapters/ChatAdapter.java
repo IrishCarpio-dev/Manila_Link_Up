@@ -13,7 +13,6 @@ import com.manilalinkup.app.R;
 
 import java.util.List;
 
-// FIX 1: Changed to <RecyclerView.ViewHolder>
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_SENT = 1;

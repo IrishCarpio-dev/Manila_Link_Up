@@ -9,7 +9,7 @@
     android:fitsSystemWindows="true">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation_view"
+        android:id="@+id/bottom_navigation_view_seeker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -96,7 +96,7 @@
         android:id="@+id/recycler_view_job_posts_dashboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_navigation_view"
+        android:layout_above="@id/bottom_navigation_view_seeker"
         android:layout_below="@id/text_view_recommendations"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_job_post_card">
