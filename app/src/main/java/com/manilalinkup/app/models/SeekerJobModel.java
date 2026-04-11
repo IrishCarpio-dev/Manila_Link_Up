@@ -1,4 +1,4 @@
-package com.manilalinkup.app;
+package com.manilalinkup.app.models;
 
 import java.util.Objects;
 

@@ -62,7 +62,6 @@
         android:layout_below="@id/card_view_dashboard_top_employer"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_notifications_employer_card">
-
     </androidx.recyclerview.widget.RecyclerView>
 
 

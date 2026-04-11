@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_home"
+        android:id="@+id/nav_home_seeker"
         android:icon="@drawable/home_icon"
         android:title="Home" />
     <item
-        android:id="@+id/nav_notifications"
+        android:id="@+id/nav_notifications_seeker"
         android:icon="@drawable/notif_icon"
         android:title="Notifications" />
     <item
-        android:id="@+id/nav_activity"
+        android:id="@+id/nav_activity_seeker"
         android:icon="@drawable/activity_icon"
         android:title="My Activity" />
     <item
-        android:id="@+id/nav_chat"
+        android:id="@+id/nav_chat_seeker"
         android:icon="@drawable/chat_logo"
         android:title="Messages" />
     <item
-        android:id="@+id/nav_profile"
+        android:id="@+id/nav_profile_seeker"
         android:icon="@drawable/profile_logo"
         android:title="Profile" />
 </menu>

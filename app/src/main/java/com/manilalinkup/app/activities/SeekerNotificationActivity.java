@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.EmployerNotificationsAdapter;
 import com.manilalinkup.app.models.EmployerNotificationsModel;
-import com.manilalinkup.app.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,23 +39,23 @@ public class SeekerNotificationActivity extends AppCompatActivity {
         recyclerViewNotifications.setAdapter(adapterNotif);
 
         bottomNavigationViewSeeker = findViewById(R.id.bottom_navigation_view_seeker);
-        bottomNavigationViewSeeker.setSelectedItemId(R.id.nav_notifications);
+        bottomNavigationViewSeeker.setSelectedItemId(R.id.nav_notifications_seeker);
         bottomNavigationViewSeeker.setOnItemSelectedListener(menuItem ->  {
             int id = menuItem.getItemId();
-            if(id == R.id.nav_home){
+            if(id == R.id.nav_home_seeker){
                 startActivity(new Intent(SeekerNotificationActivity.this, SeekerDashboardActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
-            } else if(id == R.id.nav_chat) {
+            } else if(id == R.id.nav_chat_seeker) {
                 startActivity(new Intent(SeekerNotificationActivity.this, ChatSeekerActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
-            } else if(id == R.id.nav_profile) {
+            } else if(id == R.id.nav_profile_seeker) {
                 startActivity(new Intent(SeekerNotificationActivity.this, SeekerProfileActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
-            } else if(id == R.id.nav_activity) {
-                // Placeholder for Seeker Activity
+            } else if(id == R.id.nav_activity_seeker) {
+                // Already in Notifications/Activity
                 return true;
             }
             return true;

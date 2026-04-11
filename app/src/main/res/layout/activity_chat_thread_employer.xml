@@ -115,7 +115,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#F4F7F9"
-        android:layout_above="@id/type_a_message_container"
         android:layout_below="@id/button_container">
 
         <RelativeLayout
@@ -127,10 +126,8 @@
                 android:id="@+id/recycler_chat_messages"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/toolbar"
                 android:clipToPadding="false"
                 android:padding="8dp"/>
-
         </RelativeLayout>
     </ScrollView>
 

@@ -1,4 +1,4 @@
-package com.manilalinkup.app;
+package com.manilalinkup.app.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.manilalinkup.app.R;
+import com.manilalinkup.app.activities.SaveSeekerActivity;
+import com.manilalinkup.app.models.SeekerJobModel;
 
 import java.util.List;
 
@@ -31,7 +35,7 @@ public class SeekerJobAdapter extends RecyclerView.Adapter<SeekerJobAdapter.Seek
     public void onBindViewHolder(@NonNull SeekerJobViewHolder holder, int position) {
         SeekerJobModel job = seekerJobList.get(position);
         holder.bind(job);
-        
+
         holder.saveBtn.setOnClickListener(v -> {
             if (!SaveSeekerActivity.savedList.contains(job)) {
                 SaveSeekerActivity.savedList.add(job);
@@ -47,7 +51,7 @@ public class SeekerJobAdapter extends RecyclerView.Adapter<SeekerJobAdapter.Seek
         return seekerJobList.size();
     }
 
-    static class SeekerJobViewHolder extends RecyclerView.ViewHolder {
+    public static class SeekerJobViewHolder extends RecyclerView.ViewHolder {
         private final ImageView employerPfp;
         private final TextView jobTitle;
         private final TextView employerName;
