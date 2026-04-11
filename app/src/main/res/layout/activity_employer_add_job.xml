@@ -136,7 +136,7 @@
                 android:id="@+id/text_view_employer_job_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text_input_layout_job_duration"
+                android:layout_below="@id/text_input_layout_job_title"
                 android:layout_margin="8dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="Job Location"
