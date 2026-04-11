@@ -28,7 +28,6 @@ public class SeekerSettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // CRITICAL: Ensure this layout file contains ALL the IDs used below
         setContentView(R.layout.activity_settings_seeker);
 
         mAuth = FirebaseAuth.getInstance();
@@ -68,7 +67,6 @@ public class SeekerSettingsActivity extends AppCompatActivity {
         if (btnTerms == null) Log.e(TAG, "Missing View: btn_terms");
         if (btnAbout == null) Log.e(TAG, "Missing View: btn_about");
 
-        // Return true only if the most critical views are found
         return btnPrivacy != null && btnTerms != null && btnAbout != null;
     }
 
@@ -118,15 +116,18 @@ public class SeekerSettingsActivity extends AppCompatActivity {
         });
 
         btnHelpCenter.setOnClickListener(v -> {
-            startActivity(new Intent(this, HelpCenterActivity.class));
+            Intent intent = new Intent(this, HelpCenterActivity.class);
+            startActivity(intent);
         });
 
         btnTerms.setOnClickListener(v -> {
-            startActivity(new Intent(this, TermsOfServiceActivity.class));
+            Intent intent = new Intent(this, TermsOfServiceActivity.class);
+            startActivity(intent);
         });
 
         btnAbout.setOnClickListener(v -> {
-            startActivity(new Intent(this, AboutActivity.class));
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
         });
 
         btnLogout.setOnClickListener(v -> showLogoutConfirmation());

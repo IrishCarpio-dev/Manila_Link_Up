@@ -2,10 +2,10 @@ package com.manilalinkup.app.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,9 +26,11 @@ public class SeekerProfileActivity extends AppCompatActivity {
     private RecyclerView recyclerViewRatings;
     private RatingsProfileAdapter adapterRating;
     private List<RatingsProfileModel> ratingProfileList;
+
     private RecyclerView recyclerViewExperience;
     private ExperienceAdapter adapterExperience;
     private List<ExperienceModel> experienceList;
+
     private BottomNavigationView bottomNavigationView;
     private ImageView settingsIcon;
     private TextInputEditText summaryEditText;
@@ -38,9 +40,14 @@ public class SeekerProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seeker_profile);
 
+        // 1. Initialize all views first
         initializeViews();
+
+        // 2. Setup Data and Adapters
         setupFeedbacksRecyclerView();
         setupExperienceRecyclerView();
+
+        // 3. Setup Interactions
         setupBottomNavigation();
         setupClickListeners();
     }
@@ -48,13 +55,14 @@ public class SeekerProfileActivity extends AppCompatActivity {
     private void initializeViews() {
         settingsIcon = findViewById(R.id.image_view_seeker_settings_icon);
         summaryEditText = findViewById(R.id.editText_summary);
-
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-
         recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
         recyclerViewExperience = findViewById(R.id.recycler_view_experience);
 
-        bottomNavigationView.setSelectedItemId(R.id.nav_profile);
+        // Set the initial state of the navigation bar
+        if (bottomNavigationView != null) {
+            bottomNavigationView.setSelectedItemId(R.id.nav_profile);
+        }
     }
 
     private void setupFeedbacksRecyclerView() {
@@ -69,7 +77,6 @@ public class SeekerProfileActivity extends AppCompatActivity {
         adapterRating = new RatingsProfileAdapter(ratingProfileList);
         recyclerViewRatings.setAdapter(adapterRating);
     }
-
 
     private void setupExperienceRecyclerView() {
         recyclerViewExperience.setLayoutManager(new LinearLayoutManager(this));
@@ -88,38 +95,47 @@ public class SeekerProfileActivity extends AppCompatActivity {
             int id = item.getItemId();
 
             if (id == R.id.nav_home) {
-                startActivity(new Intent(this, SeekerDashboardActivity.class));
+                // Navigate to Dashboard/Home
+                Intent intent = new Intent(this, SeekerDashboardActivity.class);
+                startActivity(intent);
                 overridePendingTransition(0, 0);
-                finish();
+                // We don't call finish() so the user can go back to Profile
                 return true;
             } else if (id == R.id.nav_profile) {
+                // Already here, do nothing
                 return true;
             }
+            // Add logic for nav_bills, nav_savings, nav_cards as you create them
             return false;
         });
     }
 
     private void setupClickListeners() {
-        settingsIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(SeekerProfileActivity.this, SeekerSettingsActivity.class);
-            startActivity(intent);
-        });
+        if (settingsIcon != null) {
+            settingsIcon.setOnClickListener(v -> {
+                Intent intent = new Intent(SeekerProfileActivity.this, SeekerSettingsActivity.class);
+                startActivity(intent);
+            });
+        }
 
-        summaryEditText.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) {
-                // Potential place to save data to Firebase
-            }
-        });
-    }
-
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        if (summaryEditText != null) {
+            summaryEditText.setOnFocusChangeListener((v, hasFocus) -> {
+                if (!hasFocus) {
+                    // Logic to save profile summary text
+                }
+            });
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Ensure the correct menu item is checked when returning to this activity
-        bottomNavigationView.getMenu().findItem(R.id.nav_profile).setChecked(true);
+        // FIXED: Added null safety for the BottomNav and the specific menu item
+        if (bottomNavigationView != null) {
+            MenuItem profileItem = bottomNavigationView.getMenu().findItem(R.id.nav_profile);
+            if (profileItem != null) {
+                profileItem.setChecked(true);
+            }
+        }
     }
 }
