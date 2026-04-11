@@ -52,8 +52,7 @@ public class SaveSeekerActivity extends AppCompatActivity {
                 overridePendingTransition(0, 0);
                 return true;
             }else if(menuItem.getItemId() == R.id.nav_chat_seeker) {
-                //will change once chatSeeker activity has been added
-                startActivity(new Intent(SaveSeekerActivity.this, ChatEmployerActivity.class));
+                startActivity(new Intent(SaveSeekerActivity.this, ChatSeekerActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
             }else if(menuItem.getItemId() == R.id.nav_profile_seeker) {

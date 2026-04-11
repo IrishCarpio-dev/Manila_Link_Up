@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#1B3E9C"
+        app:navigationIcon="?attr/homeAsUpIndicator"
         app:navigationIconTint="@color/white">
 
         <TextView
@@ -107,7 +108,7 @@
                 android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@android:drawable/ic_menu_send"
-                app:tint="#424242" />
+                app:tint="#1B3E9C" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
