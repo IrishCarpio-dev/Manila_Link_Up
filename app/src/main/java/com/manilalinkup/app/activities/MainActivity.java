@@ -1,4 +1,4 @@
-package com.manilalinkup.app;
+package com.manilalinkup.app.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,16 +6,15 @@ import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.button.MaterialButton;
+import com.manilalinkup.app.R;
 
 public class MainActivity extends AppCompatActivity {
 
     MaterialButton loginButton;
     MaterialButton signupButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +29,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent loginActivityIntent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(loginActivityIntent);
+            }
+        });
+
+        signupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent signUpActivityintent = new Intent(MainActivity.this, GetStarted.class );
+                startActivity(signUpActivityintent);
             }
         });
 

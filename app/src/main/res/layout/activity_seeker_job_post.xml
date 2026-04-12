@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/design_default_color_background"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1B3E9C"
+        app:navigationIconTint="@color/white">
+
+        <TextView
+            android:id="@+id/text_view_employer_name_job_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-medium"
+            android:text="Employer Name XML"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        app:itemIconTint="@color/bottom_nav_icon_colors"
+        app:itemTextColor="@color/bottom_nav_icon_colors"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu_icons" />
+
+    <LinearLayout
+        android:id="@+id/layout_save_apply_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_navigation_view"
+        android:background="@android:color/transparent"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:weightSum="2">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#EEEEEE"
+            android:text="Save"
+            android:textAllCaps="false"
+            android:textColor="#212121"
+            app:cornerRadius="8dp"
+            app:elevation="4dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#BDBDBD"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_apply"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#1B3E9C"
+            android:text="Apply"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:cornerRadius="8dp"
+            app:elevation="4dp"
+            app:strokeWidth="1.5dp"
+            app:strokeColor="#142D70" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/layout_save_apply_buttons"
+        android:layout_below="@id/toolbar"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_job_post_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="4dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp">
+
+                    <ImageView
+                        android:id="@+id/image_view_employer_cover_photo_placeholder"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/coverphotosamp"></ImageView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_view_logo_container"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_margin="16dp"
+                        app:cardCornerRadius="25dp"
+                        app:cardElevation="8dp"
+                        app:cardPreventCornerOverlap="false">
+
+                        <ImageView
+                            android:id="@+id/image_view_employee_profile_picture_placeholder"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/chipsstarters" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <ImageView
+                        android:id="@+id/image_view_report_button_job_post"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_margin="13dp"
+                        android:contentDescription="Report"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/report_caution_logo" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_employer_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/card_view_job_post_header"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="4dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/text_view_employer_job_title_placeholder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-black"
+                        android:text="Employer Job Title"
+                        android:textColor="#212121"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/text_view_employer_name_placeholder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_view_employer_job_title_placeholder"
+                        android:fontFamily="sans-serif"
+                        android:text="Employer Name"
+                        android:textColor="#616161"
+                        android:textSize="12sp" />
+
+                    <RelativeLayout
+                        android:id="@+id/relative_layout_details_job_post"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_view_employer_name_placeholder"
+                        android:background="@color/white"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/location_logo"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_alignTop="@+id/text_view_location_placeholder"
+                            android:layout_marginTop="3dp"
+                            android:src="@drawable/location3" />
+
+                        <TextView
+                            android:id="@+id/text_view_location_placeholder"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_toEndOf="@id/location_logo"
+                            android:fontFamily="sans-serif"
+                            android:text="Binondo, Manila"
+                            android:textColor="#616161"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:id="@+id/money_logo"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_alignTop="@+id/text_view_salary_placeholder"
+                            android:layout_marginTop="3dp"
+                            android:src="@drawable/moneybill" />
+
+                        <TextView
+                            android:id="@+id/text_view_salary_placeholder"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/text_view_location_placeholder"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_toEndOf="@id/money_logo"
+                            android:fontFamily="sans-serif"
+                            android:textColor="#616161"
+                            android:textSize="14sp"
+                            tools:text="P700/day" />
+
+                        <ImageView
+                            android:id="@+id/calendar_logo"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_alignTop="@id/text_view_calendar_placeholder"
+                            android:layout_marginTop="3dp"
+                            android:src="@drawable/bxscalendarcheck" />
+
+                        <TextView
+                            android:id="@+id/text_view_calendar_placeholder"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/text_view_salary_placeholder"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_toEndOf="@id/calendar_logo"
+                            android:fontFamily="sans-serif"
+                            android:text="Apr. 4-8, 2026"
+                            android:textColor="#616161"
+                            android:textSize="14sp" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/text_view_how_long_job_post_posted_placeholder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="2d ago" />
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/text_view_job_description_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/card_view_employer_info"
+                android:layout_margin="16dp"
+                android:text="Job Description will go here"
+                android:textColor="#616161" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+</RelativeLayout>

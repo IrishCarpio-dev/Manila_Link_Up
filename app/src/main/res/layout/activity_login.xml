@@ -12,17 +12,16 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/material_toolbar"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:background="@color/design_default_color_background"
-            app:titleTextColor="@color/white" />
+            android:layout_height="wrap_content"
+            android:background="@color/design_default_color_background" />
 
         <ImageView
             android:id="@+id/image_view_logo"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_below="@id/material_toolbar"
+            android:layout_below="@id/toolbar"
             android:layout_marginStart="20dp"
             android:src="@drawable/logo" />
 
@@ -34,7 +33,8 @@
             android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:text="Login Now"
-            android:textSize="30dp" />
+            android:textColor="#212121"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/text_view_backInLinkUp"
@@ -43,7 +43,8 @@
             android:layout_below="@id/text_view_login"
             android:fontFamily="sans-serif"
             android:gravity="center"
-            android:text="Back in the LinkUp. Let's get to work." />
+            android:text="Back in the LinkUp. Let's get to work."
+            android:textColor="#616161" />
 
         <TextView
             android:id="@+id/text_view_email"
@@ -54,13 +55,15 @@
             android:layout_marginTop="55dp"
             android:fontFamily="sans-serif-black"
             android:text="Email"
-            android:textSize="16dp" />
+            android:textColor="#212121"
+            android:textSize="16sp" />
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout_email_address"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/text_view_email"
             android:layout_marginStart="30dp"
             android:layout_marginTop="5dp"
@@ -75,6 +78,7 @@
             app:boxStrokeWidthFocused="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_email_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress" />
@@ -89,13 +93,14 @@
             android:layout_marginTop="25dp"
             android:fontFamily="sans-serif-black"
             android:text="Password"
-            android:textSize="16dp" />
+            android:textColor="#212121"
+            android:textSize="16sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout_password"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/text_view_password"
             android:layout_marginStart="30dp"
             android:layout_marginTop="5dp"
@@ -111,6 +116,7 @@
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_password_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword" />
@@ -122,10 +128,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/text_input_layout_password"
             android:layout_marginStart="40dp"
-            android:buttonTint="#0D47A1"
+            android:checked="true"
             android:fontFamily="sans-serif-medium"
             android:text="Remember Me"
-            android:textSize="13sp" />
+            android:textColor="#212121"
+            android:textSize="13sp"
+            app:buttonTint="#0D47A1" />
 
         <TextView
             android:id="@+id/text_view_forget_password"
@@ -180,14 +188,15 @@
             android:src="@drawable/facebook" />
 
         <TextView
-            android:id="@+id/text_view_login_sign_upaccount"
+            android:id="@+id/text_view_login_sign_up_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/image_view_login_google"
             android:layout_marginStart="110dp"
             android:layout_marginTop="30dp"
             android:fontFamily="sans-serif-medium"
-            android:text="Don't Have an Account?" />
+            android:text="Don't Have an Account?"
+            android:textColor="#212121" />
 
         <TextView
             android:id="@+id/text_view_login_sign_up"
@@ -196,7 +205,7 @@
             android:layout_below="@id/image_view_login_google"
             android:layout_marginStart="3dp"
             android:layout_marginTop="30dp"
-            android:layout_toEndOf="@id/text_view_login_sign_upaccount"
+            android:layout_toEndOf="@id/text_view_login_sign_up_account"
             android:fontFamily="sans-serif-medium"
             android:text="Sign Up"
             android:textColor="#0D47A1" />

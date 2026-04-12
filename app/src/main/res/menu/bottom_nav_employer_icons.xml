@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/home_icon"
+        android:title="Home" />
+    <item
+        android:id="@+id/nav_notifications"
+        android:icon="@drawable/notif_icon"
+        android:title="Notifications" />
+
+    <item
+        android:id="@+id/nav_add_job"
+        android:icon="@drawable/addjob_icon"
+        android:title="Post Job"/>
+
+    <item
+        android:id="@+id/nav_chat"
+        android:icon="@drawable/chat_logo"
+        android:title="Messages" />
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/profile_logo"
+        android:title="Profile" />
+
+</menu>

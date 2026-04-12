@@ -14,7 +14,6 @@ local.properties
 .idea/assetWizardSettings.xml
 
 # --- Secrets (Firebase) ---
-# IMPORTANT: Keep your keys off GitHub!
 google-services.json
 
 # --- Mac Specific ---
@@ -29,3 +28,4 @@ $RECYCLE.BIN/
 *.log
 *.temp
 *.tmp
+

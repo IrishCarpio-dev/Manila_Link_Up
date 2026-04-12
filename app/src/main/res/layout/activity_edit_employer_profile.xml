@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/design_default_color_background"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/design_default_color_background" />
+
+
+        <ImageView
+            android:id="@+id/image_view_insert_photo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_below="@id/toolbar"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/insert_photo" />
+
+        <ImageButton
+            android:id="@+id/btn_remove_photo"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignTop="@id/image_view_insert_photo"
+            android:layout_alignEnd="@id/image_view_insert_photo"
+            android:background="@drawable/circular_button"
+            android:elevation="4dp"
+            android:padding="4dp"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:visibility="gone"
+            app:tint="#FF0000" />
+
+        <TextView
+            android:id="@+id/text_view_upload_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image_view_insert_photo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:text="Upload Profile Photo"
+            android:textColor="#212121" />
+
+        <TextView
+            android:id="@+id/lblClearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_view_upload_photo"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="32dp"
+            android:text="Upload Clearance"
+            android:textColor="#212121"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/subClearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lblClearance"
+            android:layout_marginStart="30dp"
+            android:text="(Ex. Nbi, Police, \nBarangay Clearance)"
+            android:textColor="@android:color/darker_gray" />
+
+        <Button
+            android:id="@+id/btnUploadClearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/lblClearance"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="30dp"
+            android:backgroundTint="#283593"
+            android:drawableStart="@android:drawable/stat_sys_upload"
+            android:text="Upload"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/arrowup2" />
+
+        <Button
+            android:id="@+id/btnReplaceClearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/lblClearance"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="30dp"
+            android:backgroundTint="#666666"
+            android:text="Replace Image"
+            android:visibility="gone"
+            app:cornerRadius="12dp" />
+
+        <ImageView
+            android:id="@+id/image_view_clearance_preview"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_below="@id/subClearance"
+            android:layout_marginVertical="16dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/lblID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image_view_clearance_preview"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="16dp"
+            android:text="Upload Valid ID"
+            android:textColor="#212121"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/subID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lblID"
+            android:layout_marginStart="30dp"
+            android:text="(Ex. Passport, Driver's License, \nUMID, Postal ID etc."
+            android:textColor="@android:color/darker_gray" />
+
+
+        <Button
+            android:id="@+id/btnUploadID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/lblID"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="30dp"
+            android:backgroundTint="#283593"
+            android:drawableStart="@android:drawable/stat_sys_upload"
+            android:text="Upload"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/arrowup2" />
+
+        <Button
+            android:id="@+id/btnReplaceID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/lblID"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="30dp"
+            android:backgroundTint="#666666"
+            android:text="Replace Image"
+            android:visibility="gone"
+            app:cornerRadius="12dp" />
+
+        <ImageView
+            android:id="@+id/image_view_id_preview"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_below="@id/subID"
+            android:layout_marginVertical="16dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/lblLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/image_view_id_preview"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="24dp"
+            android:text="Preferred Location"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etLocation"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@id/lblLocation"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="30dp"
+            android:background="#F0F0F0"
+            android:hint="Enter your location"
+            android:importantForAccessibility="yes"
+            android:paddingLeft="12dp" />
+
+        <TextView
+            android:id="@+id/lblDOB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etLocation"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="16dp"
+            android:text="Date of Birth"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etDOB"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@id/lblDOB"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="30dp"
+            android:background="#F0F0F0"
+            android:hint="yyyy-MM-dd"
+            android:paddingLeft="12dp"
+            android:focusable="false"
+            android:clickable="true"
+            android:inputType="none" />
+
+
+        <com.google.android.material.button.MaterialButton
+        android:id="@+id/material_button_save"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_below="@id/etDOB"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="8dp"
+        android:text="Save"
+        android:textSize="20sp"
+        app:backgroundTint="#0D47A1"
+        app:cornerRadius="12dp" />
+
+    </RelativeLayout>
+</ScrollView>
