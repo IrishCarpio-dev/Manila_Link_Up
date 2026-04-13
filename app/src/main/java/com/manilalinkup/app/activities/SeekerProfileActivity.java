@@ -3,6 +3,7 @@ package com.manilalinkup.app.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -34,22 +35,30 @@ public class SeekerProfileActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private ImageView settingsIcon;
     private TextInputEditText summaryEditText;
+    ImageView viewAllRatings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seeker_profile);
 
-        // 1. Initialize all views first
         initializeViews();
 
-        // 2. Setup Data and Adapters
         setupFeedbacksRecyclerView();
         setupExperienceRecyclerView();
 
-        // 3. Setup Interactions
         setupBottomNavigation();
         setupClickListeners();
+
+        viewAllRatings = findViewById(R.id.item_card_see_more_ratings_seeker);
+        viewAllRatings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SeekerProfileActivity.this, EmployerViewAllRatings.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void initializeViews() {
@@ -59,7 +68,6 @@ public class SeekerProfileActivity extends AppCompatActivity {
         recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
         recyclerViewExperience = findViewById(R.id.recycler_view_experience);
 
-        // Set the initial state of the navigation bar
         if (bottomNavigationView != null) {
             bottomNavigationView.setSelectedItemId(R.id.nav_profile);
         }
@@ -95,17 +103,13 @@ public class SeekerProfileActivity extends AppCompatActivity {
             int id = item.getItemId();
 
             if (id == R.id.nav_home) {
-                // Navigate to Dashboard/Home
                 Intent intent = new Intent(this, SeekerDashboardActivity.class);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
-                // We don't call finish() so the user can go back to Profile
                 return true;
             } else if (id == R.id.nav_profile) {
-                // Already here, do nothing
                 return true;
             }
-            // Add logic for nav_bills, nav_savings, nav_cards as you create them
             return false;
         });
     }
@@ -130,7 +134,6 @@ public class SeekerProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // FIXED: Added null safety for the BottomNav and the specific menu item
         if (bottomNavigationView != null) {
             MenuItem profileItem = bottomNavigationView.getMenu().findItem(R.id.nav_profile);
             if (profileItem != null) {
