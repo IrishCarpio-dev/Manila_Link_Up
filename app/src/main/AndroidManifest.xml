@@ -65,7 +65,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.EmployerDashboard"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".activities.SeekerDashboardActivity"
             android:exported="false"
@@ -110,24 +110,51 @@
             android:parentActivityName=".activities.SeekerDashboardActivity" />
         <activity
             android:name=".activities.SeekerSettingsActivity"
-            android:exported="false"
             android:label="Seeker Settings"
-            android:parentActivityName=".activities.SeekerProfileActivity" />
+            android:exported="false"
+            android:parentActivityName=".activities.SeekerProfileActivity"/>
         <activity
             android:name=".activities.EmployerSettingsActivity"
-            android:exported="false"
             android:label="Employer Settings"
-            android:parentActivityName=".activities.EmployerProfileActivity" />
+            android:exported="false"
+            android:parentActivityName=".activities.EmployerProfileActivity"/>
         <activity
             android:name=".activities.SeekerVerifyIdentityActivity"
-            android:exported="false"
             android:label="Verify Identity"
-            android:parentActivityName=".activities.SeekerSettingsActivity" />
+            android:exported="false"
+            android:parentActivityName=".activities.SeekerSettingsActivity"/>
         <activity
             android:name=".activities.SeekerPrivacyControlsActivity"
             android:exported="false"
             android:label="Privacy Controls"
             android:parentActivityName=".activities.SeekerSettingsActivity" />
+        <activity
+            android:name=".activities.TermsOfServiceActivity"
+            android:allowEmbedded="false"
+            android:label="Terms of Service"/>
+        <activity
+            android:name=".activities.SeekerDocumentVaultActivity"
+            android:exported="false"
+            android:label="Document Vault"
+            android:parentActivityName=".activities.SeekerSettingsActivity"/>
+        <activity
+            android:name=".activities.AboutActivity"
+            android:exported="false"
+            android:label="About" />
+        <activity
+            android:name=".activities.HelpCenterActivity"
+            android:exported="false"
+            android:label="Help Center"/>
+        <activity
+            android:name=".activities.EmployerBusinessVerificationActivity"
+            android:exported="false"
+            android:label="Business Verification"
+            android:parentActivityName=".activities.EmployerSettingsActivity"/>
+        <activity
+            android:name=".activities.EmployerPrivacyActivity"
+            android:exported="false"
+            android:label="Privacy Controls"
+            android:parentActivityName=".activities.EmployerSettingsActivity"/>
         <activity
             android:name=".activities.MainActivity"
             android:exported="true" />

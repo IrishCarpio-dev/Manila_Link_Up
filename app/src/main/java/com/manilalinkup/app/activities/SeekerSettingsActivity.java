@@ -2,6 +2,7 @@ package com.manilalinkup.app.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -14,6 +15,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
 
 public class SeekerSettingsActivity extends AppCompatActivity {
+
+    private static final String TAG = "SeekerSettingsActivity";
 
     private TextView btnEditProfile, btnVerification, btnPrivacy;
     private TextView btnChangePassword, tvUserEmail;
@@ -30,8 +33,14 @@ public class SeekerSettingsActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         initializeViews();
-        displayCurrentUserEmail();
-        setupClickListeners();
+
+        // This check will tell you in Logcat if any view is missing
+        if (checkViewsExist()) {
+            displayCurrentUserEmail();
+            setupClickListeners();
+        } else {
+            showToast("Error: Some UI elements were not found. App may crash.");
+        }
     }
 
     private void initializeViews() {
@@ -53,6 +62,14 @@ public class SeekerSettingsActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btn_logout);
     }
 
+    private boolean checkViewsExist() {
+        if (btnPrivacy == null) Log.e(TAG, "Missing View: btn_privacy");
+        if (btnTerms == null) Log.e(TAG, "Missing View: btn_terms");
+        if (btnAbout == null) Log.e(TAG, "Missing View: btn_about");
+
+        return btnPrivacy != null && btnTerms != null && btnAbout != null;
+    }
+
     private void displayCurrentUserEmail() {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null && user.getEmail() != null) {
@@ -62,14 +79,12 @@ public class SeekerSettingsActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
 
-        // 1. Edit Profile with Warning
         btnEditProfile.setOnClickListener(v -> {
             showSensitiveActionWarning(
                     "Edit Profile",
-                    "Changing your profile details may require a new identity verification. Do you want to proceed?",
+                    "Changing your profile details may require a new identity verification. Proceed?",
                     () -> {
-                        Intent intent = new Intent(this, EditSeekerProfileActivity.class);
-                        startActivity(intent);
+                        startActivity(new Intent(this, EditSeekerProfileActivity.class));
                     }
             );
         });
@@ -85,10 +100,9 @@ public class SeekerSettingsActivity extends AppCompatActivity {
         btnVerification.setOnClickListener(v -> {
             showSensitiveActionWarning(
                     "Verify Identity",
-                    "Uploading a new ID will put your account under review. You may be temporarily unable to apply for gigs. Proceed?",
+                    "Uploading a new ID will put your account under review. Proceed?",
                     () -> {
-                        Intent intent = new Intent(this, SeekerVerifyIdentityActivity.class);
-                        startActivity(intent);
+                        startActivity(new Intent(this, SeekerVerifyIdentityActivity.class));
                     }
             );
         });
@@ -97,24 +111,26 @@ public class SeekerSettingsActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SeekerPrivacyControlsActivity.class);
             startActivity(intent);
         });
-
-        btnPrivacy.setOnClickListener(v -> showToast("Opening Privacy Controls..."));
-
         switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> {
             showToast("Notifications " + (isChecked ? "Enabled" : "Disabled"));
         });
-
-        btnHelpCenter.setOnClickListener(v -> showToast("Loading Help Center..."));
-        btnTerms.setOnClickListener(v -> showToast("Displaying Terms of Service..."));
-        btnAbout.setOnClickListener(v -> showAboutDialog());
-
-        btnLogout.setOnClickListener(v -> showLogoutConfirmation());
 
         btnHelpCenter.setOnClickListener(v -> {
             Intent intent = new Intent(this, HelpCenterActivity.class);
             startActivity(intent);
         });
 
+        btnTerms.setOnClickListener(v -> {
+            Intent intent = new Intent(this, TermsOfServiceActivity.class);
+            startActivity(intent);
+        });
+
+        btnAbout.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+        });
+
+        btnLogout.setOnClickListener(v -> showLogoutConfirmation());
     }
 
     private void showSensitiveActionWarning(String title, String message, Runnable onConfirm) {
@@ -146,25 +162,16 @@ public class SeekerSettingsActivity extends AppCompatActivity {
         }
     }
 
-    private void showAboutDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("About Manila LinkUp")
-                .setMessage("Manila LinkUp v1.0.2-beta\nConnecting employers and gig workers in Metro Manila.")
-                .setPositiveButton("Close", null)
-                .show();
-    }
-
     private void showLogoutConfirmation() {
         new AlertDialog.Builder(this)
                 .setTitle("Logout")
                 .setMessage("Are you sure you want to log out from Manila LinkUp?")
                 .setPositiveButton("Logout", (dialog, which) -> {
                     mAuth.signOut();
-                    Intent intent = new Intent(SeekerSettingsActivity.this, MainActivity.class);
+                    Intent intent = new Intent(this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
-                    showToast("Logged out successfully");
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
