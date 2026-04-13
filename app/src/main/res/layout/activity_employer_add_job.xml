@@ -80,7 +80,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/card_view_dashboard_top_employer">
+        android:layout_below="@id/card_view_dashboard_top_employer"
+        android:paddingBottom="150dp"
+        android:clipToPadding="false">
 
         <RelativeLayout
             android:layout_width="match_parent"
