@@ -1,5 +1,6 @@
 package com.manilalinkup.app.activities;
 
+import android.content.Context;
 import android.content.Intent; // Added
 import android.os.Bundle;
 import android.widget.Button;
@@ -18,14 +19,14 @@ public class EmployerSettingsActivity extends AppCompatActivity {
     private Switch switchNotifications;
     private TextView btnHelpCenter, btnTerms, btnAbout;
     private Button btnLogout;
-    private FirebaseAuth mAuth; // Added
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_seeker);
 
-        mAuth = FirebaseAuth.getInstance(); // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
         initializeViews();
         setupClickListeners();
@@ -54,6 +55,29 @@ public class EmployerSettingsActivity extends AppCompatActivity {
         btnHelpCenter.setOnClickListener(v -> showToast("Loading Help Center..."));
         btnTerms.setOnClickListener(v -> showToast("Displaying Terms of Service..."));
         btnAbout.setOnClickListener(v -> showToast("Manila LinkUp v1.0.2-beta"));
+
+        btnLogout.setOnClickListener(v -> showLogoutConfirmation());
+
+        btnPrivacy.setOnClickListener(v -> {
+            Intent intent = new Intent(this, EmployerPrivacyActivity.class);
+            startActivity(intent);
+        });
+
+        btnVerification.setOnClickListener(v -> {
+            startActivity(new Intent(this, EmployerBusinessVerificationActivity.class));
+        });
+
+        btnHelpCenter.setOnClickListener(v -> {
+            startActivity(new Intent(this, HelpCenterActivity.class));
+        });
+
+        btnTerms.setOnClickListener(v -> {
+            startActivity(new Intent(this, TermsOfServiceActivity.class));
+        });
+
+        btnAbout.setOnClickListener(v -> {
+            startActivity(new Intent(this, AboutActivity.class));
+        });
 
         btnLogout.setOnClickListener(v -> showLogoutConfirmation());
     }
