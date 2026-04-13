@@ -169,7 +169,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="• Precious Irish Carpio (Project Lead)\n• Roehvique Caling\n• Loraine Gulo\n• Dino Dumanon\n• Monica Del Rosario"
+                        android:text="• Precious Irish Carpio (Project Lead)\n• Roehvique Caling\n• Loraine Gulo\n• Dino Dumanon"
                         android:textColor="?attr/colorOnSurface"
                         android:lineSpacingExtra="6dp"
                         android:fontFamily="sans-serif-medium"/>

@@ -23,10 +23,11 @@
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.ChatThreadSeeker"
+            android:exported="false"/>
         <activity
             android:name=".activities.EmployerViewAllRatings"
             android:exported="false" />
@@ -68,7 +69,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.SeekerDashboardActivity"
-            android:exported="false"
+            android:exported="true"
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.SeekerJobPostActivity"

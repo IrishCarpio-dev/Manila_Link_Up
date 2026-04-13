@@ -10,66 +10,22 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:background="#1B3E9C"
         app:navigationIcon="?attr/homeAsUpIndicator"
         app:navigationIconTint="@color/white">
 
         <TextView
-            android:id="@+id/text_view_seeker_name_top"
+            android:id="@+id/text_view_chat_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-medium"
-            android:text="Seeker Name"
+            android:text="Employer Name"
             android:textColor="@color/white"
             android:textSize="18sp"/>
 
     </com.google.android.material.appbar.MaterialToolbar>
-
-    <LinearLayout
-        android:id="@+id/button_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
-        android:background="@android:color/transparent"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        android:clipToPadding="false"
-        android:clipChildren="false"
-        android:weightSum="2">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_accept_seeker"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:backgroundTint="#EEEEEE"
-            android:text="REJECT"
-            android:textAllCaps="false"
-            android:textColor="#E53935"
-            app:cornerRadius="8dp"
-            app:elevation="4dp"
-            app:strokeWidth="1dp"
-            app:strokeColor="#BDBDBD"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_reject_seeker"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:backgroundTint="#1B3E9C"
-            android:text="ACCEPT"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:cornerRadius="8dp"
-            app:elevation="4dp"
-            app:strokeWidth="1.5dp"
-            app:strokeColor="#142D70" />
-    </LinearLayout>
-
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_view_type_message"
@@ -77,13 +33,12 @@
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         app:cardCornerRadius="24dp"
-        app:cardElevation="2dp"
+        app:cardElevation="4dp"
         android:layout_alignParentBottom="true"
         app:strokeColor="#F0F0F0"
         app:strokeWidth="1dp">
 
         <LinearLayout
-            android:id="@+id/type_a_message_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -116,8 +71,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#F4F7F9"
-        android:layout_below="@id/button_container">
-
+        android:layout_below="@id/toolbar">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -131,5 +85,4 @@
                 android:padding="8dp"/>
         </RelativeLayout>
     </ScrollView>
-
 </RelativeLayout>

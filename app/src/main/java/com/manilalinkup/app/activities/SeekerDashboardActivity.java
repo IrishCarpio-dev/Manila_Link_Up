@@ -77,8 +77,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                     overridePendingTransition(0, 0);
                     return true;
                 }else if (id == R.id.nav_chat_seeker) {
-                    //Will still create chat for Seeker
-                    Intent intent = new Intent(SeekerDashboardActivity.this, ChatEmployerActivity.class);
+                    Intent intent = new Intent(SeekerDashboardActivity.this, ChatSeekerActivity.class);
                     startActivity(intent);
                     overridePendingTransition(0, 0);
                     return true;
