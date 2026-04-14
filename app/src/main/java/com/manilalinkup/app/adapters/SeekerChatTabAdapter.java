@@ -55,7 +55,7 @@ public class SeekerChatTabAdapter extends RecyclerView.Adapter<SeekerChatTabAdap
             employerProfilePicture.setImageResource(seekerChatModel.getEmployerImage());
             employerName.setText(seekerChatModel.getEmployerName());
             messagePreview.setText(seekerChatModel.getMessagePreview());
-            messageTimeStamp.setText(seekerChatModel.getMessagePreview());
+            messageTimeStamp.setText(seekerChatModel.getMessageTimeStamp());
         }
     }
 

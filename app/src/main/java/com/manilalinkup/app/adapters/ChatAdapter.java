@@ -50,7 +50,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return new SentViewHolder(view);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_received, parent, false);
-            // FIX 3: Changed to RecivedViewHolder to match your class below
             return new RecivedViewHolder(view);
         }
     }

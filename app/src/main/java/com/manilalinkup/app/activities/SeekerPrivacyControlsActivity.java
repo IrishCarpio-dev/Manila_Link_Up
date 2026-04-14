@@ -1,6 +1,9 @@
 package com.manilalinkup.app.activities;
 
+import android.content.Intent; // Needed for navigation
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,57 +14,83 @@ import com.manilalinkup.app.R;
 
 public class SeekerPrivacyControlsActivity extends AppCompatActivity {
 
+    private ImageView btnBack;
     private Switch switchPublicProfile;
-    private TextView btnDownloadData, btnDeleteAccount;
+    private TextView btnDownloadData, btnClearHistory, btnDeleteAccount;
+
+    // 1. Add the variable for the Document Vault button
+    private TextView btnViewDocs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_seeker_privacy_controls);
+        setContentView(R.layout.activity_seeker_privacy_and_data_controls);
 
         initializeViews();
         setupListeners();
     }
 
     private void initializeViews() {
+        btnBack = findViewById(R.id.btn_back_privacy);
         switchPublicProfile = findViewById(R.id.switch_public_profile);
         btnDownloadData = findViewById(R.id.btn_download_data);
+        btnClearHistory = findViewById(R.id.btn_clear_history);
         btnDeleteAccount = findViewById(R.id.btn_delete_account);
+
+        btnViewDocs = findViewById(R.id.btn_view_uploaded_docs);
     }
 
     private void setupListeners() {
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
 
-        switchPublicProfile.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            String status = isChecked ? "Visible" : "Hidden";
-            showToast("Profile is now " + status);
-        });
+        if (btnViewDocs != null) {
+            btnViewDocs.setOnClickListener(v -> {
+                Intent intent = new Intent(this, SeekerDocumentVaultActivity.class);
+                startActivity(intent);
+            });
+        }
 
-        btnDownloadData.setOnClickListener(v -> {
-            new AlertDialog.Builder(this)
-                    .setTitle("Data Export")
-                    .setMessage("We will prepare a copy of your personal data and send it to your registered email. This may take up to 24 hours.")
-                    .setPositiveButton("Request", (dialog, which) -> showToast("Request Sent"))
-                    .setNegativeButton("Cancel", null)
-                    .show();
-        });
+        if (switchPublicProfile != null) {
+            switchPublicProfile.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                String message = isChecked ? "Profile is now Public" : "Profile is now Private";
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            });
+        }
 
-        btnDeleteAccount.setOnClickListener(v -> showDeleteConfirmation());
-    }
+        if (btnDownloadData != null) {
+            btnDownloadData.setOnClickListener(v -> {
+                Toast.makeText(this, "Preparing your data archive. Check your email soon.", Toast.LENGTH_LONG).show();
+            });
+        }
 
-    private void showDeleteConfirmation() {
-        new AlertDialog.Builder(this)
-                .setTitle("Delete Account?")
-                .setMessage("This action is permanent. All your profile data, gig history, and verifications will be wiped from Manila LinkUp. Are you absolutely sure?")
-                .setIcon(android.R.drawable.ic_delete)
-                .setPositiveButton("DELETE PERMANENTLY", (dialog, which) -> {
-                    // TODO: Firebase user.delete() logic
-                    showToast("Account deletion request initiated.");
-                })
-                .setNegativeButton("Keep My Account", null)
-                .show();
-    }
+        if (btnClearHistory != null) {
+            btnClearHistory.setOnClickListener(v -> {
+                new AlertDialog.Builder(this)
+                        .setTitle("Clear History")
+                        .setMessage("Are you sure you want to clear your job search history?")
+                        .setPositiveButton("Clear", (dialog, which) -> {
+                            Toast.makeText(this, "History cleared", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            });
+        }
 
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        if (btnDeleteAccount != null) {
+            btnDeleteAccount.setOnClickListener(v -> {
+                new AlertDialog.Builder(this)
+                        .setTitle("Delete Account")
+                        .setMessage("This action is permanent. Proceed?")
+                        .setPositiveButton("Delete Forever", (dialog, which) -> {
+                            Toast.makeText(this, "Account deletion request submitted.", Toast.LENGTH_LONG).show();
+                            finishAffinity();
+                        })
+                        .setNegativeButton("Keep Account", null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            });
+        }
     }
 }
