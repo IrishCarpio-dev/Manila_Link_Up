@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.models.CreateJobRequest;
+import com.manilalinkup.app.utilities.AddressAutocompleteHelper;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
@@ -37,11 +39,12 @@ public class EmployerAddJobActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationViewEmployer;
     TextInputLayout titleLayout, locationLayout, descriptionLayout, expiresAtLayout;
-    TextInputEditText titleInput, locationInput, descriptionInput, salaryInput, expiresAtInput, durationAmountInput;
+    TextInputEditText titleInput, descriptionInput, salaryInput, expiresAtInput, durationAmountInput;
     AutoCompleteTextView rateDropdown;
     ExtendedFloatingActionButton postJobButton;
     TextView greetingNameText;
     ProgressDialog progressDialog;
+    EditText locationInput;
 
     private String formattedExpiresAt = "";
 
@@ -57,7 +60,6 @@ public class EmployerAddJobActivity extends AppCompatActivity {
         expiresAtLayout = findViewById(R.id.text_input_layout_expires_at);
 
         titleInput = findViewById(R.id.edit_text_job_title);
-        locationInput = findViewById(R.id.edit_text_job_location);
         descriptionInput = findViewById(R.id.edit_text_job_description);
         salaryInput = findViewById(R.id.edit_text_salary);
         durationAmountInput = findViewById(R.id.edit_text_duration_amount);
@@ -65,6 +67,7 @@ public class EmployerAddJobActivity extends AppCompatActivity {
         rateDropdown = findViewById(R.id.auto_complete_rate);
         postJobButton = findViewById(R.id.button_post_job);
         greetingNameText = findViewById(R.id.textview_greeting_name_employer);
+        locationInput = findViewById(R.id.edit_text_location);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Posting job...");
@@ -81,6 +84,8 @@ public class EmployerAddJobActivity extends AppCompatActivity {
 
         expiresAtInput.setOnClickListener(v -> showDatePicker());
         expiresAtInput.setFocusable(false);
+
+        AddressAutocompleteHelper.attachDistrictAutocomplete(locationInput);
 
         postJobButton.setOnClickListener(v -> postJob());
 

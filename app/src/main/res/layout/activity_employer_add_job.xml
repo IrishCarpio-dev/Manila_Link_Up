@@ -162,10 +162,14 @@
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_job_location"
+                <EditText
+                    android:id="@+id/edit_text_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/lblLocation"
+                    android:background="#F0F0F0"
+                    android:importantForAccessibility="yes"
+                    android:paddingLeft="12dp"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
