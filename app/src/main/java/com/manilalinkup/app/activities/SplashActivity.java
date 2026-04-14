@@ -9,6 +9,7 @@ import androidx.core.splashscreen.SplashScreen;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
@@ -53,13 +54,13 @@ public class SplashActivity extends AppCompatActivity {
     private void checkUserRole(String token) {
         ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
-        apiService.getUserProfile().enqueue(new Callback<UserProfileModel>() {
+        apiService.getUserProfile().enqueue(new Callback<ApiResponse<UserProfileModel>>() {
             @Override
-            public void onResponse(Call<UserProfileModel> call, Response<UserProfileModel> response) {
+            public void onResponse(Call<ApiResponse<UserProfileModel>> call, Response<ApiResponse<UserProfileModel>> response) {
                 if (response.isSuccessful()) {
-                    if (response.body().getSeekers() != null) {
+                    if (response.body().getData().getSeekers() != null) {
                         // User is a seeker
-                        Boolean isProfileSet = Optional.ofNullable(response.body().getSeekers().getProfileSet()).orElse(false);
+                        Boolean isProfileSet = Optional.ofNullable(response.body().getData().getSeekers().getProfileSet()).orElse(false);
 
                         if (isProfileSet) {
                             startActivity(new Intent(SplashActivity.this, SeekerDashboardActivity.class));
@@ -68,9 +69,9 @@ public class SplashActivity extends AppCompatActivity {
                             startActivity(new Intent(SplashActivity.this, EditSeekerProfileActivity.class));
                             finish();
                         }
-                    } else if (response.body().getEmployers() != null) {
+                    } else if (response.body().getData().getEmployers() != null) {
                         // User is an employer
-                        Boolean isProfileSet = Optional.ofNullable(response.body().getEmployers().getProfileSet()).orElse(false);
+                        Boolean isProfileSet = Optional.ofNullable(response.body().getData().getEmployers().getProfileSet()).orElse(false);
 
                         if (isProfileSet) {
                             startActivity(new Intent(SplashActivity.this, EmployerDashboard.class));
@@ -94,7 +95,7 @@ public class SplashActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<UserProfileModel> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<UserProfileModel>> call, Throwable t) {
                 mAuth.signOut();
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();
