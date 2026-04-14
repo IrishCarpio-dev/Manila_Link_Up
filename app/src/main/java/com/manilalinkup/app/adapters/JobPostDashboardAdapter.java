@@ -3,8 +3,8 @@ package com.manilalinkup.app.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,13 +20,19 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
         void onRemoveClick(JobPostDashboardModel job, int position);
     }
     private final List<JobPostDashboardModel> jobPostDashboardModelList;
-    OnJobClickListener listener;
-    boolean isProfileView;
+    private final OnJobClickListener listener;
+    private final boolean isProfileView;
+    private final boolean showActionIcon;
 
     public JobPostDashboardAdapter(List<JobPostDashboardModel> jobPostDashboardModelList, boolean isProfileView, OnJobClickListener listener) {
+        this(jobPostDashboardModelList, isProfileView, listener, true);
+    }
+
+    public JobPostDashboardAdapter(List<JobPostDashboardModel> jobPostDashboardModelList, boolean isProfileView, OnJobClickListener listener, boolean showActionIcon) {
         this.jobPostDashboardModelList = jobPostDashboardModelList;
         this.isProfileView = isProfileView;
         this.listener = listener;
+        this.showActionIcon = showActionIcon;
     }
 
     @Override
@@ -45,17 +51,18 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
     @Override
     public void onBindViewHolder(@NonNull JobPostDashboardViewHolder holder, int position) {
         JobPostDashboardModel currentJob = jobPostDashboardModelList.get(position);
-        holder.bind(currentJob, listener);
+        holder.bind(currentJob, listener, showActionIcon);
     }
 
     static class JobPostDashboardViewHolder extends RecyclerView.ViewHolder {
-        private ImageView employer_pfp;
-        private TextView job_title;
-        private TextView employer_name;
-        private TextView job_location;
-        private TextView job_duration;
-        private TextView how_long_job_was_posted;
-        private ImageView removeButton;
+        private final ImageView employer_pfp;
+        private final TextView job_title;
+        private final TextView employer_name;
+        private final TextView job_location;
+        private final TextView job_duration;
+        private final TextView how_long_job_was_posted;
+        private final ImageView removeButton;
+        private final ImageView overflowButton;
         public JobPostDashboardViewHolder(@NonNull View itemView) {
             super(itemView);
             employer_pfp = itemView.findViewById(R.id.item_card_employer_profile_picture_placeholder);
@@ -66,15 +73,17 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
             how_long_job_was_posted = itemView.findViewById(R.id.item_card_how_long_job_post_posted_placeholder);
 
             removeButton = itemView.findViewById(R.id.image_view_remove_button_job_post);
+            overflowButton = itemView.findViewById(R.id.image_view_dots_button_job_post);
         }
 
-        public void bind(JobPostDashboardModel jobBind, OnJobClickListener listener){
+        public void bind(JobPostDashboardModel jobBind, OnJobClickListener listener, boolean showActionIcon){
 
             if (employer_pfp != null) {
                 Glide.with(itemView.getContext())
                         .load(jobBind.getEmployerProfilePicture())
                         .placeholder(R.drawable.user_placeholder)
-                        .circleCrop()
+                        .error(R.drawable.user_placeholder)
+                        .centerCrop()
                         .into(employer_pfp);
             }
             if (employer_name != null) {
@@ -98,18 +107,23 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
             }
 
             if (removeButton != null) {
-                removeButton.setOnClickListener(v -> {
+                removeButton.setVisibility(showActionIcon ? View.VISIBLE : View.GONE);
+                removeButton.setOnClickListener(showActionIcon && listener != null ? v -> {
                     int currentPosition = getAbsoluteAdapterPosition();
-                    if (listener != null && currentPosition != RecyclerView.NO_POSITION) {
+                    if (currentPosition != RecyclerView.NO_POSITION) {
                         listener.onRemoveClick(jobBind, currentPosition);
                     }
-                });
+                } : null);
             }
-            itemView.setOnClickListener(v -> {
-                if(listener != null){
-                    listener.onJobClick(jobBind);
-                }
-            });
+
+            if (overflowButton != null) {
+                overflowButton.setVisibility(showActionIcon ? View.VISIBLE : View.GONE);
+                overflowButton.setOnClickListener(null);
+            }
+
+            itemView.setClickable(listener != null);
+            itemView.setFocusable(listener != null);
+            itemView.setOnClickListener(listener == null ? null : v -> listener.onJobClick(jobBind));
 
         }
     }

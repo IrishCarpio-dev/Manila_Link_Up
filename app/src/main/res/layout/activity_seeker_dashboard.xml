@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/design_default_color_background"
-    android:fillViewport="true"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -88,16 +87,28 @@
         android:layout_below="@id/card_view_dashboard_top_seeker"
         android:layout_margin="8dp"
         android:fontFamily="sans-serif-medium"
-        android:text="Recommendations"
+        android:text="Jobs From Employer Archive"
         android:textColor="#212121"
         android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/text_view_recommendations_caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_view_recommendations"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:text="These are the same job cards shown in the employer archive."
+        android:textColor="#616161"
+        android:textSize="13sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_job_posts_dashboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation_view_seeker"
-        android:layout_below="@id/text_view_recommendations"
+        android:layout_below="@id/text_view_recommendations_caption"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_job_post_card">
 

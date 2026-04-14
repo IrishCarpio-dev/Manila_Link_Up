@@ -114,6 +114,11 @@
             android:label="Seeker Settings"
             android:parentActivityName=".activities.SeekerProfileActivity" />
         <activity
+            android:name=".activities.EditInformationActivity"
+            android:exported="false"
+            android:label="Edit Information"
+            android:parentActivityName=".activities.SeekerSettingsActivity" />
+        <activity
             android:name=".activities.EmployerSettingsActivity"
             android:exported="false"
             android:label="Employer Settings"

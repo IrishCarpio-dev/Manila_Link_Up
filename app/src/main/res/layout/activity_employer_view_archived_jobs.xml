@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -20,44 +20,33 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-medium"
-            android:text="My Archived Jobs"
+            android:text="Employer Archive"
             android:textColor="@color/white"
             android:textSize="16sp"/>
 
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <ScrollView
+    <TextView
+        android:id="@+id/text_view_archive_jobs_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar">
+        android:layout_below="@id/toolbar"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="These are the same job cards shown on the seeker dashboard."
+        android:textColor="#616161"
+        android:textSize="14sp"
+        android:textStyle="italic" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp">
-
-            <TextView
-                android:id="@+id/text_view_archive_jobs_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:text="Archived posts are hidden from job seekers but can be reposted at any time."
-                android:textSize="16sp"
-                android:textStyle="italic" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_employer_archived_jobs"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/text_view_archive_jobs_description"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_employer_view_archived_jobs">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-
-        </RelativeLayout>
-    </ScrollView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_employer_archived_jobs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/text_view_archive_jobs_description"
+        android:layout_marginTop="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_job_post_card" />
 
 
 </RelativeLayout>
