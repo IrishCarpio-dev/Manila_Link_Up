@@ -6,10 +6,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,6 +46,7 @@ public class EmployerDashboard extends AppCompatActivity {
     private List<JobPostDashboardModel> jobListJobCard;
     private ProgressBar progressBarLoadMore;
     private TextView greetingNameText;
+    private CardView jobAddJob;
     BottomNavigationView bottomNavigationViewEmployer;
 
     private boolean isLoading = false;
@@ -132,6 +135,16 @@ public class EmployerDashboard extends AppCompatActivity {
         });
 
         loadJobs();
+
+        jobAddJob = findViewById(R.id.card_view_post_new_job);
+        jobAddJob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EmployerDashboard.this, EmployerAddJobActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void loadJobs() {
