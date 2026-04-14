@@ -58,7 +58,7 @@ public interface ApiService {
     );
 
     @GET("api/user/profile")
-    Call<UserProfileModel> getUserProfile();
+    Call<ApiResponse<UserProfileModel>> getUserProfile();
 
     // Jobs
     @POST("api/jobs")

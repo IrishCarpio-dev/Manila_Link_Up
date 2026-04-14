@@ -16,6 +16,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
+import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.R;
@@ -156,14 +157,14 @@ public class LoginActivity extends AppCompatActivity {
     private void checkUserRole(String token) {
         ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
-        apiService.getUserProfile().enqueue(new Callback<UserProfileModel>() {
+        apiService.getUserProfile().enqueue(new Callback<ApiResponse<UserProfileModel>>() {
             @Override
-            public void onResponse(Call<UserProfileModel> call, Response<UserProfileModel> response) {
+            public void onResponse(Call<ApiResponse<UserProfileModel>> call, Response<ApiResponse<UserProfileModel>> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful()) {
-                    if (response.body().getSeekers() != null) {
+                    if (response.body().getData().getSeekers() != null) {
                         // User is a seeker
-                        Boolean isProfileSet = Optional.ofNullable(response.body().getSeekers().getProfileSet()).orElse(false);
+                        Boolean isProfileSet = Optional.ofNullable(response.body().getData().getSeekers().getProfileSet()).orElse(false);
 
                         if (isProfileSet) {
                             startActivity(new Intent(LoginActivity.this, SeekerDashboardActivity.class));
@@ -172,9 +173,9 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(new Intent(LoginActivity.this, EditSeekerProfileActivity.class));
                             finish();
                         }
-                    } else if (response.body().getEmployers() != null) {
+                    } else if (response.body().getData().getEmployers() != null) {
                         // User is an employer
-                        Boolean isProfileSet = Optional.ofNullable(response.body().getEmployers().getProfileSet()).orElse(false);
+                        Boolean isProfileSet = Optional.ofNullable(response.body().getData().getEmployers().getProfileSet()).orElse(false);
 
                         if (isProfileSet) {
                             startActivity(new Intent(LoginActivity.this, EmployerDashboard.class));
@@ -194,7 +195,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<UserProfileModel> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<UserProfileModel>> call, Throwable t) {
                 progressDialog.dismiss();
                 mAuth.signOut();
 
