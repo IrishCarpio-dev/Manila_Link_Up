@@ -1,7 +1,7 @@
 package com.manilalinkup.app.models;
 
 public class JobModel {
-    String id, title, description, expiresAt, duration, location;
+    String id, title, description, expiresAt, duration, location, createdAt;
     Double salary;
 
     EmployerProfileModel employer;
@@ -14,7 +14,8 @@ public class JobModel {
             String duration,
             String location,
             Double salary,
-            EmployerProfileModel employer
+            EmployerProfileModel employer,
+            String createdAt
     ) {
         this.id = id;
         this.title = title;
@@ -24,6 +25,7 @@ public class JobModel {
         this.location = location;
         this.salary = salary;
         this.employer = employer;
+        this.createdAt = createdAt;
     }
 
     public String getId() { return id; }
@@ -41,4 +43,6 @@ public class JobModel {
     public Double getSalary() { return salary; }
 
     public EmployerProfileModel getEmployer() { return employer; }
+
+    public String getCreatedAt() { return createdAt; }
 }
