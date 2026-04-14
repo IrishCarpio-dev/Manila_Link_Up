@@ -98,27 +98,25 @@ public class LoginActivity extends AppCompatActivity {
                 String email = emailInput.getText().toString().trim();
                 String password = passwordInput.getText().toString().trim();
 
-                // Reset errors
                 emailLayout.setError(null);
                 passwordLayout.setError(null);
 
-                // Validation Checks
                 if(email.isEmpty()){
                     emailLayout.setError("Email is required.");
                     emailInput.requestFocus();
-                    return; // Stop here
+                    return;
                 }
 
                 if(password.isEmpty()){
                     passwordLayout.setError("Password is required.");
                     passwordInput.requestFocus();
-                    return; // Stop here
+                    return;
                 }
 
                 if(password.length() < 8){
                     passwordLayout.setError("Password must be at least 8 characters.");
                     passwordInput.requestFocus();
-                    return; // Stop here
+                    return;
                 }
 
                 progressDialog.show();
