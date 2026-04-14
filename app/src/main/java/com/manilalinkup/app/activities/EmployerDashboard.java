@@ -3,10 +3,12 @@ package com.manilalinkup.app.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +26,7 @@ public class EmployerDashboard extends AppCompatActivity {
     private RecyclerView recyclerViewJobPost;
     private JobPostDashboardAdapter adapterJobPost;
     private List<JobPostDashboardModel> jobListJobCard;
+    private CardView jobAddJob;
     BottomNavigationView bottomNavigationViewEmployer;
 
     @Override
@@ -84,6 +87,15 @@ public class EmployerDashboard extends AppCompatActivity {
                 }
 
                 return false;
+            }
+        });
+
+        jobAddJob = findViewById(R.id.card_view_post_new_job);
+        jobAddJob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EmployerDashboard.this, EmployerAddJobActivity.class);
+                startActivity(intent);
             }
         });
 
