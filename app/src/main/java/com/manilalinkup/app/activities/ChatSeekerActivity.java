@@ -1,5 +1,6 @@
 package com.manilalinkup.app.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -38,7 +39,30 @@ public class ChatSeekerActivity extends AppCompatActivity {
         seekerChatTabAdapter = new SeekerChatTabAdapter(seekerChatModelList);
         recyclerViewChat.setAdapter(seekerChatTabAdapter);
 
+        bottomNavigationViewSeeker = findViewById(R.id.bottom_navigation_view);
+        bottomNavigationViewSeeker.setSelectedItemId(R.id.nav_chat_seeker);
+        bottomNavigationViewSeeker.setOnItemSelectedListener(menuItem ->  {
 
+            if(menuItem.getItemId() == R.id.nav_home_seeker){
+                startActivity(new Intent(ChatSeekerActivity.this, SeekerDashboardActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_notifications_seeker) {
+                //pending notif view
+                startActivity(new Intent(ChatSeekerActivity.this, EmployerNotificationsActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_activity_seeker) {
+                startActivity(new Intent(ChatSeekerActivity.this, SaveSeekerActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_profile_seeker) {
+                startActivity(new Intent(ChatSeekerActivity.this, SeekerProfileActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }
+            return true;
+        });
     }
 
     private void setupMockData() {
