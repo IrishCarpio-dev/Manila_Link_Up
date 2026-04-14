@@ -66,10 +66,10 @@
             android:exported="false" />
         <activity
             android:name=".activities.EmployerDashboard"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".activities.SeekerDashboardActivity"
-            android:exported="true"
+            android:exported="false"
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.SeekerJobPostActivity"
