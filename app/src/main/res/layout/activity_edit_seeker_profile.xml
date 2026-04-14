@@ -26,6 +26,19 @@
             android:layout_centerHorizontal="true"
             android:src="@drawable/insert_photo" />
 
+        <ImageButton
+            android:id="@+id/btn_remove_photo"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignTop="@id/image_view_insert_photo"
+            android:layout_alignEnd="@id/image_view_insert_photo"
+            android:background="@drawable/circular_button"
+            android:elevation="4dp"
+            android:padding="4dp"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:visibility="gone"
+            app:tint="#FF0000" />
+
         <TextView
             android:id="@+id/text_view_upload_photo"
             android:layout_width="wrap_content"
@@ -70,11 +83,34 @@
             app:cornerRadius="12dp"
             app:icon="@drawable/arrowup2" />
 
+        <Button
+            android:id="@+id/btnReplaceClearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/lblClearance"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="30dp"
+            android:backgroundTint="#666666"
+            android:text="Replace Image"
+            android:visibility="gone"
+            app:cornerRadius="12dp" />
+
+        <ImageView
+            android:id="@+id/image_view_clearance_preview"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_below="@id/subClearance"
+            android:layout_marginVertical="16dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/lblID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/subClearance"
+            android:layout_below="@id/image_view_clearance_preview"
             android:layout_marginStart="30dp"
             android:layout_marginTop="16dp"
             android:text="Upload Valid ID"
@@ -105,11 +141,34 @@
             app:cornerRadius="12dp"
             app:icon="@drawable/arrowup2" />
 
+        <Button
+            android:id="@+id/btnReplaceID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/lblID"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="30dp"
+            android:backgroundTint="#666666"
+            android:text="Replace Image"
+            android:visibility="gone"
+            app:cornerRadius="12dp" />
+
+        <ImageView
+            android:id="@+id/image_view_id_preview"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_below="@id/subID"
+            android:layout_marginVertical="16dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/lblLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/subID"
+            android:layout_below="@id/image_view_id_preview"
             android:layout_marginStart="30dp"
             android:layout_marginTop="24dp"
             android:text="Preferred Location"
@@ -151,8 +210,11 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="30dp"
             android:background="#F0F0F0"
-            android:hint="MM / DD /YR"
-            android:paddingLeft="12dp" />
+            android:hint="YYYY-MM-DD"
+            android:paddingLeft="12dp"
+            android:focusable="false"
+            android:clickable="true"
+            android:inputType="none" />
 
         <TextView
             android:id="@+id/lblSalary"
