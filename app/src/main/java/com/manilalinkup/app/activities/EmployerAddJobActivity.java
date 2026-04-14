@@ -115,14 +115,24 @@ public class EmployerAddJobActivity extends AppCompatActivity {
 
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
-        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+        DatePickerDialog dialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
             Calendar selected = Calendar.getInstance();
             selected.set(year, month, dayOfMonth);
             SimpleDateFormat apiFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             formattedExpiresAt = apiFormat.format(selected.getTime());
             SimpleDateFormat displayFormat = new SimpleDateFormat("MMM d, yyyy", Locale.US);
             expiresAtInput.setText(displayFormat.format(selected.getTime()));
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+        tomorrow.set(Calendar.HOUR_OF_DAY, 0);
+        tomorrow.set(Calendar.MINUTE, 0);
+        tomorrow.set(Calendar.SECOND, 0);
+        tomorrow.set(Calendar.MILLISECOND, 0);
+        dialog.getDatePicker().setMinDate(tomorrow.getTimeInMillis());
+
+        dialog.show();
     }
 
     private void postJob() {
@@ -155,6 +165,25 @@ public class EmployerAddJobActivity extends AppCompatActivity {
         }
         if (formattedExpiresAt.isEmpty()) {
             expiresAtLayout.setError("Expiry date is required.");
+            expiresAtInput.requestFocus();
+            return;
+        }
+        try {
+            Calendar today = Calendar.getInstance();
+            today.set(Calendar.HOUR_OF_DAY, 0);
+            today.set(Calendar.MINUTE, 0);
+            today.set(Calendar.SECOND, 0);
+            today.set(Calendar.MILLISECOND, 0);
+            SimpleDateFormat parseFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            Calendar selectedDate = Calendar.getInstance();
+            selectedDate.setTime(parseFormat.parse(formattedExpiresAt));
+            if (!selectedDate.after(today)) {
+                expiresAtLayout.setError("Expiry date must be after today.");
+                expiresAtInput.requestFocus();
+                return;
+            }
+        } catch (Exception e) {
+            expiresAtLayout.setError("Invalid expiry date.");
             expiresAtInput.requestFocus();
             return;
         }
