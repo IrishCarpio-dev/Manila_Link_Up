@@ -32,7 +32,6 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
     private android.app.ProgressDialog progressDialog;
     private com.google.firebase.auth.FirebaseAuth mAuth;
-    MaterialToolbar toolbar;
     MaterialButton loginNowButton;
     TextInputEditText emailInput;
     TextInputEditText passwordInput;
@@ -82,10 +81,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         progressDialog = new android.app.ProgressDialog(this);
         progressDialog.setMessage("Logging in...");
