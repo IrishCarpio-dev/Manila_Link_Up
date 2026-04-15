@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.manilalinkup.app.utilities.ArchiveJobAdapter;
+import com.manilalinkup.app.adapters.AppliedJobsAdapter;
 import com.manilalinkup.app.models.ArchiveJobModel;
 import com.manilalinkup.app.R;
 
@@ -19,7 +19,7 @@ public class EmployerViewArchivedJobs extends AppCompatActivity {
 
     MaterialToolbar toolbar;
     RecyclerView recyclerView;
-    ArchiveJobAdapter adapter;
+    AppliedJobsAdapter.ArchiveJobAdapter adapter;
     List<ArchiveJobModel> archiveList;
 
     @Override
@@ -44,7 +44,7 @@ public class EmployerViewArchivedJobs extends AppCompatActivity {
         archiveList = new ArrayList<>();
         loadDummyData();
 
-        adapter = new ArchiveJobAdapter(archiveList);
+        adapter = new AppliedJobsAdapter.ArchiveJobAdapter(archiveList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }

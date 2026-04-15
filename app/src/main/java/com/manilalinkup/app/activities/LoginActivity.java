@@ -16,6 +16,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
+import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.R;
@@ -98,27 +99,25 @@ public class LoginActivity extends AppCompatActivity {
                 String email = emailInput.getText().toString().trim();
                 String password = passwordInput.getText().toString().trim();
 
-                // Reset errors
                 emailLayout.setError(null);
                 passwordLayout.setError(null);
 
-                // Validation Checks
                 if(email.isEmpty()){
                     emailLayout.setError("Email is required.");
                     emailInput.requestFocus();
-                    return; // Stop here
+                    return;
                 }
 
                 if(password.isEmpty()){
                     passwordLayout.setError("Password is required.");
                     passwordInput.requestFocus();
-                    return; // Stop here
+                    return;
                 }
 
                 if(password.length() < 8){
                     passwordLayout.setError("Password must be at least 8 characters.");
                     passwordInput.requestFocus();
-                    return; // Stop here
+                    return;
                 }
 
                 progressDialog.show();
@@ -156,14 +155,14 @@ public class LoginActivity extends AppCompatActivity {
     private void checkUserRole(String token) {
         ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
-        apiService.getUserProfile().enqueue(new Callback<UserProfileModel>() {
+        apiService.getUserProfile().enqueue(new Callback<ApiResponse<UserProfileModel>>() {
             @Override
-            public void onResponse(Call<UserProfileModel> call, Response<UserProfileModel> response) {
+            public void onResponse(Call<ApiResponse<UserProfileModel>> call, Response<ApiResponse<UserProfileModel>> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful()) {
-                    if (response.body().getSeekers() != null) {
+                    if (response.body().getData().getSeekers() != null) {
                         // User is a seeker
-                        Boolean isProfileSet = Optional.ofNullable(response.body().getSeekers().getProfileSet()).orElse(false);
+                        Boolean isProfileSet = Optional.ofNullable(response.body().getData().getSeekers().getProfileSet()).orElse(false);
 
                         if (isProfileSet) {
                             startActivity(new Intent(LoginActivity.this, SeekerDashboardActivity.class));
@@ -172,9 +171,9 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(new Intent(LoginActivity.this, EditSeekerProfileActivity.class));
                             finish();
                         }
-                    } else if (response.body().getEmployers() != null) {
+                    } else if (response.body().getData().getEmployers() != null) {
                         // User is an employer
-                        Boolean isProfileSet = Optional.ofNullable(response.body().getEmployers().getProfileSet()).orElse(false);
+                        Boolean isProfileSet = Optional.ofNullable(response.body().getData().getEmployers().getProfileSet()).orElse(false);
 
                         if (isProfileSet) {
                             startActivity(new Intent(LoginActivity.this, EmployerDashboard.class));
@@ -194,7 +193,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<UserProfileModel> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<UserProfileModel>> call, Throwable t) {
                 progressDialog.dismiss();
                 mAuth.signOut();
 

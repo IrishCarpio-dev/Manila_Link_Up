@@ -90,7 +90,7 @@
 
         <activity
             android:name=".activities.SeekerDashboardActivity"
-            android:exported="true"
+            android:exported="false"
             android:parentActivityName=".activities.MainActivity" />
 
         <activity

@@ -73,6 +73,7 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
             if (employer_pfp != null) {
                 Glide.with(itemView.getContext())
                         .load(jobBind.getEmployerProfilePicture())
+                        .override(50, 50)
                         .placeholder(R.drawable.user_placeholder)
                         .circleCrop()
                         .into(employer_pfp);

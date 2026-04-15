@@ -15,11 +15,27 @@ import okhttp3.RequestBody;
 
 public class MultipartRequestBodyHelper {
 
+    private static final int PROFILE_SIZE = 512;
+
+    private static Bitmap cropToSquare(Bitmap original, int newSize) {
+        int width = original.getWidth();
+        int height = original.getHeight();
+        int size = Math.min(width, height);
+        int x = (width - size) / 2;
+        int y = (height - size) / 2;
+        Bitmap square = Bitmap.createBitmap(original, x, y, size, size);
+        return Bitmap.createScaledBitmap(square, newSize, newSize, true);
+    }
+
     public static MultipartBody.Part prepareImagePart(Context context, Uri uri, String field) {
         try {
             InputStream isp = context.getContentResolver().openInputStream(uri);
             Bitmap bitmap = BitmapFactory.decodeStream(isp);
             isp.close();
+
+            if (field.toLowerCase().contains("profile")) {
+                bitmap = cropToSquare(bitmap, PROFILE_SIZE);
+            }
 
             File file = new File(context.getCacheDir(), field + "Upload.jpg");
             FileOutputStream fos = new FileOutputStream(file);
