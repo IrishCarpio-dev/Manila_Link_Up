@@ -1,5 +1,7 @@
 package com.manilalinkup.app.activities;
 
+import static com.manilalinkup.app.utilities.RetrofitClient.BASE_URL;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -207,7 +209,6 @@ public class EmployerDashboard extends AppCompatActivity {
     }
 
     private JobPostDashboardModel mapToDisplayModel(JobModel job) {
-        String BASE_URL = "http://10.0.2.2:8000/"; // TODO: Change BASE_URL to actual server domain
         String employerName = job.getEmployer() != null ? job.getEmployer().getFullName() : "";
         String photoUrl = job.getEmployer() != null ? BASE_URL + job.getEmployer().getProfilePhotoUrl() : "";
         return new JobPostDashboardModel(
