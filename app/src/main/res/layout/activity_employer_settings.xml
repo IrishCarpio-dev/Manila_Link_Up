@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F7FB"
+    android:fitsSystemWindows="true">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/header_settings"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:cardBackgroundColor="#1B3E9C"
+        app:cardElevation="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/btn_back_settings"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerVertical="true"
+                android:padding="12dp"
+                android:src="@drawable/ic_chevron_right"
+                android:rotation="180"
+                app:tint="@android:color/white"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="sans-serif-medium"
+                android:text="Employer Settings"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/header_settings"
+        android:clipToPadding="false"
+        android:paddingBottom="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Company &amp; Security"
+                android:textColor="#212121"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Business Email"
+                            android:textSize="12sp"
+                            android:textColor="#757575"/>
+                        <TextView
+                            android:id="@+id/tv_employer_email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Loading email..."
+                            android:textSize="16sp"
+                            android:textColor="#212121"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0"/>
+
+                    <TextView
+                        android:id="@+id/btn_business_verification"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="Business Verification (BIR/SEC)"
+                        android:drawableEnd="@drawable/ic_chevron_right"
+                        android:background="?attr/selectableItemBackground"
+                        android:textColor="#212121"/>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0"/>
+
+                    <TextView
+                        android:id="@+id/btn_change_password_employer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="Security &amp; Password"
+                        android:drawableEnd="@drawable/ic_chevron_right"
+                        android:background="?attr/selectableItemBackground"
+                        android:textColor="#212121"/>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0"/>
+
+                    <TextView
+                        android:id="@+id/btn_privacy_employer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="Privacy &amp; Data Controls"
+                        android:drawableEnd="@drawable/ic_chevron_right"
+                        android:background="?attr/selectableItemBackground"
+                        android:textColor="#212121"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recruitment Preferences"
+                android:textColor="#212121"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                android:layout_marginBottom="20dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New Applicant Alerts"
+                        android:layout_centerVertical="true"
+                        android:textColor="#212121"/>
+                    <Switch
+                        android:id="@+id/switch_applicant_notif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:checked="true"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Support &amp; Legal"
+                android:textColor="#212121"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                android:layout_marginBottom="32dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/btn_employer_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="Help Center &amp; FAQs"
+                        android:drawableEnd="@drawable/ic_chevron_right"
+                        android:background="?attr/selectableItemBackground"
+                        android:textColor="#212121"/>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0"/>
+
+                    <TextView
+                        android:id="@+id/btn_terms_employer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="Terms of Service"
+                        android:drawableEnd="@drawable/ic_chevron_right"
+                        android:background="?attr/selectableItemBackground"
+                        android:textColor="#212121"/>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0"/>
+
+                    <TextView
+                        android:id="@+id/btn_about"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="About Manila LinkUp"
+                        android:drawableEnd="@drawable/ic_chevron_right"
+                        android:background="?attr/selectableItemBackground"
+                        android:textColor="#212121"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/btn_logout_employer"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="14dp"
+                android:text="Log Out"
+                android:textAllCaps="false"
+                android:textColor="#E74C3C"
+                app:backgroundTint="@android:color/white"
+                app:cornerRadius="8dp"
+                app:strokeColor="#E74C3C"/>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

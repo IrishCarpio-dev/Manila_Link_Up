@@ -31,9 +31,8 @@ public class EmployerProfileActivity extends AppCompatActivity {
     private List<JobPostDashboardModel> allJobsPostedList;
     MaterialButton viewArchivedJobs;
     BottomNavigationView bottomNavigationViewEmployer;
-
-    // 1. Declare the Settings Icon
     private ImageView settingsIcon;
+    ImageView viewAllRatings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +42,8 @@ public class EmployerProfileActivity extends AppCompatActivity {
 
         recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
         recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
-        // 2. Initialize the Settings Icon
         settingsIcon = findViewById(R.id.image_view_employer_settings_icon);
 
-        // 3. Set the Click Listener for Settings
         settingsIcon.setOnClickListener(v -> {
             Intent intent = new Intent(EmployerProfileActivity.this, EmployerSettingsActivity.class);
             startActivity(intent);
@@ -66,7 +63,6 @@ public class EmployerProfileActivity extends AppCompatActivity {
         adapterRating = new RatingsProfileAdapter(ratingProfileList);
         recyclerViewRatings.setAdapter(adapterRating);
 
-        //For the recycler all jobs posted
         recyclerViewAllJobsPosted = findViewById(R.id.recycler_view_employer_jobs_posted);
         recyclerViewAllJobsPosted.setLayoutManager(new LinearLayoutManager(this));
 
@@ -141,6 +137,15 @@ public class EmployerProfileActivity extends AppCompatActivity {
                 return true;
             }
             return true;
+        });
+
+        viewAllRatings = findViewById(R.id.item_card_see_more_ratings_arrow);
+        viewAllRatings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EmployerProfileActivity.this, EmployerViewAllRatings.class);
+                startActivity(intent);
+            }
         });
 
         viewArchivedJobs = findViewById(R.id.button_view_archive_jobs);

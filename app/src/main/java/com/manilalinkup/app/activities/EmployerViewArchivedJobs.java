@@ -8,19 +8,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.manilalinkup.app.adapters.AppliedJobsAdapter;
+import com.manilalinkup.app.models.ArchiveJobModel;
 import com.manilalinkup.app.R;
-import com.manilalinkup.app.adapters.JobPostDashboardAdapter;
-import com.manilalinkup.app.models.JobPostDashboardModel;
-import com.manilalinkup.app.utilities.JobPostRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployerViewArchivedJobs extends AppCompatActivity {
 
     MaterialToolbar toolbar;
     RecyclerView recyclerView;
-    JobPostDashboardAdapter adapter;
-    List<JobPostDashboardModel> archiveList;
+    AppliedJobsAdapter.ArchiveJobAdapter adapter;
+    List<ArchiveJobModel> archiveList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +40,35 @@ public class EmployerViewArchivedJobs extends AppCompatActivity {
         });
 
         recyclerView = findViewById(R.id.recycler_view_employer_archived_jobs);
-        archiveList = JobPostRepository.getEmployerArchiveJobs(this);
-        adapter = new JobPostDashboardAdapter(archiveList, false, null, false);
+
+        archiveList = new ArrayList<>();
+        loadDummyData();
+
+        adapter = new AppliedJobsAdapter.ArchiveJobAdapter(archiveList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+    }
+
+    private void loadDummyData() {
+        archiveList.add(new ArchiveJobModel(
+                "101",
+                "Barista (Full Time)",
+                "EXPIRED (2 days ago)",
+                "Insight: 8 applicants were waiting for review."
+        ));
+
+        archiveList.add(new ArchiveJobModel(
+                "102",
+                "Kitchen Helper",
+                "ARCHIVED (1 week ago)",
+                "Insight: Manually moved to archive."
+        ));
+
+        archiveList.add(new ArchiveJobModel(
+                "103",
+                "Delivery Rider",
+                "EXPIRED (5 days ago)",
+                "Insight: 15 views, 0 applicants."
+        ));
     }
 }

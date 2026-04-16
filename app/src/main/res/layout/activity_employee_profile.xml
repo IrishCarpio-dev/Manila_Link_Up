@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        app:itemIconTint="@color/bottom_nav_icon_colors"
+        app:itemTextColor="@color/bottom_nav_icon_colors"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_employer_icons" />
+
+    <ScrollView
+        android:id="@+id/main_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation_view"
+        android:clipToPadding="false"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_job_post_header"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="4dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="11dp"
+                    android:background="@drawable/card_gradient_bg">
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_image_card"
+                android:layout_width="104dp"
+                android:layout_height="104dp"
+                android:layout_below="@id/card_view_job_post_header"
+                android:layout_marginTop="-52dp"
+                android:layout_marginStart="20dp"
+                app:cardCornerRadius="52dp"
+                app:cardElevation="8dp">
+
+                <ImageView
+                    android:id="@+id/image_view_employee_profile_picture_placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/chipsstarters"
+                    android:background="@drawable/profile_background"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_employer_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/card_view_job_post_header"
+                android:layout_marginBottom="0dp"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="4dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingStart="20dp"
+                    android:paddingTop="60dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="20dp">
+
+                    <ImageView
+                        android:id="@+id/verification_checkmark_blue"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginStart="255dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_verified" />
+
+                    <TextView
+                        android:id="@+id/text_name_of_seeker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="112dp"
+                        android:layout_marginTop="0dp"
+                        android:fontFamily="sans-serif-black"
+                        android:textColor="#212121"
+                        android:textSize="18sp"
+                        android:text="Employer Name"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/text_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_name_of_seeker"
+                        android:layout_marginStart="112dp"
+                        android:layout_marginTop="8dp"
+                        android:backgroundTint="#beedc4"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="2dp"
+                        android:text="● Active"
+                        android:textSize="12sp"
+                        android:background="@drawable/tag_bg"
+                        android:textColor="#2ECC71" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_status"
+                        android:layout_toEndOf="@+id/text_status"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <Space
+                            android:layout_width="8dp"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+
+
+                    <TextView
+                        android:id="@+id/verification_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="●●●"
+                        android:textStyle="bold"
+                        android:textSize="10dp"
+                        android:layout_marginTop="0dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"/>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_name_of_seeker"
+                        android:layout_marginTop="8dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="112dp"
+                        android:background="@drawable/tag_bg"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="6dp">
+
+                        <ImageView
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:src="@drawable/location3"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="Malate, Manila"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
+                    </RelativeLayout>
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="7dp"
+                android:padding="16dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:fitsSystemWindows="true"
+                android:layout_below="@+id/card_view_employer_info">
+
+                <RelativeLayout
+                    android:id="@+id/relative_layout_details_job_post"
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:background="@color/white"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/text_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:textColor="#616161"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:text="About Me"
+                        android:layout_marginEnd="80dp"/>
+
+                    <TextView
+                        android:id="@+id/text_about_me_placeholder_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#616161"
+                        android:text="Trusted local employer building a reliable archive of active and past openings. Posts are reviewed carefully to keep hiring organized and easy to manage."
+                        android:layout_marginTop="8dp"
+                        android:layout_below="@+id/text_description"/>
+
+                    <TextView
+                        android:id="@+id/text_about_me_dots"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="●●●"
+                        android:textColor="#616161"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_contact_information"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="7dp"
+                app:contentPadding="16dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@+id/card_view_description">
+
+                <RelativeLayout
+                    android:id="@+id/relative_layout_contact_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"> <TextView
+                    android:id="@+id/text_description_contact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:textColor="#616161"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:text="Contact Information"
+                    android:layout_marginEnd="80dp"/>
+
+                    <TextView
+                        android:id="@+id/text_view_phone_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#616161"
+                        android:text="Phone Number"
+                        android:layout_marginTop="12dp"
+                        android:layout_below="@+id/text_description_contact"/>
+
+                    <TextView
+                        android:id="@+id/text_view_phone_number_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#212121"
+                        android:text="+63 912 345 6789"
+                        android:layout_marginTop="2dp"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:layout_below="@+id/text_view_phone_number"/>
+
+                    <TextView
+                        android:id="@+id/text_view_seeker_email_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#616161"
+                        android:text="Email Address"
+                        android:layout_marginTop="12dp"
+                        android:layout_below="@+id/text_view_phone_number_data"/>
+
+                    <TextView
+                        android:id="@+id/text_view_seeker_email_address_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#212121"
+                        android:text="mark.sy@email.com"
+                        android:layout_marginTop="2dp"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:layout_below="@+id/text_view_seeker_email_address"/>
+
+                    <TextView
+                        android:id="@+id/text_contact_info_dots"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:text="●●●"
+                        android:textColor="#616161"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_documents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="120dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp"
+                app:contentPadding="16dp"
+                android:layout_below="@+id/card_view_contact_information">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/text_documents_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Documents"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="●●●"
+                        android:textColor="#616161"
+                        android:textSize="10sp"
+                        android:letterSpacing="0.1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_documents_title"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/document_button_bg"
+                            android:gravity="center_vertical"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:background="@drawable/ic_circle_bg_blue"
+                                android:padding="6dp"
+                                android:src="@drawable/ic_id_card"
+                                app:tint="#1B3E9C" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:text="Valid ID"
+                                android:textColor="#000000"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:background="@drawable/document_button_bg"
+                            android:gravity="center_vertical"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:id="@+id/resume_icon"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:background="@drawable/ic_circle_bg_blue"
+                                android:padding="6dp"
+                                android:src="@drawable/ic_resume"
+                                app:tint="#1B3E9C" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:text="Resume/Cv"
+                                android:textColor="#000000"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

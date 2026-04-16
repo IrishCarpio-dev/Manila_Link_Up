@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F7FB"
+    android:fitsSystemWindows="true">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/header_verify"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:cardBackgroundColor="#1B3E9C"
+        app:cardElevation="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/btn_back_verify"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerVertical="true"
+                android:padding="12dp"
+                android:src="@drawable/ic_chevron_right"
+                android:rotation="180"
+                app:tint="@android:color/white"
+                android:background="?attr/selectableItemBackgroundBorderless"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="sans-serif-medium"
+                android:text="Business Verification"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/header_verify"
+        android:clipToPadding="false"
+        android:paddingBottom="40dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Step 1: Select Document Type"
+                android:textColor="#1B3E9C"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="8dp">
+                <Spinner
+                    android:id="@+id/spinner_business_doc_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:padding="8dp"/>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Step 2: Upload Primary Document (BIR/SEC)"
+                android:textColor="#1B3E9C"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btn_upload_main_doc"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="#E8EAF6"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:id="@+id/upload_placeholder_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@android:drawable/ic_menu_camera"
+                        app:tint="#1B3E9C" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Tap to take a photo"
+                        android:textColor="#1B3E9C" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/img_main_doc_preview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+            </androidx.cardview.widget.CardView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Step 3: Supporting Documents"
+                    android:textColor="#1B3E9C"
+                    android:textStyle="bold"
+                    android:textSize="16sp"/>
+                <TextView
+                    android:id="@+id/btn_add_supporting_doc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="+ ADD NEW"
+                    android:textColor="#1B3E9C"
+                    android:padding="4dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mayor's Permit, DTI, or Company ID"
+                android:textColor="#757575"
+                android:textSize="12sp"
+                android:layout_marginBottom="12dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_supporting_docs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginBottom="16dp"/>
+
+            <Button
+                android:id="@+id/btn_submit_business_verification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="#1B3E9C"
+                android:padding="14dp"
+                android:text="SUBMIT FOR REVIEW"
+                android:textColor="@android:color/white"
+                app:cornerRadius="8dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
