@@ -14,6 +14,7 @@ public class SeekerProfileModel {
     Boolean isProfileSet;
     Boolean isVerified;
     Boolean isOpenForWork;
+    SeekerPreferencesModel preferences;
 
     public SeekerProfileModel(
             String firstName,
@@ -26,7 +27,8 @@ public class SeekerProfileModel {
             String profilePhotoUrl,
             Boolean isProfileSet,
             Boolean isVerified,
-            Boolean isOpenForWork
+            Boolean isOpenForWork,
+            SeekerPreferencesModel preferences
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -39,6 +41,7 @@ public class SeekerProfileModel {
         this.isProfileSet = isProfileSet;
         this.isVerified = isVerified;
         this.isOpenForWork = isOpenForWork;
+        this.preferences = preferences;
     }
 
     public String getFirstName() { return firstName; }
@@ -62,4 +65,6 @@ public class SeekerProfileModel {
     public Boolean getVerified() { return isVerified; }
 
     public Boolean getOpenForWork() { return isOpenForWork; }
+
+    public SeekerPreferencesModel getPreferences() { return preferences; }
 }
