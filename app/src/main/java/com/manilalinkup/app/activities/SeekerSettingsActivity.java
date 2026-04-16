@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
+import com.manilalinkup.app.utilities.LogoutHelper;
 
 public class SeekerSettingsActivity extends AppCompatActivity {
 
@@ -167,11 +168,7 @@ public class SeekerSettingsActivity extends AppCompatActivity {
                 .setTitle("Logout")
                 .setMessage("Are you sure you want to log out from Manila LinkUp?")
                 .setPositiveButton("Logout", (dialog, which) -> {
-                    mAuth.signOut();
-                    Intent intent = new Intent(this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
+                    LogoutHelper.logout(SeekerSettingsActivity.this, mAuth);
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
