@@ -2,35 +2,35 @@ package com.manilalinkup.app.models;
 
 public class SeekerRequest {
     String uid;
-    String firstname;
-    String lastname;
+    String firstName;
+    String lastName;
     String email;
     String address;
     String birthdate;
     String location;
-    String phone;
+    String mobileNumber;
     int salary;
-    String profile_picture;
+    String profilePhotoUrl;
     String clearance_photo;
-    int status;
-    int verified;
+    Boolean isOpenForWork;
+    Boolean isVerified;
 
-    public SeekerRequest(String uid, String firstname, String lastname, String email,
-                         String address, String birthdate, String location, String phone,
-                         int salary, String profile_picture, String clearance_photo,
-                         int status, int verified) {
+    public SeekerRequest(String uid, String firstName, String lastName, String email,
+                         String address, String birthdate, String location, String mobileNumber,
+                         int salary, String profilePhotoUrl, String clearance_photo,
+                         Boolean  isOpenForWork, Boolean isVerified) {
         this.uid = uid;
-        this.firstname = firstname;
-        this.lastname = lastname;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.address = address;
         this.birthdate = birthdate;
         this.location = location;
-        this.phone = phone;
+        this.mobileNumber = mobileNumber;
         this.salary = salary;
-        this.profile_picture = profile_picture;
+        this.profilePhotoUrl = profilePhotoUrl;
         this.clearance_photo = clearance_photo;
-        this.status = status;
-        this.verified = verified;
+        this. isOpenForWork =  isOpenForWork;
+        this.isVerified = isVerified;
     }
 }

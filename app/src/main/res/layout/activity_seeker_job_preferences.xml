@@ -140,7 +140,7 @@
                     app:suffixText="/hr">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etMinSalary"
+                        android:id="@+id/edit_text_MinSalary"
                         android:layout_width="match_parent"
                         android:background="#F0F0F0"
                         android:layout_height="wrap_content"

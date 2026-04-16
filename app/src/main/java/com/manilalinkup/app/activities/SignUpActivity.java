@@ -96,26 +96,22 @@ public class SignUpActivity extends AppCompatActivity {
                                 mAuth.getCurrentUser().sendEmailVerification();
 
                                 FirebaseUser user = mAuth.getCurrentUser();
+                                String userUid = user.getUid();
+
                                 user.getIdToken(true).addOnCompleteListener(tokenTask -> {
                                     if(tokenTask.isSuccessful()){
                                         String idToken = tokenTask.getResult().getToken();
 
                                         sendProfileToLaravel(
                                                 idToken,
+                                                userUid,
                                                 firstnameInput,
                                                 lastnameInput,
                                                 emailAddressInput,
                                                 mobileNumberInput
                                         );
                                     }
-
                                 });
-
-                                Toast.makeText(SignUpActivity.this, "Registration successful! Please verify your email before logging in.", Toast.LENGTH_LONG).show();
-
-                                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                                finish();
                             } else {
                                 progressDialog.dismiss();
                                 Toast.makeText(SignUpActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -126,28 +122,30 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void sendProfileToLaravel(String uid, String firstnameInput, String lastnameInput, String emailAddressInput, String mobileNumberInput) {
-        ApiService apiService = RetrofitClient.getClient(uid).create(ApiService.class);
+    private void sendProfileToLaravel(String idToken, String actualUid, String firstnameInput, String lastnameInput, String emailAddressInput, String mobileNumberInput) {
+        // RetrofitClient uses the Token for the "Bearer" header
+        ApiService apiService = RetrofitClient.getClient(idToken).create(ApiService.class);
 
         SeekerRequest request = new SeekerRequest(
-                uid,
+                actualUid, // Pass the short UID here
                 firstnameInput,
                 lastnameInput,
                 emailAddressInput,
-                "Not set",        // Placeholder for Address
-                "Not set",        // Placeholder for Birthdate
-                "Manila",         // Placeholder for Location
+                "Not set",
+                "2000-01-01", // Use a valid date format string for Laravel
+                "Manila",
                 mobileNumberInput,
-                0,                // Placeholder for Salary
-                "default_url",    // Placeholder for Profile Picture
-                "pending",        // Placeholder for Clearance
-                1,                // Status: 1 (Active)
-                0                 // Verified: 0 (No)
+                0,
+                "default_url",
+                "pending",
+                true,
+                true
         );
 
         apiService.registerSeeker(request).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     Toast.makeText(SignUpActivity.this, "Registration successful! Please verify your email before logging in.", Toast.LENGTH_LONG).show();
 
