@@ -33,6 +33,18 @@ public interface ApiService {
     @POST("api/seeker/signup")
     Call<ResponseBody> registerSeeker(@Body SeekerRequest seekerRequest);
 
+    @Multipart
+    @POST("api/seeker/setupProfile")
+    Call<ResponseBody> setupSeekerProfile(
+            @Part MultipartBody.Part profilePhoto,
+            @Part MultipartBody.Part clearance,
+            @Part MultipartBody.Part validId,
+            @Part("birthDate") RequestBody birthDate,
+            @Part("location") RequestBody location,
+            @Part("salaryValue") RequestBody salaryValue,
+            @Part("salaryType") RequestBody salaryType
+    );
+
     @POST("api/employer/signup")
     Call<ResponseBody> registerEmployer(@Body EmployerRequest employerRequest);
 

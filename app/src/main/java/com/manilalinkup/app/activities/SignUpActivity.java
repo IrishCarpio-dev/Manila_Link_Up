@@ -11,9 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.models.SeekerRequest;
+import com.manilalinkup.app.utilities.ErrorUtils;
+import com.manilalinkup.app.utilities.RetrofitClient;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -23,6 +26,7 @@ import retrofit2.Response;
 import okhttp3.ResponseBody;
 
 public class SignUpActivity extends AppCompatActivity {
+    private android.app.ProgressDialog progressDialog;
     private com.google.firebase.auth.FirebaseAuth mAuth;
     MaterialToolbar toolbar;
     MaterialButton sendOTP;
@@ -48,6 +52,10 @@ public class SignUpActivity extends AppCompatActivity {
         createPassword = findViewById(R.id.text_input_create_password);
         confirmPassword = findViewById(R.id.text_input_confirm_password);
 
+        progressDialog = new android.app.ProgressDialog(this);
+        progressDialog.setMessage("Creating account...");
+        progressDialog.setCancelable(false);
+
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,40 +77,47 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }
                 if (!createPasswordInput.equals(confirmPasswordInput)) {
-                    // Show error on the layout so the user sees it clearly
                     confirmPassword.setError("Passwords do not match");
                     return;
                 } else {
-                    confirmPassword.setError(null); // Clear error if they match
+                    confirmPassword.setError(null);
                 }
 
                 if (createPasswordInput.length() < 8) {
                     createPassword.setError("Password must be at least 8 characters");
                     return;
                 }
-                // If validation passes, start Firebase
+
+                progressDialog.show();
+
                 mAuth.createUserWithEmailAndPassword(emailAddressInput, createPasswordInput)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                // 1. Send verification link
                                 mAuth.getCurrentUser().sendEmailVerification();
 
-                                // 2. Send profile to Laravel immediately so the DB record exists
-                                sendProfileToLaravel(
-                                        mAuth.getCurrentUser().getUid(),
-                                        firstnameInput,
-                                        lastnameInput,
-                                        emailAddressInput,
-                                        mobileNumberInput
-                                );
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+                                    if(tokenTask.isSuccessful()){
+                                        String idToken = tokenTask.getResult().getToken();
 
-                                // 3. Inform user and go to Login
+                                        sendProfileToLaravel(
+                                                idToken,
+                                                firstnameInput,
+                                                lastnameInput,
+                                                emailAddressInput,
+                                                mobileNumberInput
+                                        );
+                                    }
+
+                                });
+
                                 Toast.makeText(SignUpActivity.this, "Registration successful! Please verify your email before logging in.", Toast.LENGTH_LONG).show();
 
                                 Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                                 startActivity(intent);
-                                finish(); // Close SignUpActivity so they can't go back
+                                finish();
                             } else {
+                                progressDialog.dismiss();
                                 Toast.makeText(SignUpActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
@@ -112,12 +127,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void sendProfileToLaravel(String uid, String firstnameInput, String lastnameInput, String emailAddressInput, String mobileNumberInput) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://172.31.243.113/") // Replaced with actual IPv4
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiService apiService = retrofit.create(ApiService.class);
+        ApiService apiService = RetrofitClient.getClient(uid).create(ApiService.class);
 
         SeekerRequest request = new SeekerRequest(
                 uid,
@@ -139,15 +149,20 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    android.util.Log.d("API_SUCCESS", "Data sent to Laravel successfully");
+                    Toast.makeText(SignUpActivity.this, "Registration successful! Please verify your email before logging in.", Toast.LENGTH_LONG).show();
+
+                    Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
                 } else {
-                    android.util.Log.e("API_ERROR", "Response Code: " + response.code());
+                    ErrorUtils.showErrorMessage(SignUpActivity.this, response.errorBody());
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                android.util.Log.e("API_FAILURE", "Check Connection: " + t.getMessage());
+                progressDialog.dismiss();
+                ErrorUtils.showThrowableError(SignUpActivity.this, t);
             }
         });
     }
