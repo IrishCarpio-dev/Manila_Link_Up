@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0D47A1">
+
+    <!-- Tab Layout -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="60dp"
+        android:background="@android:color/transparent"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@android:color/white"
+        app:tabIndicatorHeight="3dp"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabTextColor="#90CAF9"
+        app:tabTextAppearance="@style/TabTextStyle" />
+
+    <!-- Content Area -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tab_layout"
+        android:layout_above="@id/bottom_navigation"
+        android:background="#E8EAF6"
+        android:layout_marginTop="8dp">
+
+        <LinearLayout
+            android:id="@+id/container_cards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Job Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <!-- Close / X button -->
+                    <ImageView
+                        android:id="@+id/btn_close_card"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentEnd="true"
+                        android:contentDescription="Remove"
+                        android:src="@android:drawable/ic_menu_close_clear_cancel"
+                        app:tint="#333333" />
+
+                    <!-- Job Title -->
+                    <TextView
+                        android:id="@+id/text_card_job_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-bold"
+                        android:text="Fast Food Crew"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
+                    <!-- Company Name -->
+                    <TextView
+                        android:id="@+id/text_card_company"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_card_job_title"
+                        android:layout_marginTop="2dp"
+                        android:text="Burger Spot Manila"
+                        android:textColor="#555555"
+                        android:textSize="14sp" />
+
+                    <!-- Location and Salary Row -->
+                    <LinearLayout
+                        android:id="@+id/layout_card_location_salary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_card_company"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📍"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/text_card_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="2dp"
+                            android:text="Vito Cruz, Manila."
+                            android:textColor="#666666"
+                            android:textSize="13sp" />
+
+                        <View
+                            android:layout_width="24dp"
+                            android:layout_height="0dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="💰"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/text_card_salary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="2dp"
+                            android:text="P 695 / Day"
+                            android:textColor="#666666"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+                    <!-- Schedule Row -->
+                    <LinearLayout
+                        android:id="@+id/layout_card_schedule"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/layout_card_location_salary"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="☑️"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/text_card_schedule"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="2dp"
+                            android:text="M | TH | S | -Night Shift"
+                            android:textColor="#666666"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+                    <!-- Save On Date -->
+                    <TextView
+                        android:id="@+id/text_card_save_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/layout_card_schedule"
+                        android:layout_marginTop="12dp"
+                        android:text="Save on : March 10"
+                        android:textColor="#333333"
+                        android:textSize="14sp" />
+
+                    <!-- Apply Now Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_card_apply"
+                        style="@style/AppButtonOutline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="42dp"
+                        android:layout_below="@id/text_card_save_date"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="12dp"
+                        android:minWidth="160dp"
+                        android:text="Apply now" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:background="#0D47A1"
+        app:itemIconTint="@android:color/white"
+        app:itemTextColor="@android:color/white"
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/bottom_nav_menu" />
+
+</RelativeLayout>

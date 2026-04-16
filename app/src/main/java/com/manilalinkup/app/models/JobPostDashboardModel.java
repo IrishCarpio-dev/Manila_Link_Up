@@ -1,23 +1,32 @@
 package com.manilalinkup.app.models;
 
-import android.content.Intent;
-
 public class JobPostDashboardModel {
-    public static final String EXTRA_JOB_TITLE = "job_title";
-    public static final String EXTRA_EMPLOYER_NAME = "employer_name";
-    public static final String EXTRA_JOB_LOCATION = "job_location";
-    public static final String EXTRA_JOB_DURATION = "job_duration";
-    public static final String EXTRA_EMPLOYER_PROFILE_PICTURE = "employer_profile_picture";
-    public static final String EXTRA_POSTED_AGO = "posted_ago";
+    public static final String EXTRA_JOB_TITLE = "extra_job_title";
+    public static final String EXTRA_EMPLOYER_NAME = "extra_employer_name";
+    public static final String EXTRA_JOB_LOCATION = "extra_job_location";
+    public static final String EXTRA_JOB_DURATION = "extra_job_duration";
+    public static final String EXTRA_JOB_POSTED_AGO = "extra_job_posted_ago";
+    public static final String EXTRA_EMPLOYER_PICTURE = "extra_employer_picture";
 
-    String jobTitle, employerName, jobPostLocation, job_duration, howLongJobIsPosted;
-    String employerProfilePicture;
+    private final String jobTitle;
+    private final String employerName;
+    private final String jobPostLocation;
+    private final String jobDuration;
+    private final String howLongJobIsPosted;
+    private final String employerProfilePicture;
 
-    public JobPostDashboardModel(String jobTitle, String employerName, String jobPostLocation, String job_duration, String employerProfilePicture, String howLongJobIsPosted) {
+    public JobPostDashboardModel(
+            String jobTitle,
+            String employerName,
+            String jobPostLocation,
+            String jobDuration,
+            String employerProfilePicture,
+            String howLongJobIsPosted
+    ) {
         this.jobTitle = jobTitle;
         this.employerName = employerName;
         this.jobPostLocation = jobPostLocation;
-        this.job_duration = job_duration;
+        this.jobDuration = jobDuration;
         this.employerProfilePicture = employerProfilePicture;
         this.howLongJobIsPosted = howLongJobIsPosted;
     }
@@ -34,8 +43,13 @@ public class JobPostDashboardModel {
         return jobPostLocation;
     }
 
+    public String getJobDuration() {
+        return jobDuration;
+    }
+
+    // Alias for compatibility with existing code
     public String getJob_duration() {
-        return job_duration;
+        return jobDuration;
     }
 
     public String getEmployerProfilePicture() {
@@ -46,16 +60,16 @@ public class JobPostDashboardModel {
         return howLongJobIsPosted;
     }
 
-    public void putIntoIntent(Intent intent) {
+    public void putIntoIntent(android.content.Intent intent) {
         intent.putExtra(EXTRA_JOB_TITLE, jobTitle);
         intent.putExtra(EXTRA_EMPLOYER_NAME, employerName);
         intent.putExtra(EXTRA_JOB_LOCATION, jobPostLocation);
-        intent.putExtra(EXTRA_JOB_DURATION, job_duration);
-        intent.putExtra(EXTRA_EMPLOYER_PROFILE_PICTURE, employerProfilePicture);
-        intent.putExtra(EXTRA_POSTED_AGO, howLongJobIsPosted);
+        intent.putExtra(EXTRA_JOB_DURATION, jobDuration);
+        intent.putExtra(EXTRA_JOB_POSTED_AGO, howLongJobIsPosted);
+        intent.putExtra(EXTRA_EMPLOYER_PICTURE, employerProfilePicture);
     }
 
-    public static JobPostDashboardModel fromIntent(Intent intent) {
+    public static JobPostDashboardModel fromIntent(android.content.Intent intent) {
         if (intent == null || !intent.hasExtra(EXTRA_JOB_TITLE)) {
             return null;
         }
@@ -65,8 +79,8 @@ public class JobPostDashboardModel {
                 intent.getStringExtra(EXTRA_EMPLOYER_NAME),
                 intent.getStringExtra(EXTRA_JOB_LOCATION),
                 intent.getStringExtra(EXTRA_JOB_DURATION),
-                intent.getStringExtra(EXTRA_EMPLOYER_PROFILE_PICTURE),
-                intent.getStringExtra(EXTRA_POSTED_AGO)
+                intent.getStringExtra(EXTRA_EMPLOYER_PICTURE),
+                intent.getStringExtra(EXTRA_JOB_POSTED_AGO)
         );
     }
 }

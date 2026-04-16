@@ -1,6 +1,6 @@
 plugins {
-    id("com.google.gms.google-services")
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -50,18 +50,27 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    // Firebase BOM
+    implementation(platform("com.google.firebase:firebase-bom:34.10.0"))
+
+    // Firebase Analytics
     implementation("com.google.firebase:firebase-analytics")
+
+    // Firebase Auth & Firestore / Database
     implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-database:20.3.1")
-    implementation("com.google.firebase:firebase-database")
+
+    // Google Sign-In
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
+
+    // Facebook Login
+    implementation("com.facebook.android:facebook-login:16.0.0")
     
+    // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.github.bumptech.glide:glide:4.15.1")
-    implementation("androidx.core:core-splashscreen:1.0.1")
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    // Other UI/Utils
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }

@@ -21,22 +21,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+
         loginButton = findViewById(R.id.material_button_login);
         signupButton = findViewById(R.id.material_button_signup);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent loginActivityIntent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(loginActivityIntent);
-            }
-        });
-
-        signupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent signUpActivityintent = new Intent(MainActivity.this, GetStarted.class );
-                startActivity(signUpActivityintent);
+                Intent intent = new Intent(MainActivity.this, GetStartedActivity.class);
+                startActivity(intent);
             }
         });
 

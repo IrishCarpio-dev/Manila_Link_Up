@@ -12,6 +12,17 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:theme="@style/Theme.ManilaLinkUp">
+
+        <!-- TODO: Add back when Facebook is configured
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token"/>
+        -->
+
         android:theme="@style/Theme.ManilaLinkUp"
         android:usesCleartextTraffic="true">
         <activity
@@ -27,6 +38,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activities.GetStartedActivity" android:exported="false" />
+        <activity android:name=".activities.EmployerProfileActivity" android:exported="false" />
+        <activity android:name=".activities.SeekerJobDetailsActivity" android:exported="false" />
+        <activity android:name=".activities.EditInformationActivity" android:exported="false" />
+        <activity android:name=".activities.SavedJobsActivity" android:exported="false" />
+
         <activity
             android:name=".activities.EmployerViewAllRatings"
             android:exported="false" />
@@ -113,11 +131,6 @@
             android:exported="false"
             android:label="Seeker Settings"
             android:parentActivityName=".activities.SeekerProfileActivity" />
-        <activity
-            android:name=".activities.EditInformationActivity"
-            android:exported="false"
-            android:label="Edit Information"
-            android:parentActivityName=".activities.SeekerSettingsActivity" />
         <activity
             android:name=".activities.EmployerSettingsActivity"
             android:exported="false"

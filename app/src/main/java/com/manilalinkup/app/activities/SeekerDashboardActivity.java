@@ -15,8 +15,8 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.manilalinkup.app.adapters.JobPostDashboardAdapter;
 import com.manilalinkup.app.models.JobPostDashboardModel;
 import com.manilalinkup.app.R;
-import com.manilalinkup.app.utilities.JobPostRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SeekerDashboardActivity extends AppCompatActivity {
@@ -35,19 +35,20 @@ public class SeekerDashboardActivity extends AppCompatActivity {
         recyclerViewJobPost = findViewById(R.id.recycler_view_job_posts_dashboard);
         recyclerViewJobPost.setLayoutManager(new LinearLayoutManager(this));
 
-        jobListJobCard = JobPostRepository.getSeekerDashboardJobs(this);
+        jobListJobCard = new ArrayList<>();
+        mockData();
 
         adapterJobPost = new JobPostDashboardAdapter(jobListJobCard, false, new JobPostDashboardAdapter.OnJobClickListener() {
             @Override
             public void onJobClick(JobPostDashboardModel job) {
                 Intent intent = new Intent(SeekerDashboardActivity.this, SeekerJobPostActivity.class);
-                job.putIntoIntent(intent);
+                //not yet tested - irish
                 startActivity(intent);
             }
             @Override
             public void onRemoveClick(JobPostDashboardModel job, int position) {
             }
-        }, false);
+        });
         recyclerViewJobPost.setAdapter(adapterJobPost);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view_seeker);
@@ -65,6 +66,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                     overridePendingTransition(0, 0);
                     return true;
                 }else if (id == R.id.nav_notifications_seeker) {
+                    //Will set to SeekerNotifications pa, pending task for loraine
                     Intent intent = new Intent(SeekerDashboardActivity.this, EmployerNotificationsActivity.class);
                     startActivity(intent);
                     overridePendingTransition(0, 0);
@@ -75,6 +77,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                     overridePendingTransition(0, 0);
                     return true;
                 }else if (id == R.id.nav_chat_seeker) {
+                    //Will still create chat for Seeker
                     Intent intent = new Intent(SeekerDashboardActivity.this, ChatEmployerActivity.class);
                     startActivity(intent);
                     overridePendingTransition(0, 0);
@@ -84,5 +87,46 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void mockData() {
+        jobListJobCard.add(new JobPostDashboardModel(
+                "Events/Catering Helper",
+                "Eng Bee Tin",
+                "Binondo, Manila",
+                "March 30, 2026",
+                "https://en.wikipedia.org/wiki/Eng_Bee_Tin",
+                "3 days ago"
+        ));
+        jobListJobCard.add(new JobPostDashboardModel(
+                "Cafe Barista",
+                "Don Kopi",
+                "Malate, Manila",
+                "Full Time",
+                "https://www.freepik.com/vectors/coffee-shop-logo-design",
+                "7 days ago"
+        ));
+
+        jobListJobCard.add(new JobPostDashboardModel(
+                "Store Assistant",
+                "Quick Smart Express",
+                "Quiapo, Manila",
+                "M | W | F",
+                "https://venngage.com/templates/logos/market-store-creative-logo-fc8535df-be09-4c80-8ea5-a69a34b2318e",
+                "10 days ago"
+        ));
+
+        jobListJobCard.add(new JobPostDashboardModel(
+                "Artist Assistant",
+                "BINI Mika's Company",
+                "GMA, Manila",
+                "T | Th | F",
+                "https://www.thebeautyedit.ph/people/bini-members-and-their-beauty-looks/",
+                "1 day ago"
+        ));
+
+        if (adapterJobPost != null) {
+            adapterJobPost.notifyDataSetChanged();
+        }
     }
 }

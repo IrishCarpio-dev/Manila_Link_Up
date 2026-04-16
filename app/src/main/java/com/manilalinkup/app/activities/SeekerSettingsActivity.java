@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,15 +15,10 @@ import com.manilalinkup.app.R;
 
 public class SeekerSettingsActivity extends AppCompatActivity {
 
-    private TextView btnEditProfile;
-    private TextView btnVerification;
-    private TextView btnPrivacy;
-    private TextView btnChangePassword;
-    private TextView tvUserEmail;
+    private TextView btnEditProfile, btnVerification, btnPrivacy;
+    private TextView btnChangePassword, tvUserEmail;
     private Switch switchNotifications;
-    private TextView btnHelpCenter;
-    private TextView btnTerms;
-    private TextView btnAbout;
+    private TextView btnHelpCenter, btnTerms, btnAbout;
     private Button btnLogout;
     private FirebaseAuth mAuth;
 
@@ -41,15 +35,21 @@ public class SeekerSettingsActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
+        // Account & Security
         tvUserEmail = findViewById(R.id.tv_user_email);
         btnEditProfile = findViewById(R.id.btn_edit_profile);
         btnChangePassword = findViewById(R.id.btn_change_password);
         btnVerification = findViewById(R.id.btn_verification);
         btnPrivacy = findViewById(R.id.btn_privacy);
+
+        // Preferences
         switchNotifications = findViewById(R.id.switch_notifications);
+
+        // Support & Legal
         btnHelpCenter = findViewById(R.id.btn_help_center);
         btnTerms = findViewById(R.id.btn_terms);
         btnAbout = findViewById(R.id.btn_about);
+
         btnLogout = findViewById(R.id.btn_logout);
     }
 
@@ -61,41 +61,60 @@ public class SeekerSettingsActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        btnEditProfile.setOnClickListener(v -> showSensitiveActionWarning(
-                "Edit Profile",
-                "Changing your profile details may require a new identity verification. Do you want to proceed?",
-                () -> startActivity(new Intent(SeekerSettingsActivity.this, EditInformationActivity.class))
-        ));
 
-        btnChangePassword.setOnClickListener(v -> showSensitiveActionWarning(
-                "Change Password",
-                "We will send a password reset link to your registered email address. Proceed?",
-                this::sendPasswordResetEmail
-        ));
+        // 1. Edit Profile with Warning
+        btnEditProfile.setOnClickListener(v -> {
+            showSensitiveActionWarning(
+                    "Edit Profile",
+                    "Changing your profile details may require a new identity verification. Do you want to proceed?",
+                    () -> {
+                        Intent intent = new Intent(this, EditInformationActivity.class);
+                        startActivity(intent);
+                    }
+            );
+        });
 
-        btnVerification.setOnClickListener(v -> showSensitiveActionWarning(
-                "Verify Identity",
-                "Uploading a new ID will put your account under review. You may be temporarily unable to apply for gigs. Proceed?",
-                () -> startActivity(new Intent(SeekerSettingsActivity.this, SeekerVerifyIdentityActivity.class))
-        ));
+        btnChangePassword.setOnClickListener(v -> {
+            showSensitiveActionWarning(
+                    "Change Password",
+                    "We will send a password reset link to your registered email address. Proceed?",
+                    this::sendPasswordResetEmail
+            );
+        });
+
+        btnVerification.setOnClickListener(v -> {
+            showSensitiveActionWarning(
+                    "Verify Identity",
+                    "Uploading a new ID will put your account under review. You may be temporarily unable to apply for gigs. Proceed?",
+                    () -> {
+                        Intent intent = new Intent(this, SeekerVerifyIdentityActivity.class);
+                        startActivity(intent);
+                    }
+            );
+        });
 
         btnPrivacy.setOnClickListener(v -> {
-            showToast("Opening Privacy Controls...");
-            startActivity(new Intent(SeekerSettingsActivity.this, SeekerPrivacyControlsActivity.class));
+            Intent intent = new Intent(this, SeekerPrivacyControlsActivity.class);
+            startActivity(intent);
         });
 
-        switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) ->
-                showToast("Notifications " + (isChecked ? "Enabled" : "Disabled"))
-        );
+        btnPrivacy.setOnClickListener(v -> showToast("Opening Privacy Controls..."));
 
-        btnHelpCenter.setOnClickListener(v -> {
-            showToast("Loading Help Center...");
-            startActivity(new Intent(SeekerSettingsActivity.this, HelpCenterActivity.class));
+        switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            showToast("Notifications " + (isChecked ? "Enabled" : "Disabled"));
         });
 
+        btnHelpCenter.setOnClickListener(v -> showToast("Loading Help Center..."));
         btnTerms.setOnClickListener(v -> showToast("Displaying Terms of Service..."));
         btnAbout.setOnClickListener(v -> showAboutDialog());
+
         btnLogout.setOnClickListener(v -> showLogoutConfirmation());
+
+        btnHelpCenter.setOnClickListener(v -> {
+            Intent intent = new Intent(this, HelpCenterActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     private void showSensitiveActionWarning(String title, String message, Runnable onConfirm) {
@@ -120,10 +139,8 @@ public class SeekerSettingsActivity extends AppCompatActivity {
                                     .setMessage("A reset link has been sent to: " + email)
                                     .setPositiveButton("OK", null)
                                     .show();
-                        } else if (task.getException() != null) {
-                            showToast("Error: " + task.getException().getMessage());
                         } else {
-                            showToast("Error sending reset email.");
+                            showToast("Error: " + task.getException().getMessage());
                         }
                     });
         }

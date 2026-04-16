@@ -62,9 +62,8 @@ public class LoginActivity extends AppCompatActivity {
         googleLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent testIntents = new Intent(LoginActivity.this, SeekerDashboardActivity.class);
+                Intent testIntents = new Intent(LoginActivity.this, EmployerDashboard.class);
                 startActivity(testIntents);
-                finish();
             }
         });
 

@@ -40,7 +40,7 @@ public class SavedJobsAdapter extends RecyclerView.Adapter<SavedJobsAdapter.Save
         holder.jobTitle.setText(job.getJobTitle());
         holder.employerName.setText(job.getEmployerName());
         holder.location.setText(job.getJobPostLocation());
-        holder.duration.setText(job.getJob_duration());
+        holder.duration.setText(job.getJobDuration());
         holder.postedDate.setText(job.getHowLongJobIsPosted());
 
         Glide.with(holder.itemView.getContext())
