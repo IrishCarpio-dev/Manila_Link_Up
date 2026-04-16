@@ -158,10 +158,8 @@ public class SeekerJobPreferences extends AppCompatActivity {
 
         for (ServiceTagModel tag : serviceTagList) {
             Chip chip = new Chip(this);
-
             chip.setText(tag.getLabel());
             chip.setTag(tag.getId());
-
             chip.setCheckable(true);
             chip.setChecked(selectedTagIds.contains(tag.getId()));
 

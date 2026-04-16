@@ -3,6 +3,8 @@ package com.manilalinkup.app.activities;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -171,15 +173,21 @@ public class EmployerAddJobActivity extends AppCompatActivity {
 
             Chip chip = new Chip(this);
             chip.setText(tag.getLabel());
+
+            chip.setChipBackgroundColorResource(R.color.chip_background_state_list);
+            chip.setTextColor(Color.WHITE);
+
             chip.setTag(tag.getId());
-            chip.setCloseIconVisible(true);
-            chip.setCheckable(false);
+            chip.setCheckable(true);
+            chip.setChecked(true);
+            chip.setCheckedIconVisible(false);
             final String idToRemove = tagId;
             chip.setOnCloseIconClickListener(v -> {
                 selectedTagIds.remove(idToRemove);
                 refreshServiceTagsDisplay();
             });
             chipGroupServiceTags.addView(chip);
+            chip.setCloseIconTint(ColorStateList.valueOf(Color.WHITE));
         }
 
         Chip addChip = new Chip(this);
@@ -201,6 +209,17 @@ public class EmployerAddJobActivity extends AppCompatActivity {
             chip.setTag(tag.getId());
             chip.setCheckable(true);
             chip.setChecked(selectedTagIds.contains(tag.getId()));
+
+            chip.setCheckedIconVisible(false);
+
+            chip.setChipBackgroundColorResource(R.color.chip_background_state_list);
+            // Safety check for older Android versions
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                chip.setTextColor(getResources().getColorStateList(R.color.chip_text_state_list, getTheme()));
+            } else {
+                chip.setTextColor(getResources().getColorStateList(R.color.chip_text_state_list));
+            }
+
             chipGroupModal.addView(chip);
         }
 
