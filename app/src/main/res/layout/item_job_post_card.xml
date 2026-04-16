@@ -93,19 +93,6 @@
             android:textColor="#616161"
             tools:text="2d ago" />
 
-        <ImageView
-            android:id="@+id/image_view_report_button_job_post"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:clickable="true"
-            android:contentDescription="Save Post"
-            android:focusable="true"
-            android:scaleType="centerInside"
-            android:src="@drawable/activity_icon"
-            app:tint="@color/icon_save_job_post_color_selector" />
-
     </RelativeLayout>
 
 

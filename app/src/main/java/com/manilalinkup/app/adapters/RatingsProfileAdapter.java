@@ -41,7 +41,6 @@ public class RatingsProfileAdapter extends RecyclerView.Adapter<RatingsProfileAd
     static class RatingsProfileViewHolder extends RecyclerView.ViewHolder {
         TextView ratingMessage;
         TextView raterName;
-        TextView jobTitle;
         RatingBar ratingScore;
 
         RatingsProfileViewHolder(@NonNull View itemView) {
@@ -49,7 +48,6 @@ public class RatingsProfileAdapter extends RecyclerView.Adapter<RatingsProfileAd
             ratingMessage = itemView.findViewById(R.id.item_card_rating_message);
             raterName     = itemView.findViewById(R.id.item_card_rater_name);
             ratingScore   = itemView.findViewById(R.id.item_card_rating_bar);
-            jobTitle      = itemView.findViewById(R.id.item_card_job_title);
         }
 
         void bind(RatingModel rating) {
@@ -61,13 +59,6 @@ public class RatingsProfileAdapter extends RecyclerView.Adapter<RatingsProfileAd
                 name = rating.getRater().getName();
             }
             raterName.setText(name);
-
-            if (jobTitle != null) {
-                String title = rating.getJob() != null && rating.getJob().getTitle() != null
-                        ? rating.getJob().getTitle() : "";
-                jobTitle.setText(title);
-                jobTitle.setVisibility(title.isEmpty() ? View.GONE : View.VISIBLE);
-            }
         }
     }
 }

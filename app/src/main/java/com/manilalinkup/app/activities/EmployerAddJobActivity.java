@@ -3,14 +3,20 @@ package com.manilalinkup.app.activities;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -22,7 +28,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
+import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.models.CreateJobRequest;
+import com.manilalinkup.app.models.ServiceTagModel;
 import com.manilalinkup.app.utilities.AddressAutocompleteHelper;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
@@ -31,8 +39,10 @@ import com.manilalinkup.app.utilities.RetrofitClient;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -46,14 +56,14 @@ public class EmployerAddJobActivity extends AppCompatActivity {
     TextInputEditText titleInput, descriptionInput, salaryInput, expiresAtInput, durationAmountInput;
     AutoCompleteTextView rateDropdown;
     ExtendedFloatingActionButton postJobButton;
-    TextView greetingNameText;
+    TextView greetingNameText, tvServiceTagsError;
     ProgressDialog progressDialog;
     EditText locationInput;
-    EditText tagInput;
-    ChipGroup tagChipGroup;
+    ChipGroup chipGroupServiceTags;
 
     private String formattedExpiresAt = "";
-    private final List<String> selectedTags = new ArrayList<>();
+    private final List<ServiceTagModel> serviceTagList = new ArrayList<>();
+    private final Set<String> selectedTagIds = new LinkedHashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +85,8 @@ public class EmployerAddJobActivity extends AppCompatActivity {
         postJobButton = findViewById(R.id.button_post_job);
         greetingNameText = findViewById(R.id.textview_greeting_name_employer);
         locationInput = findViewById(R.id.edit_text_location);
+        chipGroupServiceTags = findViewById(R.id.chip_group_service_tags);
+        tvServiceTagsError = findViewById(R.id.text_view_service_tags_error);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Posting job...");
@@ -94,24 +106,9 @@ public class EmployerAddJobActivity extends AppCompatActivity {
 
         AddressAutocompleteHelper.attachDistrictAutocomplete(locationInput);
 
-        tagInput      = findViewById(R.id.edit_text_tag_input);
-        tagChipGroup  = findViewById(R.id.chip_group_tags);
-        if (tagInput != null) {
-            tagInput.setOnEditorActionListener((v, actionId, event) -> {
-                String raw = tagInput.getText() != null ? tagInput.getText().toString().trim() : "";
-                if (!raw.isEmpty() && selectedTags.size() < 10) {
-                    String tag = raw.toLowerCase().replaceAll("[^a-z0-9\\-]", "");
-                    if (!tag.isEmpty() && !selectedTags.contains(tag)) {
-                        selectedTags.add(tag);
-                        addTagChip(tag);
-                    }
-                    tagInput.setText("");
-                }
-                return true;
-            });
-        }
-
         postJobButton.setOnClickListener(v -> postJob());
+
+        loadServiceTags();
 
         bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
         bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_add_job);
@@ -135,6 +132,116 @@ public class EmployerAddJobActivity extends AppCompatActivity {
             }
             return true;
         });
+    }
+
+    private void loadServiceTags() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+        user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+            if (!tokenTask.isSuccessful()) return;
+            String token = tokenTask.getResult().getToken();
+            ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
+            apiService.getServiceTags().enqueue(new Callback<ApiResponse<List<ServiceTagModel>>>() {
+                @Override
+                public void onResponse(Call<ApiResponse<List<ServiceTagModel>>> call, Response<ApiResponse<List<ServiceTagModel>>> response) {
+                    if (!response.isSuccessful() || response.body() == null) return;
+                    serviceTagList.clear();
+                    serviceTagList.addAll(response.body().getData());
+                    refreshServiceTagsDisplay();
+                }
+
+                @Override
+                public void onFailure(Call<ApiResponse<List<ServiceTagModel>>> call, Throwable t) {
+                    Toast.makeText(EmployerAddJobActivity.this, "Failed to load service tags.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+    }
+
+    private void refreshServiceTagsDisplay() {
+        chipGroupServiceTags.removeAllViews();
+
+        for (String tagId : selectedTagIds) {
+            ServiceTagModel tag = null;
+            for (ServiceTagModel t : serviceTagList) {
+                if (t.getId().equals(tagId)) {
+                    tag = t;
+                    break;
+                }
+            }
+            if (tag == null) continue;
+
+            Chip chip = new Chip(this);
+            chip.setText(tag.getLabel());
+
+            chip.setChipBackgroundColorResource(R.color.chip_background_state_list);
+            chip.setTextColor(Color.WHITE);
+
+            chip.setTag(tag.getId());
+            chip.setCheckable(true);
+            chip.setChecked(true);
+            chip.setCheckedIconVisible(false);
+            final String idToRemove = tagId;
+            chip.setOnCloseIconClickListener(v -> {
+                selectedTagIds.remove(idToRemove);
+                refreshServiceTagsDisplay();
+            });
+            chipGroupServiceTags.addView(chip);
+            chip.setCloseIconTint(ColorStateList.valueOf(Color.WHITE));
+        }
+
+        Chip addChip = new Chip(this);
+        addChip.setText("+");
+        addChip.setCheckable(false);
+        addChip.setOnClickListener(v -> showServiceTagModal());
+        chipGroupServiceTags.addView(addChip);
+    }
+
+    private void showServiceTagModal() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_service_tags, null);
+        ChipGroup chipGroupModal = dialogView.findViewById(R.id.chipGroupServiceTagsModal);
+        ImageButton btnClose = dialogView.findViewById(R.id.btnCloseServiceTags);
+        Button btnSave = dialogView.findViewById(R.id.btnSaveServiceTags);
+
+        for (ServiceTagModel tag : serviceTagList) {
+            Chip chip = new Chip(this);
+            chip.setText(tag.getLabel());
+            chip.setTag(tag.getId());
+            chip.setCheckable(true);
+            chip.setChecked(selectedTagIds.contains(tag.getId()));
+
+            chip.setCheckedIconVisible(false);
+
+            chip.setChipBackgroundColorResource(R.color.chip_background_state_list);
+            // Safety check for older Android versions
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                chip.setTextColor(getResources().getColorStateList(R.color.chip_text_state_list, getTheme()));
+            } else {
+                chip.setTextColor(getResources().getColorStateList(R.color.chip_text_state_list));
+            }
+
+            chipGroupModal.addView(chip);
+        }
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+
+        btnSave.setOnClickListener(v -> {
+            selectedTagIds.clear();
+            for (int i = 0; i < chipGroupModal.getChildCount(); i++) {
+                Chip chip = (Chip) chipGroupModal.getChildAt(i);
+                if (chip.isChecked()) {
+                    selectedTagIds.add((String) chip.getTag());
+                }
+            }
+            dialog.dismiss();
+            refreshServiceTagsDisplay();
+        });
+
+        dialog.show();
     }
 
     private void showDatePicker() {
@@ -171,6 +278,7 @@ public class EmployerAddJobActivity extends AppCompatActivity {
         locationLayout.setError(null);
         descriptionLayout.setError(null);
         expiresAtLayout.setError(null);
+        tvServiceTagsError.setVisibility(View.GONE);
 
         if (title.isEmpty()) {
             titleLayout.setError("Job title is required.");
@@ -236,6 +344,13 @@ public class EmployerAddJobActivity extends AppCompatActivity {
             return;
         }
 
+        if (selectedTagIds.isEmpty()) {
+            tvServiceTagsError.setText("At least one service tag is required.");
+            tvServiceTagsError.setVisibility(View.VISIBLE);
+            chipGroupServiceTags.requestFocus();
+            return;
+        }
+
         progressDialog.show();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -252,20 +367,9 @@ public class EmployerAddJobActivity extends AppCompatActivity {
         });
     }
 
-    private void addTagChip(String tag) {
-        Chip chip = new Chip(this);
-        chip.setText(tag);
-        chip.setCloseIconVisible(true);
-        chip.setOnCloseIconClickListener(v -> {
-            selectedTags.remove(tag);
-            tagChipGroup.removeView(chip);
-        });
-        tagChipGroup.addView(chip);
-    }
-
     private void submitCreateJob(String token, String employerUid, String title, String description,
                                   String location, String expiresAt, String duration, double salary) {
-        CreateJobRequest request = new CreateJobRequest(title, description, employerUid, expiresAt, duration, location, salary, selectedTags);
+        CreateJobRequest request = new CreateJobRequest(title, description, employerUid, expiresAt, duration, location, salary, new ArrayList<>(selectedTagIds));
         ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
         apiService.createJob(request).enqueue(new Callback<ResponseBody>() {

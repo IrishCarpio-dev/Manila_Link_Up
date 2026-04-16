@@ -188,12 +188,11 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
                     switch(selectedImageOption) {
                         case PROFILE:
                             selectProfilePhoto(uri);
+                            break;
                         case CLEARANCE:
-                            selectValidationPhoto(uri);
                         case ID:
                             selectValidationPhoto(uri);
-                        default:
-                            return;
+                            break;
                     }
                 };
             }
@@ -260,16 +259,17 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
                 File profileFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_profile.jpg");
                 profilePhotoUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", profileFile);
                 cameraLauncher.launch(profilePhotoUri);
+                break;
             case CLEARANCE:
                 File clearanceFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_clearance.jpg");
                 clearanceUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", clearanceFile);
                 cameraLauncher.launch(clearanceUri);
+                break;
             case ID:
                 File idFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_valid_id.jpg");
                 validIdUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", idFile);
                 cameraLauncher.launch(validIdUri);
-            default:
-                return;
+                break;
         }
     }
 
@@ -292,18 +292,26 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
             return;
         }
 
-        MultipartBody.Part profilePhoto = MultipartRequestBodyHelper.prepareImagePart(this, profilePhotoUri, "profilePhoto");
+        String locationText = locationInput.getText().toString().trim();
+        if (locationText.isEmpty()) {
+            progressDialog.dismiss();
+            Toast.makeText(this, "Please fill Location field.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        MultipartBody.Part profilePhoto = (profilePhotoUri != null) ? MultipartRequestBodyHelper.prepareImagePart(this, profilePhotoUri, "profilePhoto") : null;
         MultipartBody.Part clearance = MultipartRequestBodyHelper.prepareImagePart(this, clearanceUri, "clearance");
         MultipartBody.Part validId = MultipartRequestBodyHelper.prepareImagePart(this, validIdUri, "validId");
 
         RequestBody birthDate = MultipartRequestBodyHelper.createPartFromString(formattedDateForApi);
-        RequestBody location = MultipartRequestBodyHelper.createPartFromString(locationInput.getText().toString());
+        RequestBody address = MultipartRequestBodyHelper.createPartFromString(locationText);
+        RequestBody location = MultipartRequestBodyHelper.createPartFromString(locationText);
 
         // Using placeholders since this activity no longer handles salary
         RequestBody salaryValue = MultipartRequestBodyHelper.createPartFromString("0");
         RequestBody salaryType = MultipartRequestBodyHelper.createPartFromString("undecided");
 
-        sendProfileToApi(token, profilePhoto, clearance, validId, birthDate, location, salaryValue, salaryType);
+        sendProfileToApi(token, profilePhoto, clearance, validId, birthDate, address, location, salaryValue, salaryType);
     }
 
     private void sendProfileToApi(
@@ -312,22 +320,23 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
             MultipartBody.Part clearance,
             MultipartBody.Part validId,
             RequestBody birthDate,
-            RequestBody location,
+            RequestBody address,   // Added
+            RequestBody location,  // Added
             RequestBody salaryValue,
             RequestBody salaryType
     ) {
         apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
         apiService.setupSeekerProfile(
-                profilePhoto, clearance, validId,
-                birthDate, location, salaryValue, salaryType
+                profilePhoto, clearance, validId, address,
+                birthDate, location
         ).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     Toast.makeText(EditSeekerProfileActivity.this, "Profile Setup Complete!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(EditSeekerProfileActivity.this, SeekerDashboardActivity.class);
+                    Intent intent = new Intent(EditSeekerProfileActivity.this, SeekerJobPreferences.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();

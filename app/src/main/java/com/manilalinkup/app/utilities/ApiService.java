@@ -26,6 +26,9 @@ import com.manilalinkup.app.models.SeekerRequest;
 import com.manilalinkup.app.models.SendMessageRequest;
 import com.manilalinkup.app.models.SubmitRatingRequest;
 import com.manilalinkup.app.models.UnregisterDeviceRequest;
+import com.manilalinkup.app.models.SeekerPreferencesModel;
+import com.manilalinkup.app.models.SeekerRequest;
+import com.manilalinkup.app.models.ServiceTagModel;
 import com.manilalinkup.app.models.UpdateApplicationStatusRequest;
 import com.manilalinkup.app.models.UserProfileModel;
 import com.manilalinkup.app.models.WithdrawApplicationRequest;
@@ -133,4 +136,12 @@ public interface ApiService {
 
     @POST("api/devices/unregister")
     Call<ResponseBody> unregisterDevice(@Body UnregisterDeviceRequest request);
+
+    // Service Tags
+    @GET("api/service-tags")
+    Call<ApiResponse<List<ServiceTagModel>>> getServiceTags();
+
+    // Seeker Preferences
+    @POST("api/seeker/preferences")
+    Call<ApiResponse<SeekerPreferencesModel>> updateSeekerPreferences(@Body SeekerPreferencesModel request);
 }
