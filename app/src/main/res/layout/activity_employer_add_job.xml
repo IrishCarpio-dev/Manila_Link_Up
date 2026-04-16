@@ -80,9 +80,10 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation_view"
         android:layout_below="@id/card_view_dashboard_top_employer"
-        android:paddingBottom="150dp"
-        android:clipToPadding="false">
+        android:clipToPadding="false"
+        android:paddingBottom="150dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -169,8 +170,8 @@
                     android:layout_below="@id/lblLocation"
                     android:background="#F0F0F0"
                     android:importantForAccessibility="yes"
-                    android:paddingLeft="12dp"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:paddingLeft="12dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
