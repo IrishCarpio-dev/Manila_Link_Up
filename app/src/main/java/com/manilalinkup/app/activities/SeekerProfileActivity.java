@@ -41,13 +41,37 @@ public class SeekerProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seeker_profile);
+        settingsIcon = findViewById(R.id.image_view_seeker_settings_icon);
+        summaryEditText = findViewById(R.id.editText_summary);
+        recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
+        recyclerViewExperience = findViewById(R.id.recycler_view_experience);
 
-        initializeViews();
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        bottomNavigationView.setSelectedItemId(R.id.nav_profile_seeker);
+        bottomNavigationView.setOnItemSelectedListener(menuItem ->  {
+            if(menuItem.getItemId() == R.id.nav_home_seeker){
+                startActivity(new Intent(SeekerProfileActivity.this, SeekerDashboardActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_notifications_seeker) {
+                //No notif yet for seeker
+                startActivity(new Intent(SeekerProfileActivity.this, EmployerNotificationsActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_activity_seeker) {
+                startActivity(new Intent(SeekerProfileActivity.this, SaveSeekerActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }else if(menuItem.getItemId() == R.id.nav_chat_seeker) {
+                startActivity(new Intent(SeekerProfileActivity.this, ChatSeekerActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }
+            return true;
+        });
 
         setupFeedbacksRecyclerView();
         setupExperienceRecyclerView();
-
-        setupBottomNavigation();
         setupClickListeners();
 
         viewAllRatings = findViewById(R.id.item_card_see_more_ratings_seeker);
@@ -59,18 +83,6 @@ public class SeekerProfileActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void initializeViews() {
-        settingsIcon = findViewById(R.id.image_view_seeker_settings_icon);
-        summaryEditText = findViewById(R.id.editText_summary);
-        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-        recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
-        recyclerViewExperience = findViewById(R.id.recycler_view_experience);
-
-        if (bottomNavigationView != null) {
-            bottomNavigationView.setSelectedItemId(R.id.nav_profile);
-        }
     }
 
     private void setupFeedbacksRecyclerView() {
@@ -98,21 +110,6 @@ public class SeekerProfileActivity extends AppCompatActivity {
         recyclerViewExperience.setAdapter(adapterExperience);
     }
 
-    private void setupBottomNavigation() {
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-
-            if (id == R.id.nav_home) {
-                Intent intent = new Intent(this, SeekerDashboardActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (id == R.id.nav_profile) {
-                return true;
-            }
-            return false;
-        });
-    }
 
     private void setupClickListeners() {
         if (settingsIcon != null) {
