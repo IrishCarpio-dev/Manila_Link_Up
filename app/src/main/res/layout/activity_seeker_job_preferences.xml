@@ -248,38 +248,27 @@
                     android:textColor="#212121"
                     android:textSize="16sp" />
 
-                <LinearLayout
-                    android:id="@+id/min_salary"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_layout_salary"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:hint="e.g. 80"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:suffixText="/hr">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etMinSalary"
-                        android:layout_width="100dp"
-                        android:layout_height="30dp"
+                        android:layout_width="match_parent"
                         android:background="#F0F0F0"
-                        android:gravity="center"
-                        android:hint="e.g. 80"
-                        android:inputType="number"
-                        android:paddingHorizontal="12dp"
-                        app:boxBackgroundColor="#F5F5F5"
-                        app:boxCornerRadiusBottomEnd="8dp"
-                        app:boxCornerRadiusBottomStart="8dp"
-                        app:boxCornerRadiusTopEnd="8dp"
-                        app:boxCornerRadiusTopStart="8dp"
-                        app:boxStrokeWidth="0dp"
-                        app:boxStrokeWidthFocused="0dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="/ hr"
-                        android:textSize="16sp" />
-                </LinearLayout>
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <TextView
@@ -322,6 +311,7 @@
                         android:id="@+id/edit_text_duration_amount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="#F0F0F0"
                         android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -345,6 +335,7 @@
                         android:id="@+id/auto_complete_rate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="#F0F0F0"
                         android:inputType="none"
                         android:minHeight="48dp"
                         android:paddingStart="16dp"
@@ -375,7 +366,6 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="e.g. Sta.Ana, Manila, Sampaloc, Manila"
-                app:boxBackgroundColor="#F5F5F5"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
