@@ -236,7 +236,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/recycler_view_ratings_card"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="21dp"
                 android:paddingStart="16dp"
                 android:text="Work Experience"
                 android:textColor="#212121"

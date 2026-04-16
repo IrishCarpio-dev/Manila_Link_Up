@@ -16,20 +16,21 @@ import com.manilalinkup.app.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SeekerNotificationActivity extends AppCompatActivity { // Added missing opening brace
+public class SeekerNotificationActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewNotifications;
     private EmployerNotificationsAdapter adapterNotif;
     private List<EmployerNotificationsModel> notifListCard;
-    private BottomNavigationView bottomNavigationViewEmployer;
+    private BottomNavigationView bottomNavigationViewSeeker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_employer_notifications);
 
-        recyclerViewNotifications = findViewById(R.id.recycler_view_employer_own_posts);
+        setContentView(R.layout.activity_seeker_notification);
+
+        recyclerViewNotifications = findViewById(R.id.recycler_view_seeker_notifications);
         recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(this));
 
         notifListCard = new ArrayList<>();
@@ -38,27 +39,36 @@ public class SeekerNotificationActivity extends AppCompatActivity { // Added mis
         adapterNotif = new EmployerNotificationsAdapter(notifListCard);
         recyclerViewNotifications.setAdapter(adapterNotif);
 
-        bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_notifications);
+        // 3. Setup Bottom Navigation
+        bottomNavigationViewSeeker = findViewById(R.id.bottom_navigation_view_seeker);
 
-        bottomNavigationViewEmployer.setOnItemSelectedListener(menuItem -> {
+        // Force the Seeker Menu to ensure it doesn't default to Employer
+        bottomNavigationViewSeeker.getMenu().clear();
+        bottomNavigationViewSeeker.inflateMenu(R.menu.bottom_nav_menu_icons);
+
+        // Highlights the 2nd icon (Notifications)
+        bottomNavigationViewSeeker.setSelectedItemId(R.id.nav_notifications_seeker);
+
+        bottomNavigationViewSeeker.setOnItemSelectedListener(menuItem -> {
             int itemId = menuItem.getItemId();
 
-            // Changed context from EmployerNotificationsActivity.this to SeekerNotificationActivity.this
-            if (itemId == R.id.nav_home) {
-                startActivity(new Intent(SeekerNotificationActivity.this, SeekerDashboardActivity.class));
+            // All navigation stays within the Seeker Activity flow
+            if (itemId == R.id.nav_home_seeker) {
+                startActivity(new Intent(this, SeekerDashboardActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
-            } else if (itemId == R.id.nav_add_job) {
-                startActivity(new Intent(SeekerNotificationActivity.this, SeekerJobPostActivity.class));
+            } else if (itemId == R.id.nav_notifications_seeker) {
+                return true; // Already on this screen
+            } else if (itemId == R.id.nav_activity_seeker) {
+                // The middle button (My Activity)
+                // If you don't have a separate Activity for this yet, keep it on Dashboard or current
+                return true;
+            } else if (itemId == R.id.nav_chat_seeker) {
+                startActivity(new Intent(this, ChatSeekerActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
-            } else if (itemId == R.id.nav_chat) {
-                startActivity(new Intent(SeekerNotificationActivity.this, ChatSeekerActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (itemId == R.id.nav_profile) {
-                startActivity(new Intent(SeekerNotificationActivity.this, SeekerProfileActivity.class));
+            } else if (itemId == R.id.nav_profile_seeker) {
+                startActivity(new Intent(this, SeekerProfileActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
             }
@@ -69,30 +79,16 @@ public class SeekerNotificationActivity extends AppCompatActivity { // Added mis
     private void mockNotifDta() {
         notifListCard.add(new EmployerNotificationsModel(
                 R.drawable.people_notif_icon,
-                "New Applicant: Service Crew",
-                "Juan Dela Cruz applied for your Binondo branch.",
+                "Application Update",
+                "Your application for 'Barista' has been viewed.",
                 "2 mins ago"
         ));
 
         notifListCard.add(new EmployerNotificationsModel(
                 R.drawable.chat_notif_icon,
-                "Inquiry from Maria",
-                "\"Is the Barista position still available?\"",
+                "New Message",
+                "Starbucks Manila sent you an interview invite.",
                 "1 hour ago"
         ));
-
-        notifListCard.add(new EmployerNotificationsModel(
-                R.drawable.schedule_notif_icontwo,
-                "Urgent: Complete Profile",
-                "Add your business permit to verify your account.",
-                "3 hours ago"
-        ));
-
-        notifListCard.add(new EmployerNotificationsModel(
-                R.drawable.people_notif_icon,
-                "New Applicant: Delivery Rider",
-                "Mark Santos submitted his resume for Malate.",
-                "Yesterday"
-        ));
     }
-} // Corrected closing brace
+}
