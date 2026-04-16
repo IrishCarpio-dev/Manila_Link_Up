@@ -171,7 +171,7 @@ public class EmployerDashboard extends AppCompatActivity {
             String token = tokenTask.getResult().getToken();
             String uid = user.getUid();
 
-            GetJobsRequest request = new GetJobsRequest(PAGE_SIZE, lastCreatedAt, null, null, uid);
+            GetJobsRequest request = new GetJobsRequest(PAGE_SIZE, lastCreatedAt, null, null, uid, null, null);
             ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
             apiService.getJobs(request).enqueue(new Callback<ApiResponse<List<JobModel>>>() {
