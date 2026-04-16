@@ -9,22 +9,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.manilalinkup.app.models.EmployerNotificationsModel;
+import com.manilalinkup.app.models.NotificationsModel;
 import com.manilalinkup.app.R;
 
 import java.util.List;
 
-public class EmployerNotificationsAdapter extends RecyclerView.Adapter<EmployerNotificationsAdapter.EmployerNotificationsViewHolder> {
+public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.EmployerNotificationsViewHolder> {
 
-    private final List<EmployerNotificationsModel> employerNotificationsModelList;
+    private final List<NotificationsModel> notificationsModelList;
 
-    public EmployerNotificationsAdapter(List<EmployerNotificationsModel> employerNotificationsModelList) {
-        this.employerNotificationsModelList = employerNotificationsModelList;
+    public NotificationsAdapter(List<NotificationsModel> notificationsModelList) {
+        this.notificationsModelList = notificationsModelList;
     }
 
     @Override
     public int getItemCount() {
-        return employerNotificationsModelList.size();
+        return notificationsModelList.size();
     }
 
     @NonNull
@@ -36,7 +36,7 @@ public class EmployerNotificationsAdapter extends RecyclerView.Adapter<EmployerN
 
     @Override
     public void onBindViewHolder(@NonNull EmployerNotificationsViewHolder holder, int position) {
-        holder.bind(employerNotificationsModelList.get(position));
+        holder.bind(notificationsModelList.get(position));
     }
 
     static class EmployerNotificationsViewHolder extends RecyclerView.ViewHolder{
@@ -53,11 +53,11 @@ public class EmployerNotificationsAdapter extends RecyclerView.Adapter<EmployerN
             notifTimeStamp = itemView.findViewById(R.id.text_view_notif_timestamp);
         }
 
-        public void bind(EmployerNotificationsModel employerNotificationsModel){
-            imageType.setImageResource(employerNotificationsModel.getType());
-            notifTitle.setText(employerNotificationsModel.getTitle());
-            descriptionTitle.setText(employerNotificationsModel.getDescription());
-            notifTimeStamp.setText(employerNotificationsModel.getTimestamp());
+        public void bind(NotificationsModel notificationsModel){
+            imageType.setImageResource(notificationsModel.getType());
+            notifTitle.setText(notificationsModel.getTitle());
+            descriptionTitle.setText(notificationsModel.getDescription());
+            notifTimeStamp.setText(notificationsModel.getTimestamp());
         }
     }
 
