@@ -1,7 +1,10 @@
 package com.manilalinkup.app.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,19 +12,34 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.manilalinkup.app.models.EmployerChatModel;
-import com.manilalinkup.app.adapters.EmployerChatTabAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
+import com.manilalinkup.app.adapters.EmployerChatTabAdapter;
+import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.ChatListItemModel;
+import com.manilalinkup.app.models.GetChatsRequest;
+import com.manilalinkup.app.models.HideChatRequest;
+import com.manilalinkup.app.utilities.ApiService;
+import com.manilalinkup.app.utilities.ErrorUtils;
+import com.manilalinkup.app.utilities.RetrofitClient;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChatEmployerActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewChat;
     private EmployerChatTabAdapter employerChatTabAdapter;
-    private List<EmployerChatModel> employerChatModelList;
-    BottomNavigationView bottomNavigationViewEmployer;
+    private List<ChatListItemModel> chatList;
+    private BottomNavigationView bottomNavigationViewEmployer;
+    private View emptyState;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,81 +48,106 @@ public class ChatEmployerActivity extends AppCompatActivity {
 
         recyclerViewChat = findViewById(R.id.recycler_view_seeker_chat_tab);
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
+        emptyState = findViewById(R.id.empty_state_chats);
 
-        employerChatModelList = new ArrayList<>();
-        mockChatData();
+        chatList = new ArrayList<>();
 
-        employerChatTabAdapter = new EmployerChatTabAdapter(employerChatModelList, chat -> {
-            Intent intent = new Intent(ChatEmployerActivity.this, ChatThreadEmployer.class );
-            intent.putExtra("SEEKER_UID", chat.getUid());
-            intent.putExtra("SEEKER_NAME", chat.getSeekerName());
-            startActivity(intent);
-        });
+        employerChatTabAdapter = new EmployerChatTabAdapter(
+                chatList,
+                chat -> {
+                    Intent intent = new Intent(ChatEmployerActivity.this, ChatThreadEmployer.class);
+                    intent.putExtra("CHAT_ID", chat.getId());
+                    intent.putExtra("JOB_TITLE", chat.getJob() != null ? chat.getJob().getTitle() : "");
+                    intent.putExtra("COUNTERPART_NAME", chat.getCounterpart() != null ? chat.getCounterpart().getName() : "");
+                    startActivity(intent);
+                },
+                chat -> showHideDialog(chat)
+        );
         recyclerViewChat.setAdapter(employerChatTabAdapter);
-
 
         bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
         bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_chat);
-        bottomNavigationViewEmployer.setOnItemSelectedListener(menuItem ->  {
-
-            if(menuItem.getItemId() == R.id.nav_home){
-                startActivity(new Intent(ChatEmployerActivity.this, EmployerDashboard.class));
+        bottomNavigationViewEmployer.setOnItemSelectedListener(menuItem -> {
+            if (menuItem.getItemId() == R.id.nav_home) {
+                startActivity(new Intent(this, EmployerDashboard.class));
                 overridePendingTransition(0, 0);
-                return true;
-            }else if(menuItem.getItemId() == R.id.nav_notifications) {
-                startActivity(new Intent(ChatEmployerActivity.this, EmployerNotificationsActivity.class));
+            } else if (menuItem.getItemId() == R.id.nav_notifications) {
+                startActivity(new Intent(this, EmployerNotificationsActivity.class));
                 overridePendingTransition(0, 0);
-                return true;
-            }else if(menuItem.getItemId() == R.id.nav_add_job) {
-                startActivity(new Intent(ChatEmployerActivity.this, EmployerAddJobActivity.class));
+            } else if (menuItem.getItemId() == R.id.nav_add_job) {
+                startActivity(new Intent(this, EmployerAddJobActivity.class));
                 overridePendingTransition(0, 0);
-                return true;
-            }else if(menuItem.getItemId() == R.id.nav_profile) {
-                startActivity(new Intent(ChatEmployerActivity.this, EmployerProfileActivity.class));
+            } else if (menuItem.getItemId() == R.id.nav_profile) {
+                startActivity(new Intent(this, EmployerProfileActivity.class));
                 overridePendingTransition(0, 0);
-                return true;
             }
-
             return true;
         });
     }
 
-    private void mockChatData() {
-        // 1. A new message from an applicant
-        employerChatModelList.add(new EmployerChatModel(
-                R.drawable.frieren, // Replace with your actual drawable
-                "Frieren Chan",
-                "Hello! Is the Barista position still open?",
-                "10:45 AM",
-                "uid_001"
-        ));
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadChats();
+    }
 
-        // 2. A follow-up message
-        employerChatModelList.add(new EmployerChatModel(
-                R.drawable.seeker_prof_mock1,
-                "Fern Frieren",
-                "I have sent my resume to your email. Thank you!",
-                "Yesterday",
-                "uid_002"
-        ));
+    private void loadChats() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
 
-        // 3. An older conversation
-        employerChatModelList.add(new EmployerChatModel(
-                R.drawable.profpic_mock2,
-                "Stark Rizal",
-                "When can I start the orientation?",
-                "Mar 25",
-                "uid_003"
-        ));
+        user.getIdToken(true).addOnSuccessListener(result -> {
+            ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
+            api.getChats(new GetChatsRequest(20, null)).enqueue(new Callback<ApiResponse<List<ChatListItemModel>>>() {
+                @Override
+                public void onResponse(Call<ApiResponse<List<ChatListItemModel>>> call, Response<ApiResponse<List<ChatListItemModel>>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        chatList.clear();
+                        chatList.addAll(response.body().getData());
+                        employerChatTabAdapter.notifyDataSetChanged();
+                        if (emptyState != null) {
+                            emptyState.setVisibility(chatList.isEmpty() ? View.VISIBLE : View.GONE);
+                        }
+                    }
+                }
 
-        // 4. Another inquiry
-        employerChatModelList.add(new EmployerChatModel(
-                R.drawable.profpicmock3,
-                "Himmel Bonifacio",
-                "Is the salary paid weekly or monthly?",
-                "Mar 24",
-                "uid_004"
-        ));
+                @Override
+                public void onFailure(Call<ApiResponse<List<ChatListItemModel>>> call, Throwable t) {
+                    ErrorUtils.showThrowableError(ChatEmployerActivity.this, t);
+                }
+            });
+        });
+    }
 
+    private void showHideDialog(ChatListItemModel chat) {
+        new AlertDialog.Builder(this)
+                .setTitle("Hide chat")
+                .setMessage("Hide this conversation? It will reappear if you receive a new message.")
+                .setPositiveButton("Hide", (d, w) -> hideChat(chat))
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void hideChat(ChatListItemModel chat) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        user.getIdToken(true).addOnSuccessListener(result -> {
+            ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
+            api.hideChat(new HideChatRequest(chat.getId())).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.isSuccessful()) {
+                        chatList.remove(chat);
+                        employerChatTabAdapter.notifyDataSetChanged();
+                        Toast.makeText(ChatEmployerActivity.this, "Chat hidden", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    ErrorUtils.showThrowableError(ChatEmployerActivity.this, t);
+                }
+            });
+        });
     }
 }

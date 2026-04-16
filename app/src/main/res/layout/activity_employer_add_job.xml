@@ -358,6 +358,40 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/text_view_tags_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout_duration_row"
+                android:layout_margin="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Tags (optional)"
+                android:textColor="#212121"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edit_text_tag_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_view_tags_label"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="#F5F5F5"
+                android:hint="Type a tag and press Enter"
+                android:inputType="text"
+                android:imeOptions="actionDone"
+                android:padding="12dp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edit_text_tag_input"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp" />
+
         </RelativeLayout>
     </ScrollView>
 

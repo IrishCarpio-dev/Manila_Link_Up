@@ -14,6 +14,8 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -27,7 +29,9 @@ import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.ResponseBody;
@@ -45,8 +49,11 @@ public class EmployerAddJobActivity extends AppCompatActivity {
     TextView greetingNameText;
     ProgressDialog progressDialog;
     EditText locationInput;
+    EditText tagInput;
+    ChipGroup tagChipGroup;
 
     private String formattedExpiresAt = "";
+    private final List<String> selectedTags = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +93,23 @@ public class EmployerAddJobActivity extends AppCompatActivity {
         expiresAtInput.setFocusable(false);
 
         AddressAutocompleteHelper.attachDistrictAutocomplete(locationInput);
+
+        tagInput      = findViewById(R.id.edit_text_tag_input);
+        tagChipGroup  = findViewById(R.id.chip_group_tags);
+        if (tagInput != null) {
+            tagInput.setOnEditorActionListener((v, actionId, event) -> {
+                String raw = tagInput.getText() != null ? tagInput.getText().toString().trim() : "";
+                if (!raw.isEmpty() && selectedTags.size() < 10) {
+                    String tag = raw.toLowerCase().replaceAll("[^a-z0-9\\-]", "");
+                    if (!tag.isEmpty() && !selectedTags.contains(tag)) {
+                        selectedTags.add(tag);
+                        addTagChip(tag);
+                    }
+                    tagInput.setText("");
+                }
+                return true;
+            });
+        }
 
         postJobButton.setOnClickListener(v -> postJob());
 
@@ -228,9 +252,20 @@ public class EmployerAddJobActivity extends AppCompatActivity {
         });
     }
 
+    private void addTagChip(String tag) {
+        Chip chip = new Chip(this);
+        chip.setText(tag);
+        chip.setCloseIconVisible(true);
+        chip.setOnCloseIconClickListener(v -> {
+            selectedTags.remove(tag);
+            tagChipGroup.removeView(chip);
+        });
+        tagChipGroup.addView(chip);
+    }
+
     private void submitCreateJob(String token, String employerUid, String title, String description,
                                   String location, String expiresAt, String duration, double salary) {
-        CreateJobRequest request = new CreateJobRequest(title, description, employerUid, expiresAt, duration, location, salary);
+        CreateJobRequest request = new CreateJobRequest(title, description, employerUid, expiresAt, duration, location, salary, selectedTags);
         ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
         apiService.createJob(request).enqueue(new Callback<ResponseBody>() {
