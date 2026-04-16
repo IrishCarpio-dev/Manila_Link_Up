@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -26,9 +27,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.SeekerPreferencesModel;
 import com.manilalinkup.app.models.ServiceTagModel;
 import com.manilalinkup.app.utilities.AddressAutocompleteHelper;
 import com.manilalinkup.app.utilities.ApiService;
+import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
 
 import java.util.ArrayList;
@@ -44,9 +47,9 @@ import retrofit2.Response;
 import com.manilalinkup.app.R;
 
 public class SeekerJobPreferences extends AppCompatActivity {
-    private TextInputEditText etMinSalary, etDurationAmount;
+    private TextInputEditText minSalaryInput, durationAmountInput;
     private AutoCompleteTextView rateDropdown;
-    private EditText etLocation;
+    private EditText preferredLocationInput;
     private ChipGroup chipGroupServiceTags;
     private TextView tvServiceTagsError, greetingNameText;
     private ExtendedFloatingActionButton btnSave;
@@ -61,14 +64,24 @@ public class SeekerJobPreferences extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_seeker_job_preferences);
 
-        etMinSalary = findViewById(R.id.etMinSalary);
-        etDurationAmount = findViewById(R.id.edit_text_duration_amount);
+        minSalaryInput = findViewById(R.id.edit_text_MinSalary);
+        durationAmountInput = findViewById(R.id.edit_text_duration_amount);
         rateDropdown = findViewById(R.id.auto_complete_rate);
-        etLocation = findViewById(R.id.edit_text_location);
+        preferredLocationInput = findViewById(R.id.edit_text_location);
         chipGroupServiceTags = findViewById(R.id.chip_group_service_tags);
         tvServiceTagsError = findViewById(R.id.text_view_service_tags_error);
         greetingNameText = findViewById(R.id.textview_greeting_name_seeker);
         btnSave = findViewById(R.id.button_post_job);
+
+        TextView tvSkip = findViewById(R.id.text_view_skip);
+        tvSkip.setPaintFlags(tvSkip.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvSkip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SeekerJobPreferences.this, SeekerDashboardActivity.class);
+                startActivity(intent);
+            }
+        });
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Saving preferences...");
@@ -83,7 +96,7 @@ public class SeekerJobPreferences extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, durationUnits);
         rateDropdown.setAdapter(adapter);
 
-        AddressAutocompleteHelper.attachDistrictAutocomplete(etLocation);
+        AddressAutocompleteHelper.attachDistrictAutocomplete(preferredLocationInput);
 
         loadServiceTags();
 
@@ -199,9 +212,9 @@ public class SeekerJobPreferences extends AppCompatActivity {
     }
 
     private void savePreferences() {
-        String salary = etMinSalary.getText().toString().trim();
-        String location = etLocation.getText().toString().trim();
-        String durationValue = etDurationAmount.getText().toString().trim();
+        String salaryStr = minSalaryInput.getText() != null ? minSalaryInput.getText().toString().trim() : "";
+        String location = preferredLocationInput.getText() != null ? preferredLocationInput.getText().toString().trim() : "";
+        String durationValue = durationAmountInput.getText() != null ? durationAmountInput.getText().toString().trim() : "";
         String durationUnit = rateDropdown.getText().toString().trim();
 
         tvServiceTagsError.setVisibility(View.GONE);
@@ -209,17 +222,63 @@ public class SeekerJobPreferences extends AppCompatActivity {
         if (selectedTagIds.isEmpty()) {
             tvServiceTagsError.setText("Please select at least one service.");
             tvServiceTagsError.setVisibility(View.VISIBLE);
+            chipGroupServiceTags.requestFocus();
             return;
         }
 
-        if (salary.isEmpty() || location.isEmpty() || durationValue.isEmpty() || durationUnit.isEmpty()) {
+        if (salaryStr.isEmpty() || location.isEmpty() || durationValue.isEmpty() || durationUnit.isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // API Call logic would go here, similar to Employer submitCreateJob
-        // But sending to the Seeker preferences endpoint
-        Toast.makeText(this, "Preferences Saved!", Toast.LENGTH_SHORT).show();
+        double salary;
+        try {
+            salary = Double.parseDouble(salaryStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid salary format", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        progressDialog.show();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            progressDialog.dismiss();
+            return;
+        }
+        user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+            if(tokenTask.isSuccessful()){
+                String token = tokenTask.getResult().getToken();
+                String duration = durationValue + " " + durationUnit;
+                submitSeekerPreference(token, location, duration, salary);
+            } else {
+                progressDialog.dismiss();
+                Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
+    private void submitSeekerPreference(String token, String location, String duration, double salary) {
+        SeekerPreferencesModel preference = new SeekerPreferencesModel(salary, duration, location, new ArrayList<>(selectedTagIds));
+
+        ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
+
+        apiService.updateSeekerPreferences(preference).enqueue(new Callback<ApiResponse<SeekerPreferencesModel>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<SeekerPreferencesModel>> call, Response<ApiResponse<SeekerPreferencesModel>> response) {
+                progressDialog.dismiss();
+                if (response.isSuccessful()) {
+                    Toast.makeText(SeekerJobPreferences.this, "Preferences Saved!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(SeekerJobPreferences.this, SeekerDashboardActivity.class));
+                    finish();
+                } else {
+                    ErrorUtils.showErrorMessage(SeekerJobPreferences.this, response.errorBody());
+                }
+            }
+            @Override
+            public void onFailure(Call<ApiResponse<SeekerPreferencesModel>> call, Throwable t) {
+                progressDialog.dismiss();
+                ErrorUtils.showThrowableError(SeekerJobPreferences.this, t);
+            }
+        });
+    }
 }

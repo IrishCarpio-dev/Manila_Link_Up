@@ -42,6 +42,7 @@ public interface ApiService {
             @Part MultipartBody.Part clearance,
             @Part MultipartBody.Part validId,
             @Part("birthDate") RequestBody birthDate,
+            @Part("address") RequestBody address,
             @Part("location") RequestBody location,
             @Part("salaryValue") RequestBody salaryValue,
             @Part("salaryType") RequestBody salaryType
