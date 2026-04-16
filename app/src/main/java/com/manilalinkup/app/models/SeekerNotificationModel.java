@@ -2,18 +2,15 @@ package com.manilalinkup.app.models;
 
 import androidx.annotation.NonNull;
 
-/**
- * Model class for Seeker Notifications.
- * Suppressing "unused" because these are often accessed dynamically by adapters or databases.
- */
-@SuppressWarnings("unused")
+import com.manilalinkup.app.adapters.SeekerNotificationsAdapter;
+
+
 public class SeekerNotificationModel {
     private int imageType;
     private String notifTitle;
     private String descriptionNotif;
     private String notifTimeStamp;
 
-    // Required empty constructor for Firebase/JSON parsing
     public SeekerNotificationModel() {
     }
 
