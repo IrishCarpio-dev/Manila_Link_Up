@@ -75,164 +75,30 @@
                 android:textSize="16sp" />
 
             <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chip_group_services_tags"
+                android:id="@+id/chip_group_service_tags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_view_preferred_services"
                 android:elevation="8dp"
                 app:chipSpacingHorizontal="8dp"
-                app:chipSpacingVertical="4dp">
+                app:chipSpacingVertical="4dp"/>
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_child_care"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Child Care"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
+            <TextView
+                android:id="@+id/text_view_service_tags_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/chip_group_service_tags"
+                android:layout_marginStart="20dp"
+                android:textColor="#B00020"
+                android:textSize="12sp"
+                android:visibility="gone" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_pet_care"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pet Care"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_elderly_care"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Elderly Care"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_plant_care"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Plant Care"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_household_help"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Household Help"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_errand_runner"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Errand Runner"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_moving_assistant"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Moving Assistant"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_waitstaff_serve"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Waitstaff/Server"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_cashiering"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cashiering"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_inventory"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Inventory/Stocking"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_sales"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sales Assistant"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_promodizer"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Promodizer"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_office_support"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Office Support"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_basic_repairs"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Basic Repairs"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_tutor"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tutor"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_delivery_courier"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Delivery Courier"
-                    android:textColor="@color/chip_text_state_list"
-                    app:chipBackgroundColor="@color/chip_background_state_list" />
-            </com.google.android.material.chip.ChipGroup>
 
             <LinearLayout
                 android:id="@+id/min_salary_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/chip_group_services_tags"
+                android:layout_below="@id/text_view_service_tags_error"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
