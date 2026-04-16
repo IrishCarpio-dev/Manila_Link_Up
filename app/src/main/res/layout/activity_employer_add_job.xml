@@ -288,6 +288,18 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
+                android:id="@+id/text_view_salary_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/text_input_layout_salary"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="/hr"
+                android:textColor="#212121"
+                android:textSize="16sp" />
+
+            <TextView
                 android:id="@+id/text_view_duration_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -359,6 +371,36 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/text_view_service_tags_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout_duration_row"
+                android:layout_margin="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Service(s)"
+                android:textColor="#212121"
+                android:textSize="16sp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_service_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_view_service_tags_label"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp" />
+
+            <TextView
+                android:id="@+id/text_view_service_tags_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/chip_group_service_tags"
+                android:layout_marginStart="20dp"
+                android:textColor="#B00020"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
         </RelativeLayout>
     </ScrollView>
 

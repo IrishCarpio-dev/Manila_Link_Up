@@ -1,9 +1,11 @@
 package com.manilalinkup.app.models;
 
+import java.util.List;
+
 public class CreateJobRequest {
     String title, description, employer, expiresAt, duration, location;
-
     Double salary;
+    List<String> serviceTags;
 
     public CreateJobRequest(
             String title,
@@ -12,7 +14,8 @@ public class CreateJobRequest {
             String expiresAt,
             String duration,
             String location,
-            Double salary
+            Double salary,
+            List<String> serviceTags
     ) {
         this.title = title;
         this.description = description;
@@ -21,6 +24,6 @@ public class CreateJobRequest {
         this.duration = duration;
         this.location = location;
         this.salary = salary;
+        this.serviceTags = serviceTags;
     }
-
 }
