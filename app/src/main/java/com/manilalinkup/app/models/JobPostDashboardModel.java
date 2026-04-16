@@ -1,5 +1,7 @@
 package com.manilalinkup.app.models;
 
+import android.content.Intent;
+
 public class JobPostDashboardModel {
     String jobTitle, employerName, jobPostLocation, job_duration, howLongJobIsPosted;
     String employerProfilePicture;
