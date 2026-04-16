@@ -171,7 +171,7 @@
             android:layout_below="@id/image_view_id_preview"
             android:layout_marginStart="30dp"
             android:layout_marginTop="24dp"
-            android:text="Preferred Location"
+            android:text="Current Location"
             android:textColor="#212121"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -216,99 +216,11 @@
             android:clickable="true"
             android:inputType="none" />
 
-        <TextView
-            android:id="@+id/lblSalary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/etDOB"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="16dp"
-            android:text="Preferred Salary"
-            android:textColor="#212121"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <RadioGroup
-            android:id="@+id/rgSalaryType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/lblSalary"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="30dp"
-            android:background="#F9F9F9"
-            android:padding="12dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="Choose salary type"
-                android:textColor="#616161" />
-
-            <RadioButton
-                android:id="@+id/rbHour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="Per Hour" />
-
-            <RadioButton
-                android:id="@+id/rbDay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Per Day" />
-
-            <RadioButton
-                android:id="@+id/rbMonth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Per Month" />
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/lblRange"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rgSalaryType"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="16dp"
-            android:text="Salary Range"
-            android:textColor="#212121"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvSalaryRange"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/lblRange"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="30dp"
-            android:background="#F9F9F9"
-            android:minHeight="100dp"
-            android:textColor="#212121"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-        <EditText
-            android:id="@+id/etCustomSalary"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_below="@id/rvSalaryRange"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:background="#F9F9F9"
-            android:hint="(Want something specific? Type you salary here!)"
-            android:inputType="number"
-            android:textSize="14sp" />
-
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/material_button_save"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:layout_below="@id/etCustomSalary"
+            android:layout_below="@id/etDOB"
             android:layout_marginStart="100dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="100dp"

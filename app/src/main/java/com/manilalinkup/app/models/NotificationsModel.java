@@ -1,12 +1,12 @@
 package com.manilalinkup.app.models;
 
-public class EmployerNotificationsModel {
+public class NotificationsModel {
     int imageType; // "message", "reminder", or "applicant"
     String notifTitle;
     String descriptionNotif;
     String notifTimeStamp;
 
-    public EmployerNotificationsModel(int imageType, String notifTitle, String descriptionNotif, String notifTimeStamp) {
+    public NotificationsModel(int imageType, String notifTitle, String descriptionNotif, String notifTimeStamp) {
         this.imageType = imageType;
         this.notifTitle = notifTitle;
         this.descriptionNotif = descriptionNotif;
