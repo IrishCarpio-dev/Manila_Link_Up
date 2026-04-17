@@ -12,7 +12,9 @@ import com.manilalinkup.app.models.GetApplicantsRequest;
 import com.manilalinkup.app.models.GetAppliedJobsRequest;
 import com.manilalinkup.app.models.GetJobsRequest;
 import com.manilalinkup.app.models.JobModel;
+import com.manilalinkup.app.models.SeekerPreferencesModel;
 import com.manilalinkup.app.models.SeekerRequest;
+import com.manilalinkup.app.models.ServiceTagModel;
 import com.manilalinkup.app.models.UpdateApplicationStatusRequest;
 import com.manilalinkup.app.models.UserProfileModel;
 import com.manilalinkup.app.models.WithdrawApplicationRequest;
@@ -40,6 +42,7 @@ public interface ApiService {
             @Part MultipartBody.Part clearance,
             @Part MultipartBody.Part validId,
             @Part("birthDate") RequestBody birthDate,
+            @Part("address") RequestBody address,
             @Part("location") RequestBody location,
             @Part("salaryValue") RequestBody salaryValue,
             @Part("salaryType") RequestBody salaryType
@@ -97,4 +100,12 @@ public interface ApiService {
 
     @POST("api/applications/updateStatus")
     Call<ApiResponse<ApplicationModel>> updateApplicationStatus(@Body UpdateApplicationStatusRequest request);
+
+    // Service Tags
+    @GET("api/service-tags")
+    Call<ApiResponse<List<ServiceTagModel>>> getServiceTags();
+
+    // Seeker Preferences
+    @POST("api/seeker/preferences")
+    Call<ApiResponse<SeekerPreferencesModel>> updateSeekerPreferences(@Body SeekerPreferencesModel request);
 }
