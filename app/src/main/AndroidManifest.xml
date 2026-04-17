@@ -16,7 +16,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".activities.SeekerJobPreferences"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".activities.AppliedJobPostActivity"
             android:exported="false" />
