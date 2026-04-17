@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth; // Added
 import com.manilalinkup.app.R;
+import com.manilalinkup.app.utilities.LogoutHelper;
 
 public class EmployerSettingsActivity extends AppCompatActivity {
 
@@ -87,17 +88,7 @@ public class EmployerSettingsActivity extends AppCompatActivity {
                 .setTitle("Logout")
                 .setMessage("Are you sure you want to log out from Manila LinkUp?")
                 .setPositiveButton("Logout", (dialog, which) -> {
-
-                    mAuth.signOut();
-
-                    Intent intent = new Intent(EmployerSettingsActivity.this, MainActivity.class);
-
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                    startActivity(intent);
-                    finish();
-
-                    showToast("Logged out successfully");
+                    LogoutHelper.logout(EmployerSettingsActivity.this, mAuth);
                 })
                 .setNegativeButton("Cancel", null)
                 .show();

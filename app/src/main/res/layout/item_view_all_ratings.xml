@@ -33,6 +33,15 @@
             android:layout_marginStart="4dp"
             android:layout_weight="1">
 
+            <TextView
+                android:id="@+id/item_rating_job_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:textColor="#9E9E9E"
+                android:textSize="11sp"
+                tools:text="Babysitter · Binondo" />
+
             <LinearLayout
                 android:id="@+id/name_block_container"
                 android:layout_width="match_parent"

@@ -138,21 +138,13 @@ public class SignUpActivity extends AppCompatActivity {
         ApiService apiService = RetrofitClient.getClient(idToken).create(ApiService.class);
 
         SeekerRequest request = new SeekerRequest(
-                actualUid, // Pass the short UID here
                 firstnameInput,
                 middleNameInput,
                 lastnameInput,
                 suffixInput,
                 emailAddressInput,
-                "Not set",
-                "2000-01-01", // Use a valid date format string for Laravel
-                "Manila",
                 mobileNumberInput,
-                0,
-                "default_url",
-                "pending",
-                true,
-                true
+                "2000-01-01"
         );
 
         apiService.registerSeeker(request).enqueue(new Callback<ResponseBody>() {

@@ -16,13 +16,20 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.RegisterDeviceRequest;
+import com.manilalinkup.app.models.ServiceTagModel;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.utilities.SessionCache;
 import com.manilalinkup.app.models.UserProfileModel;
 
+import okhttp3.ResponseBody;
+
+import java.util.List;
 import java.util.Optional;
 
 import retrofit2.Call;
@@ -147,7 +154,19 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void registerFcmToken(String idToken) {
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(fcmToken -> {
+            ApiService api = RetrofitClient.getClient(idToken).create(ApiService.class);
+            api.registerDevice(new RegisterDeviceRequest(fcmToken, "android"))
+                    .enqueue(new retrofit2.Callback<ResponseBody>() {
+                @Override public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {}
+                @Override public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {}
+            });
+        });
+    }
+
     private void checkUserRole(String token) {
+        registerFcmToken(token);
         ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
         apiService.getUserProfile().enqueue(new Callback<ApiResponse<UserProfileModel>>() {
@@ -155,6 +174,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<ApiResponse<UserProfileModel>> call, Response<ApiResponse<UserProfileModel>> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful()) {
+                    SessionCache.getInstance().setUserProfile(response.body().getData());
+                    SessionCache.getInstance().refreshServiceTags(token, new SessionCache.ServiceTagsCallback() {
+                        @Override public void onAvailable(List<ServiceTagModel> tags) {}
+                        @Override public void onError() {}
+                    });
                     if (response.body().getData().getSeekers() != null) {
                         // User is a seeker
                         Boolean isProfileSet = Optional.ofNullable(response.body().getData().getSeekers().getProfileSet()).orElse(false);

@@ -8,17 +8,17 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.bumptech.glide.Glide; // Make sure to add Glide to your build.gradle
-import com.manilalinkup.app.models.EmployerAllRatingsModel;
+import com.bumptech.glide.Glide;
 import com.manilalinkup.app.R;
+import com.manilalinkup.app.models.RatingModel;
 
 import java.util.List;
 
 public class EmployerAllRatingsAdapter extends RecyclerView.Adapter<EmployerAllRatingsAdapter.ViewHolder> {
 
-    private List<EmployerAllRatingsModel> ratingsList;
+    private final List<RatingModel> ratingsList;
 
-    public EmployerAllRatingsAdapter(List<EmployerAllRatingsModel> ratingsList) {
+    public EmployerAllRatingsAdapter(List<RatingModel> ratingsList) {
         this.ratingsList = ratingsList;
     }
 
@@ -31,21 +31,30 @@ public class EmployerAllRatingsAdapter extends RecyclerView.Adapter<EmployerAllR
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        EmployerAllRatingsModel rating = ratingsList.get(position);
+        RatingModel rating = ratingsList.get(position);
 
-        holder.firstname.setText(rating.getFirstname());
-        holder.lastname.setText(rating.getLastname());
+        RatingModel.RaterInfo rater = rating.getRater();
+        if (rater != null) {
+            String name = rater.getName() != null ? rater.getName() : "";
+            String[] parts = name.split(" ", 2);
+            holder.firstname.setText(parts.length > 0 ? parts[0] : "");
+            holder.lastname.setText(parts.length > 1 ? parts[1] : "");
+            Glide.with(holder.itemView.getContext())
+                    .load(rater.getProfilePhotoUrl())
+                    .placeholder(R.drawable.ic_person_placeholder)
+                    .circleCrop()
+                    .into(holder.imageProfile);
+        }
 
-        holder.ratingMessage.setText(rating.getRatingMessage());
-        holder.timestamp.setText(rating.getFormattedDate());
-        holder.ratingBar.setRating(rating.getRatingScore());
+        holder.ratingMessage.setText(rating.getComment() != null ? rating.getComment() : "");
+        holder.ratingBar.setRating(rating.getScore());
 
-        // Load Profile Image using Glide
-        Glide.with(holder.itemView.getContext())
-                .load(rating.getProfilePhoto())
-                .placeholder(R.drawable.user_placeholder)
-                .circleCrop()
-                .into(holder.imageProfile);
+        RatingModel.JobInfo job = rating.getJob();
+        if (holder.jobTitle != null && job != null) {
+            holder.jobTitle.setText(job.getTitle() != null ? job.getTitle() : "");
+        }
+
+        holder.timestamp.setText(rating.getCreatedAt() != null ? rating.getCreatedAt() : "");
     }
 
     @Override
@@ -53,12 +62,12 @@ public class EmployerAllRatingsAdapter extends RecyclerView.Adapter<EmployerAllR
         return ratingsList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageProfile;
-        TextView firstname, lastname, ratingMessage, timestamp;
+        TextView firstname, lastname, ratingMessage, timestamp, jobTitle;
         RatingBar ratingBar;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageProfile = itemView.findViewById(R.id.applicant_profile_photo);
             firstname = itemView.findViewById(R.id.rater_firstname);
@@ -66,6 +75,7 @@ public class EmployerAllRatingsAdapter extends RecyclerView.Adapter<EmployerAllR
             ratingMessage = itemView.findViewById(R.id.item_card_rating_message);
             timestamp = itemView.findViewById(R.id.item_rating_timestamp);
             ratingBar = itemView.findViewById(R.id.item_card_rating_bar);
+            jobTitle = itemView.findViewById(R.id.item_rating_job_title);
         }
     }
 }

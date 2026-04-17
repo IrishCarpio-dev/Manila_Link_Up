@@ -12,14 +12,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.adapters.JobPostDashboardAdapter;
+import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.GetRatingsRequest;
 import com.manilalinkup.app.models.JobPostDashboardModel;
+import com.manilalinkup.app.models.RatingModel;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.RatingsProfileAdapter;
-import com.manilalinkup.app.models.RatingsProfileModel;
+import com.manilalinkup.app.utilities.ApiService;
+import com.manilalinkup.app.utilities.RetrofitClient;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EmployerProfileActivity extends AppCompatActivity {
 
@@ -27,7 +39,7 @@ public class EmployerProfileActivity extends AppCompatActivity {
     private RecyclerView recyclerViewAllJobsPosted;
     private RatingsProfileAdapter adapterRating;
     private JobPostDashboardAdapter adapterAllJobPost;
-    private List<RatingsProfileModel> ratingProfileList;
+    private final List<RatingModel> ratingProfileList = new ArrayList<>();
     private List<JobPostDashboardModel> allJobsPostedList;
     MaterialButton viewArchivedJobs;
     BottomNavigationView bottomNavigationViewEmployer;
@@ -54,14 +66,9 @@ public class EmployerProfileActivity extends AppCompatActivity {
         recyclerViewRatings.setLayoutManager(layoutManager);
         recyclerViewRatings.setLayoutManager(layoutManager);
 
-        //dummy data
-        ratingProfileList = new ArrayList<>();
-        ratingProfileList.add(new RatingsProfileModel("Mahusay na employer! Mabuhay ka! ", "Juan Dela Cruz", 5.0f));
-        ratingProfileList.add(new RatingsProfileModel("Clear instructions and fast payment.", "Maria Clara", 4.5f));
-        ratingProfileList.add(new RatingsProfileModel("Watta nice.", "Simoun Ibarra", 4.0f));
-
         adapterRating = new RatingsProfileAdapter(ratingProfileList);
         recyclerViewRatings.setAdapter(adapterRating);
+        loadRatings();
 
         recyclerViewAllJobsPosted = findViewById(R.id.recycler_view_employer_jobs_posted);
         recyclerViewAllJobsPosted.setLayoutManager(new LinearLayoutManager(this));
@@ -154,9 +161,35 @@ public class EmployerProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(EmployerProfileActivity.this, EmployerViewArchivedJobs.class);
                 startActivity(intent);
-
             }
         });
+    }
 
+    private void loadRatings() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        user.getIdToken(false).addOnSuccessListener(result -> {
+            ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
+            api.getRatings(new GetRatingsRequest(user.getUid(), null, null))
+                    .enqueue(new Callback<ApiResponse<List<RatingModel>>>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse<List<RatingModel>>> call,
+                                               Response<ApiResponse<List<RatingModel>>> response) {
+                            if (response.isSuccessful() && response.body() != null
+                                    && response.body().getData() != null) {
+                                ratingProfileList.clear();
+                                ratingProfileList.addAll(response.body().getData());
+                                adapterRating.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ApiResponse<List<RatingModel>>> call, Throwable t) {
+                            Toast.makeText(EmployerProfileActivity.this,
+                                    "Failed to load ratings", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        });
     }
 }
