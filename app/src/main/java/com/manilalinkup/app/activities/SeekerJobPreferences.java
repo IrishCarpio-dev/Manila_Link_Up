@@ -33,6 +33,7 @@ import com.manilalinkup.app.utilities.AddressAutocompleteHelper;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.utilities.SessionCache;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -104,29 +105,18 @@ public class SeekerJobPreferences extends AppCompatActivity {
     }
 
     private void loadServiceTags() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) return;
+        SessionCache.getInstance().ensureServiceTags(new SessionCache.ServiceTagsCallback() {
+            @Override
+            public void onAvailable(List<ServiceTagModel> tags) {
+                serviceTagList.clear();
+                serviceTagList.addAll(tags);
+                refreshServiceTagsDisplay();
+            }
 
-        user.getIdToken(true).addOnCompleteListener(tokenTask -> {
-            if (!tokenTask.isSuccessful()) return;
-            String token = tokenTask.getResult().getToken();
-            ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
-
-            apiService.getServiceTags().enqueue(new Callback<ApiResponse<List<ServiceTagModel>>>() {
-                @Override
-                public void onResponse(Call<ApiResponse<List<ServiceTagModel>>> call, Response<ApiResponse<List<ServiceTagModel>>> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        serviceTagList.clear();
-                        serviceTagList.addAll(response.body().getData());
-                        refreshServiceTagsDisplay();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ApiResponse<List<ServiceTagModel>>> call, Throwable t) {
-                    Toast.makeText(SeekerJobPreferences.this, "Error loading tags", Toast.LENGTH_SHORT).show();
-                }
-            });
+            @Override
+            public void onError() {
+                Toast.makeText(SeekerJobPreferences.this, "Error loading tags", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 

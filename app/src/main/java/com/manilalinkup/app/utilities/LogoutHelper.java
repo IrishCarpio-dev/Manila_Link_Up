@@ -55,6 +55,7 @@ public class LogoutHelper {
     }
 
     private static void performSignOut(Activity activity, FirebaseAuth mAuth) {
+        SessionCache.getInstance().clear();
         mAuth.signOut();
         Intent intent = new Intent(activity, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
