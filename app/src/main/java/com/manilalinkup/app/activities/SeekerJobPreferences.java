@@ -78,7 +78,7 @@ public class SeekerJobPreferences extends AppCompatActivity {
         tvSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SeekerJobPreferences.this, SeekerDashboardActivity.class);
+                Intent intent = new Intent(SeekerJobPreferences.this, AllSetActivity.class);
                 startActivity(intent);
             }
         });
@@ -268,7 +268,7 @@ public class SeekerJobPreferences extends AppCompatActivity {
                 progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     Toast.makeText(SeekerJobPreferences.this, "Preferences Saved!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(SeekerJobPreferences.this, SeekerDashboardActivity.class));
+                    startActivity(new Intent(SeekerJobPreferences.this, AllSetActivity.class));
                     finish();
                 } else {
                     ErrorUtils.showErrorMessage(SeekerJobPreferences.this, response.errorBody());

@@ -82,7 +82,7 @@
             android:label="Employer Name" />
         <activity
             android:name=".activities.AllSetActivity"
-            android:exported="false"
+            android:exported="true"
             android:parentActivityName=".activities.EditSeekerProfileActivity" />
         <activity
             android:name=".activities.EditSeekerProfileActivity"
