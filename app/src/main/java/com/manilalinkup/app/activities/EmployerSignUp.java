@@ -26,7 +26,6 @@ import retrofit2.Response;
 public class EmployerSignUp extends AppCompatActivity {
     private android.app.ProgressDialog progressDialog;
     private com.google.firebase.auth.FirebaseAuth mAuth;
-    MaterialToolbar toolbar;
     MaterialButton sendOTP;
     TextInputLayout employerName;
     TextInputLayout emailAddress;
@@ -48,12 +47,6 @@ public class EmployerSignUp extends AppCompatActivity {
         createPassword = findViewById(R.id.text_input_create_password_employer);
         confirmPassword = findViewById(R.id.text_input_confirm_password_employer);
 
-
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         progressDialog = new android.app.ProgressDialog(this);
         progressDialog.setMessage("Signing up...");
         progressDialog.setCancelable(false);
@@ -67,24 +60,53 @@ public class EmployerSignUp extends AppCompatActivity {
                 String createPasswordInput = createPassword.getEditText().getText().toString().trim();
                 String confirmPasswordInput = confirmPassword.getEditText().getText().toString().trim();
 
-                if (emailAddressInput.isEmpty() || createPasswordInput.isEmpty() || confirmPasswordInput.isEmpty()) {
-                    Toast.makeText(EmployerSignUp.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                employerName.setError(null);
+                mobileNumber.setError(null);
+                emailAddress.setError(null);
+                createPassword.setError(null);
+                confirmPassword.setError(null);
+
+                // 3. Name Validation
+                if (employerNameInput.isEmpty()) {
+                    employerName.setError("Full Name or Business Name is required");
+                    return;
+                }
+
+                // 4. Email Validation (Regex)
+                if (emailAddressInput.isEmpty()) {
+                    emailAddress.setError("Email address is required");
+                    return;
+                } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddressInput).matches()) {
+                    emailAddress.setError("Please enter a valid email address");
+                    return;
+                }
+
+                // 5. Mobile Number Validation (Checks for exactly 10 digits since you have prefix +63)
+                if (mobileNumberInput.isEmpty()) {
+                    mobileNumber.setError("Mobile number is required");
+                    return;
+                } else if (mobileNumberInput.length() != 10 || !mobileNumberInput.startsWith("9")) {
+                    mobileNumber.setError("Must be 10 digits starting with 9 (e.g., 9123456789)");
+                    return;
+                }
+
+                // 6. Strong Password Validation
+                // Regex: 8+ chars, 1 Upper, 1 Special
+                String passwordPattern = "^(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
+
+                if (createPasswordInput.isEmpty()) {
+                    createPassword.setError("Password is required");
+                    return;
+                } else if (!createPasswordInput.matches(passwordPattern)) {
+                    createPassword.setError("Must be 8 more characters with 1 capital letter and 1 special character!");
                     return;
                 }
                 if (!createPasswordInput.equals(confirmPasswordInput)) {
                     confirmPassword.setError("Passwords do not match");
                     return;
-                } else {
-                    confirmPassword.setError(null);
-                }
-
-                if (createPasswordInput.length() < 8) {
-                    createPassword.setError("Password must be at least 8 characters");
-                    return;
                 }
 
                 progressDialog.show();
-
                 mAuth.createUserWithEmailAndPassword(emailAddressInput, createPasswordInput)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
