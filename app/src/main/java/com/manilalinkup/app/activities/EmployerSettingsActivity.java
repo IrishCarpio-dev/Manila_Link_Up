@@ -33,8 +33,7 @@ public class EmployerSettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //created a new layout since 1 layout was use for both seeker and employer
-        setContentView(R.layout.activity_settings_seeker);
+        setContentView(R.layout.activity_employer_settings);
 
         mAuth = FirebaseAuth.getInstance();
 
