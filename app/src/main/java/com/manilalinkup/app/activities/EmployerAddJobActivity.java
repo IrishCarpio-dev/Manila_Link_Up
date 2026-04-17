@@ -174,25 +174,32 @@ public class EmployerAddJobActivity extends AppCompatActivity {
             Chip chip = new Chip(this);
             chip.setText(tag.getLabel());
 
-            chip.setChipBackgroundColorResource(R.color.chip_background_state_list);
+            chip.setChipBackgroundColorResource(R.color.manila_blue);
             chip.setTextColor(Color.WHITE);
 
+            chip.setCheckable(false);
             chip.setTag(tag.getId());
-            chip.setCheckable(true);
-            chip.setChecked(true);
-            chip.setCheckedIconVisible(false);
+
+            // 3. REMOVAL: Enable the 'X' button to remove the tag
+            chip.setCloseIconVisible(true);
+            chip.setCloseIconTint(ColorStateList.valueOf(Color.WHITE));
+
             final String idToRemove = tagId;
             chip.setOnCloseIconClickListener(v -> {
                 selectedTagIds.remove(idToRemove);
-                refreshServiceTagsDisplay();
+                refreshServiceTagsDisplay(); // Redraw the list
             });
             chipGroupServiceTags.addView(chip);
-            chip.setCloseIconTint(ColorStateList.valueOf(Color.WHITE));
         }
 
         Chip addChip = new Chip(this);
-        addChip.setText("+");
+        addChip.setText("+ Add Tag");
         addChip.setCheckable(false);
+        addChip.setChipBackgroundColorResource(android.R.color.transparent);
+        addChip.setChipStrokeColor(ColorStateList.valueOf(Color.parseColor("#0D47A1")));
+        addChip.setChipStrokeWidth(5f); // 5f is usually a good visible thickness
+        addChip.setTextColor(Color.parseColor("#0D47A1"));
+
         addChip.setOnClickListener(v -> showServiceTagModal());
         chipGroupServiceTags.addView(addChip);
     }

@@ -242,6 +242,7 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
         } else if (selectedImageOption == ImageUploadSelection.ID) {
             this.validIdUri = uri;
 
+
             Glide.with(this)
                     .load(uri)
                     .centerCrop()
