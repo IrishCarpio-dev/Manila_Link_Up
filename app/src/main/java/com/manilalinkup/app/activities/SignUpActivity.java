@@ -3,6 +3,8 @@ package com.manilalinkup.app.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -31,7 +33,9 @@ public class SignUpActivity extends AppCompatActivity {
     MaterialToolbar toolbar;
     MaterialButton sendOTP;
     TextInputLayout firstName;
+    TextInputLayout middleName;
     TextInputLayout lastname;
+    AutoCompleteTextView suffixDropdown;
     TextInputLayout emailAddress;
     TextInputLayout mobileNumber;
     TextInputLayout createPassword;
@@ -46,7 +50,11 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
         sendOTP = findViewById(R.id.material_button_send_otp);
         firstName = findViewById(R.id.text_input_layout_first_name);
+        middleName = findViewById(R.id.text_input_layout_middle_name);
         lastname = findViewById(R.id.text_input_layout_last_name);
+        suffixDropdown = findViewById(R.id.auto_complete_suffix);
+        ArrayAdapter<String> suffixAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"", "Sr.", "Jr.", "III", "IV"});
+        suffixDropdown.setAdapter(suffixAdapter);
         emailAddress = findViewById(R.id.text_input_layout_email_address);
         mobileNumber = findViewById(R.id.text_input_layout_phone_number);
         createPassword = findViewById(R.id.text_input_create_password);
@@ -66,7 +74,9 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String firstnameInput = firstName.getEditText().getText().toString().trim();
+                String middleNameInput = middleName.getEditText().getText().toString().trim();
                 String lastnameInput = lastname.getEditText().getText().toString().trim();
+                String suffixInput = suffixDropdown.getText().toString().trim();
                 String mobileNumberInput = mobileNumber.getEditText().getText().toString().trim();
                 String emailAddressInput = emailAddress.getEditText().getText().toString().trim();
                 String createPasswordInput = createPassword.getEditText().getText().toString().trim();
@@ -106,7 +116,9 @@ public class SignUpActivity extends AppCompatActivity {
                                                 idToken,
                                                 userUid,
                                                 firstnameInput,
+                                                middleNameInput,
                                                 lastnameInput,
+                                                suffixInput,
                                                 emailAddressInput,
                                                 mobileNumberInput
                                         );
@@ -122,13 +134,14 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void sendProfileToLaravel(String idToken, String actualUid, String firstnameInput, String lastnameInput, String emailAddressInput, String mobileNumberInput) {
-        // RetrofitClient uses the Token for the "Bearer" header
+    private void sendProfileToLaravel(String idToken, String actualUid, String firstnameInput, String middleNameInput, String lastnameInput, String suffixInput, String emailAddressInput, String mobileNumberInput) {
         ApiService apiService = RetrofitClient.getClient(idToken).create(ApiService.class);
 
         SeekerRequest request = new SeekerRequest(
                 firstnameInput,
+                middleNameInput,
                 lastnameInput,
+                suffixInput,
                 emailAddressInput,
                 mobileNumberInput,
                 "2000-01-01"
