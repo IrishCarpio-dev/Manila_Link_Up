@@ -16,12 +16,16 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.RegisterDeviceRequest;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.utilities.RetrofitClient;
 import com.manilalinkup.app.models.UserProfileModel;
+
+import okhttp3.ResponseBody;
 
 import java.util.Optional;
 
@@ -147,7 +151,19 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void registerFcmToken(String idToken) {
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(fcmToken -> {
+            ApiService api = RetrofitClient.getClient(idToken).create(ApiService.class);
+            api.registerDevice(new RegisterDeviceRequest(fcmToken, "android"))
+                    .enqueue(new retrofit2.Callback<ResponseBody>() {
+                @Override public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {}
+                @Override public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {}
+            });
+        });
+    }
+
     private void checkUserRole(String token) {
+        registerFcmToken(token);
         ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
         apiService.getUserProfile().enqueue(new Callback<ApiResponse<UserProfileModel>>() {

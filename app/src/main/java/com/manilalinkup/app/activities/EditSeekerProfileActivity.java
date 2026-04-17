@@ -328,8 +328,8 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
         apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
         apiService.setupSeekerProfile(
-                profilePhoto, clearance, validId,
-                birthDate, address, location, salaryValue, salaryType
+                profilePhoto, clearance, validId, address,
+                birthDate, location
         ).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

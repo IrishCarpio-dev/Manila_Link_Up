@@ -369,7 +369,7 @@ public class EmployerAddJobActivity extends AppCompatActivity {
 
     private void submitCreateJob(String token, String employerUid, String title, String description,
                                   String location, String expiresAt, String duration, double salary) {
-        CreateJobRequest request = new CreateJobRequest(title, description, employerUid, expiresAt, duration, location, salary, new ArrayList<>(selectedTagIds));
+        CreateJobRequest request = new CreateJobRequest(title, description, expiresAt, duration, location, salary, new ArrayList<>(selectedTagIds));
         ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
         apiService.createJob(request).enqueue(new Callback<ResponseBody>() {

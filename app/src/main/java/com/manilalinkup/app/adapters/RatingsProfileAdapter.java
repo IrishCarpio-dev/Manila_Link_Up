@@ -10,32 +10,32 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.manilalinkup.app.R;
-import com.manilalinkup.app.models.RatingsProfileModel;
+import com.manilalinkup.app.models.RatingModel;
 
 import java.util.List;
 
 public class RatingsProfileAdapter extends RecyclerView.Adapter<RatingsProfileAdapter.RatingsProfileViewHolder> {
 
-    private List<RatingsProfileModel> ratingsProfileModelList;
-    public RatingsProfileAdapter(List<RatingsProfileModel> ratingsProfileModelList) {
-        this.ratingsProfileModelList = ratingsProfileModelList;
+    private final List<RatingModel> ratingsList;
+
+    public RatingsProfileAdapter(List<RatingModel> ratingsList) {
+        this.ratingsList = ratingsList;
     }
 
     @Override
-    public int getItemCount() {
-        return ratingsProfileModelList.size();
-    }
+    public int getItemCount() { return ratingsList.size(); }
 
     @NonNull
     @Override
     public RatingsProfileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ratings_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_ratings_card, parent, false);
         return new RatingsProfileViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RatingsProfileViewHolder holder, int position) {
-        holder.bind(ratingsProfileModelList.get(position));
+        holder.bind(ratingsList.get(position));
     }
 
     static class RatingsProfileViewHolder extends RecyclerView.ViewHolder {
@@ -43,19 +43,22 @@ public class RatingsProfileAdapter extends RecyclerView.Adapter<RatingsProfileAd
         TextView raterName;
         RatingBar ratingScore;
 
-        public RatingsProfileViewHolder(@NonNull View itemView) {
+        RatingsProfileViewHolder(@NonNull View itemView) {
             super(itemView);
             ratingMessage = itemView.findViewById(R.id.item_card_rating_message);
-            raterName = itemView.findViewById(R.id.item_card_rater_name);
-            ratingScore = itemView.findViewById(R.id.item_card_rating_bar);
+            raterName     = itemView.findViewById(R.id.item_card_rater_name);
+            ratingScore   = itemView.findViewById(R.id.item_card_rating_bar);
         }
 
+        void bind(RatingModel rating) {
+            ratingMessage.setText(rating.getComment() != null ? rating.getComment() : "");
+            ratingScore.setRating(rating.getScore());
 
-        public void bind(RatingsProfileModel ratingsProfileModel){
-            ratingMessage.setText(ratingsProfileModel.getRatingMessage());
-            raterName.setText(ratingsProfileModel.getRaterName());
-            ratingScore.setRating(ratingsProfileModel.getRatingScore());
-
+            String name = "";
+            if (rating.getRater() != null && rating.getRater().getName() != null) {
+                name = rating.getRater().getName();
+            }
+            raterName.setText(name);
         }
     }
 }
