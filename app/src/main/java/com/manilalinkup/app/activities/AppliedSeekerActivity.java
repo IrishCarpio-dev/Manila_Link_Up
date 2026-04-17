@@ -21,7 +21,7 @@ import com.manilalinkup.app.models.JobPostDashboardModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SaveSeekerActivity extends AppCompatActivity {
+public class AppliedSeekerActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LinearLayout emptyState;
     private TextView savedTab, appliedTab;
@@ -36,27 +36,27 @@ public class SaveSeekerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_save_seeker);
+        setContentView(R.layout.activity_applied_seeker);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setSelectedItemId(R.id.nav_activity_seeker);
         bottomNavigationView.setOnItemSelectedListener(menuItem ->  {
 
             if(menuItem.getItemId() == R.id.nav_home_seeker){
-                startActivity(new Intent(SaveSeekerActivity.this, SeekerDashboardActivity.class));
+                startActivity(new Intent(AppliedSeekerActivity.this, SeekerDashboardActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
             }else if(menuItem.getItemId() == R.id.nav_notifications_seeker) {
                 //will change once notification activity has been added
-                startActivity(new Intent(SaveSeekerActivity.this, EmployerNotificationsActivity.class));
+                startActivity(new Intent(AppliedSeekerActivity.this, EmployerNotificationsActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
             }else if(menuItem.getItemId() == R.id.nav_chat_seeker) {
-                startActivity(new Intent(SaveSeekerActivity.this, ChatSeekerActivity.class));
+                startActivity(new Intent(AppliedSeekerActivity.this, ChatSeekerActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
             }else if(menuItem.getItemId() == R.id.nav_profile_seeker) {
-                startActivity(new Intent(SaveSeekerActivity.this, SeekerProfileActivity.class));
+                startActivity(new Intent(AppliedSeekerActivity.this, SeekerProfileActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
             }
@@ -162,7 +162,7 @@ public class SaveSeekerActivity extends AppCompatActivity {
         appliedAdapter = new AppliedJobsAdapter(appliedList, new AppliedJobsAdapter.OnAppliedJobClickListener() {
             @Override
             public void onJobClick(JobPostDashboardModel job) {
-                Intent intent = new Intent(SaveSeekerActivity.this, AppliedJobPostActivity.class);
+                Intent intent = new Intent(AppliedSeekerActivity.this, AppliedJobPostActivity.class);
 
                 intent.putExtra("JOB_TITLE", job.getJobTitle());
                 intent.putExtra("EMPLOYER_NAME", job.getEmployerName());
