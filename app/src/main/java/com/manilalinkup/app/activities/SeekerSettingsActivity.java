@@ -10,6 +10,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
@@ -23,8 +26,9 @@ public class SeekerSettingsActivity extends AppCompatActivity {
     private TextView btnChangePassword, tvUserEmail;
     private Switch switchNotifications;
     private TextView btnHelpCenter, btnTerms, btnAbout;
-    private Button btnLogout;
+    private Button logoutButton;
     private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +37,14 @@ public class SeekerSettingsActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
         initializeViews();
 
-        // This check will tell you in Logcat if any view is missing
         if (checkViewsExist()) {
             displayCurrentUserEmail();
             setupClickListeners();
@@ -60,7 +69,7 @@ public class SeekerSettingsActivity extends AppCompatActivity {
         btnTerms = findViewById(R.id.btn_terms);
         btnAbout = findViewById(R.id.btn_about);
 
-        btnLogout = findViewById(R.id.btn_logout);
+        logoutButton = findViewById(R.id.btn_logout);
     }
 
     private boolean checkViewsExist() {
@@ -131,8 +140,38 @@ public class SeekerSettingsActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        btnLogout.setOnClickListener(v -> showLogoutConfirmation());
+        logoutButton.setOnClickListener(v -> showLogoutConfirmation());
     }
+
+    private void showLogoutConfirmation() {
+        new AlertDialog.Builder(this)
+                .setTitle("Logout")
+                .setMessage("Are you sure you want to log out from Manila LinkUp?")
+                .setPositiveButton("Logout", (dialog, which) -> {
+                    performLogout();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void performLogout() {
+        mAuth.signOut();
+
+        mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> {
+            // After Google signs out, use your helper or manual intent to go back to Login
+            Intent intent = new Intent(SeekerSettingsActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+
+            showToast("Logged out successfully");
+        });
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
 
     private void showSensitiveActionWarning(String title, String message, Runnable onConfirm) {
         new AlertDialog.Builder(this)
@@ -161,20 +200,5 @@ public class SeekerSettingsActivity extends AppCompatActivity {
                         }
                     });
         }
-    }
-
-    private void showLogoutConfirmation() {
-        new AlertDialog.Builder(this)
-                .setTitle("Logout")
-                .setMessage("Are you sure you want to log out from Manila LinkUp?")
-                .setPositiveButton("Logout", (dialog, which) -> {
-                    LogoutHelper.logout(SeekerSettingsActivity.this, mAuth);
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
-    }
-
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

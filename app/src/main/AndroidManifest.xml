@@ -38,7 +38,7 @@
             android:name=".activities.EmployerViewAllRatings"
             android:exported="false" />
         <activity
-            android:name=".activities.SaveSeekerActivity"
+            android:name=".activities.AppliedSeekerActivity"
             android:exported="false" />
         <activity
             android:name=".activities.EmployerViewArchivedJobs"
