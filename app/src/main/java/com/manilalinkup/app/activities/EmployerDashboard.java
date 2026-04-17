@@ -2,13 +2,15 @@ package com.manilalinkup.app.activities;
 
 import static com.manilalinkup.app.utilities.RetrofitClient.BASE_URL;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -23,13 +25,18 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.adapters.JobPostDashboardAdapter;
 import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.ArchiveJobRequest;
 import com.manilalinkup.app.models.GetJobsRequest;
 import com.manilalinkup.app.models.JobModel;
 import com.manilalinkup.app.models.JobPostDashboardModel;
+import com.manilalinkup.app.models.ServiceTagModel;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.utilities.SessionCache;
+
+import okhttp3.ResponseBody;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +58,7 @@ public class EmployerDashboard extends AppCompatActivity {
     private CardView jobAddJob;
     BottomNavigationView bottomNavigationViewEmployer;
 
+    private ProgressDialog progressDialog;
     private boolean isLoading = false;
     private boolean hasMorePages = true;
     private String lastCreatedAt = null;
@@ -67,6 +75,10 @@ public class EmployerDashboard extends AppCompatActivity {
         progressBarLoadMore = findViewById(R.id.progress_bar_load_more);
         greetingNameText = findViewById(R.id.textview_greeting_name_employer);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Archiving job...");
+        progressDialog.setCancelable(false);
+
         jobListJobCard = new ArrayList<>();
 
         adapterJobPost = new JobPostDashboardAdapter(jobListJobCard, false, new JobPostDashboardAdapter.OnJobClickListener() {
@@ -79,10 +91,19 @@ public class EmployerDashboard extends AppCompatActivity {
             }
             @Override
             public void onRemoveClick(JobPostDashboardModel job, int position) {
+                new AlertDialog.Builder(EmployerDashboard.this)
+                        .setTitle("Archive job?")
+                        .setMessage("Are you sure you want to archive \"" + job.getJobTitle() + "\"?")
+                        .setPositiveButton("Archive", (d, w) -> archiveJob(job, position))
+                        .setNegativeButton("Cancel", null)
+                        .show();
             }
         });
 
+        adapterJobPost.setShowOptionsMenu(true);
         recyclerViewJobPost.setAdapter(adapterJobPost);
+
+        loadServiceTags();
 
         recyclerViewJobPost.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -211,7 +232,7 @@ public class EmployerDashboard extends AppCompatActivity {
     private JobPostDashboardModel mapToDisplayModel(JobModel job) {
         String employerName = job.getEmployer() != null ? job.getEmployer().getFullName() : "";
         String photoUrl = job.getEmployer() != null ? BASE_URL + job.getEmployer().getProfilePhotoUrl() : "";
-        return new JobPostDashboardModel(
+        JobPostDashboardModel model = new JobPostDashboardModel(
             job.getTitle(),
             employerName,
             job.getLocation(),
@@ -219,6 +240,54 @@ public class EmployerDashboard extends AppCompatActivity {
             photoUrl,
             getRelativeTime(job.getCreatedAt())
         );
+        model.setJobId(job.getId());
+        model.setTagIds(job.getTags());
+        return model;
+    }
+
+    private void loadServiceTags() {
+        SessionCache.getInstance().ensureServiceTags(new SessionCache.ServiceTagsCallback() {
+            @Override
+            public void onAvailable(List<ServiceTagModel> tags) {
+                adapterJobPost.setTagLabelsById(SessionCache.getInstance().getServiceTagLabelsById());
+            }
+
+            @Override
+            public void onError() {
+                // Non-fatal: cards will still render without tag labels.
+            }
+        });
+    }
+
+    private void archiveJob(JobPostDashboardModel job, int position) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        progressDialog.show();
+        user.getIdToken(true).addOnSuccessListener(result -> {
+            ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
+            api.archiveJob(new ArchiveJobRequest(job.getJobId()))
+                    .enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    progressDialog.dismiss();
+                    if (response.isSuccessful()) {
+                        jobListJobCard.remove(position);
+                        adapterJobPost.notifyItemRemoved(position);
+                        adapterJobPost.notifyItemRangeChanged(position, jobListJobCard.size());
+                        Toast.makeText(EmployerDashboard.this, "Job archived", Toast.LENGTH_SHORT).show();
+                    } else {
+                        ErrorUtils.showErrorMessage(EmployerDashboard.this, response.errorBody());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    progressDialog.dismiss();
+                    ErrorUtils.showThrowableError(EmployerDashboard.this, t);
+                }
+            });
+        });
     }
 
     private String getRelativeTime(String createdAt) {
