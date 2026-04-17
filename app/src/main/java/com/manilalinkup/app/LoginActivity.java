@@ -1,125 +1,203 @@
 package com.manilalinkup.app;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.FirebaseUser;
+import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.utilities.ApiService;
+import com.manilalinkup.app.utilities.ErrorUtils;
+import com.manilalinkup.app.R;
+import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.models.UserProfileModel;
+import com.manilalinkup.app.activities.EmployerDashboard;
+import com.manilalinkup.app.activities.SeekerDashboardActivity;
+import com.manilalinkup.app.activities.EditSeekerProfileActivity;
+import com.manilalinkup.app.activities.EditEmployerProfileActivity;
+
+import java.util.Optional;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
+    private android.app.ProgressDialog progressDialog;
+    private com.google.firebase.auth.FirebaseAuth mAuth;
+    MaterialButton loginNowButton;
+    TextInputEditText emailInput;
+    TextInputEditText passwordInput;
+    TextInputLayout emailLayout;
+    TextInputLayout passwordLayout;
+    TextView forgetPassword;
 
-    private static final String TAG = "LoginActivity";
+    //for testing Dashboards - Irish
+    ImageView googleLogin;
+    ImageView facebookLogin; // Added for Facebook shortcut
 
-    private GoogleSignInClient googleSignInClient;
-    private FirebaseAuth firebaseAuth;
-    private ActivityResultLauncher<Intent> googleSignInLauncher;
 
-    private TextInputLayout emailLayout;
-    private TextInputLayout passwordLayout;
-    private MaterialButton btnLogin;
-    private ImageView btnGoogle;
-    private ImageView btnFacebook;
-    private TextView tvForgotPassword;
-    private TextView tvSignUp;
-
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+        loginNowButton = findViewById(R.id.material_button_login_now_2);
+        emailInput = findViewById(R.id.text_input_email_input);
+        passwordInput = findViewById(R.id.text_input_password_input);
+        emailLayout = findViewById(R.id.text_input_layout_email_address);
+        passwordLayout = findViewById(R.id.text_input_layout_password);
+        forgetPassword = findViewById(R.id.text_view_forget_password);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        // For testing Dashboards - Irish
+        googleLogin = findViewById(R.id.image_view_login_google);
+        googleLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent testIntents = new Intent(LoginActivity.this, EmployerDashboard.class);
+                startActivity(testIntents);
+            }
+        });
+
+        // For testing Seeker Dashboard via Facebook shortcut
+        facebookLogin = findViewById(R.id.image_view_login_facebook);
+        facebookLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Direct jump to Seeker Dashboard
+                Intent intent = new Intent(LoginActivity.this, SeekerDashboardActivity.class);
+                startActivity(intent);
+                finish(); // Optional: closes login screen so back button doesn't return here
+            }
+        });
 
 
 
-        initViews();
-        setupGoogleSignIn();
 
-        googleSignInLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
-                    try {
-                        GoogleSignInAccount account = task.getResult(ApiException.class);
-                        firebaseAuthWithGoogle(account);
-                    } catch (ApiException e) {
-                        Log.e(TAG, "Google sign in failed: " + e.getStatusCode());
-                        Toast.makeText(this, "Google Sign-In failed: " + e.getStatusCode(), Toast.LENGTH_SHORT).show();
-                    }
+        progressDialog = new android.app.ProgressDialog(this);
+        progressDialog.setMessage("Logging in...");
+        progressDialog.setCancelable(false); // Prevents user from dismissing it by clicking outside
+
+        mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
+        loginNowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String email = emailInput.getText().toString().trim();
+                String password = passwordInput.getText().toString().trim();
+
+                emailLayout.setError(null);
+                passwordLayout.setError(null);
+
+                if(email.isEmpty()){
+                    emailLayout.setError("Email is required.");
+                    emailInput.requestFocus();
+                    return;
                 }
-        );
 
-        setupClickListeners();
-    }
+                if(password.isEmpty()){
+                    passwordLayout.setError("Password is required.");
+                    passwordInput.requestFocus();
+                    return;
+                }
 
-    private void initViews() {
-        emailLayout      = findViewById(R.id.text_input_layout_email_address);
-        passwordLayout   = findViewById(R.id.text_input_layout_password);
-        btnLogin         = findViewById(R.id.material_button_login_now_2);
-        btnGoogle        = findViewById(R.id.image_view_login_google);
-        btnFacebook      = findViewById(R.id.image_view_login_facebook);
-        tvForgotPassword = findViewById(R.id.text_view_forget_password);
-        tvSignUp         = findViewById(R.id.text_view_login_sign_up);
-    }
+                if(password.length() < 8){
+                    passwordLayout.setError("Password must be at least 8 characters.");
+                    passwordInput.requestFocus();
+                    return;
+                }
 
-    private void setupGoogleSignIn() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
-    }
+                progressDialog.show();
 
-    private void setupClickListeners() {
-        btnGoogle.setOnClickListener(v -> launchGoogleSignIn());
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                if (user != null) {
+                                    user.reload().addOnCompleteListener(reloadTask -> {
+                                        if (user.isEmailVerified()) {
+                                            user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+                                                if (tokenTask.isSuccessful()) {
+                                                    String idToken = tokenTask.getResult().getToken();
+                                                    checkUserRole(idToken);
+                                                }
+                                            });
+                                        } else {
+                                            progressDialog.dismiss();
+                                            mAuth.signOut();
+                                            Toast.makeText(LoginActivity.this, "Please verify your email first!", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+                            } else {
+                                progressDialog.dismiss();
+                                Toast.makeText(LoginActivity.this, "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
 
-
-        tvSignUp.setOnClickListener(v ->
-                Toast.makeText(this, "Sign Up coming soon!", Toast.LENGTH_SHORT).show());
-
-        btnFacebook.setOnClickListener(v ->
-                Toast.makeText(this, "Facebook login coming soon!", Toast.LENGTH_SHORT).show());
-    }
-
-
-    private void launchGoogleSignIn() {
-        googleSignInClient.signOut().addOnCompleteListener(this, task -> {
-            googleSignInLauncher.launch(googleSignInClient.getSignInIntent());
+            }
         });
     }
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        firebaseAuth.signInWithCredential(credential)
-                .addOnSuccessListener(authResult -> {
-                    Log.d(TAG, "Google auth success: " + authResult.getUser().getEmail());
-                    goToMain();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Google auth failed", e);
-                    Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show();
-                });
-    }
 
-    private void goToMain() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+    private void checkUserRole(String token) {
+        ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
+
+        apiService.getUserProfile().enqueue(new Callback<ApiResponse<UserProfileModel>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<UserProfileModel>> call, Response<ApiResponse<UserProfileModel>> response) {
+                progressDialog.dismiss();
+                if (response.isSuccessful()) {
+                    if (response.body().getData().getSeekers() != null) {
+                        // User is a seeker
+                        Boolean isProfileSet = Optional.ofNullable(response.body().getData().getSeekers().getProfileSet()).orElse(false);
+
+                        if (isProfileSet) {
+                            startActivity(new Intent(LoginActivity.this, SeekerDashboardActivity.class));
+                            finish();
+                        } else {
+                            startActivity(new Intent(LoginActivity.this, EditSeekerProfileActivity.class));
+                            finish();
+                        }
+                    } else if (response.body().getData().getEmployers() != null) {
+                        // User is an employer
+                        Boolean isProfileSet = Optional.ofNullable(response.body().getData().getEmployers().getProfileSet()).orElse(false);
+
+                        if (isProfileSet) {
+                            startActivity(new Intent(LoginActivity.this, EmployerDashboard.class));
+                            finish();
+                        } else {
+                            startActivity(new Intent(LoginActivity.this, EditEmployerProfileActivity.class));
+                            finish();
+                        }
+                    } else {
+                        mAuth.signOut();
+                        Toast.makeText(LoginActivity.this, "User profile not found in our system.", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    mAuth.signOut();
+                    ErrorUtils.showErrorMessage(LoginActivity.this, response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<UserProfileModel>> call, Throwable t) {
+                progressDialog.dismiss();
+                mAuth.signOut();
+
+                ErrorUtils.showThrowableError(LoginActivity.this, t);
+            }
+        });
     }
 }
