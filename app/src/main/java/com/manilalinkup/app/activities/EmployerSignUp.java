@@ -66,13 +66,11 @@ public class EmployerSignUp extends AppCompatActivity {
                 createPassword.setError(null);
                 confirmPassword.setError(null);
 
-                // 3. Name Validation
                 if (employerNameInput.isEmpty()) {
                     employerName.setError("Full Name or Business Name is required");
                     return;
                 }
 
-                // 4. Email Validation (Regex)
                 if (emailAddressInput.isEmpty()) {
                     emailAddress.setError("Email address is required");
                     return;
@@ -81,7 +79,6 @@ public class EmployerSignUp extends AppCompatActivity {
                     return;
                 }
 
-                // 5. Mobile Number Validation (Checks for exactly 10 digits since you have prefix +63)
                 if (mobileNumberInput.isEmpty()) {
                     mobileNumber.setError("Mobile number is required");
                     return;
@@ -90,8 +87,6 @@ public class EmployerSignUp extends AppCompatActivity {
                     return;
                 }
 
-                // 6. Strong Password Validation
-                // Regex: 8+ chars, 1 Upper, 1 Special
                 String passwordPattern = "^(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
 
                 if (createPasswordInput.isEmpty()) {

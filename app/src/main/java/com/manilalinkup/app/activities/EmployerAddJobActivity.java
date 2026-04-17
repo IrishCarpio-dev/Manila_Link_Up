@@ -172,15 +172,13 @@ public class EmployerAddJobActivity extends AppCompatActivity {
 
             chip.setCheckable(false);
             chip.setTag(tag.getId());
-
-            // 3. REMOVAL: Enable the 'X' button to remove the tag
             chip.setCloseIconVisible(true);
             chip.setCloseIconTint(ColorStateList.valueOf(Color.WHITE));
 
             final String idToRemove = tagId;
             chip.setOnCloseIconClickListener(v -> {
                 selectedTagIds.remove(idToRemove);
-                refreshServiceTagsDisplay(); // Redraw the list
+                refreshServiceTagsDisplay();
             });
             chipGroupServiceTags.addView(chip);
         }
@@ -190,7 +188,7 @@ public class EmployerAddJobActivity extends AppCompatActivity {
         addChip.setCheckable(false);
         addChip.setChipBackgroundColorResource(android.R.color.transparent);
         addChip.setChipStrokeColor(ColorStateList.valueOf(Color.parseColor("#0D47A1")));
-        addChip.setChipStrokeWidth(5f); // 5f is usually a good visible thickness
+        addChip.setChipStrokeWidth(5f);
         addChip.setTextColor(Color.parseColor("#0D47A1"));
 
         addChip.setOnClickListener(v -> showServiceTagModal());

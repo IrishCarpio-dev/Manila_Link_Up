@@ -129,19 +129,13 @@ public class SeekerJobPreferences extends AppCompatActivity {
 
             Chip chip = new Chip(this);
             chip.setText(tag.getLabel());
-
-            // 1. STYLE: Use the Manila Blue color we added to colors.xml
             chip.setChipBackgroundColorResource(R.color.manila_blue);
             chip.setTextColor(Color.WHITE);
-
-            // 2. BEHAVIOR: Disable checkable (it's already selected)
             chip.setCheckable(false);
-
-            // 3. REMOVAL: Setup the close icon
             chip.setCloseIconVisible(true);
             chip.setCloseIconTint(ColorStateList.valueOf(Color.WHITE));
 
-            final String currentTagId = tagId; // Final variable for the listener
+            final String currentTagId = tagId;
             chip.setOnCloseIconClickListener(v -> {
                 selectedTagIds.remove(currentTagId);
                 refreshServiceTagsDisplay();
@@ -150,15 +144,11 @@ public class SeekerJobPreferences extends AppCompatActivity {
             chipGroupServiceTags.addView(chip);
         }
 
-        // 4. ADD BUTTON: Create the outlined "+" button
         Chip addChip = new Chip(this);
         addChip.setText("+ Add Service");
-
-        // Style it as an outlined/hollow button
         addChip.setChipBackgroundColorResource(android.R.color.transparent);
         addChip.setChipStrokeColor(ColorStateList.valueOf(getResources().getColor(R.color.manila_blue)));
 
-        // Convert 2dp to pixels for the stroke width
         float strokeWidthPx = 2 * getResources().getDisplayMetrics().density;
         addChip.setChipStrokeWidth(strokeWidthPx);
 
