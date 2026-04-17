@@ -72,7 +72,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                     overridePendingTransition(0, 0);
                     return true;
                 }else if (id == R.id.nav_activity_seeker) {
-                    Intent intent = new Intent(SeekerDashboardActivity.this, SaveSeekerActivity.class);
+                    Intent intent = new Intent(SeekerDashboardActivity.this, AppliedSeekerActivity.class);
                     startActivity(intent);
                     overridePendingTransition(0, 0);
                     return true;

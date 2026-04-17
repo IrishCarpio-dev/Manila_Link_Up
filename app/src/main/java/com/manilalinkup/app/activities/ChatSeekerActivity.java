@@ -75,7 +75,7 @@ public class ChatSeekerActivity extends AppCompatActivity {
                 startActivity(new Intent(this, EmployerNotificationsActivity.class));
                 overridePendingTransition(0, 0);
             } else if (menuItem.getItemId() == R.id.nav_activity_seeker) {
-                startActivity(new Intent(this, SaveSeekerActivity.class));
+                startActivity(new Intent(this, AppliedSeekerActivity.class));
                 overridePendingTransition(0, 0);
             } else if (menuItem.getItemId() == R.id.nav_profile_seeker) {
                 startActivity(new Intent(this, SeekerProfileActivity.class));

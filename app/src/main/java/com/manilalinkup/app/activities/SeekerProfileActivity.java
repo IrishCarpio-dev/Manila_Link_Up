@@ -69,7 +69,7 @@ public class SeekerProfileActivity extends AppCompatActivity {
                 overridePendingTransition(0, 0);
                 return true;
             }else if(menuItem.getItemId() == R.id.nav_activity_seeker) {
-                startActivity(new Intent(SeekerProfileActivity.this, SaveSeekerActivity.class));
+                startActivity(new Intent(SeekerProfileActivity.this, AppliedSeekerActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
             }else if(menuItem.getItemId() == R.id.nav_chat_seeker) {
