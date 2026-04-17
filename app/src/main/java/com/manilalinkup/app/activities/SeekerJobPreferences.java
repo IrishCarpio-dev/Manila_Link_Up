@@ -79,7 +79,7 @@ public class SeekerJobPreferences extends AppCompatActivity {
         tvSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SeekerJobPreferences.this, SeekerDashboardActivity.class);
+                Intent intent = new Intent(SeekerJobPreferences.this, AllSetActivity.class);
                 startActivity(intent);
             }
         });
@@ -129,26 +129,32 @@ public class SeekerJobPreferences extends AppCompatActivity {
 
             Chip chip = new Chip(this);
             chip.setText(tag.getLabel());
-
-            chip.setChipBackgroundColorResource(R.color.chip_background_state_list);
+            chip.setChipBackgroundColorResource(R.color.manila_blue);
             chip.setTextColor(Color.WHITE);
-
-            chip.setCheckable(true);
-            chip.setChecked(true);
-            chip.setCheckedIconVisible(false);
-
+            chip.setCheckable(false);
             chip.setCloseIconVisible(true);
+            chip.setCloseIconTint(ColorStateList.valueOf(Color.WHITE));
+
+            final String currentTagId = tagId;
             chip.setOnCloseIconClickListener(v -> {
-                selectedTagIds.remove(tagId);
+                selectedTagIds.remove(currentTagId);
                 refreshServiceTagsDisplay();
             });
+
             chipGroupServiceTags.addView(chip);
-            chip.setCloseIconTint(ColorStateList.valueOf(Color.WHITE));
         }
 
-        // Add the "+" button to open modal
         Chip addChip = new Chip(this);
         addChip.setText("+ Add Service");
+        addChip.setChipBackgroundColorResource(android.R.color.transparent);
+        addChip.setChipStrokeColor(ColorStateList.valueOf(getResources().getColor(R.color.manila_blue)));
+
+        float strokeWidthPx = 2 * getResources().getDisplayMetrics().density;
+        addChip.setChipStrokeWidth(strokeWidthPx);
+
+        addChip.setTextColor(getResources().getColor(R.color.manila_blue));
+        addChip.setCheckable(false);
+
         addChip.setOnClickListener(v -> showServiceTagModal());
         chipGroupServiceTags.addView(addChip);
     }
@@ -258,7 +264,7 @@ public class SeekerJobPreferences extends AppCompatActivity {
                 progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     Toast.makeText(SeekerJobPreferences.this, "Preferences Saved!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(SeekerJobPreferences.this, SeekerDashboardActivity.class));
+                    startActivity(new Intent(SeekerJobPreferences.this, AllSetActivity.class));
                     finish();
                 } else {
                     ErrorUtils.showErrorMessage(SeekerJobPreferences.this, response.errorBody());

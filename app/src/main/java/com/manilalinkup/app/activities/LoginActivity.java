@@ -1,6 +1,5 @@
 package com.manilalinkup.app.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -46,12 +45,6 @@ public class LoginActivity extends AppCompatActivity {
     TextInputLayout passwordLayout;
     TextView forgetPassword;
 
-    //for testing Dashboards - Irish
-    ImageView googleLogin;
-    ImageView facebookLogin; // Added for Facebook shortcut
-
-
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,31 +56,6 @@ public class LoginActivity extends AppCompatActivity {
         emailLayout = findViewById(R.id.text_input_layout_email_address);
         passwordLayout = findViewById(R.id.text_input_layout_password);
         forgetPassword = findViewById(R.id.text_view_forget_password);
-
-        // For testing Dashboards - Irish
-        googleLogin = findViewById(R.id.image_view_login_google);
-        googleLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent testIntents = new Intent(LoginActivity.this, EmployerDashboard.class);
-                startActivity(testIntents);
-            }
-        });
-
-        // For testing Seeker Dashboard via Facebook shortcut
-        facebookLogin = findViewById(R.id.image_view_login_facebook);
-        facebookLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Direct jump to Seeker Dashboard
-                Intent intent = new Intent(LoginActivity.this, SeekerDashboardActivity.class);
-                startActivity(intent);
-                finish(); // Optional: closes login screen so back button doesn't return here
-            }
-        });
-
-
-
 
         progressDialog = new android.app.ProgressDialog(this);
         progressDialog.setMessage("Logging in...");
@@ -104,20 +72,24 @@ public class LoginActivity extends AppCompatActivity {
                 emailLayout.setError(null);
                 passwordLayout.setError(null);
 
-                if(email.isEmpty()){
+                if (email.isEmpty()) {
                     emailLayout.setError("Email is required.");
+                    emailInput.requestFocus();
+                    return;
+                } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    emailLayout.setError("Please enter a valid email address.");
                     emailInput.requestFocus();
                     return;
                 }
 
-                if(password.isEmpty()){
+                String passwordPattern = "^(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
+
+                if (password.isEmpty()) {
                     passwordLayout.setError("Password is required.");
                     passwordInput.requestFocus();
                     return;
-                }
-
-                if(password.length() < 8){
-                    passwordLayout.setError("Password must be at least 8 characters.");
+                } else if (!password.matches(passwordPattern)) {
+                    passwordLayout.setError("Please check your password if it's correct.");
                     passwordInput.requestFocus();
                     return;
                 }

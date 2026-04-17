@@ -30,7 +30,6 @@ import okhttp3.ResponseBody;
 public class SignUpActivity extends AppCompatActivity {
     private android.app.ProgressDialog progressDialog;
     private com.google.firebase.auth.FirebaseAuth mAuth;
-    MaterialToolbar toolbar;
     MaterialButton sendOTP;
     TextInputLayout firstName;
     TextInputLayout middleName;
@@ -64,12 +63,6 @@ public class SignUpActivity extends AppCompatActivity {
         progressDialog.setMessage("Creating account...");
         progressDialog.setCancelable(false);
 
-
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         sendOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,24 +75,54 @@ public class SignUpActivity extends AppCompatActivity {
                 String createPasswordInput = createPassword.getEditText().getText().toString().trim();
                 String confirmPasswordInput = confirmPassword.getEditText().getText().toString().trim();
 
-                if (emailAddressInput.isEmpty() || createPasswordInput.isEmpty() || confirmPasswordInput.isEmpty()) {
-                    Toast.makeText(SignUpActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                firstName.setError(null);
+                lastname.setError(null);
+                emailAddress.setError(null);
+                mobileNumber.setError(null);
+                createPassword.setError(null);
+                confirmPassword.setError(null);
+
+                if (firstnameInput.isEmpty()) {
+                    firstName.setError("First name is required");
                     return;
                 }
-                if (!createPasswordInput.equals(confirmPasswordInput)) {
-                    confirmPassword.setError("Passwords do not match");
+                if (lastnameInput.isEmpty()) {
+                    lastname.setError("Last name is required");
                     return;
-                } else {
-                    confirmPassword.setError(null);
                 }
 
-                if (createPasswordInput.length() < 8) {
-                    createPassword.setError("Password must be at least 8 characters");
+                if (emailAddressInput.isEmpty()) {
+                    emailAddress.setError("Email address is required");
+                    return;
+                } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddressInput).matches()) {
+                    emailAddress.setError("Please enter a valid email address");
+                    return;
+                }
+
+                if (mobileNumberInput.isEmpty()) {
+                    mobileNumber.setError("Mobile number is required");
+                    return;
+                } else if (mobileNumberInput.length() != 10 || !mobileNumberInput.startsWith("9")) {
+                    mobileNumber.setError("Enter 10 digits starting with 9");
+                    return;
+                }
+
+                String passwordPattern = "^(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
+
+                if (createPasswordInput.isEmpty()) {
+                    createPassword.setError("Password is required");
+                    return;
+                } else if (!createPasswordInput.matches(passwordPattern)) {
+                    createPassword.setError("Please use 8+ character, 1 Capital, and 1 Special character");
+                    return;
+                }
+
+                if (!createPasswordInput.equals(confirmPasswordInput)) {
+                    confirmPassword.setError("Passwords do not match");
                     return;
                 }
 
                 progressDialog.show();
-
                 mAuth.createUserWithEmailAndPassword(emailAddressInput, createPasswordInput)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
