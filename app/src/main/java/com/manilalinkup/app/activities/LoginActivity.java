@@ -72,20 +72,24 @@ public class LoginActivity extends AppCompatActivity {
                 emailLayout.setError(null);
                 passwordLayout.setError(null);
 
-                if(email.isEmpty()){
+                if (email.isEmpty()) {
                     emailLayout.setError("Email is required.");
+                    emailInput.requestFocus();
+                    return;
+                } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    emailLayout.setError("Please enter a valid email address.");
                     emailInput.requestFocus();
                     return;
                 }
 
-                if(password.isEmpty()){
+                String passwordPattern = "^(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
+
+                if (password.isEmpty()) {
                     passwordLayout.setError("Password is required.");
                     passwordInput.requestFocus();
                     return;
-                }
-
-                if(password.length() < 8){
-                    passwordLayout.setError("Password must be at least 8 characters.");
+                } else if (!password.matches(passwordPattern)) {
+                    passwordLayout.setError("Please check your password if it's correct.");
                     passwordInput.requestFocus();
                     return;
                 }
