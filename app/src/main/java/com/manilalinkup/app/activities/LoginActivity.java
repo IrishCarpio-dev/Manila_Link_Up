@@ -2,6 +2,7 @@ package com.manilalinkup.app.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,7 +36,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.GoogleAuthProvider;
+
 public class LoginActivity extends AppCompatActivity {
+    private static final int RC_SIGN_IN = 9001;
+    private GoogleSignInClient mGoogleSignInClient;
+    private ImageView googleLoginButton;
     private android.app.ProgressDialog progressDialog;
     private com.google.firebase.auth.FirebaseAuth mAuth;
     MaterialButton loginNowButton;
@@ -44,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     TextInputLayout emailLayout;
     TextInputLayout passwordLayout;
     TextView forgetPassword;
+    TextView signUpInstead;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +70,34 @@ public class LoginActivity extends AppCompatActivity {
         emailLayout = findViewById(R.id.text_input_layout_email_address);
         passwordLayout = findViewById(R.id.text_input_layout_password);
         forgetPassword = findViewById(R.id.text_view_forget_password);
+        signUpInstead = findViewById(R.id.text_view_login_sign_up_account);
+        googleLoginButton = findViewById(R.id.image_view_login_google);
+
+        signUpInstead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, GetStarted.class);
+                startActivity(intent);
+            }
+        });
+
+
+        mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
+
+        // 3. Configure Google Sign-In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id)) // This comes from google-services.json automatically
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        progressDialog = new android.app.ProgressDialog(this);
+        progressDialog.setMessage("Logging in...");
+        progressDialog.setCancelable(false);
+
+        // 4. Set Google Button Click Listener
+        googleLoginButton.setOnClickListener(v -> signInWithGoogle());
 
         progressDialog = new android.app.ProgressDialog(this);
         progressDialog.setMessage("Logging in...");
@@ -125,6 +167,56 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void signInWithGoogle() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                if (e.getStatusCode() == 12501) {
+                    Log.d("GoogleSignIn", "User cancelled sign-in");
+                } else {
+                    Toast.makeText(this, "Google sign in failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        progressDialog.setMessage("Authenticating with Google...");
+        progressDialog.show();
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+                                if (tokenTask.isSuccessful()) {
+                                    String token = tokenTask.getResult().getToken();
+                                    // REUSE your existing checkUserRole method!
+                                    checkUserRole(token);
+                                }
+                            });
+                        }
+                    } else {
+                        progressDialog.dismiss();
+                        Toast.makeText(LoginActivity.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 
     private void registerFcmToken(String idToken) {
         FirebaseMessaging.getInstance().getToken().addOnSuccessListener(fcmToken -> {
