@@ -84,9 +84,8 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
 
-        // 3. Configure Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id)) // This comes from google-services.json automatically
+                .requestIdToken(getString(R.string.default_web_client_id)) // This comes from google-services.json
                 .requestEmail()
                 .build();
 
@@ -96,12 +95,11 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Logging in...");
         progressDialog.setCancelable(false);
 
-        // 4. Set Google Button Click Listener
         googleLoginButton.setOnClickListener(v -> signInWithGoogle());
 
         progressDialog = new android.app.ProgressDialog(this);
         progressDialog.setMessage("Logging in...");
-        progressDialog.setCancelable(false); // Prevents user from dismissing it by clicking outside
+        progressDialog.setCancelable(false);
 
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
         loginNowButton.setOnClickListener(new View.OnClickListener() {
@@ -205,7 +203,6 @@ public class LoginActivity extends AppCompatActivity {
                             user.getIdToken(true).addOnCompleteListener(tokenTask -> {
                                 if (tokenTask.isSuccessful()) {
                                     String token = tokenTask.getResult().getToken();
-                                    // REUSE your existing checkUserRole method!
                                     checkUserRole(token);
                                 }
                             });

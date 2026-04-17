@@ -154,12 +154,9 @@ public class SeekerSettingsActivity extends AppCompatActivity {
                 .show();
     }
 
-    // 3. Create a specialized logout method that handles Google Sign-Out
     private void performLogout() {
-        // Sign out from Firebase
         mAuth.signOut();
 
-        // Sign out from Google (This ensures the account picker shows next time)
         mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> {
             // After Google signs out, use your helper or manual intent to go back to Login
             Intent intent = new Intent(SeekerSettingsActivity.this, LoginActivity.class);
