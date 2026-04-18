@@ -66,8 +66,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                     overridePendingTransition(0, 0);
                     return true;
                 }else if (id == R.id.nav_notifications_seeker) {
-                    //Will set to SeekerNotifications pa, pending task for loraine
-                    Intent intent = new Intent(SeekerDashboardActivity.this, EmployerNotificationsActivity.class);
+                    Intent intent = new Intent(SeekerDashboardActivity.this, SeekerNotificationsActivity.class);
                     startActivity(intent);
                     overridePendingTransition(0, 0);
                     return true;
