@@ -40,6 +40,7 @@ import okhttp3.ResponseBody;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -85,8 +86,17 @@ public class EmployerDashboard extends AppCompatActivity {
             @Override
             public void onJobClick(JobPostDashboardModel job) {
                 Intent intent = new Intent(EmployerDashboard.this, EmployerViewJobPost.class);
+                intent.putExtra("JOB_ID", job.getJobId());
                 intent.putExtra("JOB_TITLE", job.getJobTitle());
                 intent.putExtra("EMPLOYER_NAME", job.getEmployerName());
+                intent.putExtra("LOCATION", job.getJobPostLocation());
+                intent.putExtra("DURATION", job.getJob_duration());
+                intent.putExtra("SALARY", job.getSalary() != null ? job.getSalary() : 0.0);
+                intent.putExtra("DESCRIPTION", job.getDescription());
+                intent.putExtra("EXPIRES_AT", job.getExpiresAt());
+                intent.putExtra("HOW_LONG_POSTED", job.getHowLongJobIsPosted());
+                intent.putExtra("EMPLOYER_PHOTO", job.getEmployerProfilePicture());
+                intent.putStringArrayListExtra("TAG_IDS", new ArrayList<>(job.getTagIds() != null ? job.getTagIds() : Collections.emptyList()));
                 startActivity(intent);
             }
             @Override
@@ -242,6 +252,9 @@ public class EmployerDashboard extends AppCompatActivity {
         );
         model.setJobId(job.getId());
         model.setTagIds(job.getTags());
+        model.setSalary(job.getSalary());
+        model.setDescription(job.getDescription());
+        model.setExpiresAt(job.getExpiresAt());
         return model;
     }
 

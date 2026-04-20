@@ -2,16 +2,23 @@ package com.manilalinkup.app.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
@@ -21,6 +28,14 @@ import com.manilalinkup.app.models.MarkCompleteRequest;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.utilities.SessionCache;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,11 +62,22 @@ public class EmployerViewJobPost extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_employer_view_job_post);
 
-        jobId               = getIntent().getStringExtra("JOB_ID");
-        applicationId       = getIntent().getStringExtra("APPLICATION_ID");
-        seekerName          = getIntent().getStringExtra("SEEKER_NAME");
-        currentStatus       = getIntent().getIntExtra("STATUS", 1);
+        jobId                = getIntent().getStringExtra("JOB_ID");
+        applicationId        = getIntent().getStringExtra("APPLICATION_ID");
+        seekerName           = getIntent().getStringExtra("SEEKER_NAME");
+        currentStatus        = getIntent().getIntExtra("STATUS", 1);
         employerHasCompleted = getIntent().getBooleanExtra("EMPLOYER_HAS_COMPLETED", false);
+
+        String jobTitle       = getIntent().getStringExtra("JOB_TITLE");
+        String employerName   = getIntent().getStringExtra("EMPLOYER_NAME");
+        String location       = getIntent().getStringExtra("LOCATION");
+        String duration       = getIntent().getStringExtra("DURATION");
+        double salary         = getIntent().getDoubleExtra("SALARY", 0.0);
+        String description    = getIntent().getStringExtra("DESCRIPTION");
+        String expiresAt      = getIntent().getStringExtra("EXPIRES_AT");
+        String howLongPosted  = getIntent().getStringExtra("HOW_LONG_POSTED");
+        String employerPhoto  = getIntent().getStringExtra("EMPLOYER_PHOTO");
+        ArrayList<String> tagIds = getIntent().getStringArrayListExtra("TAG_IDS");
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -61,6 +87,49 @@ public class EmployerViewJobPost extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
         toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+
+        TextView tvToolbarEmployerName = findViewById(R.id.text_view_employer_name_job_post);
+        TextView tvJobTitle            = findViewById(R.id.text_view_employer_job_title_placeholder);
+        TextView tvEmployerName        = findViewById(R.id.text_view_employer_name_placeholder);
+        TextView tvLocation            = findViewById(R.id.text_view_location_placeholder);
+        TextView tvSalary              = findViewById(R.id.text_view_salary_placeholder);
+        TextView tvCalendar            = findViewById(R.id.text_view_calendar_placeholder);
+        TextView tvExpiresAt           = findViewById(R.id.text_view_expires_at);
+        TextView tvDescription         = findViewById(R.id.text_view_job_description_placeholder);
+        TextView tvHowLongPosted       = findViewById(R.id.text_view_how_long_job_post_posted_placeholder);
+        ImageView ivProfilePicture     = findViewById(R.id.image_view_employee_profile_picture_placeholder);
+        ChipGroup chipGroupTags        = findViewById(R.id.chip_group_tags);
+
+        if (employerName != null) tvToolbarEmployerName.setText(employerName);
+        if (jobTitle != null)     tvJobTitle.setText(jobTitle);
+        if (employerName != null) tvEmployerName.setText(employerName);
+        if (location != null)     tvLocation.setText(location);
+        if (duration != null)     tvCalendar.setText(duration);
+        if (description != null)  tvDescription.setText(description);
+        if (howLongPosted != null) tvHowLongPosted.setText(howLongPosted);
+
+        if (salary > 0) {
+            tvSalary.setText(String.format(Locale.US, "₱%.0f/day", salary));
+        } else {
+            tvSalary.setVisibility(View.GONE);
+            findViewById(R.id.money_logo).setVisibility(View.GONE);
+        }
+
+        if (expiresAt != null) {
+            tvExpiresAt.setText("Expires: " + formatDate(expiresAt));
+        } else {
+            tvExpiresAt.setVisibility(View.GONE);
+            findViewById(R.id.expires_logo).setVisibility(View.GONE);
+        }
+
+        if (employerPhoto != null && !employerPhoto.isEmpty()) {
+            Glide.with(this)
+                    .load(employerPhoto)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(ivProfilePicture);
+        }
+
+        populateTags(chipGroupTags, tagIds);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
@@ -77,6 +146,43 @@ public class EmployerViewJobPost extends AppCompatActivity {
         btnRate         = findViewById(R.id.btn_rate);
 
         updateActionVisibility();
+    }
+
+    private void populateTags(ChipGroup chipGroup, List<String> tagIds) {
+        if (tagIds == null || tagIds.isEmpty()) return;
+        SessionCache.getInstance().ensureServiceTags(new SessionCache.ServiceTagsCallback() {
+            @Override
+            public void onAvailable(List<com.manilalinkup.app.models.ServiceTagModel> tags) {
+                Map<String, String> labelsById = SessionCache.getInstance().getServiceTagLabelsById();
+                chipGroup.removeAllViews();
+                for (String id : tagIds) {
+                    String label = labelsById.get(id);
+                    if (label == null) continue;
+                    Chip chip = new Chip(EmployerViewJobPost.this);
+                    chip.setText(label);
+                    chip.setChipBackgroundColorResource(R.color.manila_blue);
+                    chip.setTextColor(Color.WHITE);
+                    chip.setCheckable(false);
+                    chip.setClickable(false);
+                    chip.setFocusable(false);
+                    chip.setEnsureMinTouchTargetSize(false);
+                    chipGroup.addView(chip);
+                }
+            }
+
+            @Override
+            public void onError() {}
+        });
+    }
+
+    private String formatDate(String isoDate) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US);
+            Date date = sdf.parse(isoDate);
+            return new SimpleDateFormat("MMM d, yyyy", Locale.US).format(date);
+        } catch (Exception e) {
+            return isoDate;
+        }
     }
 
     private void updateActionVisibility() {
