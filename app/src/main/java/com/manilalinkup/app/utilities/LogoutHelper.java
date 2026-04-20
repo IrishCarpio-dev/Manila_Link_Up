@@ -34,6 +34,7 @@ public class LogoutHelper {
             }
 
             String idToken = tokenTask.getResult().getToken();
+
             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(fcmTask -> {
                 if (!fcmTask.isSuccessful()) {
                     finalPerformSignOut(activity, mAuth);
@@ -42,6 +43,7 @@ public class LogoutHelper {
 
                 String fcmToken = fcmTask.getResult();
                 ApiService api = RetrofitClient.getClient(idToken).create(ApiService.class);
+
                 api.unregisterDevice(new UnregisterDeviceRequest(fcmToken))
                         .enqueue(new Callback<ResponseBody>() {
                             @Override
@@ -57,8 +59,10 @@ public class LogoutHelper {
             });
         });
     }
+
     private static void finalPerformSignOut(Activity activity, FirebaseAuth mAuth) {
         SessionCache.getInstance().clear();
+
         mAuth.signOut();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

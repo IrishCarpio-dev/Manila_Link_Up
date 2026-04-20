@@ -146,9 +146,10 @@ public class SeekerSettingsActivity extends AppCompatActivity {
     private void showLogoutConfirmation() {
         new AlertDialog.Builder(this)
                 .setTitle("Logout")
-                .setMessage("Are you sure you want to log out from Manila LinkUp?")
+                .setMessage("Are you sure you want to log out?")
                 .setPositiveButton("Logout", (dialog, which) -> {
-                    performLogout();
+                    // DELETE performLogout() and use this instead:
+                    LogoutHelper.logout(SeekerSettingsActivity.this, mAuth);
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
