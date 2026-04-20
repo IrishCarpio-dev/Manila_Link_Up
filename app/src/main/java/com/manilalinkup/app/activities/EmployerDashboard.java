@@ -97,6 +97,7 @@ public class EmployerDashboard extends AppCompatActivity {
                 intent.putExtra("HOW_LONG_POSTED", job.getHowLongJobIsPosted());
                 intent.putExtra("EMPLOYER_PHOTO", job.getEmployerProfilePicture());
                 intent.putStringArrayListExtra("TAG_IDS", new ArrayList<>(job.getTagIds() != null ? job.getTagIds() : Collections.emptyList()));
+                intent.putExtra("IS_OWNER", true);
                 startActivity(intent);
             }
             @Override

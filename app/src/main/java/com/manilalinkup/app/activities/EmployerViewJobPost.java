@@ -1,9 +1,12 @@
 package com.manilalinkup.app.activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -24,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.models.ApplicationModel;
+import com.manilalinkup.app.models.ArchiveJobRequest;
 import com.manilalinkup.app.models.MarkCompleteRequest;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
@@ -37,6 +41,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,10 +54,12 @@ public class EmployerViewJobPost extends AppCompatActivity {
     private Button btnRate;
 
     private String jobId;
+    private String jobTitle;
     private String applicationId;
     private String seekerName;
     private int currentStatus;
     private boolean employerHasCompleted;
+    private boolean isOwner;
 
     private ProgressDialog progressDialog;
 
@@ -67,8 +74,9 @@ public class EmployerViewJobPost extends AppCompatActivity {
         seekerName           = getIntent().getStringExtra("SEEKER_NAME");
         currentStatus        = getIntent().getIntExtra("STATUS", 1);
         employerHasCompleted = getIntent().getBooleanExtra("EMPLOYER_HAS_COMPLETED", false);
+        isOwner              = getIntent().getBooleanExtra("IS_OWNER", false);
 
-        String jobTitle       = getIntent().getStringExtra("JOB_TITLE");
+        jobTitle              = getIntent().getStringExtra("JOB_TITLE");
         String employerName   = getIntent().getStringExtra("EMPLOYER_NAME");
         String location       = getIntent().getStringExtra("LOCATION");
         String duration       = getIntent().getStringExtra("DURATION");
@@ -146,6 +154,59 @@ public class EmployerViewJobPost extends AppCompatActivity {
         btnRate         = findViewById(R.id.btn_rate);
 
         updateActionVisibility();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (isOwner) {
+            getMenuInflater().inflate(R.menu.menu_employer_view_job_post, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_archive_job) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Archive Job")
+                    .setMessage("Are you sure you want to archive \"" + jobTitle + "\"?")
+                    .setPositiveButton("Archive", (d, w) -> archiveJob())
+                    .setNegativeButton("Cancel", null)
+                    .show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void archiveJob() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        progressDialog.setMessage("Archiving job...");
+        progressDialog.show();
+
+        user.getIdToken(true).addOnSuccessListener(result -> {
+            ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
+            api.archiveJob(new ArchiveJobRequest(jobId))
+                    .enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    progressDialog.dismiss();
+                    if (response.isSuccessful()) {
+                        Toast.makeText(EmployerViewJobPost.this, "Job archived", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        ErrorUtils.showErrorMessage(EmployerViewJobPost.this, response.errorBody());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    progressDialog.dismiss();
+                    ErrorUtils.showThrowableError(EmployerViewJobPost.this, t);
+                }
+            });
+        });
     }
 
     private void populateTags(ChipGroup chipGroup, List<String> tagIds) {

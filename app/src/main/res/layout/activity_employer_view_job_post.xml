@@ -13,7 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#1B3E9C"
-        app:navigationIconTint="@color/white">
+        app:navigationIconTint="@color/white"
+        app:titleTextColor="@color/white"
+        android:theme="@style/ThemeOverlay.ManilaBluToolbar">
 
         <TextView
             android:id="@+id/text_view_employer_name_job_post"

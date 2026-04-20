@@ -15,6 +15,15 @@
         <item name="postSplashScreenTheme">@style/Theme.ManilaLinkUp</item>
     </style>
 
+    <style name="ManilaBluPopupMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@color/manila_blue</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ThemeOverlay.ManilaBluToolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="actionOverflowMenuStyle">@style/ManilaBluPopupMenu</item>
+    </style>
+
     <style name="CircleImage">
         <item name="cornerSize">50%</item>
     </style>
