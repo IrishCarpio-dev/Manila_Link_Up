@@ -3,18 +3,17 @@ package com.manilalinkup.app.models;
 public class ApplicantModel {
     String id;
     String seekerUid;
+    String jobId;
     Integer status;
+    String chatId;
     SeekerProfileModel seeker;
 
-    public ApplicantModel(String id, String seekerUid, Integer status, SeekerProfileModel seeker) {
-        this.id = id;
-        this.seekerUid = seekerUid;
-        this.status = status;
-        this.seeker = seeker;
-    }
+    public ApplicantModel() {}
 
     public String getId() { return id; }
     public String getSeekerUid() { return seekerUid; }
+    public String getJobId() { return jobId; }
     public Integer getStatus() { return status; }
+    public String getChatId() { return chatId; }
     public SeekerProfileModel getSeeker() { return seeker; }
 }

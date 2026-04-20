@@ -12,15 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -28,7 +25,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
-import com.manilalinkup.app.adapters.SalaryRangeAdapter;
 import com.manilalinkup.app.utilities.AddressAutocompleteHelper;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
@@ -38,9 +34,7 @@ import com.manilalinkup.app.utilities.RetrofitClient;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import okhttp3.MultipartBody;
@@ -51,11 +45,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EditSeekerProfileActivity extends AppCompatActivity {
-
-    private RecyclerView rvSalaryRange;
-    private SalaryRangeAdapter adapter;
-    private RadioGroup rgSalaryType;
-    private EditText etCustomSalary;
     private EditText locationInput;
     private ImageView profileImage;
     private ImageView clearanceImage;
@@ -101,28 +90,6 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-
-        rvSalaryRange = findViewById(R.id.rvSalaryRange);
-        rgSalaryType = findViewById(R.id.rgSalaryType);
-        etCustomSalary = findViewById(R.id.etCustomSalary);
-        saveBtn = findViewById(R.id.material_button_save);
-
-        rvSalaryRange.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SalaryRangeAdapter(getHourlyRanges());
-        rvSalaryRange.setAdapter(adapter);
-
-        rgSalaryType.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.rbHour) {
-                adapter.updateData(getHourlyRanges());
-                etCustomSalary.setHint("(Type your preferred Salary per hour)");
-            } else if (checkedId == R.id.rbDay) {
-                adapter.updateData(getDailyRanges());
-                etCustomSalary.setHint("(Type your preferred Salary per day)");
-            } else if (checkedId == R.id.rbMonth) {
-                adapter.updateData(getMonthRanges());
-                etCustomSalary.setHint("(Type your preferred Salary per month)");
-            }
-        });
 
         progressDialog = new android.app.ProgressDialog(this);
         progressDialog.setMessage("Setting up profile...");
@@ -199,43 +166,6 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
         });
 
     }
-
-    private List<SalaryRangeAdapter.SalaryOption> getHourlyRanges() {
-        List<SalaryRangeAdapter.SalaryOption> list = new ArrayList<>();
-        list.add(new SalaryRangeAdapter.SalaryOption("Below 50/Hour", 49));
-        list.add(new SalaryRangeAdapter.SalaryOption("50 - 100/Hour", 100));
-        list.add(new SalaryRangeAdapter.SalaryOption("100 - 150/Hour", 150));
-        list.add(new SalaryRangeAdapter.SalaryOption("150 - 200/Hour", 200));
-        list.add(new SalaryRangeAdapter.SalaryOption("200 - 300/Hour", 300));
-        list.add(new SalaryRangeAdapter.SalaryOption("300 - 500/Hour", 500));
-        list.add(new SalaryRangeAdapter.SalaryOption("500+/Hour", 501));
-        return list;
-    }
-
-    private List<SalaryRangeAdapter.SalaryOption> getDailyRanges() {
-        List<SalaryRangeAdapter.SalaryOption> list = new ArrayList<>();
-        list.add(new SalaryRangeAdapter.SalaryOption("Below 500/Day", 499));
-        list.add(new SalaryRangeAdapter.SalaryOption("500-800/Day", 800));
-        list.add(new SalaryRangeAdapter.SalaryOption("800-1200/Day", 1200));
-        list.add(new SalaryRangeAdapter.SalaryOption("1200-2000/Day", 2000));
-        list.add(new SalaryRangeAdapter.SalaryOption("2000-3000/Day", 3000));
-        list.add(new SalaryRangeAdapter.SalaryOption("3000-5000/Day", 5000));
-        list.add(new SalaryRangeAdapter.SalaryOption("5000+/Day", 5001));
-        return list;
-    }
-
-    private List<SalaryRangeAdapter.SalaryOption> getMonthRanges() {
-        List<SalaryRangeAdapter.SalaryOption> list = new ArrayList<>();
-        list.add(new SalaryRangeAdapter.SalaryOption("Below 15,000/Month", 14999));
-        list.add(new SalaryRangeAdapter.SalaryOption("15,000 - 25,000/Month", 25000));
-        list.add(new SalaryRangeAdapter.SalaryOption("25,000 - 40,000/Month", 40000));
-        list.add(new SalaryRangeAdapter.SalaryOption("40,000 - 60,000/Month", 60000));
-        list.add(new SalaryRangeAdapter.SalaryOption("60,000 - 80,000/Month", 80000));
-        list.add(new SalaryRangeAdapter.SalaryOption("80,000 - 100,000/Month", 100000));
-        list.add(new SalaryRangeAdapter.SalaryOption("100,000+/Month", 100001));
-        return list;
-    }
-
     private void updateLabel() {
         SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         formattedDateForApi = apiDateFormat.format(aCalendar.getTime());
@@ -258,12 +188,11 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
                     switch(selectedImageOption) {
                         case PROFILE:
                             selectProfilePhoto(uri);
+                            break;
                         case CLEARANCE:
-                            selectValidationPhoto(uri);
                         case ID:
                             selectValidationPhoto(uri);
-                        default:
-                            return;
+                            break;
                     }
                 };
             }
@@ -313,6 +242,7 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
         } else if (selectedImageOption == ImageUploadSelection.ID) {
             this.validIdUri = uri;
 
+
             Glide.with(this)
                     .load(uri)
                     .centerCrop()
@@ -330,16 +260,17 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
                 File profileFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_profile.jpg");
                 profilePhotoUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", profileFile);
                 cameraLauncher.launch(profilePhotoUri);
+                break;
             case CLEARANCE:
                 File clearanceFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_clearance.jpg");
                 clearanceUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", clearanceFile);
                 cameraLauncher.launch(clearanceUri);
+                break;
             case ID:
                 File idFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_valid_id.jpg");
                 validIdUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", idFile);
                 cameraLauncher.launch(validIdUri);
-            default:
-                return;
+                break;
         }
     }
 
@@ -356,45 +287,32 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
             return;
         }
 
-        int selectedTypeId = rgSalaryType.getCheckedRadioButtonId();
-        String salaryTypeStr = "hourly";
-        if (selectedTypeId == R.id.rbDay) salaryTypeStr = "daily";
-        else if (selectedTypeId == R.id.rbMonth) salaryTypeStr = "monthly";
-
-        int salaryValueInt = adapter.getSelectedValue();
-        String customValue = etCustomSalary.getText().toString().trim();
-        if (!customValue.isEmpty()) {
-            try {
-                salaryValueInt = Integer.parseInt(customValue);
-            } catch (NumberFormatException e) {
-                progressDialog.dismiss();
-                Toast.makeText(this, "Please enter a valid number for salary", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-
-        if (salaryValueInt == 0) {
-            progressDialog.dismiss();
-            Toast.makeText(this, "Please select or enter a salary range", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         if (clearanceUri == null || validIdUri == null) {
             progressDialog.dismiss();
             Toast.makeText(this, "Please upload all required documents", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        MultipartBody.Part profilePhoto = MultipartRequestBodyHelper.prepareImagePart(this, profilePhotoUri, "profilePhoto");
+        String locationText = locationInput.getText().toString().trim();
+        if (locationText.isEmpty()) {
+            progressDialog.dismiss();
+            Toast.makeText(this, "Please fill Location field.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        MultipartBody.Part profilePhoto = (profilePhotoUri != null) ? MultipartRequestBodyHelper.prepareImagePart(this, profilePhotoUri, "profilePhoto") : null;
         MultipartBody.Part clearance = MultipartRequestBodyHelper.prepareImagePart(this, clearanceUri, "clearance");
         MultipartBody.Part validId = MultipartRequestBodyHelper.prepareImagePart(this, validIdUri, "validId");
 
         RequestBody birthDate = MultipartRequestBodyHelper.createPartFromString(formattedDateForApi);
-        RequestBody location = MultipartRequestBodyHelper.createPartFromString(locationInput.getText().toString());
-        RequestBody salaryValue = MultipartRequestBodyHelper.createPartFromString(String.valueOf(salaryValueInt));
-        RequestBody salaryType = MultipartRequestBodyHelper.createPartFromString(salaryTypeStr);
+        RequestBody address = MultipartRequestBodyHelper.createPartFromString(locationText);
+        RequestBody location = MultipartRequestBodyHelper.createPartFromString(locationText);
 
-        sendProfileToApi(token, profilePhoto, clearance, validId, birthDate, location, salaryValue, salaryType);
+        // Using placeholders since this activity no longer handles salary
+        RequestBody salaryValue = MultipartRequestBodyHelper.createPartFromString("0");
+        RequestBody salaryType = MultipartRequestBodyHelper.createPartFromString("undecided");
+
+        sendProfileToApi(token, profilePhoto, clearance, validId, birthDate, address, location, salaryValue, salaryType);
     }
 
     private void sendProfileToApi(
@@ -403,22 +321,23 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
             MultipartBody.Part clearance,
             MultipartBody.Part validId,
             RequestBody birthDate,
-            RequestBody location,
+            RequestBody address,   // Added
+            RequestBody location,  // Added
             RequestBody salaryValue,
             RequestBody salaryType
     ) {
         apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
         apiService.setupSeekerProfile(
-                profilePhoto, clearance, validId,
-                birthDate, location, salaryValue, salaryType
+                profilePhoto, clearance, validId, address,
+                birthDate, location
         ).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     Toast.makeText(EditSeekerProfileActivity.this, "Profile Setup Complete!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(EditSeekerProfileActivity.this, SeekerDashboardActivity.class);
+                    Intent intent = new Intent(EditSeekerProfileActivity.this, SeekerJobPreferences.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();

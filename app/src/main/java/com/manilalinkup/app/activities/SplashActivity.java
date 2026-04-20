@@ -10,11 +10,14 @@ import androidx.core.splashscreen.SplashScreen;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.ServiceTagModel;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.utilities.SessionCache;
 import com.manilalinkup.app.models.UserProfileModel;
 
+import java.util.List;
 import java.util.Optional;
 
 import retrofit2.Call;
@@ -58,6 +61,11 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ApiResponse<UserProfileModel>> call, Response<ApiResponse<UserProfileModel>> response) {
                 if (response.isSuccessful()) {
+                    SessionCache.getInstance().setUserProfile(response.body().getData());
+                    SessionCache.getInstance().refreshServiceTags(token, new SessionCache.ServiceTagsCallback() {
+                        @Override public void onAvailable(List<ServiceTagModel> tags) {}
+                        @Override public void onError() {}
+                    });
                     if (response.body().getData().getSeekers() != null) {
                         // User is a seeker
                         Boolean isProfileSet = Optional.ofNullable(response.body().getData().getSeekers().getProfileSet()).orElse(false);

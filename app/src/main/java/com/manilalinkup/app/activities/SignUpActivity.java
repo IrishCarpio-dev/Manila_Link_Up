@@ -3,6 +3,8 @@ package com.manilalinkup.app.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -28,10 +30,11 @@ import okhttp3.ResponseBody;
 public class SignUpActivity extends AppCompatActivity {
     private android.app.ProgressDialog progressDialog;
     private com.google.firebase.auth.FirebaseAuth mAuth;
-    MaterialToolbar toolbar;
     MaterialButton sendOTP;
     TextInputLayout firstName;
+    TextInputLayout middleName;
     TextInputLayout lastname;
+    AutoCompleteTextView suffixDropdown;
     TextInputLayout emailAddress;
     TextInputLayout mobileNumber;
     TextInputLayout createPassword;
@@ -46,7 +49,11 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
         sendOTP = findViewById(R.id.material_button_send_otp);
         firstName = findViewById(R.id.text_input_layout_first_name);
+        middleName = findViewById(R.id.text_input_layout_middle_name);
         lastname = findViewById(R.id.text_input_layout_last_name);
+        suffixDropdown = findViewById(R.id.auto_complete_suffix);
+        ArrayAdapter<String> suffixAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new String[]{"", "Sr.", "Jr.", "III", "IV"});
+        suffixDropdown.setAdapter(suffixAdapter);
         emailAddress = findViewById(R.id.text_input_layout_email_address);
         mobileNumber = findViewById(R.id.text_input_layout_phone_number);
         createPassword = findViewById(R.id.text_input_create_password);
@@ -56,66 +63,90 @@ public class SignUpActivity extends AppCompatActivity {
         progressDialog.setMessage("Creating account...");
         progressDialog.setCancelable(false);
 
-
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         sendOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String firstnameInput = firstName.getEditText().getText().toString().trim();
+                String middleNameInput = middleName.getEditText().getText().toString().trim();
                 String lastnameInput = lastname.getEditText().getText().toString().trim();
+                String suffixInput = suffixDropdown.getText().toString().trim();
                 String mobileNumberInput = mobileNumber.getEditText().getText().toString().trim();
                 String emailAddressInput = emailAddress.getEditText().getText().toString().trim();
                 String createPasswordInput = createPassword.getEditText().getText().toString().trim();
                 String confirmPasswordInput = confirmPassword.getEditText().getText().toString().trim();
 
-                if (emailAddressInput.isEmpty() || createPasswordInput.isEmpty() || confirmPasswordInput.isEmpty()) {
-                    Toast.makeText(SignUpActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                firstName.setError(null);
+                lastname.setError(null);
+                emailAddress.setError(null);
+                mobileNumber.setError(null);
+                createPassword.setError(null);
+                confirmPassword.setError(null);
+
+                if (firstnameInput.isEmpty()) {
+                    firstName.setError("First name is required");
                     return;
                 }
-                if (!createPasswordInput.equals(confirmPasswordInput)) {
-                    confirmPassword.setError("Passwords do not match");
+                if (lastnameInput.isEmpty()) {
+                    lastname.setError("Last name is required");
                     return;
-                } else {
-                    confirmPassword.setError(null);
                 }
 
-                if (createPasswordInput.length() < 8) {
-                    createPassword.setError("Password must be at least 8 characters");
+                if (emailAddressInput.isEmpty()) {
+                    emailAddress.setError("Email address is required");
+                    return;
+                } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddressInput).matches()) {
+                    emailAddress.setError("Please enter a valid email address");
+                    return;
+                }
+
+                if (mobileNumberInput.isEmpty()) {
+                    mobileNumber.setError("Mobile number is required");
+                    return;
+                } else if (mobileNumberInput.length() != 10 || !mobileNumberInput.startsWith("9")) {
+                    mobileNumber.setError("Enter 10 digits starting with 9");
+                    return;
+                }
+
+                String passwordPattern = "^(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
+
+                if (createPasswordInput.isEmpty()) {
+                    createPassword.setError("Password is required");
+                    return;
+                } else if (!createPasswordInput.matches(passwordPattern)) {
+                    createPassword.setError("Please use 8+ character, 1 Capital, and 1 Special character");
+                    return;
+                }
+
+                if (!createPasswordInput.equals(confirmPasswordInput)) {
+                    confirmPassword.setError("Passwords do not match");
                     return;
                 }
 
                 progressDialog.show();
-
                 mAuth.createUserWithEmailAndPassword(emailAddressInput, createPasswordInput)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 mAuth.getCurrentUser().sendEmailVerification();
 
                                 FirebaseUser user = mAuth.getCurrentUser();
+                                String userUid = user.getUid();
+
                                 user.getIdToken(true).addOnCompleteListener(tokenTask -> {
                                     if(tokenTask.isSuccessful()){
                                         String idToken = tokenTask.getResult().getToken();
 
                                         sendProfileToLaravel(
                                                 idToken,
+                                                userUid,
                                                 firstnameInput,
+                                                middleNameInput,
                                                 lastnameInput,
+                                                suffixInput,
                                                 emailAddressInput,
                                                 mobileNumberInput
                                         );
                                     }
-
                                 });
-
-                                Toast.makeText(SignUpActivity.this, "Registration successful! Please verify your email before logging in.", Toast.LENGTH_LONG).show();
-
-                                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                                finish();
                             } else {
                                 progressDialog.dismiss();
                                 Toast.makeText(SignUpActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -126,28 +157,23 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void sendProfileToLaravel(String uid, String firstnameInput, String lastnameInput, String emailAddressInput, String mobileNumberInput) {
-        ApiService apiService = RetrofitClient.getClient(uid).create(ApiService.class);
+    private void sendProfileToLaravel(String idToken, String actualUid, String firstnameInput, String middleNameInput, String lastnameInput, String suffixInput, String emailAddressInput, String mobileNumberInput) {
+        ApiService apiService = RetrofitClient.getClient(idToken).create(ApiService.class);
 
         SeekerRequest request = new SeekerRequest(
-                uid,
                 firstnameInput,
+                middleNameInput,
                 lastnameInput,
+                suffixInput,
                 emailAddressInput,
-                "Not set",        // Placeholder for Address
-                "Not set",        // Placeholder for Birthdate
-                "Manila",         // Placeholder for Location
                 mobileNumberInput,
-                0,                // Placeholder for Salary
-                "default_url",    // Placeholder for Profile Picture
-                "pending",        // Placeholder for Clearance
-                1,                // Status: 1 (Active)
-                0                 // Verified: 0 (No)
+                "2000-01-01"
         );
 
         apiService.registerSeeker(request).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     Toast.makeText(SignUpActivity.this, "Registration successful! Please verify your email before logging in.", Toast.LENGTH_LONG).show();
 

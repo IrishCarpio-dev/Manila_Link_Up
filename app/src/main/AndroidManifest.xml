@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -14,6 +15,9 @@
         android:usesCleartextTraffic="true">
 
         <activity
+            android:name=".activities.SeekerJobPreferences"
+            android:exported="false" />
+        <activity
             android:name=".activities.AppliedJobPostActivity"
             android:exported="false" />
 
@@ -23,19 +27,19 @@
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activities.ChatThreadSeeker"
-            android:exported="false"/>
-
+        <activity
+            android:name=".activities.ChatThreadSeeker"
+            android:exported="false" />
         <activity
             android:name=".activities.EmployerViewAllRatings"
             android:exported="false" />
 
         <activity
-            android:name=".activities.SaveSeekerActivity"
+            android:name=".activities.AppliedSeekerActivity"
             android:exported="false" />
 
         <activity
@@ -141,22 +145,19 @@
 
         <activity
             android:name=".activities.SeekerSettingsActivity"
-            android:label="Seeker Settings"
             android:exported="false"
-            android:parentActivityName=".activities.SeekerProfileActivity"/>
-
+            android:label="Seeker Settings"
+            android:parentActivityName=".activities.SeekerProfileActivity" />
         <activity
             android:name=".activities.EmployerSettingsActivity"
-            android:label="Employer Settings"
             android:exported="false"
-            android:parentActivityName=".activities.EmployerProfileActivity"/>
-
+            android:label="Employer Settings"
+            android:parentActivityName=".activities.EmployerProfileActivity" />
         <activity
             android:name=".activities.SeekerVerifyIdentityActivity"
-            android:label="Verify Identity"
             android:exported="false"
-            android:parentActivityName=".activities.SeekerSettingsActivity"/>
-
+            android:label="Verify Identity"
+            android:parentActivityName=".activities.SeekerSettingsActivity" />
         <activity
             android:name=".activities.SeekerPrivacyControlsActivity"
             android:exported="false"
@@ -166,14 +167,12 @@
         <activity
             android:name=".activities.TermsOfServiceActivity"
             android:allowEmbedded="false"
-            android:label="Terms of Service"/>
-
+            android:label="Terms of Service" />
         <activity
             android:name=".activities.SeekerDocumentVaultActivity"
             android:exported="false"
             android:label="Document Vault"
-            android:parentActivityName=".activities.SeekerSettingsActivity"/>
-
+            android:parentActivityName=".activities.SeekerSettingsActivity" />
         <activity
             android:name=".activities.AboutActivity"
             android:exported="false"
@@ -182,23 +181,31 @@
         <activity
             android:name=".activities.HelpCenterActivity"
             android:exported="false"
-            android:label="Help Center"/>
-
+            android:label="Help Center" />
         <activity
             android:name=".activities.EmployerBusinessVerificationActivity"
             android:exported="false"
             android:label="Business Verification"
-            android:parentActivityName=".activities.EmployerSettingsActivity"/>
-
+            android:parentActivityName=".activities.EmployerSettingsActivity" />
         <activity
             android:name=".activities.EmployerPrivacyActivity"
             android:exported="false"
             android:label="Privacy Controls"
-            android:parentActivityName=".activities.EmployerSettingsActivity"/>
-
+            android:parentActivityName=".activities.EmployerSettingsActivity" />
         <activity
             android:name=".activities.MainActivity"
             android:exported="true" />
+        <activity
+            android:name=".activities.SubmitRatingActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".services.MLUFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

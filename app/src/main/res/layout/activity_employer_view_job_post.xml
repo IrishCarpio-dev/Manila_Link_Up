@@ -51,6 +51,33 @@
             app:cornerRadius="8dp"
             app:elevation="8dp" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_mark_complete"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="#388E3C"
+            android:text="Mark Job Complete"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:cornerRadius="8dp"
+            android:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_rate"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="Rate Seeker"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            app:cornerRadius="8dp"
+            android:visibility="gone" />
+
     </LinearLayout>
 
     <ScrollView

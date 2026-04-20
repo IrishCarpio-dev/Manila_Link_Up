@@ -13,7 +13,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="190dp"
+        android:layout_height="wrap_content"
+        android:minHeight="190dp"
         android:padding="16dp">
 
         <ImageView
@@ -22,6 +23,17 @@
             android:layout_height="45dp"
             android:scaleType="fitXY"
             tools:src="@drawable/chipsstarters" />
+
+        <ImageView
+            android:id="@+id/image_view_job_card_options"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="More options"
+            android:padding="4dp"
+            android:src="@drawable/ic_more_vert"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/item_card_job_title_placeholder"
@@ -84,27 +96,24 @@
             android:textSize="14sp"
             tools:text="Apr. 4-8, 2026" />
 
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_job_card_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_card_calendar_placeholder"
+            android:layout_marginTop="8dp"
+            app:chipSpacingHorizontal="4dp"
+            app:chipSpacingVertical="2dp" />
+
         <TextView
             android:id="@+id/item_card_how_long_job_post_posted_placeholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/chip_group_job_card_tags"
             android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
+            android:layout_marginTop="8dp"
             android:textColor="#616161"
             tools:text="2d ago" />
-
-        <ImageView
-            android:id="@+id/image_view_report_button_job_post"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:clickable="true"
-            android:contentDescription="Save Post"
-            android:focusable="true"
-            android:scaleType="centerInside"
-            android:src="@drawable/activity_icon"
-            app:tint="@color/icon_save_job_post_color_selector" />
 
     </RelativeLayout>
 
