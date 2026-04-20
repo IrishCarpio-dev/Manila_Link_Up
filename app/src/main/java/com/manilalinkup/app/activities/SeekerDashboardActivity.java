@@ -108,8 +108,8 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                     startActivity(intent);
                     overridePendingTransition(0, 0);
                     return true;
-                } else if (id == R.id.nav_notifications_seeker) {
-                    Intent intent = new Intent(SeekerDashboardActivity.this, EmployerNotificationsActivity.class);
+                }else if (id == R.id.nav_notifications_seeker) {
+                    Intent intent = new Intent(SeekerDashboardActivity.this, SeekerNotificationsActivity.class);
                     startActivity(intent);
                     overridePendingTransition(0, 0);
                     return true;

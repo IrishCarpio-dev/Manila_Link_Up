@@ -65,7 +65,7 @@ public class SeekerProfileActivity extends AppCompatActivity {
                 return true;
             }else if(menuItem.getItemId() == R.id.nav_notifications_seeker) {
                 //No notif yet for seeker
-                startActivity(new Intent(SeekerProfileActivity.this, EmployerNotificationsActivity.class));
+                startActivity(new Intent(SeekerProfileActivity.this, SeekerNotificationsActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
             }else if(menuItem.getItemId() == R.id.nav_activity_seeker) {
