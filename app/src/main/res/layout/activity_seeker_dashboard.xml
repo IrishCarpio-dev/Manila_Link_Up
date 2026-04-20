@@ -92,11 +92,19 @@
         android:textColor="#212121"
         android:textSize="18sp" />
 
+    <ProgressBar
+        android:id="@+id/progress_bar_load_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_navigation_view_seeker"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_job_posts_dashboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_navigation_view_seeker"
+        android:layout_above="@id/progress_bar_load_more"
         android:layout_below="@id/text_view_recommendations"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_job_post_card">
