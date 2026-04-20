@@ -1,6 +1,7 @@
 package com.manilalinkup.app.utilities;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -22,8 +23,10 @@ public class ErrorUtils {
                 message = "Unknown error occurred";
             }
 
+            Log.e("ErrorUtils", message);
             Toast.makeText(context, message, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
+            Log.e("ErrorUtils", "Connection error");
             Toast.makeText(context, "Connection error", Toast.LENGTH_SHORT).show();
         }
     }
@@ -41,6 +44,8 @@ public class ErrorUtils {
             errorMessage = t.getMessage();
         }
 
+
+        Log.e("ErrorUtils", errorMessage);
         Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
     }
 }

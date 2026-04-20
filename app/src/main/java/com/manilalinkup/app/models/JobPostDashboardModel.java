@@ -59,4 +59,8 @@ public class JobPostDashboardModel {
 
     public String getExpiresAt() { return expiresAt; }
     public void setExpiresAt(String expiresAt) { this.expiresAt = expiresAt; }
+
+    private boolean hasApplied;
+    public boolean isHasApplied() { return hasApplied; }
+    public void setHasApplied(boolean hasApplied) { this.hasApplied = hasApplied; }
 }

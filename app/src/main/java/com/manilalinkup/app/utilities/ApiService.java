@@ -92,7 +92,7 @@ public interface ApiService {
 
     // Applications
     @POST("api/jobs/apply")
-    Call<ApiResponse<ApplicationModel>> applyJob(@Body ApplyJobRequest request);
+    Call<ResponseBody> applyJob(@Body ApplyJobRequest request);
 
     @POST("api/jobs/withdraw")
     Call<ResponseBody> withdrawApplication(@Body WithdrawApplicationRequest request);
