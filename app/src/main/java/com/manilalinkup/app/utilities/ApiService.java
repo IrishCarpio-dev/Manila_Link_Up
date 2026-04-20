@@ -12,6 +12,7 @@ import com.manilalinkup.app.models.CreateJobRequest;
 import com.manilalinkup.app.models.EmployerRequest;
 import com.manilalinkup.app.models.GetApplicantsRequest;
 import com.manilalinkup.app.models.GetAppliedJobsRequest;
+import com.manilalinkup.app.models.GetSeekerJobsRequest;
 import com.manilalinkup.app.models.GetChatsRequest;
 import com.manilalinkup.app.models.GetJobsRequest;
 import com.manilalinkup.app.models.GetMessagesRequest;
@@ -26,6 +27,7 @@ import com.manilalinkup.app.models.SeekerRequest;
 import com.manilalinkup.app.models.SendMessageRequest;
 import com.manilalinkup.app.models.SubmitRatingRequest;
 import com.manilalinkup.app.models.UnregisterDeviceRequest;
+import com.manilalinkup.app.models.SeekerJobsResponse;
 import com.manilalinkup.app.models.SeekerPreferencesModel;
 import com.manilalinkup.app.models.SeekerRequest;
 import com.manilalinkup.app.models.ServiceTagModel;
@@ -100,6 +102,9 @@ public interface ApiService {
 
     @POST("api/seeker/appliedJobs")
     Call<ApiResponse<List<AppliedJobModel>>> getAppliedJobs(@Body GetAppliedJobsRequest request);
+
+    @POST("api/seeker/jobs")
+    Call<SeekerJobsResponse> getSeekerJobs(@Body GetSeekerJobsRequest request);
 
     @POST("api/applications/updateStatus")
     Call<ApiResponse<ApplicationModel>> updateApplicationStatus(@Body UpdateApplicationStatusRequest request);
