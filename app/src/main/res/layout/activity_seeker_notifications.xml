@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/design_default_color_background"
     android:fitsSystemWindows="true">
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        app:itemIconTint="@color/bottom_nav_icon_colors"
+        app:itemTextColor="@color/bottom_nav_icon_colors"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu_icons" />
+
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_view_top_bar"
+        android:id="@+id/card_view_dashboard_top_seeker_i"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        app:cardBackgroundColor="#1B3E9C"
-        app:cardElevation="4dp">
+        app:cardBackgroundColor="#1B3E9C">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:layout_width="145dp"
@@ -29,43 +38,31 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingStart="24dp">
+                android:padding="24dp">
 
                 <TextView
-                    android:id="@+id/textview_header_title"
+                    android:id="@+id/textview_greeting_employer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
                     android:text="Notifications"
                     android:textColor="@color/white"
                     android:textSize="21sp" />
+
             </LinearLayout>
         </FrameLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_seeker_notifications"
+        android:id="@+id/recycler_view_seeker_notif"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp"
-        android:clipToPadding="false"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_marginTop="70dp"
-        android:layout_marginBottom="56dp"
-        tools:listitem="@layout/item_notifications_card" />
+        android:layout_above="@id/bottom_navigation_view"
+        android:layout_below="@id/card_view_dashboard_top_seeker_i"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_notifications_card">
+    </androidx.recyclerview.widget.RecyclerView>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation_view_seeker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/white"
-        app:elevation="8dp"
-        app:itemIconTint="@color/bottom_nav_icon_colors"
-        app:itemTextColor="@color/bottom_nav_icon_colors"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_nav_menu_icons" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>
