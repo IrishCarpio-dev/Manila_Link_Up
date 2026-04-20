@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         emailLayout = findViewById(R.id.text_input_layout_email_address);
         passwordLayout = findViewById(R.id.text_input_layout_password);
         forgetPassword = findViewById(R.id.text_view_forget_password);
-        signUpInstead = findViewById(R.id.text_view_login_sign_up_account);
+        signUpInstead = findViewById(R.id.text_view_login_sign_up_instead);
         googleLoginButton = findViewById(R.id.image_view_login_google);
 
         signUpInstead.setOnClickListener(new View.OnClickListener() {
