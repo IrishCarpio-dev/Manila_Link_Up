@@ -51,7 +51,7 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView profilePhoto;
-        TextView firstName, lastName, location, statusChip;
+        TextView firstName, lastName, location, rating, statusChip;
         Button btnInterview, btnHire, btnChat;
 
         ViewHolder(@NonNull View itemView) {
@@ -60,6 +60,7 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
             firstName    = itemView.findViewById(R.id.applicant_first_name);
             lastName     = itemView.findViewById(R.id.applicant_last_name);
             location     = itemView.findViewById(R.id.applicant_location);
+            rating       = itemView.findViewById(R.id.applicant_rating);
             statusChip   = itemView.findViewById(R.id.applicant_status_chip);
             btnInterview = itemView.findViewById(R.id.btn_interview);
             btnHire      = itemView.findViewById(R.id.btn_hire);
@@ -72,6 +73,14 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
                 firstName.setText(seeker.getFirstName() != null ? seeker.getFirstName() : "");
                 lastName.setText(seeker.getLastName() != null ? seeker.getLastName() : "");
                 location.setText(seeker.getLocation() != null ? seeker.getLocation() : "");
+
+                Integer ratingCount = seeker.getRatingCount();
+                Double bayesianAvg = seeker.getBayesianAvg();
+                if (ratingCount != null && ratingCount > 0 && bayesianAvg != null) {
+                    rating.setText(String.format("★ %.1f", bayesianAvg));
+                } else {
+                    rating.setText("N/A");
+                }
 
                 if (seeker.getProfilePhotoUrl() != null) {
                     Glide.with(itemView.getContext())
