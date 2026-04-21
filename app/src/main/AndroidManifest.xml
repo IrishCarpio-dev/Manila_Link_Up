@@ -16,6 +16,9 @@
         android:theme="@style/Theme.ManilaLinkUp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".EditSeekerInformationActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.SeekerNotificationsActivity"
             android:exported="false" />
         <activity
