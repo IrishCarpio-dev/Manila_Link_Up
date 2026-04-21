@@ -1,8 +1,8 @@
 package com.manilalinkup.app.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,20 +16,39 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.RegisterDeviceRequest;
+import com.manilalinkup.app.models.ServiceTagModel;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.utilities.SessionCache;
 import com.manilalinkup.app.models.UserProfileModel;
 
+import okhttp3.ResponseBody;
+
+import java.util.List;
 import java.util.Optional;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.GoogleAuthProvider;
+
 public class LoginActivity extends AppCompatActivity {
+    private static final int RC_SIGN_IN = 9001;
+    private GoogleSignInClient mGoogleSignInClient;
+    private ImageView googleLoginButton;
     private android.app.ProgressDialog progressDialog;
     private com.google.firebase.auth.FirebaseAuth mAuth;
     MaterialButton loginNowButton;
@@ -38,13 +57,8 @@ public class LoginActivity extends AppCompatActivity {
     TextInputLayout emailLayout;
     TextInputLayout passwordLayout;
     TextView forgetPassword;
+    TextView signUpInstead;
 
-    //for testing Dashboards - Irish
-    ImageView googleLogin;
-    ImageView facebookLogin; // Added for Facebook shortcut
-
-
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,35 +70,36 @@ public class LoginActivity extends AppCompatActivity {
         emailLayout = findViewById(R.id.text_input_layout_email_address);
         passwordLayout = findViewById(R.id.text_input_layout_password);
         forgetPassword = findViewById(R.id.text_view_forget_password);
+        signUpInstead = findViewById(R.id.text_view_login_sign_up_instead);
+        googleLoginButton = findViewById(R.id.image_view_login_google);
 
-        // For testing Dashboards - Irish
-        googleLogin = findViewById(R.id.image_view_login_google);
-        googleLogin.setOnClickListener(new View.OnClickListener() {
+        signUpInstead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent testIntents = new Intent(LoginActivity.this, EmployerDashboard.class);
-                startActivity(testIntents);
-            }
-        });
-
-        // For testing Seeker Dashboard via Facebook shortcut
-        facebookLogin = findViewById(R.id.image_view_login_facebook);
-        facebookLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Direct jump to Seeker Dashboard
-                Intent intent = new Intent(LoginActivity.this, SeekerDashboardActivity.class);
+                Intent intent = new Intent(LoginActivity.this, GetStarted.class);
                 startActivity(intent);
-                finish(); // Optional: closes login screen so back button doesn't return here
             }
         });
 
 
+        mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id)) // This comes from google-services.json
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         progressDialog = new android.app.ProgressDialog(this);
         progressDialog.setMessage("Logging in...");
-        progressDialog.setCancelable(false); // Prevents user from dismissing it by clicking outside
+        progressDialog.setCancelable(false);
+
+        googleLoginButton.setOnClickListener(v -> signInWithGoogle());
+
+        progressDialog = new android.app.ProgressDialog(this);
+        progressDialog.setMessage("Logging in...");
+        progressDialog.setCancelable(false);
 
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
         loginNowButton.setOnClickListener(new View.OnClickListener() {
@@ -97,20 +112,24 @@ public class LoginActivity extends AppCompatActivity {
                 emailLayout.setError(null);
                 passwordLayout.setError(null);
 
-                if(email.isEmpty()){
+                if (email.isEmpty()) {
                     emailLayout.setError("Email is required.");
+                    emailInput.requestFocus();
+                    return;
+                } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    emailLayout.setError("Please enter a valid email address.");
                     emailInput.requestFocus();
                     return;
                 }
 
-                if(password.isEmpty()){
+                String passwordPattern = "^(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
+
+                if (password.isEmpty()) {
                     passwordLayout.setError("Password is required.");
                     passwordInput.requestFocus();
                     return;
-                }
-
-                if(password.length() < 8){
-                    passwordLayout.setError("Password must be at least 8 characters.");
+                } else if (!password.matches(passwordPattern)) {
+                    passwordLayout.setError("Please check your password if it's correct.");
                     passwordInput.requestFocus();
                     return;
                 }
@@ -147,7 +166,68 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void signInWithGoogle() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                if (e.getStatusCode() == 12501) {
+                    Log.d("GoogleSignIn", "User cancelled sign-in");
+                } else {
+                    Toast.makeText(this, "Google sign in failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        progressDialog.setMessage("Authenticating with Google...");
+        progressDialog.show();
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+                                if (tokenTask.isSuccessful()) {
+                                    String token = tokenTask.getResult().getToken();
+                                    checkUserRole(token);
+                                }
+                            });
+                        }
+                    } else {
+                        progressDialog.dismiss();
+                        Toast.makeText(LoginActivity.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
+    private void registerFcmToken(String idToken) {
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(fcmToken -> {
+            ApiService api = RetrofitClient.getClient(idToken).create(ApiService.class);
+            api.registerDevice(new RegisterDeviceRequest(fcmToken, "android"))
+                    .enqueue(new retrofit2.Callback<ResponseBody>() {
+                @Override public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {}
+                @Override public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {}
+            });
+        });
+    }
+
     private void checkUserRole(String token) {
+        registerFcmToken(token);
         ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
         apiService.getUserProfile().enqueue(new Callback<ApiResponse<UserProfileModel>>() {
@@ -155,6 +235,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<ApiResponse<UserProfileModel>> call, Response<ApiResponse<UserProfileModel>> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful()) {
+                    SessionCache.getInstance().setUserProfile(response.body().getData());
+                    SessionCache.getInstance().refreshServiceTags(token, new SessionCache.ServiceTagsCallback() {
+                        @Override public void onAvailable(List<ServiceTagModel> tags) {}
+                        @Override public void onError() {}
+                    });
                     if (response.body().getData().getSeekers() != null) {
                         // User is a seeker
                         Boolean isProfileSet = Optional.ofNullable(response.body().getData().getSeekers().getProfileSet()).orElse(false);

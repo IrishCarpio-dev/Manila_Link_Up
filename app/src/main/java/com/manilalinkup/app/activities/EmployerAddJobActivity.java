@@ -35,6 +35,7 @@ import com.manilalinkup.app.utilities.AddressAutocompleteHelper;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.utilities.SessionCache;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -135,26 +136,18 @@ public class EmployerAddJobActivity extends AppCompatActivity {
     }
 
     private void loadServiceTags() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) return;
-        user.getIdToken(true).addOnCompleteListener(tokenTask -> {
-            if (!tokenTask.isSuccessful()) return;
-            String token = tokenTask.getResult().getToken();
-            ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
-            apiService.getServiceTags().enqueue(new Callback<ApiResponse<List<ServiceTagModel>>>() {
-                @Override
-                public void onResponse(Call<ApiResponse<List<ServiceTagModel>>> call, Response<ApiResponse<List<ServiceTagModel>>> response) {
-                    if (!response.isSuccessful() || response.body() == null) return;
-                    serviceTagList.clear();
-                    serviceTagList.addAll(response.body().getData());
-                    refreshServiceTagsDisplay();
-                }
+        SessionCache.getInstance().ensureServiceTags(new SessionCache.ServiceTagsCallback() {
+            @Override
+            public void onAvailable(List<ServiceTagModel> tags) {
+                serviceTagList.clear();
+                serviceTagList.addAll(tags);
+                refreshServiceTagsDisplay();
+            }
 
-                @Override
-                public void onFailure(Call<ApiResponse<List<ServiceTagModel>>> call, Throwable t) {
-                    Toast.makeText(EmployerAddJobActivity.this, "Failed to load service tags.", Toast.LENGTH_SHORT).show();
-                }
-            });
+            @Override
+            public void onError() {
+                Toast.makeText(EmployerAddJobActivity.this, "Failed to load service tags.", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -174,25 +167,30 @@ public class EmployerAddJobActivity extends AppCompatActivity {
             Chip chip = new Chip(this);
             chip.setText(tag.getLabel());
 
-            chip.setChipBackgroundColorResource(R.color.chip_background_state_list);
+            chip.setChipBackgroundColorResource(R.color.manila_blue);
             chip.setTextColor(Color.WHITE);
 
+            chip.setCheckable(false);
             chip.setTag(tag.getId());
-            chip.setCheckable(true);
-            chip.setChecked(true);
-            chip.setCheckedIconVisible(false);
+            chip.setCloseIconVisible(true);
+            chip.setCloseIconTint(ColorStateList.valueOf(Color.WHITE));
+
             final String idToRemove = tagId;
             chip.setOnCloseIconClickListener(v -> {
                 selectedTagIds.remove(idToRemove);
                 refreshServiceTagsDisplay();
             });
             chipGroupServiceTags.addView(chip);
-            chip.setCloseIconTint(ColorStateList.valueOf(Color.WHITE));
         }
 
         Chip addChip = new Chip(this);
-        addChip.setText("+");
+        addChip.setText("+ Add Tag");
         addChip.setCheckable(false);
+        addChip.setChipBackgroundColorResource(android.R.color.transparent);
+        addChip.setChipStrokeColor(ColorStateList.valueOf(Color.parseColor("#0D47A1")));
+        addChip.setChipStrokeWidth(5f);
+        addChip.setTextColor(Color.parseColor("#0D47A1"));
+
         addChip.setOnClickListener(v -> showServiceTagModal());
         chipGroupServiceTags.addView(addChip);
     }
@@ -369,7 +367,7 @@ public class EmployerAddJobActivity extends AppCompatActivity {
 
     private void submitCreateJob(String token, String employerUid, String title, String description,
                                   String location, String expiresAt, String duration, double salary) {
-        CreateJobRequest request = new CreateJobRequest(title, description, employerUid, expiresAt, duration, location, salary, new ArrayList<>(selectedTagIds));
+        CreateJobRequest request = new CreateJobRequest(title, description, expiresAt, duration, location, salary, new ArrayList<>(selectedTagIds));
         ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
         apiService.createJob(request).enqueue(new Callback<ResponseBody>() {

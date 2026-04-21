@@ -263,47 +263,59 @@
                 android:textColor="#212121"
                 android:textSize="16sp" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_salary"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/salary_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_view_salary_label"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:hint="e.g. 500"
-                app:boxBackgroundColor="#F5F5F5"
-                app:boxCornerRadiusBottomEnd="8dp"
-                app:boxCornerRadiusBottomStart="8dp"
-                app:boxCornerRadiusTopEnd="8dp"
-                app:boxCornerRadiusTopStart="8dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp">
+                android:layout_marginHorizontal="16dp"
+                >
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_text_salary"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/text_input_layout_salary"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/text_view_salary_rate"
+                    android:hint="e.g. 500"
+                    app:boxBackgroundColor="#F5F5F5"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp">
 
-            <TextView
-                android:id="@+id/text_view_salary_rate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/text_input_layout_salary"
-                android:layout_alignParentEnd="true"
-                android:layout_margin="8dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="/hr"
-                android:textColor="#212121"
-                android:textSize="16sp" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_salary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/text_view_salary_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="/hr"
+                    android:textColor="#212121"
+                    android:textSize="16sp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/text_view_duration_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text_input_layout_salary"
+                android:layout_below="@id/salary_layout"
                 android:layout_margin="8dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="Duration"

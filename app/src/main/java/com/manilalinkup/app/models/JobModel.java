@@ -1,48 +1,24 @@
 package com.manilalinkup.app.models;
 
-public class JobModel {
-    String id, title, description, expiresAt, duration, location, createdAt;
-    Double salary;
+import java.util.List;
 
+public class JobModel {
+    String id, title, description, expiresAt, duration, location, createdAt, filledAt;
+    Double salary;
+    List<String> tags;
     EmployerProfileModel employer;
 
-    public JobModel(
-            String id,
-            String title,
-            String description,
-            String expiresAt,
-            String duration,
-            String location,
-            Double salary,
-            EmployerProfileModel employer,
-            String createdAt
-    ) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.expiresAt = expiresAt;
-        this.duration = duration;
-        this.location = location;
-        this.salary = salary;
-        this.employer = employer;
-        this.createdAt = createdAt;
-    }
+    public JobModel() {}
 
     public String getId() { return id; }
-
     public String getTitle() { return title; }
-
     public String getDescription() { return description; }
-
     public String getExpiresAt() { return expiresAt; }
-
     public String getDuration() { return duration; }
-
     public String getLocation() { return location; }
-
     public Double getSalary() { return salary; }
-
+    public List<String> getTags() { return tags; }
     public EmployerProfileModel getEmployer() { return employer; }
-
     public String getCreatedAt() { return createdAt; }
+    public String getFilledAt() { return filledAt; }
 }

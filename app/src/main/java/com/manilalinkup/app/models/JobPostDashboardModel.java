@@ -1,12 +1,14 @@
 package com.manilalinkup.app.models;
 
-import android.content.Intent;
+import java.util.List;
 
 public class JobPostDashboardModel {
-    String jobTitle, employerName, jobPostLocation, job_duration, howLongJobIsPosted;
+    String jobId;
+    String jobTitle, employerName, jobPostLocation, job_duration,howLongJobIsPosted;
     String employerProfilePicture;
+    List<String> tagIds;
 
-    public JobPostDashboardModel(String jobTitle, String employerName, String jobPostLocation, String job_duration, String employerProfilePicture, String howLongJobIsPosted) {
+    public JobPostDashboardModel(String jobTitle, String employerName, String jobPostLocation, String job_duration, String employerProfilePicture ,String howLongJobIsPosted) {
         this.jobTitle = jobTitle;
         this.employerName = employerName;
         this.jobPostLocation = jobPostLocation;
@@ -31,10 +33,6 @@ public class JobPostDashboardModel {
         return job_duration;
     }
 
-    public String getJobDuration() {
-        return job_duration;
-    }
-
     public String getEmployerProfilePicture() {
         return employerProfilePicture;
     }
@@ -43,26 +41,9 @@ public class JobPostDashboardModel {
         return howLongJobIsPosted;
     }
 
-    public void putIntoIntent(android.content.Intent intent) {
-        intent.putExtra("jobTitle", jobTitle);
-        intent.putExtra("employerName", employerName);
-        intent.putExtra("jobPostLocation", jobPostLocation);
-        intent.putExtra("job_duration", job_duration);
-        intent.putExtra("employerProfilePicture", employerProfilePicture);
-        intent.putExtra("howLongJobIsPosted", howLongJobIsPosted);
-    }
+    public String getJobId() { return jobId; }
+    public void setJobId(String jobId) { this.jobId = jobId; }
 
-    public static JobPostDashboardModel fromIntent(android.content.Intent intent) {
-        if (intent == null || !intent.hasExtra("jobTitle")) {
-            return null;
-        }
-        return new JobPostDashboardModel(
-                intent.getStringExtra("jobTitle"),
-                intent.getStringExtra("employerName"),
-                intent.getStringExtra("jobPostLocation"),
-                intent.getStringExtra("job_duration"),
-                intent.getStringExtra("employerProfilePicture"),
-                intent.getStringExtra("howLongJobIsPosted")
-        );
-    }
+    public List<String> getTagIds() { return tagIds; }
+    public void setTagIds(List<String> tagIds) { this.tagIds = tagIds; }
 }

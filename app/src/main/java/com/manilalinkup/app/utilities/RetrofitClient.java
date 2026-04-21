@@ -9,11 +9,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
     public static final String BASE_URL = "http://10.0.2.2:8000/"; // TODO: Change BASE_URL to actual server domain
 
-    public static Retrofit getClient(String token) {
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
+    private static OkHttpClient sharedHttpClient;
+
+    private static OkHttpClient getHttpClient(String token) {
+        if (sharedHttpClient == null) {
+            sharedHttpClient = new OkHttpClient.Builder()
+                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .writeTimeout(60, TimeUnit.SECONDS)
+                    .retryOnConnectionFailure(true)
+                    .build();
+        }
+        return sharedHttpClient.newBuilder()
                 .addInterceptor(chain -> {
                     Request original = chain.request();
                     Request.Builder requestBuilder = original.newBuilder()
@@ -25,14 +32,15 @@ public class RetrofitClient {
                         requestBuilder.addHeader("Authorization", "Bearer " + token);
                     }
 
-                    Request request = requestBuilder.build();
-                    return chain.proceed(request);
+                    return chain.proceed(requestBuilder.build());
                 })
                 .build();
+    }
 
+    public static Retrofit getClient(String token) {
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .client(okHttpClient)
+                .client(getHttpClient(token))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }

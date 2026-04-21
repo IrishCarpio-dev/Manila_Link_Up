@@ -19,9 +19,6 @@ public class GetStarted extends AppCompatActivity {
     CardView employerCard;
     TextView backToLogin;
 
-
-    MaterialToolbar toolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,11 +28,6 @@ public class GetStarted extends AppCompatActivity {
         employerCard = findViewById(R.id.card_view_employer);
         backToLogin = findViewById(R.id.text_view_back_log_in);
 
-
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         jobSeekerCard.setOnClickListener(new View.OnClickListener() {
             @Override
