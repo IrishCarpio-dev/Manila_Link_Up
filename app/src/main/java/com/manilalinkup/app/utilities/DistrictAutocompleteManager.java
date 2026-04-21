@@ -9,7 +9,7 @@ public class DistrictAutocompleteManager {
     private final List<String> allOptions;
 
     private DistrictAutocompleteManager() {
-        allOptions = Arrays.asList("Binondo", "Ermita", "Intramuros", "Malate", "Paco", "Pandacan", "Port Area", "Quiapo", "Sampaloc", "San Andres", "San miguel", "San Nicolas", "Santa Ana", "Santa Cruz", "Santa Mesa", "Tondo");
+        allOptions = Arrays.asList("Binondo", "Ermita", "Intramuros", "Malate", "Paco", "Pandacan", "Port Area", "Quiapo", "Sampaloc", "San Andres", "San Miguel", "San Nicolas", "Santa Ana", "Santa Cruz", "Santa Mesa", "Tondo");
 
     }
 
@@ -18,6 +18,10 @@ public class DistrictAutocompleteManager {
             instance = new DistrictAutocompleteManager();
         }
         return instance;
+    }
+
+    public List<String> getAll() {
+        return allOptions;
     }
 
     public List<String> getFilteredResults(String query) {
