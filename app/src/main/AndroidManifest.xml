@@ -34,7 +34,7 @@
         </activity>
 
         <activity
-            android:name=".EditSeekerInformationActivity"
+            android:name=".activities.EditSeekerInformationActivity"
             android:exported="false" />
         <activity
             android:name=".activities.SeekerNotificationsActivity"
