@@ -146,6 +146,7 @@ public class EmployerViewJobPost extends AppCompatActivity {
         viewApplicantsButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, EmployerListOfApplicants.class);
             intent.putExtra("JOB_ID", jobId);
+            intent.putExtra("JOB_TITLE", jobTitle);
             startActivity(intent);
             overridePendingTransition(0, 0);
         });

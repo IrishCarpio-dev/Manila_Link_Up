@@ -18,6 +18,7 @@ import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.EmployerApplicantsAdapter;
 import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.models.ApplicantModel;
+import com.manilalinkup.app.models.SeekerProfileModel;
 import com.manilalinkup.app.models.ApplicationModel;
 import com.manilalinkup.app.models.GetApplicantsRequest;
 import com.manilalinkup.app.models.UpdateApplicationStatusRequest;
@@ -39,6 +40,7 @@ public class EmployerListOfApplicants extends AppCompatActivity {
     private EmployerApplicantsAdapter applicantsAdapter;
     private List<ApplicantModel> applicantsList;
     private String jobId;
+    private String jobTitle;
     private ProgressDialog progressDialog;
 
     @Override
@@ -48,6 +50,7 @@ public class EmployerListOfApplicants extends AppCompatActivity {
         setContentView(R.layout.activity_employer_list_of_applicants);
 
         jobId = getIntent().getStringExtra("JOB_ID");
+        jobTitle = getIntent().getStringExtra("JOB_TITLE");
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -89,6 +92,13 @@ public class EmployerListOfApplicants extends AppCompatActivity {
                 intent.putExtra("SEEKER_UID", applicant.getSeekerUid());
                 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                 if (currentUser != null) intent.putExtra("EMPLOYER_UID", currentUser.getUid());
+                if (jobTitle != null) intent.putExtra("JOB_TITLE", jobTitle);
+                SeekerProfileModel seeker = applicant.getSeeker();
+                if (seeker != null) {
+                    String name = (seeker.getFirstName() != null ? seeker.getFirstName() : "") +
+                            (seeker.getLastName() != null ? " " + seeker.getLastName() : "");
+                    intent.putExtra("COUNTERPART_NAME", name.trim());
+                }
                 startActivity(intent);
             }
         });
