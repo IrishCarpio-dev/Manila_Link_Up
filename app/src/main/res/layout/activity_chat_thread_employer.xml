@@ -12,20 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#1B3E9C"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:navigationIcon="?attr/homeAsUpIndicator"
-        app:navigationIconTint="@color/white">
-
-        <TextView
-            android:id="@+id/text_view_seeker_name_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="sans-serif-medium"
-            android:text="Seeker Name"
-            android:textColor="@color/white"
-            android:textSize="18sp"/>
-
-    </com.google.android.material.appbar.MaterialToolbar>
+        app:navigationIconTint="@color/white"/>
 
     <LinearLayout
         android:id="@+id/button_container"
@@ -112,24 +101,14 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_chat_messages"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@id/button_container"
+        android:layout_above="@id/card_view_type_message"
         android:background="#F4F7F9"
-        android:layout_below="@id/button_container">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_chat_messages"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:padding="8dp"/>
-        </RelativeLayout>
-    </ScrollView>
+        android:clipToPadding="false"
+        android:padding="8dp"/>
 
 </RelativeLayout>

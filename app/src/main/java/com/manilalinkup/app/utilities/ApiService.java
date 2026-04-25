@@ -21,6 +21,7 @@ import com.manilalinkup.app.models.HideChatRequest;
 import com.manilalinkup.app.models.JobModel;
 import com.manilalinkup.app.models.MarkCompleteRequest;
 import com.manilalinkup.app.models.MarkReadRequest;
+import com.manilalinkup.app.models.NotifyChatRequest;
 import com.manilalinkup.app.models.RatingModel;
 import com.manilalinkup.app.models.RegisterDeviceRequest;
 import com.manilalinkup.app.models.SeekerRequest;
@@ -129,7 +130,7 @@ public interface ApiService {
     Call<ResponseBody> hideChat(@Body HideChatRequest request);
 
     @POST("api/chats/notify")
-    Call<ResponseBody> notifyChat(@Body SendMessageRequest request);
+    Call<ResponseBody> notifyChat(@Body NotifyChatRequest request);
 
     // Ratings
     @POST("api/ratings")

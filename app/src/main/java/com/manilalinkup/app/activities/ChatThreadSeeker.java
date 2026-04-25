@@ -23,7 +23,7 @@ import com.google.firebase.firestore.WriteBatch;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.ChatAdapter;
 import com.manilalinkup.app.models.ChatModel;
-import com.manilalinkup.app.models.SendMessageRequest;
+import com.manilalinkup.app.models.NotifyChatRequest;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
@@ -47,6 +47,7 @@ public class ChatThreadSeeker extends AppCompatActivity {
     private ImageButton btnSend;
 
     private String chatId;
+    private String jobTitle;
     private String currentUid;
 
     private FirebaseFirestore db;
@@ -60,7 +61,7 @@ public class ChatThreadSeeker extends AppCompatActivity {
         setContentView(R.layout.activity_chat_thread_seeker);
 
         chatId = getIntent().getStringExtra("CHAT_ID");
-        String jobTitle = getIntent().getStringExtra("JOB_TITLE");
+        jobTitle = getIntent().getStringExtra("JOB_TITLE");
         String counterpartName = getIntent().getStringExtra("COUNTERPART_NAME");
         String seekerUid = getIntent().getStringExtra("SEEKER_UID");
         String employerUid = getIntent().getStringExtra("EMPLOYER_UID");
@@ -71,10 +72,8 @@ public class ChatThreadSeeker extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        if (jobTitle != null && !jobTitle.isEmpty()) {
-            toolbar.setTitle(jobTitle);
-            toolbar.setSubtitle(counterpartName);
-        }
+        toolbar.setTitle(counterpartName != null ? counterpartName : "");
+        if (jobTitle != null && !jobTitle.isEmpty()) toolbar.setSubtitle(jobTitle);
         toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
         recyclerView = findViewById(R.id.recycler_chat_messages);
@@ -136,7 +135,7 @@ public class ChatThreadSeeker extends AppCompatActivity {
                         chatList.add(docToModel(doc));
                     }
                     adapter.notifyDataSetChanged();
-                    if (!chatList.isEmpty()) recyclerView.scrollToPosition(chatList.size() - 1);
+                    if (!chatList.isEmpty()) recyclerView.post(() -> recyclerView.scrollToPosition(chatList.size() - 1));
                 });
     }
 
@@ -146,6 +145,7 @@ public class ChatThreadSeeker extends AppCompatActivity {
 
         btnSend.setEnabled(false);
         messageInput.setText("");
+        if (!chatList.isEmpty()) recyclerView.post(() -> recyclerView.scrollToPosition(chatList.size() - 1));
 
         Map<String, Object> msg = new HashMap<>();
         msg.put("senderUid", currentUid);
@@ -169,8 +169,14 @@ public class ChatThreadSeeker extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
         user.getIdToken(false).addOnSuccessListener(result -> {
+            Map<String, String> data = new HashMap<>();
+            data.put("type", "chat_message");
+            data.put("chatId", chatId);
+            data.put("role", "employer");
+            String title = (jobTitle != null && !jobTitle.isEmpty()) ? jobTitle : "New Message";
+            NotifyChatRequest request = new NotifyChatRequest(chatId, title, text, data);
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
-            api.notifyChat(new SendMessageRequest(chatId, text)).enqueue(new Callback<ResponseBody>() {
+            api.notifyChat(request).enqueue(new Callback<ResponseBody>() {
                 @Override public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {}
                 @Override public void onFailure(Call<ResponseBody> call, Throwable t) {}
             });
