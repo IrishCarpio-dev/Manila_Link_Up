@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -10,7 +10,7 @@
         android:id="@+id/header_about"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        app:cardBackgroundColor="#1B3E9C"
+        app:cardBackgroundColor="@color/manila_blue"
         app:cardElevation="4dp">
 
         <FrameLayout
@@ -70,7 +70,7 @@
                         android:layout_height="wrap_content"
                         android:text="Purpose"
                         android:textStyle="bold"
-                        android:textColor="#1B3E9C"
+                        android:textColor="@color/manila_blue"
                         android:textSize="16sp"
                         android:layout_marginBottom="8dp"/>
 
@@ -101,14 +101,14 @@
                         android:layout_height="wrap_content"
                         android:text="Key Features"
                         android:textStyle="bold"
-                        android:textColor="#1B3E9C"
+                        android:textColor="@color/manila_blue"
                         android:textSize="16sp"
                         android:layout_marginBottom="8dp"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="• User-friendly Login &amp; Registration\n• Post local job opportunities\n• Browse available jobs (Pet sitting, Tutoring, etc.)\n• Detailed job descriptions\n• Clean and responsive UI design"
+                        android:text="â€¢ User-friendly Login &amp; Registration\nâ€¢ Post local job opportunities\nâ€¢ Browse available jobs (Pet sitting, Tutoring, etc.)\nâ€¢ Detailed job descriptions\nâ€¢ Clean and responsive UI design"
                         android:textColor="?attr/colorOnSurface"
                         android:lineSpacingExtra="4dp"/>
                 </LinearLayout>
@@ -132,7 +132,7 @@
                         android:layout_height="wrap_content"
                         android:text="Tech Stack &amp; Structure"
                         android:textStyle="bold"
-                        android:textColor="#1B3E9C"
+                        android:textColor="@color/manila_blue"
                         android:textSize="16sp"
                         android:layout_marginBottom="8dp"/>
 
@@ -162,7 +162,7 @@
                         android:layout_height="wrap_content"
                         android:text="The Developers"
                         android:textStyle="bold"
-                        android:textColor="#1B3E9C"
+                        android:textColor="@color/manila_blue"
                         android:textSize="16sp"
                         android:layout_marginBottom="12dp"/>
 
@@ -171,7 +171,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:lineSpacingExtra="6dp"
-                        android:text="• Precious Irish Carpio (Project Lead)\n• Roehvique Caling\n• Loraine Gulo\n• Dino Dumanon"
+                        android:text="â€¢ Precious Irish Carpio (Project Lead)\nâ€¢ Roehvique Caling\nâ€¢ Loraine Gulo\nâ€¢ Dino Dumanon"
                         android:textColor="?attr/colorOnSurface" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -179,7 +179,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="© 2026 Manila LinkUp | Computer Science Department"
+                android:text="Â© 2026 Manila LinkUp | Computer Science Department"
                 android:textAlignment="center"
                 android:layout_marginTop="24dp"
                 android:textColor="#999999"

@@ -12,7 +12,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#1B3E9C"
+        android:background="@color/manila_blue"
+        android:theme="@style/ThemeOverlay.ManilaBluToolbar"
         app:navigationIconTint="@color/white">
 
         <TextView
@@ -60,7 +61,7 @@
             android:layout_height="55dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="12dp"
-            android:backgroundTint="#1B3E9C"
+            android:backgroundTint="@color/manila_blue"
             android:text="Mark Job Complete"
             android:textAllCaps="false"
             android:textColor="@color/white"
