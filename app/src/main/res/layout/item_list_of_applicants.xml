@@ -71,7 +71,10 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/name_block_container"
                     android:layout_marginTop="2dp"
-                    tools:text="★ 4.2"
+                    android:drawableStart="@drawable/ic_star"
+                    android:drawablePadding="4dp"
+                    android:gravity="center_vertical"
+                    tools:text="4.2"
                     android:textColor="#757575"
                     android:textSize="14sp" />
 

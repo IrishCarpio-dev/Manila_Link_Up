@@ -1,5 +1,7 @@
 package com.manilalinkup.app.adapters;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -67,6 +70,20 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
             btnChat      = itemView.findViewById(R.id.btn_open_chat);
         }
 
+        private void setStarTint(TextView tv, float fraction) {
+            Drawable[] drawables = tv.getCompoundDrawablesRelative();
+            if (drawables[0] == null) return;
+            Drawable star = DrawableCompat.wrap(drawables[0].mutate());
+            int grey   = Color.parseColor("#BDBDBD");
+            int yellow = Color.parseColor("#FFC107");
+            float f = Math.max(0f, Math.min(1f, fraction));
+            int r = (int) (Color.red(grey)   + f * (Color.red(yellow)   - Color.red(grey)));
+            int g = (int) (Color.green(grey) + f * (Color.green(yellow) - Color.green(grey)));
+            int b = (int) (Color.blue(grey)  + f * (Color.blue(yellow)  - Color.blue(grey)));
+            DrawableCompat.setTint(star, Color.rgb(r, g, b));
+            tv.setCompoundDrawablesRelative(star, drawables[1], drawables[2], drawables[3]);
+        }
+
         void bind(ApplicantModel applicant, OnActionListener listener) {
             SeekerProfileModel seeker = applicant.getSeeker();
             if (seeker != null) {
@@ -77,9 +94,11 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
                 Integer ratingCount = seeker.getRatingCount();
                 Double bayesianAvg = seeker.getBayesianAvg();
                 if (ratingCount != null && ratingCount > 0 && bayesianAvg != null) {
-                    rating.setText(String.format("★ %.1f", bayesianAvg));
+                    rating.setText(String.format("%.1f", bayesianAvg));
+                    setStarTint(rating, (float) (bayesianAvg / 5.0));
                 } else {
                     rating.setText("N/A");
+                    setStarTint(rating, 0f);
                 }
 
                 if (seeker.getProfilePhotoUrl() != null) {

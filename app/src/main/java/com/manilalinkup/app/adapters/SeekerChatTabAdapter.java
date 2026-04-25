@@ -56,6 +56,7 @@ public class SeekerChatTabAdapter extends RecyclerView.Adapter<SeekerChatTabAdap
     static class SeekerChatViewHolder extends RecyclerView.ViewHolder {
         private final ImageView employerProfilePicture;
         private final TextView employerName;
+        private final TextView jobTitle;
         private final TextView messagePreview;
         private final TextView messageTimeStamp;
         private final TextView unreadBadge;
@@ -64,6 +65,7 @@ public class SeekerChatTabAdapter extends RecyclerView.Adapter<SeekerChatTabAdap
             super(itemView);
             employerProfilePicture = itemView.findViewById(R.id.item_card_employer_profile_picture);
             employerName           = itemView.findViewById(R.id.item_card_employer_name);
+            jobTitle               = itemView.findViewById(R.id.text_view_job_title);
             messagePreview         = itemView.findViewById(R.id.item_card_message_preview);
             messageTimeStamp       = itemView.findViewById(R.id.text_view_chat_timestamp);
             unreadBadge            = itemView.findViewById(R.id.text_view_unread_badge);
@@ -77,6 +79,9 @@ public class SeekerChatTabAdapter extends RecyclerView.Adapter<SeekerChatTabAdap
 
             String name = counterpart != null ? counterpart.getName() : "Unknown";
             employerName.setText(name);
+            if (jobTitle != null) {
+                jobTitle.setText(job != null && job.getTitle() != null ? job.getTitle() : "");
+            }
             messagePreview.setText(chat.getLastMessage() != null ? chat.getLastMessage() : "");
             messageTimeStamp.setText(chat.getLastMessageAt() != null ? chat.getLastMessageAt() : "");
 
