@@ -86,6 +86,9 @@ public class EmployerListOfApplicants extends AppCompatActivity {
             public void onOpenChat(ApplicantModel applicant) {
                 Intent intent = new Intent(EmployerListOfApplicants.this, ChatThreadEmployer.class);
                 intent.putExtra("CHAT_ID", applicant.getChatId());
+                intent.putExtra("SEEKER_UID", applicant.getSeekerUid());
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (currentUser != null) intent.putExtra("EMPLOYER_UID", currentUser.getUid());
                 startActivity(intent);
             }
         });

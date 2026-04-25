@@ -128,6 +128,9 @@ public interface ApiService {
     @POST("api/chats/hide")
     Call<ResponseBody> hideChat(@Body HideChatRequest request);
 
+    @POST("api/chats/notify")
+    Call<ResponseBody> notifyChat(@Body SendMessageRequest request);
+
     // Ratings
     @POST("api/ratings")
     Call<ApiResponse<RatingModel>> submitRating(@Body SubmitRatingRequest request);

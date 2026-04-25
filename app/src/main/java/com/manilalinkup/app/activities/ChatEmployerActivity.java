@@ -59,6 +59,8 @@ public class ChatEmployerActivity extends AppCompatActivity {
                     intent.putExtra("CHAT_ID", chat.getId());
                     intent.putExtra("JOB_TITLE", chat.getJob() != null ? chat.getJob().getTitle() : "");
                     intent.putExtra("COUNTERPART_NAME", chat.getCounterpart() != null ? chat.getCounterpart().getName() : "");
+                    intent.putExtra("SEEKER_UID", chat.getSeekerUid());
+                    intent.putExtra("EMPLOYER_UID", chat.getEmployerUid());
                     startActivity(intent);
                 },
                 chat -> showHideDialog(chat)
