@@ -72,7 +72,12 @@ public class EmployerListOfApplicants extends AppCompatActivity {
         applicantsAdapter = new EmployerApplicantsAdapter(applicantsList, new EmployerApplicantsAdapter.OnActionListener() {
             @Override
             public void onInterview(ApplicantModel applicant) {
-                updateStatus(applicant, 2);
+                new AlertDialog.Builder(EmployerListOfApplicants.this)
+                        .setTitle("Move to interview?")
+                        .setMessage("This will move the applicant to the interview stage.")
+                        .setPositiveButton("Confirm", (d, w) -> updateStatus(applicant, 2))
+                        .setNegativeButton("Cancel", null)
+                        .show();
             }
 
             @Override
@@ -99,6 +104,7 @@ public class EmployerListOfApplicants extends AppCompatActivity {
             public void onOpenChat(ApplicantModel applicant) {
                 Intent intent = new Intent(EmployerListOfApplicants.this, ChatThreadEmployer.class);
                 intent.putExtra("CHAT_ID", applicant.getChatId());
+                intent.putExtra("APPLICATION_ID", applicant.getId());
                 intent.putExtra("SEEKER_UID", applicant.getSeekerUid());
                 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                 if (currentUser != null) intent.putExtra("EMPLOYER_UID", currentUser.getUid());

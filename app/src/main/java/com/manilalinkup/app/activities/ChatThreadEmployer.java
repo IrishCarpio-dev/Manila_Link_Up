@@ -1,12 +1,21 @@
 package com.manilalinkup.app.activities;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.button.MaterialButton;
+import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.ApplicationModel;
+import com.manilalinkup.app.models.UpdateApplicationStatusRequest;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.Timestamp;
@@ -49,6 +58,8 @@ public class ChatThreadEmployer extends AppCompatActivity {
     private String chatId;
     private String jobTitle;
     private String currentUid;
+    private String applicationId;
+    private ProgressDialog progressDialog;
 
     private FirebaseFirestore db;
     private CollectionReference messagesRef;
@@ -62,6 +73,7 @@ public class ChatThreadEmployer extends AppCompatActivity {
 
         chatId = getIntent().getStringExtra("CHAT_ID");
         jobTitle = getIntent().getStringExtra("JOB_TITLE");
+        applicationId = getIntent().getStringExtra("APPLICATION_ID");
         String counterpartName = getIntent().getStringExtra("COUNTERPART_NAME");
         String seekerUid = getIntent().getStringExtra("SEEKER_UID");
         String employerUid = getIntent().getStringExtra("EMPLOYER_UID");
@@ -75,6 +87,33 @@ public class ChatThreadEmployer extends AppCompatActivity {
         toolbar.setTitle(counterpartName != null ? counterpartName : "");
         if (jobTitle != null && !jobTitle.isEmpty()) toolbar.setSubtitle(jobTitle);
         toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+
+        LinearLayout buttonContainer = findViewById(R.id.button_container);
+        MaterialButton btnReject = findViewById(R.id.button_accept_seeker);
+        MaterialButton btnAccept = findViewById(R.id.button_reject_seeker);
+        if (applicationId == null) {
+            buttonContainer.setVisibility(View.GONE);
+        } else {
+            btnReject.setOnClickListener(v ->
+                new AlertDialog.Builder(this)
+                        .setTitle("Reject applicant?")
+                        .setMessage("This will reject this applicant's application.")
+                        .setPositiveButton("Reject", (d, w) -> updateStatus(3))
+                        .setNegativeButton("Cancel", null)
+                        .show()
+            );
+            btnAccept.setOnClickListener(v ->
+                new AlertDialog.Builder(this)
+                        .setTitle("Hire applicant?")
+                        .setMessage("This will reject all other applicants and archive the job. Continue?")
+                        .setPositiveButton("Hire", (d, w) -> updateStatus(5))
+                        .setNegativeButton("Cancel", null)
+                        .show()
+            );
+        }
 
         recyclerView = findViewById(R.id.recycler_chat_messages);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -197,6 +236,35 @@ public class ChatThreadEmployer extends AppCompatActivity {
                     }
                     batch.commit();
                 });
+    }
+
+    private void updateStatus(int newStatus) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+        progressDialog.setMessage(newStatus == 5 ? "Hiring applicant..." : "Rejecting applicant...");
+        progressDialog.show();
+        user.getIdToken(true).addOnSuccessListener(result -> {
+            ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
+            api.updateApplicationStatus(new UpdateApplicationStatusRequest(applicationId, newStatus))
+                    .enqueue(new Callback<ApiResponse<ApplicationModel>>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse<ApplicationModel>> call, Response<ApiResponse<ApplicationModel>> response) {
+                            progressDialog.dismiss();
+                            if (response.isSuccessful()) {
+                                String msg = newStatus == 5 ? "Applicant hired!" : "Applicant rejected";
+                                Toast.makeText(ChatThreadEmployer.this, msg, Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else {
+                                ErrorUtils.showErrorMessage(ChatThreadEmployer.this, response.errorBody());
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<ApiResponse<ApplicationModel>> call, Throwable t) {
+                            progressDialog.dismiss();
+                            ErrorUtils.showThrowableError(ChatThreadEmployer.this, t);
+                        }
+                    });
+        });
     }
 
     private ChatModel docToModel(DocumentSnapshot doc) {
