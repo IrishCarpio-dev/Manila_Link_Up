@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.models.ChatListItemModel;
+import com.manilalinkup.app.utilities.DateUtils;
 
 import java.util.List;
 
@@ -83,7 +84,7 @@ public class EmployerChatTabAdapter extends RecyclerView.Adapter<EmployerChatTab
                 jobTitle.setText(job != null && job.getTitle() != null ? job.getTitle() : "");
             }
             messagePreview.setText(chat.getLastMessage() != null ? chat.getLastMessage() : "");
-            messageTimeStamp.setText(chat.getLastMessageAt() != null ? chat.getLastMessageAt() : "");
+            messageTimeStamp.setText(DateUtils.formatChatTimestamp(chat.getLastMessageAt()));
 
             if (unreadBadge != null) {
                 int unread = chat.getUnreadCount();
