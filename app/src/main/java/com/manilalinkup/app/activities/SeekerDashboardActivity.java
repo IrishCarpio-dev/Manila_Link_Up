@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -47,9 +48,11 @@ public class SeekerDashboardActivity extends AppCompatActivity {
     private JobPostDashboardAdapter adapterJobPost;
     private List<JobPostDashboardModel> jobListJobCard;
     private ProgressBar progressBarLoadMore;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private BottomNavigationView bottomNavigationView;
 
     private boolean isLoading = false;
+    private boolean isRefreshing = false;
     private boolean hasMorePages = true;
     private boolean isCuratedExhausted = false;
     private String lastExpiresAt = null;
@@ -65,6 +68,8 @@ public class SeekerDashboardActivity extends AppCompatActivity {
         recyclerViewJobPost = findViewById(R.id.recycler_view_job_posts_dashboard);
         recyclerViewJobPost.setLayoutManager(new LinearLayoutManager(this));
         progressBarLoadMore = findViewById(R.id.progress_bar_load_more);
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this::refreshJobs);
 
         jobListJobCard = new ArrayList<>();
 
@@ -133,10 +138,22 @@ public class SeekerDashboardActivity extends AppCompatActivity {
         loadJobs();
     }
 
+    private void refreshJobs() {
+        isRefreshing = true;
+        jobListJobCard.clear();
+        adapterJobPost.notifyDataSetChanged();
+        hasMorePages = true;
+        isLoading = false;
+        lastExpiresAt = null;
+        lastCreatedAt = null;
+        isCuratedExhausted = false;
+        loadJobs();
+    }
+
     private void loadJobs() {
         if (isLoading || !hasMorePages) return;
         isLoading = true;
-        progressBarLoadMore.setVisibility(View.VISIBLE);
+        if (!isRefreshing) progressBarLoadMore.setVisibility(View.VISIBLE);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
@@ -164,6 +181,10 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<SeekerJobsResponse> call, Response<SeekerJobsResponse> response) {
                     isLoading = false;
+                    if (isRefreshing) {
+                        isRefreshing = false;
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                     progressBarLoadMore.setVisibility(View.GONE);
 
                     if (response.isSuccessful() && response.body() != null) {
@@ -198,6 +219,10 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<SeekerJobsResponse> call, Throwable t) {
                     isLoading = false;
+                    if (isRefreshing) {
+                        isRefreshing = false;
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                     progressBarLoadMore.setVisibility(View.GONE);
                     ErrorUtils.showThrowableError(SeekerDashboardActivity.this, t);
                 }
