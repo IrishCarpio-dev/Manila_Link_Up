@@ -33,11 +33,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_message_body_sent"
-                android:layout_alignStart="@id/text_message_body_sent"
+                android:layout_alignEnd="@id/text_message_body_sent"
                 android:layout_marginTop="4dp"
                 android:text="10:01 AM"
                 android:textColor="#B3FFFFFF"
-                tools:textSize="11sp" />
+                android:textSize="11sp" />
 
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
