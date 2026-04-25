@@ -108,15 +108,33 @@
                 </RelativeLayout>
             </RelativeLayout>
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/applicant_status_chip"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:clickable="false"
-                tools:text="Pending"
-                android:textSize="11sp"
-                app:chipMinHeight="28dp" />
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btn_overflow"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="end"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_more_vert"
+                    android:contentDescription="More options" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/applicant_status_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:clickable="false"
+                    tools:text="Pending"
+                    android:textSize="11sp"
+                    app:chipMinHeight="28dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

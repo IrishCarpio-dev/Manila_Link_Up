@@ -86,6 +86,16 @@ public class EmployerListOfApplicants extends AppCompatActivity {
             }
 
             @Override
+            public void onReject(ApplicantModel applicant) {
+                new AlertDialog.Builder(EmployerListOfApplicants.this)
+                        .setTitle("Reject applicant?")
+                        .setMessage("This will reject this applicant's application.")
+                        .setPositiveButton("Reject", (d, w) -> updateStatus(applicant, 3))
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            }
+
+            @Override
             public void onOpenChat(ApplicantModel applicant) {
                 Intent intent = new Intent(EmployerListOfApplicants.this, ChatThreadEmployer.class);
                 intent.putExtra("CHAT_ID", applicant.getChatId());
@@ -148,7 +158,7 @@ public class EmployerListOfApplicants extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        progressDialog.setMessage(newStatus == 5 ? "Hiring applicant..." : "Updating status...");
+        progressDialog.setMessage(newStatus == 5 ? "Hiring applicant..." : newStatus == 3 ? "Rejecting applicant..." : "Updating status...");
         progressDialog.show();
 
         user.getIdToken(true).addOnSuccessListener(result -> {
@@ -159,7 +169,7 @@ public class EmployerListOfApplicants extends AppCompatActivity {
                 public void onResponse(Call<ApiResponse<ApplicationModel>> call, Response<ApiResponse<ApplicationModel>> response) {
                     progressDialog.dismiss();
                     if (response.isSuccessful()) {
-                        String msg = newStatus == 2 ? "Moved to interview" : "Applicant hired!";
+                        String msg = newStatus == 2 ? "Moved to interview" : newStatus == 3 ? "Applicant rejected" : "Applicant hired!";
                         Toast.makeText(EmployerListOfApplicants.this, msg, Toast.LENGTH_SHORT).show();
                         loadApplicants();
                     } else {
