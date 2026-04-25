@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -39,6 +40,9 @@ public class SignUpActivity extends AppCompatActivity {
     TextInputLayout mobileNumber;
     TextInputLayout createPassword;
     TextInputLayout confirmPassword;
+    TextView labelCreatePassword;
+    TextView labelConfirmPassword;
+    TextView otpMessage;
 
 
     @Override
@@ -58,14 +62,45 @@ public class SignUpActivity extends AppCompatActivity {
         mobileNumber = findViewById(R.id.text_input_layout_phone_number);
         createPassword = findViewById(R.id.text_input_create_password);
         confirmPassword = findViewById(R.id.text_input_confirm_password);
+        labelCreatePassword = findViewById(R.id.text_create_password);
+        labelConfirmPassword = findViewById(R.id.text_confirm_password);
+        otpMessage = findViewById(R.id.text_view_otp_message);
 
         progressDialog = new android.app.ProgressDialog(this);
         progressDialog.setMessage("Creating account...");
         progressDialog.setCancelable(false);
 
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            // 1. Hide the Input Layouts
+            createPassword.setVisibility(View.GONE);
+            confirmPassword.setVisibility(View.GONE);
+
+            // 2. Hide the TextView Labels and OTP message
+            labelCreatePassword.setVisibility(View.GONE);
+            labelConfirmPassword.setVisibility(View.GONE);
+            otpMessage.setVisibility(View.GONE);
+
+            // 3. Change Button Text to "Continue"
+            sendOTP.setText("Continue");
+
+            // Pre-fill email
+            if (currentUser.getEmail() != null) {
+                emailAddress.getEditText().setText(currentUser.getEmail());
+                emailAddress.setEnabled(false);
+            }
+        }
+
         sendOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                firstName.setError(null);
+                lastname.setError(null);
+                emailAddress.setError(null);
+                mobileNumber.setError(null);
+                createPassword.setError(null);
+                confirmPassword.setError(null);
+
                 String firstnameInput = firstName.getEditText().getText().toString().trim();
                 String middleNameInput = middleName.getEditText().getText().toString().trim();
                 String lastnameInput = lastname.getEditText().getText().toString().trim();
@@ -75,12 +110,6 @@ public class SignUpActivity extends AppCompatActivity {
                 String createPasswordInput = createPassword.getEditText().getText().toString().trim();
                 String confirmPasswordInput = confirmPassword.getEditText().getText().toString().trim();
 
-                firstName.setError(null);
-                lastname.setError(null);
-                emailAddress.setError(null);
-                mobileNumber.setError(null);
-                createPassword.setError(null);
-                confirmPassword.setError(null);
 
                 if (firstnameInput.isEmpty()) {
                     firstName.setError("First name is required");
@@ -122,39 +151,54 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }
 
-                progressDialog.show();
-                mAuth.createUserWithEmailAndPassword(emailAddressInput, createPasswordInput)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                mAuth.getCurrentUser().sendEmailVerification();
+                FirebaseUser sessionUser = mAuth.getCurrentUser();
 
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                String userUid = user.getUid();
+                if (sessionUser != null) {
+                    // --- CASE A: SOCIAL USER (Facebook/Google) ---
+                    progressDialog.show();
+                    sessionUser.getIdToken(true).addOnCompleteListener(tokenTask -> {
+                        if (tokenTask.isSuccessful()) {
+                            sendProfileToLaravel(tokenTask.getResult().getToken(), sessionUser.getUid(),
+                                    firstnameInput, middleNameInput, lastnameInput, suffixInput,
+                                    emailAddressInput, mobileNumberInput);
+                        } else {
+                            progressDialog.dismiss();
+                            Toast.makeText(SignUpActivity.this, "Auth Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-                                user.getIdToken(true).addOnCompleteListener(tokenTask -> {
-                                    if(tokenTask.isSuccessful()){
-                                        String idToken = tokenTask.getResult().getToken();
+                } else {
+                    // --- CASE B: NEW EMAIL/PASSWORD USER ---
+                    createPasswordInput = createPassword.getEditText().getText().toString().trim();
+                    confirmPasswordInput = confirmPassword.getEditText().getText().toString().trim();
 
-                                        sendProfileToLaravel(
-                                                idToken,
-                                                userUid,
-                                                firstnameInput,
-                                                middleNameInput,
-                                                lastnameInput,
-                                                suffixInput,
-                                                emailAddressInput,
-                                                mobileNumberInput
-                                        );
-                                    }
-                                });
-                            } else {
-                                progressDialog.dismiss();
-                                Toast.makeText(SignUpActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
+                    if (createPasswordInput.isEmpty()) { createPassword.setError("Required"); return; }
+                    if (!createPasswordInput.matches(passwordPattern)) { createPassword.setError("Weak password"); return; }
+                    if (!createPasswordInput.equals(confirmPasswordInput)) { confirmPassword.setError("Mismatch"); return; }
+
+                    progressDialog.show();
+                    mAuth.createUserWithEmailAndPassword(emailAddressInput, createPasswordInput)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    FirebaseUser newUser = mAuth.getCurrentUser();
+                                    newUser.sendEmailVerification();
+                                    newUser.getIdToken(true).addOnCompleteListener(tokenTask -> {
+                                        if (tokenTask.isSuccessful()) {
+                                            sendProfileToLaravel(tokenTask.getResult().getToken(), newUser.getUid(),
+                                                    firstnameInput, middleNameInput, lastnameInput, suffixInput,
+                                                    emailAddressInput, mobileNumberInput);
+                                        }
+                                    });
+                                } else {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(SignUpActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                }
             }
 
         });
+
     }
 
     private void sendProfileToLaravel(String idToken, String actualUid, String firstnameInput, String middleNameInput, String lastnameInput, String suffixInput, String emailAddressInput, String mobileNumberInput) {
