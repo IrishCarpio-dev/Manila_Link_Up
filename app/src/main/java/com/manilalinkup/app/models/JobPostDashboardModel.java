@@ -46,4 +46,21 @@ public class JobPostDashboardModel {
 
     public List<String> getTagIds() { return tagIds; }
     public void setTagIds(List<String> tagIds) { this.tagIds = tagIds; }
+
+    private Double salary;
+    private String description;
+    private String expiresAt;
+
+    public Double getSalary() { return salary; }
+    public void setSalary(Double salary) { this.salary = salary; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    public String getExpiresAt() { return expiresAt; }
+    public void setExpiresAt(String expiresAt) { this.expiresAt = expiresAt; }
+
+    private boolean hasApplied;
+    public boolean isHasApplied() { return hasApplied; }
+    public void setHasApplied(boolean hasApplied) { this.hasApplied = hasApplied; }
 }

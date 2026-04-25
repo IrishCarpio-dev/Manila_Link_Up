@@ -1,5 +1,6 @@
 package com.manilalinkup.app.adapters;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -144,6 +145,8 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
                         if (label == null) continue;
                         Chip chip = new Chip(chipGroupTags.getContext());
                         chip.setText(label);
+                        chip.setChipBackgroundColorResource(R.color.manila_blue);
+                        chip.setTextColor(Color.WHITE);
                         chip.setCheckable(false);
                         chip.setClickable(false);
                         chip.setFocusable(false);

@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,8 +25,10 @@ import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.models.ExperienceModel;
 import com.manilalinkup.app.models.GetRatingsRequest;
 import com.manilalinkup.app.models.RatingModel;
+import com.manilalinkup.app.models.SeekerProfileModel;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.utilities.SessionCache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +51,9 @@ public class SeekerProfileActivity extends AppCompatActivity {
     private ImageView settingsIcon;
     private TextInputEditText summaryEditText;
     ImageView viewAllRatings;
+    private LinearLayout layoutRatingSummary;
+    private RatingBar ratingBarProfile;
+    private TextView tvRatingSummary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +88,14 @@ public class SeekerProfileActivity extends AppCompatActivity {
             return true;
         });
 
+        layoutRatingSummary = findViewById(R.id.layout_rating_summary);
+        ratingBarProfile = findViewById(R.id.rating_bar_profile);
+        tvRatingSummary = findViewById(R.id.tv_rating_summary);
+
         setupFeedbacksRecyclerView();
         setupExperienceRecyclerView();
         setupClickListeners();
+        loadRatingStats();
 
         viewAllRatings = findViewById(R.id.item_card_see_more_ratings_seeker);
         viewAllRatings.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +106,27 @@ public class SeekerProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void loadRatingStats() {
+        SessionCache.getInstance().ensureUserProfile(new SessionCache.UserProfileCallback() {
+            @Override
+            public void onAvailable(com.manilalinkup.app.models.UserProfileModel profile) {
+                SeekerProfileModel seeker = profile.getSeekers();
+                if (seeker == null) return;
+                Integer count = seeker.getRatingCount();
+                Double avg = seeker.getBayesianAvg();
+                if (count != null && count > 0 && avg != null) {
+                    ratingBarProfile.setRating(avg.floatValue());
+                    tvRatingSummary.setText(String.format("%.1f (%d %s)",
+                            avg, count, count == 1 ? "rating" : "ratings"));
+                    layoutRatingSummary.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onError() {}
+        });
     }
 
     private void setupFeedbacksRecyclerView() {

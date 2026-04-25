@@ -21,6 +21,7 @@ import com.manilalinkup.app.models.HideChatRequest;
 import com.manilalinkup.app.models.JobModel;
 import com.manilalinkup.app.models.MarkCompleteRequest;
 import com.manilalinkup.app.models.MarkReadRequest;
+import com.manilalinkup.app.models.NotifyChatRequest;
 import com.manilalinkup.app.models.RatingModel;
 import com.manilalinkup.app.models.RegisterDeviceRequest;
 import com.manilalinkup.app.models.SeekerRequest;
@@ -92,7 +93,7 @@ public interface ApiService {
 
     // Applications
     @POST("api/jobs/apply")
-    Call<ApiResponse<ApplicationModel>> applyJob(@Body ApplyJobRequest request);
+    Call<ResponseBody> applyJob(@Body ApplyJobRequest request);
 
     @POST("api/jobs/withdraw")
     Call<ResponseBody> withdrawApplication(@Body WithdrawApplicationRequest request);
@@ -127,6 +128,9 @@ public interface ApiService {
 
     @POST("api/chats/hide")
     Call<ResponseBody> hideChat(@Body HideChatRequest request);
+
+    @POST("api/chats/notify")
+    Call<ResponseBody> notifyChat(@Body NotifyChatRequest request);
 
     // Ratings
     @POST("api/ratings")

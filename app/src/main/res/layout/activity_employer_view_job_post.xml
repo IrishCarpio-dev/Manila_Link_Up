@@ -13,7 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#1B3E9C"
-        app:navigationIconTint="@color/white">
+        app:navigationIconTint="@color/white"
+        app:titleTextColor="@color/white"
+        android:theme="@style/ThemeOverlay.ManilaBluToolbar">
 
         <TextView
             android:id="@+id/text_view_employer_name_job_post"
@@ -251,7 +253,36 @@
                             android:textSize="14sp"
                             android:text="Apr. 4-8, 2026" />
 
+                        <ImageView
+                            android:id="@+id/expires_logo"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_alignTop="@id/text_view_expires_at"
+                            android:layout_marginTop="3dp"
+                            android:src="@drawable/bxscalendarcheck" />
+
+                        <TextView
+                            android:id="@+id/text_view_expires_at"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/text_view_calendar_placeholder"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_toEndOf="@id/expires_logo"
+                            android:fontFamily="sans-serif"
+                            android:textColor="#616161"
+                            android:textSize="14sp" />
+
                     </RelativeLayout>
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chip_group_tags"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/relative_layout_details_job_post"
+                        android:layout_marginTop="4dp"
+                        app:chipSpacingHorizontal="4dp"
+                        app:chipSpacingVertical="2dp" />
 
                     <TextView
                         android:id="@+id/text_view_how_long_job_post_posted_placeholder"

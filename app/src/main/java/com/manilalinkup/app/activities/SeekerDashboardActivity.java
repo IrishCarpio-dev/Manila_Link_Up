@@ -78,6 +78,17 @@ public class SeekerDashboardActivity extends AppCompatActivity {
             public void onJobClick(JobPostDashboardModel job) {
                 Intent intent = new Intent(SeekerDashboardActivity.this, SeekerJobPostActivity.class);
                 intent.putExtra("JOB_ID", job.getJobId());
+                intent.putExtra("JOB_TITLE", job.getJobTitle());
+                intent.putExtra("EMPLOYER_NAME", job.getEmployerName());
+                intent.putExtra("LOCATION", job.getJobPostLocation());
+                intent.putExtra("DURATION", job.getJob_duration());
+                intent.putExtra("SALARY", job.getSalary() != null ? job.getSalary() : 0.0);
+                intent.putExtra("DESCRIPTION", job.getDescription());
+                intent.putExtra("EXPIRES_AT", job.getExpiresAt());
+                intent.putExtra("HOW_LONG_POSTED", job.getHowLongJobIsPosted());
+                intent.putExtra("EMPLOYER_PHOTO", job.getEmployerProfilePicture());
+                intent.putStringArrayListExtra("TAG_IDS", new ArrayList<>(job.getTagIds() != null ? job.getTagIds() : new ArrayList<>()));
+                intent.putExtra("HAS_APPLIED", job.isHasApplied());
                 startActivity(intent);
             }
 
@@ -163,8 +174,6 @@ public class SeekerDashboardActivity extends AppCompatActivity {
         }
 
         String mode = isCuratedExhausted ? "all" : "curated";
-
-        Log.d("LoadJobs", mode);
 
         user.getIdToken(true).addOnCompleteListener(tokenTask -> {
             if (!tokenTask.isSuccessful()) {
@@ -256,6 +265,10 @@ public class SeekerDashboardActivity extends AppCompatActivity {
         );
         model.setJobId(job.getId());
         model.setTagIds(job.getTags());
+        model.setSalary(job.getSalary());
+        model.setDescription(job.getDescription());
+        model.setExpiresAt(job.getExpiresAt());
+        model.setHasApplied(job.isHasApplied());
         return model;
     }
 

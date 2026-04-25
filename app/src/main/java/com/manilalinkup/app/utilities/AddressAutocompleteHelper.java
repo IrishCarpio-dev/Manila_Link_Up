@@ -1,5 +1,6 @@
 package com.manilalinkup.app.utilities;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
@@ -17,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.manilalinkup.app.R;
-import com.manilalinkup.app.adapters.DistrictAdapter;
 import com.manilalinkup.app.adapters.LocationAdapter;
 import com.manilalinkup.app.models.PhotonResponseModel;
 
@@ -29,39 +29,13 @@ import retrofit2.Response;
 
 public class AddressAutocompleteHelper {
     public static void attachDistrictAutocomplete(EditText editText) {
-        Context context = editText.getContext();
-
-        View popupView = LayoutInflater.from(context).inflate(R.layout.layout_search_popup, null);
-        RecyclerView rv = popupView.findViewById(R.id.popup_recycler);
-
-        PopupWindow popupWindow = new PopupWindow(popupView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT, false);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popupWindow.setOutsideTouchable(true);
-
-        DistrictAdapter adapter = new DistrictAdapter(address -> {
-            editText.setText(address);
-            editText.clearFocus();
-            popupWindow.dismiss();
-        });
-        rv.setLayoutManager(new LinearLayoutManager(context));
-        rv.setAdapter(adapter);
-
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                List<String> results = DistrictAutocompleteManager.getInstance().getFilteredResults(s.toString());
-                if (!results.isEmpty() && s.length() > 0) {
-                    adapter.updateList(results);
-                    if (!popupWindow.isShowing()) popupWindow.showAsDropDown(editText);
-                } else {
-                    popupWindow.dismiss();
-                }
-            }
-            @Override public void beforeTextChanged(CharSequence s, int i, int i1, int i2) {}
-            @Override public void afterTextChanged(Editable s) {}
-        });
+        String[] districts = DistrictAutocompleteManager.getInstance().getAll().toArray(new String[0]);
+        editText.setFocusable(false);
+        editText.setFocusableInTouchMode(false);
+        editText.setOnClickListener(v -> new AlertDialog.Builder(editText.getContext())
+                .setTitle("Select District")
+                .setItems(districts, (dialog, which) -> editText.setText(districts[which]))
+                .show());
     }
 
 

@@ -8,6 +8,9 @@ public class EmployerProfileModel {
     String profilePhotoUrl;
     Boolean isProfileSet;
     Boolean isVerified;
+    Integer ratingCount;
+    Double ratingSum;
+    Double bayesianAvg;
 
     public EmployerProfileModel(
             String fullName,
@@ -40,4 +43,10 @@ public class EmployerProfileModel {
     public Boolean getProfileSet() { return isProfileSet; }
 
     public Boolean getVerified() { return isVerified; }
+
+    public Integer getRatingCount() { return ratingCount; }
+
+    public Double getRatingSum() { return ratingSum; }
+
+    public Double getBayesianAvg() { return bayesianAvg; }
 }

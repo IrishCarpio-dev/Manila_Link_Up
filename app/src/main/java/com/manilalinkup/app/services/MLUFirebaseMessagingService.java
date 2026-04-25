@@ -11,6 +11,8 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.manilalinkup.app.R;
@@ -20,6 +22,7 @@ import com.manilalinkup.app.models.RegisterDeviceRequest;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.RetrofitClient;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -45,6 +48,12 @@ public class MLUFirebaseMessagingService extends FirebaseMessagingService {
                 @Override public void onFailure(Call<ResponseBody> call, Throwable t) {}
             });
         });
+
+        Map<String, Object> tokenData = new HashMap<>();
+        tokenData.put("fcmToken", token);
+        FirebaseFirestore.getInstance()
+                .collection("users").document(user.getUid())
+                .set(tokenData, SetOptions.merge());
     }
 
     @Override
@@ -65,12 +74,12 @@ public class MLUFirebaseMessagingService extends FirebaseMessagingService {
     private Intent buildDeepLinkIntent(String type, Map<String, String> data) {
         if ("chat_message".equals(type)) {
             String chatId = data.get("chatId");
-            // Determine role — try seeker first; employer fallback handled at activity level
-            Intent intent = new Intent(this, ChatThreadSeeker.class);
+            String role = data.get("role");
+            Class<?> target = "employer".equals(role) ? ChatThreadEmployer.class : ChatThreadSeeker.class;
+            Intent intent = new Intent(this, target);
             intent.putExtra("CHAT_ID", chatId);
             return intent;
         }
-        // For status_change and rating_received, go to main activity; deep-linking can be added later
         return getPackageManager().getLaunchIntentForPackage(getPackageName());
     }
 
