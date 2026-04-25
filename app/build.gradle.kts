@@ -52,6 +52,7 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-auth:21.1.0")
     implementation("com.facebook.android:facebook-login:17.0.0")
+    implementation("com.facebook.android:facebook-android-sdk:latest.release")
 
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-analytics")
