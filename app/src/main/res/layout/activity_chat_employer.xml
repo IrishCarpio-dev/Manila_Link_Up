@@ -59,14 +59,21 @@
         </FrameLayout>
     </androidx.cardview.widget.CardView>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_seeker_chat_tab"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation_view"
-        android:layout_below="@id/card_view_dashboard_top_employer"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_messages_employer_card" />
+        android:layout_below="@id/card_view_dashboard_top_employer">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_seeker_chat_tab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_messages_employer_card" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/empty_state_chats"
