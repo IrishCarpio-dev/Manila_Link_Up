@@ -219,24 +219,39 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 progressDialog.dismiss();
+
                 if (response.isSuccessful()) {
                     FirebaseUser user = mAuth.getCurrentUser();
+                    boolean isSocialLogin = false;
 
-                    if (user != null && user.getProviderData().size() > 1) {
-                        Toast.makeText(SignUpActivity.this, "We need to know more about you.", Toast.LENGTH_SHORT).show();
+                    if (user != null) {
+                        // Check if the user is using Facebook or Google
+                        for (com.google.firebase.auth.UserInfo profile : user.getProviderData()) {
+                            String providerId = profile.getProviderId();
+                            if (providerId.equals("facebook.com") || providerId.equals("google.com")) {
+                                isSocialLogin = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (isSocialLogin) {
+                        Toast.makeText(SignUpActivity.this, "Welcome! Let's finish your profile.", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(SignUpActivity.this, EditSeekerProfileActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
+                        // Traditional Email Signup
                         Toast.makeText(SignUpActivity.this, "Registration successful! Please verify your email.", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                     }
                 } else {
+                    // This was missing! It handles 400, 422, or 500 errors from your Laravel backend
                     ErrorUtils.showErrorMessage(SignUpActivity.this, response.errorBody());
                 }
-            }
+            } // End of onResponse
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
