@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,7 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#1B3E9C"
+        android:background="@color/manila_blue"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:navigationIcon="?attr/homeAsUpIndicator"
         app:navigationIconTint="@color/white"/>
@@ -23,6 +23,7 @@
         android:layout_margin="12dp"
         app:cardCornerRadius="24dp"
         app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/white"
         android:layout_alignParentBottom="true"
         app:strokeColor="#F0F0F0"
         app:strokeWidth="1dp">
@@ -42,6 +43,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:hint="Type a message..."
+                android:textColorHint="#9E9E9E"
                 android:minHeight="48dp"
                 android:textColor="#212121"
                 android:textSize="15sp" />
@@ -52,7 +54,7 @@
                 android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@android:drawable/ic_menu_send"
-                app:tint="#1B3E9C" />
+                app:tint="@color/manila_blue" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

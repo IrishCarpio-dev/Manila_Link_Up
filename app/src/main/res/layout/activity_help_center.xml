@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -10,7 +10,7 @@
         android:id="@+id/header_help"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        app:cardBackgroundColor="#1B3E9C"
+        app:cardBackgroundColor="@color/manila_blue"
         app:cardElevation="4dp">
 
         <RelativeLayout
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Frequently Asked Questions"
-                android:textColor="#1B3E9C"
+                android:textColor="@color/manila_blue"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp"/>
 
@@ -76,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Still need help?"
-                android:textColor="#1B3E9C"
+                android:textColor="@color/manila_blue"
                 android:textStyle="bold"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="12dp"/>
@@ -86,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Contact Support Team"
-                android:backgroundTint="#1B3E9C"
+                android:backgroundTint="@color/manila_blue"
                 android:textColor="@android:color/white"
                 app:cornerRadius="8dp" />
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,7 +11,7 @@
         android:id="@+id/header_privacy"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        app:cardBackgroundColor="#1B3E9C"
+        app:cardBackgroundColor="@color/manila_blue"
         app:cardElevation="4dp">
 
         <RelativeLayout
@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Business Visibility"
-                android:textColor="#1B3E9C"
+                android:textColor="@color/manila_blue"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"/>
 
@@ -110,7 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Legal &amp; Business Verification"
-                android:textColor="#1B3E9C"
+                android:textColor="@color/manila_blue"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"/>
 
@@ -156,7 +156,7 @@
                         android:drawableStart="@drawable/ic_help"
                         android:drawablePadding="12dp"
                         android:drawableEnd="@drawable/ic_chevron_right"
-                        android:textColor="#1B3E9C"
+                        android:textColor="@color/manila_blue"
                         android:gravity="center_vertical"
                         android:background="?attr/selectableItemBackground"
                         android:padding="8dp"
@@ -168,7 +168,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Employer Data Controls"
-                android:textColor="#1B3E9C"
+                android:textColor="@color/manila_blue"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"/>
 
