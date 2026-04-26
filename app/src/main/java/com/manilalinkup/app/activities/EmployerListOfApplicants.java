@@ -77,7 +77,12 @@ public class EmployerListOfApplicants extends AppCompatActivity {
         applicantsAdapter = new EmployerApplicantsAdapter(applicantsList, new EmployerApplicantsAdapter.OnActionListener() {
             @Override
             public void onInterview(ApplicantModel applicant) {
-                updateStatus(applicant, 2);
+                new AlertDialog.Builder(EmployerListOfApplicants.this)
+                        .setTitle("Move to interview?")
+                        .setMessage("This will move the applicant to the interview stage.")
+                        .setPositiveButton("Confirm", (d, w) -> updateStatus(applicant, 2))
+                        .setNegativeButton("Cancel", null)
+                        .show();
             }
 
             @Override
@@ -91,9 +96,20 @@ public class EmployerListOfApplicants extends AppCompatActivity {
             }
 
             @Override
+            public void onReject(ApplicantModel applicant) {
+                new AlertDialog.Builder(EmployerListOfApplicants.this)
+                        .setTitle("Reject applicant?")
+                        .setMessage("This will reject this applicant's application.")
+                        .setPositiveButton("Reject", (d, w) -> updateStatus(applicant, 3))
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            }
+
+            @Override
             public void onOpenChat(ApplicantModel applicant) {
                 Intent intent = new Intent(EmployerListOfApplicants.this, ChatThreadEmployer.class);
                 intent.putExtra("CHAT_ID", applicant.getChatId());
+                intent.putExtra("APPLICATION_ID", applicant.getId());
                 intent.putExtra("SEEKER_UID", applicant.getSeekerUid());
                 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                 if (currentUser != null) intent.putExtra("EMPLOYER_UID", currentUser.getUid());
@@ -156,7 +172,7 @@ public class EmployerListOfApplicants extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        progressDialog.setMessage(newStatus == 5 ? "Hiring applicant..." : "Updating status...");
+        progressDialog.setMessage(newStatus == 5 ? "Hiring applicant..." : newStatus == 3 ? "Rejecting applicant..." : "Updating status...");
         progressDialog.show();
 
         user.getIdToken(true).addOnSuccessListener(result -> {
@@ -167,7 +183,7 @@ public class EmployerListOfApplicants extends AppCompatActivity {
                 public void onResponse(Call<ApiResponse<ApplicationModel>> call, Response<ApiResponse<ApplicationModel>> response) {
                     progressDialog.dismiss();
                     if (response.isSuccessful()) {
-                        String msg = newStatus == 2 ? "Moved to interview" : "Applicant hired!";
+                        String msg = newStatus == 2 ? "Moved to interview" : newStatus == 3 ? "Applicant rejected" : "Applicant hired!";
                         Toast.makeText(EmployerListOfApplicants.this, msg, Toast.LENGTH_SHORT).show();
                         loadApplicants();
                     } else {

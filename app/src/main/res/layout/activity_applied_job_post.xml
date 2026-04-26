@@ -50,6 +50,7 @@
             android:textAllCaps="false"
             android:textColor="#D32F2F"
             android:textSize="16sp"
+            android:visibility="gone"
             app:cornerRadius="12dp"
             app:strokeColor="#D32F2F"
             app:strokeWidth="1.5dp"
