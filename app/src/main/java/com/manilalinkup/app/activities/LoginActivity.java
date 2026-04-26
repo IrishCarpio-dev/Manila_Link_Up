@@ -85,6 +85,17 @@ public class LoginActivity extends AppCompatActivity {
         googleLoginButton = findViewById(R.id.image_view_login_google);
         facebookLoginButton = findViewById(R.id.image_view_login_facebook);
 
+        signUpInstead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, GetStarted.class);
+                startActivity(intent);
+            }
+        });
+
+        forgetPassword.setOnClickListener(v ->
+                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class)));
+
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
         mCallbackManager = CallbackManager.Factory.create();
 

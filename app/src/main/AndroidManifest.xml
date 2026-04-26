@@ -135,6 +135,15 @@
             android:label="Login to Manila LinkUp"
             android:parentActivityName=".activities.MainActivity" />
         <activity
+            android:name=".activities.ForgotPasswordActivity"
+            android:exported="false"
+            android:label="Forgot Password"
+            android:parentActivityName=".activities.LoginActivity" />
+        <activity
+            android:name=".activities.ResetPasswordActivity"
+            android:exported="false"
+            android:label="Reset Password" />
+        <activity
             android:name=".activities.SeekerProfileActivity"
             android:exported="false"
             android:label="Seeker Profile"
