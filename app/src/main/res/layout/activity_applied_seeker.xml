@@ -101,14 +101,20 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_employer_own_posts"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation_view"
-        android:layout_below="@id/section_header_container"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_applied_tab_card">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_below="@id/section_header_container">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_employer_own_posts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_applied_tab_card" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

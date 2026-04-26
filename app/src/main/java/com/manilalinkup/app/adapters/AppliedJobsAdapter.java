@@ -1,30 +1,31 @@
 package com.manilalinkup.app.adapters;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.manilalinkup.app.R;
-import com.manilalinkup.app.activities.EmployerAddJobActivity;
+import com.manilalinkup.app.models.AppliedJobModel;
 import com.manilalinkup.app.models.ArchiveJobModel;
-import com.manilalinkup.app.models.JobPostDashboardModel;
+import com.manilalinkup.app.activities.EmployerAddJobActivity;
+
+import android.content.Intent;
+import android.widget.Button;
 
 import java.util.List;
 
 public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.AppliedViewHolder> {
     public interface OnAppliedJobClickListener {
-        void onJobClick(JobPostDashboardModel job);
+        void onJobClick(AppliedJobModel job);
     }
-    private List<JobPostDashboardModel> appliedJobs;
+    private List<AppliedJobModel> appliedJobs;
     private OnAppliedJobClickListener listener;
 
-    public AppliedJobsAdapter(List<JobPostDashboardModel> appliedJobs, OnAppliedJobClickListener listener) {
+    public AppliedJobsAdapter(List<AppliedJobModel> appliedJobs, OnAppliedJobClickListener listener) {
         this.appliedJobs = appliedJobs;
         this.listener = listener;
     }
@@ -38,47 +39,60 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull AppliedViewHolder holder, int position) {
-        JobPostDashboardModel job = appliedJobs.get(position);
-        holder.jobTitle.setText(job.getJobTitle());
-        holder.employerName.setText(job.getEmployerName());
+        AppliedJobModel application = appliedJobs.get(position);
+        int status = application.getStatus() != null ? application.getStatus() : 1;
 
-        String status;
-        if (position % 3 == 0) {
-            status = "PENDING";
-        } else if (position % 3 == 1) {
-            status = "INTERVIEW";
-        } else {
-            status = "ACCEPTED";
+        if (application.getJob() != null) {
+            holder.jobTitle.setText(application.getJob().getTitle());
+            if (application.getJob().getEmployer() != null) {
+                holder.employerName.setText(application.getJob().getEmployer().getFullName());
+                Glide.with(holder.itemView.getContext())
+                        .load(application.getJob().getEmployer().getProfilePhotoUrl())
+                        .circleCrop()
+                        .into(holder.employerLogo);
+            }
         }
-
-        holder.statusBadge.setText(status);
 
         switch (status) {
-            case "PENDING":
+            case 1:
+                holder.statusBadge.setText("Pending");
                 holder.statusBadge.setBackgroundResource(R.drawable.bg_status_pending);
-                holder.statusBadge.setTextColor(android.graphics.Color.parseColor("#E65100")); // Dark Orange
+                holder.statusBadge.setTextColor(android.graphics.Color.parseColor("#E65100"));
                 break;
-            case "INTERVIEW":
+            case 2:
+                holder.statusBadge.setText("Interview");
                 holder.statusBadge.setBackgroundResource(R.drawable.bg_status_interview);
-                holder.statusBadge.setTextColor(android.graphics.Color.parseColor("#1565C0")); // Dark Blue
+                holder.statusBadge.setTextColor(android.graphics.Color.parseColor("#1565C0"));
                 break;
-            case "ACCEPTED":
+            case 3:
+                holder.statusBadge.setText("Rejected");
+                holder.statusBadge.setBackgroundResource(R.drawable.bg_status_rejected);
+                holder.statusBadge.setTextColor(android.graphics.Color.parseColor("#B71C1C"));
+                break;
+            case 5:
+                holder.statusBadge.setText("Hired");
                 holder.statusBadge.setBackgroundResource(R.drawable.bg_status_accepted);
-                holder.statusBadge.setTextColor(android.graphics.Color.parseColor("#2E7D32")); // Dark Green
+                holder.statusBadge.setTextColor(android.graphics.Color.parseColor("#2E7D32"));
+                break;
+            case 6:
+                holder.statusBadge.setText("Completed");
+                holder.statusBadge.setBackgroundResource(R.drawable.bg_status_accepted);
+                holder.statusBadge.setTextColor(android.graphics.Color.parseColor("#2E7D32"));
+                break;
+            default:
+                holder.statusBadge.setText("Pending");
+                holder.statusBadge.setBackgroundResource(R.drawable.bg_status_pending);
+                holder.statusBadge.setTextColor(android.graphics.Color.parseColor("#E65100"));
                 break;
         }
-
-        Glide.with(holder.itemView.getContext())
-                .load(job.getEmployerProfilePicture())
-                .circleCrop()
-                .into(holder.employerLogo);
 
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
-                listener.onJobClick(job);
+                listener.onJobClick(application);
             }
         });
     }
+
     @Override
     public int getItemCount() { return appliedJobs.size(); }
 
@@ -141,7 +155,6 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
                 Intent intent = new Intent(v.getContext(), EmployerAddJobActivity.class);
 
                 intent.putExtra("job_id", currentJob.getJobId());
-                // Note: is_repost will be 'false' by default on the next screen because we didn't add it here
                 v.getContext().startActivity(intent);
             });
 
@@ -155,7 +168,6 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
                         .setTitle("Delete Post?")
                         .setMessage("Are you sure you want to permanently delete " + jobToDelete.getJobTitle() + "?")
                         .setPositiveButton("Delete", (dialog, which) -> {
-                            // Logic: Should call API here before removing from the list!
                             archiveJobModelList.remove(actualPosition);
                             notifyItemRemoved(actualPosition);
                             notifyItemRangeChanged(actualPosition, archiveJobModelList.size());
@@ -166,7 +178,7 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
 
         }
 
-        static class ArchiveJobViewHolder extends RecyclerView.ViewHolder{
+        static class ArchiveJobViewHolder extends RecyclerView.ViewHolder {
             TextView job_title;
             TextView statusText;
             TextView insightText;
@@ -184,13 +196,11 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
                 deleteButton = itemView.findViewById(R.id.button_delete_archived);
             }
 
-            public void bind(ArchiveJobModel archiveJobBind){
+            public void bind(ArchiveJobModel archiveJobBind) {
                 job_title.setText(archiveJobBind.getJobTitle());
                 statusText.setText(archiveJobBind.getStatusText());
                 insightText.setText(archiveJobBind.getInsightText());
             }
-
         }
-
     }
 }

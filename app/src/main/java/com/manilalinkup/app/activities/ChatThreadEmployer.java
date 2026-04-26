@@ -2,6 +2,7 @@ package com.manilalinkup.app.activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.models.ApplicationModel;
+import com.manilalinkup.app.models.MarkCompleteRequest;
 import com.manilalinkup.app.models.UpdateApplicationStatusRequest;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -59,7 +61,13 @@ public class ChatThreadEmployer extends AppCompatActivity {
     private String jobTitle;
     private String currentUid;
     private String applicationId;
+    private String counterpartName;
+    private int applicationStatus;
     private ProgressDialog progressDialog;
+
+    private LinearLayout buttonContainer;
+    private MaterialButton btnSecondary;
+    private MaterialButton btnPrimary;
 
     private FirebaseFirestore db;
     private CollectionReference messagesRef;
@@ -74,7 +82,8 @@ public class ChatThreadEmployer extends AppCompatActivity {
         chatId = getIntent().getStringExtra("CHAT_ID");
         jobTitle = getIntent().getStringExtra("JOB_TITLE");
         applicationId = getIntent().getStringExtra("APPLICATION_ID");
-        String counterpartName = getIntent().getStringExtra("COUNTERPART_NAME");
+        applicationStatus = getIntent().getIntExtra("APPLICATION_STATUS", 0);
+        counterpartName = getIntent().getStringExtra("COUNTERPART_NAME");
         String seekerUid = getIntent().getStringExtra("SEEKER_UID");
         String employerUid = getIntent().getStringExtra("EMPLOYER_UID");
 
@@ -91,29 +100,10 @@ public class ChatThreadEmployer extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
 
-        LinearLayout buttonContainer = findViewById(R.id.button_container);
-        MaterialButton btnReject = findViewById(R.id.button_accept_seeker);
-        MaterialButton btnAccept = findViewById(R.id.button_reject_seeker);
-        if (applicationId == null) {
-            buttonContainer.setVisibility(View.GONE);
-        } else {
-            btnReject.setOnClickListener(v ->
-                new AlertDialog.Builder(this)
-                        .setTitle("Reject applicant?")
-                        .setMessage("This will reject this applicant's application.")
-                        .setPositiveButton("Reject", (d, w) -> updateStatus(3))
-                        .setNegativeButton("Cancel", null)
-                        .show()
-            );
-            btnAccept.setOnClickListener(v ->
-                new AlertDialog.Builder(this)
-                        .setTitle("Hire applicant?")
-                        .setMessage("This will reject all other applicants and archive the job. Continue?")
-                        .setPositiveButton("Hire", (d, w) -> updateStatus(5))
-                        .setNegativeButton("Cancel", null)
-                        .show()
-            );
-        }
+        buttonContainer = findViewById(R.id.button_container);
+        btnSecondary = findViewById(R.id.button_accept_seeker);
+        btnPrimary = findViewById(R.id.button_reject_seeker);
+        updateActionBar();
 
         recyclerView = findViewById(R.id.recycler_chat_messages);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -236,6 +226,93 @@ public class ChatThreadEmployer extends AppCompatActivity {
                     }
                     batch.commit();
                 });
+    }
+
+    private void updateActionBar() {
+        if (applicationId == null) {
+            buttonContainer.setVisibility(View.GONE);
+            return;
+        }
+        buttonContainer.setVisibility(View.VISIBLE);
+        switch (applicationStatus) {
+            case 1:
+            case 2:
+                btnSecondary.setVisibility(View.VISIBLE);
+                btnSecondary.setText("Reject");
+                btnSecondary.setOnClickListener(v ->
+                    new AlertDialog.Builder(this)
+                            .setTitle("Reject applicant?")
+                            .setMessage("This will reject this applicant's application.")
+                            .setPositiveButton("Reject", (d, w) -> updateStatus(3))
+                            .setNegativeButton("Cancel", null)
+                            .show()
+                );
+                btnPrimary.setText("Hire");
+                btnPrimary.setOnClickListener(v ->
+                    new AlertDialog.Builder(this)
+                            .setTitle("Hire applicant?")
+                            .setMessage("This will reject all other applicants and archive the job. Continue?")
+                            .setPositiveButton("Hire", (d, w) -> updateStatus(5))
+                            .setNegativeButton("Cancel", null)
+                            .show()
+                );
+                break;
+            case 5:
+                btnSecondary.setVisibility(View.GONE);
+                btnPrimary.setText("Mark Complete");
+                btnPrimary.setOnClickListener(v ->
+                    new AlertDialog.Builder(this)
+                            .setTitle("Mark job as complete?")
+                            .setMessage("This will mark the job as complete. This action cannot be undone.")
+                            .setPositiveButton("Confirm", (d, w) -> markComplete())
+                            .setNegativeButton("Cancel", null)
+                            .show()
+                );
+                break;
+            case 6:
+                btnSecondary.setVisibility(View.GONE);
+                btnPrimary.setText("Rate Worker");
+                btnPrimary.setOnClickListener(v -> openRating());
+                break;
+            default:
+                buttonContainer.setVisibility(View.GONE);
+        }
+    }
+
+    private void markComplete() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+        progressDialog.setMessage("Marking as complete...");
+        progressDialog.show();
+        user.getIdToken(true).addOnSuccessListener(result -> {
+            ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
+            api.markApplicationComplete(new MarkCompleteRequest(applicationId))
+                    .enqueue(new Callback<ApiResponse<ApplicationModel>>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse<ApplicationModel>> call, Response<ApiResponse<ApplicationModel>> response) {
+                            progressDialog.dismiss();
+                            if (response.isSuccessful() && response.body() != null) {
+                                applicationStatus = 6;
+                                Toast.makeText(ChatThreadEmployer.this, "Marked as complete!", Toast.LENGTH_SHORT).show();
+                                updateActionBar();
+                            } else {
+                                ErrorUtils.showErrorMessage(ChatThreadEmployer.this, response.errorBody());
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<ApiResponse<ApplicationModel>> call, Throwable t) {
+                            progressDialog.dismiss();
+                            ErrorUtils.showThrowableError(ChatThreadEmployer.this, t);
+                        }
+                    });
+        });
+    }
+
+    private void openRating() {
+        Intent intent = new Intent(this, SubmitRatingActivity.class);
+        intent.putExtra("APPLICATION_ID", applicationId);
+        intent.putExtra("COUNTERPART_NAME", counterpartName != null ? counterpartName : "Worker");
+        startActivity(intent);
     }
 
     private void updateStatus(int newStatus) {
