@@ -2,24 +2,22 @@ package com.manilalinkup.app.models;
 
 public class SeekerRequest {
     private String uid;
-    String firstname;
-    String middlename;
-    String lastname;
+    String firstName;
+    String middleName;
+    String lastName;
     String suffix;
     String email;
-    String phone;
-    String birthdate;
-    private String address = "Not Provided";
-    private String location = "Not Provided";
+    String mobileNumber;
+    String birthDate;
 
-    public SeekerRequest(String uid, String firstname, String middlename, String lastname, String suffix, String email, String phone, String birthdate) {
+    public SeekerRequest(String uid, String firstName, String middleName, String lastName, String suffix, String email, String mobileNumber, String birthDate) {
         this.uid = uid;
-        this.firstname = firstname;
-        this.middlename = middlename.isEmpty() ? null : middlename;
-        this.lastname = lastname;
+        this.firstName = firstName;
+        this.middleName = middleName.isEmpty() ? null : middleName;
+        this.lastName = lastName;
         this.suffix = suffix.isEmpty() ? null : suffix;
         this.email = email;
-        this.phone = phone;
-        this.birthdate = birthdate;
+        this.mobileNumber = mobileNumber;
+        this.birthDate = birthDate;
     }
 }
