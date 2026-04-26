@@ -181,17 +181,6 @@
                             android:textSize="12sp" />
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/text_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/layout_rating_summary"
-                        android:layout_marginTop="6dp"
-                        android:background="@drawable/tag_bg"
-                        android:text="CURRENTLY HIRING"
-                        android:textColor="#097343"
-                        android:textSize="11sp" />
-
                     <ImageView
                         android:id="@+id/verification_checkmark_blue"
                         android:layout_width="18dp"
@@ -201,67 +190,15 @@
                         android:layout_toEndOf="@id/text_view_employer_name_profile"
                         android:src="@drawable/ic_verified" />
 
-                    <ImageView
-                        android:id="@+id/text_view_how_long_job_post_posted_placeholder"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:src="@drawable/dots_icon" />
-
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
 
             <TextView
-                android:id="@+id/text_view_personal_summary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/card_view_employer_info"
-                android:fontFamily="sans-serif-medium"
-                android:paddingStart="16dp"
-                android:paddingBottom="8dp"
-                android:text="Personal Summary"
-                android:textColor="#212121"
-                android:textSize="16sp" />
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_view_personal_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_view_personal_summary"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="26dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:boxBackgroundColor="#F5F5F5"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp"
-                    app:hintEnabled="false">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:gravity="top|start"
-                        android:hint="Add a personal summary to your profile as a way to introduce who you are"
-                        android:inputType="textMultiLine"
-                        android:padding="16dp"
-                        android:textColorHint="#808080" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-            </androidx.cardview.widget.CardView>
-
-            <TextView
                 android:id="@+id/text_view_ratings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/card_view_personal_description"
+                android:layout_below="@id/card_view_employer_info"
                 android:fontFamily="sans-serif-medium"
                 android:paddingStart="16dp"
                 android:paddingBottom="4dp"
@@ -273,7 +210,7 @@
                 android:id="@+id/item_card_see_more_ratings_arrow"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_below="@id/card_view_personal_description"
+                android:layout_below="@id/card_view_employer_info"
                 android:layout_alignEnd="@id/text_view_ratings"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="28dp"
