@@ -168,7 +168,6 @@ public class SignUpActivity extends AppCompatActivity {
                     });
 
                 } else {
-                    // --- CASE B: NEW EMAIL/PASSWORD USER ---
                     createPasswordInput = createPassword.getEditText().getText().toString().trim();
                     confirmPasswordInput = confirmPassword.getEditText().getText().toString().trim();
 
@@ -225,7 +224,6 @@ public class SignUpActivity extends AppCompatActivity {
                     boolean isSocialLogin = false;
 
                     if (user != null) {
-                        // Check if the user is using Facebook or Google
                         for (com.google.firebase.auth.UserInfo profile : user.getProviderData()) {
                             String providerId = profile.getProviderId();
                             if (providerId.equals("facebook.com") || providerId.equals("google.com")) {
@@ -241,17 +239,15 @@ public class SignUpActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
-                        // Traditional Email Signup
                         Toast.makeText(SignUpActivity.this, "Registration successful! Please verify your email.", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                     }
                 } else {
-                    // This was missing! It handles 400, 422, or 500 errors from your Laravel backend
                     ErrorUtils.showErrorMessage(SignUpActivity.this, response.errorBody());
                 }
-            } // End of onResponse
+            }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
