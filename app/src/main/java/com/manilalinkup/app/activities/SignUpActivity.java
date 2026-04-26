@@ -43,6 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
     TextView labelCreatePassword;
     TextView labelConfirmPassword;
     TextView otpMessage;
+    String passwordPattern;
 
 
     @Override
@@ -72,19 +73,15 @@ public class SignUpActivity extends AppCompatActivity {
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            // 1. Hide the Input Layouts
             createPassword.setVisibility(View.GONE);
             confirmPassword.setVisibility(View.GONE);
 
-            // 2. Hide the TextView Labels and OTP message
             labelCreatePassword.setVisibility(View.GONE);
             labelConfirmPassword.setVisibility(View.GONE);
             otpMessage.setVisibility(View.GONE);
 
-            // 3. Change Button Text to "Continue"
             sendOTP.setText("Continue");
 
-            // Pre-fill email
             if (currentUser.getEmail() != null) {
                 emailAddress.getEditText().setText(currentUser.getEmail());
                 emailAddress.setEnabled(false);
@@ -101,9 +98,9 @@ public class SignUpActivity extends AppCompatActivity {
                 createPassword.setError(null);
                 confirmPassword.setError(null);
 
-                String firstnameInput = firstName.getEditText().getText().toString().trim();
-                String middleNameInput = middleName.getEditText().getText().toString().trim();
-                String lastnameInput = lastname.getEditText().getText().toString().trim();
+                String firstnameInput = (firstName.getEditText() != null) ? firstName.getEditText().getText().toString().trim() : "";
+                String middleNameInput = (middleName.getEditText() != null) ? middleName.getEditText().getText().toString().trim() : "";
+                String lastnameInput = (lastname.getEditText() != null) ? lastname.getEditText().getText().toString().trim() : "";
                 String suffixInput = suffixDropdown.getText().toString().trim();
                 String mobileNumberInput = mobileNumber.getEditText().getText().toString().trim();
                 String emailAddressInput = emailAddress.getEditText().getText().toString().trim();
@@ -113,10 +110,12 @@ public class SignUpActivity extends AppCompatActivity {
 
                 if (firstnameInput.isEmpty()) {
                     firstName.setError("First name is required");
+                    firstName.requestFocus();
                     return;
                 }
                 if (lastnameInput.isEmpty()) {
                     lastname.setError("Last name is required");
+                    lastname.requestFocus();
                     return;
                 }
 
@@ -136,25 +135,26 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }
 
-                String passwordPattern = "^(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
-
-                if (createPasswordInput.isEmpty()) {
-                    createPassword.setError("Password is required");
-                    return;
-                } else if (!createPasswordInput.matches(passwordPattern)) {
-                    createPassword.setError("Please use 8+ character, 1 Capital, and 1 Special character");
-                    return;
-                }
-
-                if (!createPasswordInput.equals(confirmPasswordInput)) {
-                    confirmPassword.setError("Passwords do not match");
-                    return;
-                }
-
                 FirebaseUser sessionUser = mAuth.getCurrentUser();
 
+                if (sessionUser == null) {
+                    passwordPattern = "^(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
+
+                    if (createPasswordInput.isEmpty()) {
+                        createPassword.setError("Password is required");
+                        return;
+                    } else if (!createPasswordInput.matches(passwordPattern)) {
+                        createPassword.setError("Please use 8+ character, 1 Capital, and 1 Special character");
+                        return;
+                    }
+
+                    if (!createPasswordInput.equals(confirmPasswordInput)) {
+                        confirmPassword.setError("Passwords do not match");
+                        return;
+                    }
+                }
+
                 if (sessionUser != null) {
-                    // --- CASE A: SOCIAL USER (Facebook/Google) ---
                     progressDialog.show();
                     sessionUser.getIdToken(true).addOnCompleteListener(tokenTask -> {
                         if (tokenTask.isSuccessful()) {
@@ -205,6 +205,7 @@ public class SignUpActivity extends AppCompatActivity {
         ApiService apiService = RetrofitClient.getClient(idToken).create(ApiService.class);
 
         SeekerRequest request = new SeekerRequest(
+                actualUid,
                 firstnameInput,
                 middleNameInput,
                 lastnameInput,
@@ -219,11 +220,19 @@ public class SignUpActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful()) {
-                    Toast.makeText(SignUpActivity.this, "Registration successful! Please verify your email before logging in.", Toast.LENGTH_LONG).show();
+                    FirebaseUser user = mAuth.getCurrentUser();
 
-                    Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    if (user != null && user.getProviderData().size() > 1) {
+                        Toast.makeText(SignUpActivity.this, "We need to know more about you.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(SignUpActivity.this, EditSeekerProfileActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(SignUpActivity.this, "Registration successful! Please verify your email.", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 } else {
                     ErrorUtils.showErrorMessage(SignUpActivity.this, response.errorBody());
                 }

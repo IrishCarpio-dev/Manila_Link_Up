@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
         googleLoginButton.setOnClickListener(v -> signInWithGoogle());
 
         facebookLoginButton.setOnClickListener(v -> {
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
+            LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("email", "public_profile"));
 
             LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
                 @Override
