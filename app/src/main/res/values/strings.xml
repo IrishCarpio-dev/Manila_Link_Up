@@ -10,4 +10,10 @@
         <item>Voter\'s ID</item>
         <item>Postal ID</item>
     </string-array>
+
+
+    <string name="facebook_app_id">956317594037904</string>
+    <string name="fb_login_protocol_scheme">956317594037904</string>
+    <string name="facebook_client_token">d39b7c494a3bd21fb35b7f456b856a89</string>
+
 </resources>
