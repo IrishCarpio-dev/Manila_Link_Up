@@ -81,6 +81,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        forgetPassword.setOnClickListener(v ->
+                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class)));
 
         mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
 

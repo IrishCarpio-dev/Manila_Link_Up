@@ -117,6 +117,25 @@
             android:label="Login to Manila LinkUp"
             android:parentActivityName=".activities.MainActivity" />
         <activity
+            android:name=".activities.ForgotPasswordActivity"
+            android:exported="false"
+            android:label="Forgot Password"
+            android:parentActivityName=".activities.LoginActivity" />
+        <activity
+            android:name=".activities.ResetPasswordActivity"
+            android:exported="true"
+            android:label="Reset Password"
+            android:launchMode="singleTask">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="manilalinkup.firebaseapp.com"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activities.SeekerProfileActivity"
             android:exported="false"
             android:label="Seeker Profile"
