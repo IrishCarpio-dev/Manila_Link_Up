@@ -10,6 +10,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,6 +40,7 @@ public class ChatSeekerActivity extends AppCompatActivity {
     private List<ChatListItemModel> chatList;
     private BottomNavigationView bottomNavigationViewSeeker;
     private View emptyState;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,8 @@ public class ChatSeekerActivity extends AppCompatActivity {
         recyclerViewChat = findViewById(R.id.recycler_view_seeker_chat_tab);
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
         emptyState = findViewById(R.id.empty_state_chats);
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this::loadChats);
 
         chatList = new ArrayList<>();
 
@@ -59,6 +63,8 @@ public class ChatSeekerActivity extends AppCompatActivity {
                     intent.putExtra("CHAT_ID", chat.getId());
                     intent.putExtra("JOB_TITLE", chat.getJob() != null ? chat.getJob().getTitle() : "");
                     intent.putExtra("COUNTERPART_NAME", chat.getCounterpart() != null ? chat.getCounterpart().getName() : "");
+                    intent.putExtra("SEEKER_UID", chat.getSeekerUid());
+                    intent.putExtra("EMPLOYER_UID", chat.getEmployerUid());
                     startActivity(intent);
                 },
                 chat -> showHideDialog(chat)
@@ -100,6 +106,7 @@ public class ChatSeekerActivity extends AppCompatActivity {
             api.getChats(new GetChatsRequest(20, null)).enqueue(new Callback<ApiResponse<List<ChatListItemModel>>>() {
                 @Override
                 public void onResponse(Call<ApiResponse<List<ChatListItemModel>>> call, Response<ApiResponse<List<ChatListItemModel>>> response) {
+                    swipeRefreshLayout.setRefreshing(false);
                     if (response.isSuccessful() && response.body() != null) {
                         chatList.clear();
                         chatList.addAll(response.body().getData());
@@ -112,6 +119,7 @@ public class ChatSeekerActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ApiResponse<List<ChatListItemModel>>> call, Throwable t) {
+                    swipeRefreshLayout.setRefreshing(false);
                     ErrorUtils.showThrowableError(ChatSeekerActivity.this, t);
                 }
             });

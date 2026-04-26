@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -47,9 +48,11 @@ public class SeekerDashboardActivity extends AppCompatActivity {
     private JobPostDashboardAdapter adapterJobPost;
     private List<JobPostDashboardModel> jobListJobCard;
     private ProgressBar progressBarLoadMore;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private BottomNavigationView bottomNavigationView;
 
     private boolean isLoading = false;
+    private boolean isRefreshing = false;
     private boolean hasMorePages = true;
     private boolean isCuratedExhausted = false;
     private String lastExpiresAt = null;
@@ -65,6 +68,8 @@ public class SeekerDashboardActivity extends AppCompatActivity {
         recyclerViewJobPost = findViewById(R.id.recycler_view_job_posts_dashboard);
         recyclerViewJobPost.setLayoutManager(new LinearLayoutManager(this));
         progressBarLoadMore = findViewById(R.id.progress_bar_load_more);
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this::refreshJobs);
 
         jobListJobCard = new ArrayList<>();
 
@@ -73,6 +78,17 @@ public class SeekerDashboardActivity extends AppCompatActivity {
             public void onJobClick(JobPostDashboardModel job) {
                 Intent intent = new Intent(SeekerDashboardActivity.this, SeekerJobPostActivity.class);
                 intent.putExtra("JOB_ID", job.getJobId());
+                intent.putExtra("JOB_TITLE", job.getJobTitle());
+                intent.putExtra("EMPLOYER_NAME", job.getEmployerName());
+                intent.putExtra("LOCATION", job.getJobPostLocation());
+                intent.putExtra("DURATION", job.getJob_duration());
+                intent.putExtra("SALARY", job.getSalary() != null ? job.getSalary() : 0.0);
+                intent.putExtra("DESCRIPTION", job.getDescription());
+                intent.putExtra("EXPIRES_AT", job.getExpiresAt());
+                intent.putExtra("HOW_LONG_POSTED", job.getHowLongJobIsPosted());
+                intent.putExtra("EMPLOYER_PHOTO", job.getEmployerProfilePicture());
+                intent.putStringArrayListExtra("TAG_IDS", new ArrayList<>(job.getTagIds() != null ? job.getTagIds() : new ArrayList<>()));
+                intent.putExtra("HAS_APPLIED", job.isHasApplied());
                 startActivity(intent);
             }
 
@@ -133,10 +149,22 @@ public class SeekerDashboardActivity extends AppCompatActivity {
         loadJobs();
     }
 
+    private void refreshJobs() {
+        isRefreshing = true;
+        jobListJobCard.clear();
+        adapterJobPost.notifyDataSetChanged();
+        hasMorePages = true;
+        isLoading = false;
+        lastExpiresAt = null;
+        lastCreatedAt = null;
+        isCuratedExhausted = false;
+        loadJobs();
+    }
+
     private void loadJobs() {
         if (isLoading || !hasMorePages) return;
         isLoading = true;
-        progressBarLoadMore.setVisibility(View.VISIBLE);
+        if (!isRefreshing) progressBarLoadMore.setVisibility(View.VISIBLE);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
@@ -146,8 +174,6 @@ public class SeekerDashboardActivity extends AppCompatActivity {
         }
 
         String mode = isCuratedExhausted ? "all" : "curated";
-
-        Log.d("LoadJobs", mode);
 
         user.getIdToken(true).addOnCompleteListener(tokenTask -> {
             if (!tokenTask.isSuccessful()) {
@@ -164,6 +190,10 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<SeekerJobsResponse> call, Response<SeekerJobsResponse> response) {
                     isLoading = false;
+                    if (isRefreshing) {
+                        isRefreshing = false;
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                     progressBarLoadMore.setVisibility(View.GONE);
 
                     if (response.isSuccessful() && response.body() != null) {
@@ -198,6 +228,10 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<SeekerJobsResponse> call, Throwable t) {
                     isLoading = false;
+                    if (isRefreshing) {
+                        isRefreshing = false;
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                     progressBarLoadMore.setVisibility(View.GONE);
                     ErrorUtils.showThrowableError(SeekerDashboardActivity.this, t);
                 }
@@ -231,6 +265,10 @@ public class SeekerDashboardActivity extends AppCompatActivity {
         );
         model.setJobId(job.getId());
         model.setTagIds(job.getTags());
+        model.setSalary(job.getSalary());
+        model.setDescription(job.getDescription());
+        model.setExpiresAt(job.getExpiresAt());
+        model.setHasApplied(job.isHasApplied());
         return model;
     }
 

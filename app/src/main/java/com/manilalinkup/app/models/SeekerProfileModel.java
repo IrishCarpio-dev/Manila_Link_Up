@@ -15,6 +15,9 @@ public class SeekerProfileModel {
     Boolean isVerified;
     Boolean isOpenForWork;
     SeekerPreferencesModel preferences;
+    Integer ratingCount;
+    Double ratingSum;
+    Double bayesianAvg;
 
     public SeekerProfileModel(
             String firstName,
@@ -67,4 +70,10 @@ public class SeekerProfileModel {
     public Boolean getOpenForWork() { return isOpenForWork; }
 
     public SeekerPreferencesModel getPreferences() { return preferences; }
+
+    public Integer getRatingCount() { return ratingCount; }
+
+    public Double getRatingSum() { return ratingSum; }
+
+    public Double getBayesianAvg() { return bayesianAvg; }
 }

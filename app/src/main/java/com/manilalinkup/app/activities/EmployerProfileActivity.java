@@ -3,7 +3,10 @@ package com.manilalinkup.app.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView; // Added import
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.adapters.JobPostDashboardAdapter;
 import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.EmployerProfileModel;
 import com.manilalinkup.app.models.GetRatingsRequest;
 import com.manilalinkup.app.models.JobPostDashboardModel;
 import com.manilalinkup.app.models.RatingModel;
@@ -25,6 +29,7 @@ import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.RatingsProfileAdapter;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.utilities.SessionCache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +50,9 @@ public class EmployerProfileActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationViewEmployer;
     private ImageView settingsIcon;
     ImageView viewAllRatings;
+    private LinearLayout layoutRatingSummary;
+    private RatingBar ratingBarProfile;
+    private TextView tvRatingSummary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,22 +61,23 @@ public class EmployerProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_employer_profile);
 
         recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
-        recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
         settingsIcon = findViewById(R.id.image_view_employer_settings_icon);
+        layoutRatingSummary = findViewById(R.id.layout_rating_summary);
+        ratingBarProfile = findViewById(R.id.rating_bar_profile);
+        tvRatingSummary = findViewById(R.id.tv_rating_summary);
 
         settingsIcon.setOnClickListener(v -> {
             Intent intent = new Intent(EmployerProfileActivity.this, EmployerSettingsActivity.class);
             startActivity(intent);
         });
 
-        recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewRatings.setLayoutManager(layoutManager);
         recyclerViewRatings.setLayoutManager(layoutManager);
 
         adapterRating = new RatingsProfileAdapter(ratingProfileList);
         recyclerViewRatings.setAdapter(adapterRating);
         loadRatings();
+        loadRatingStats();
 
         recyclerViewAllJobsPosted = findViewById(R.id.recycler_view_employer_jobs_posted);
         recyclerViewAllJobsPosted.setLayoutManager(new LinearLayoutManager(this));
@@ -162,6 +171,27 @@ public class EmployerProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(EmployerProfileActivity.this, EmployerViewArchivedJobs.class);
                 startActivity(intent);
             }
+        });
+    }
+
+    private void loadRatingStats() {
+        SessionCache.getInstance().ensureUserProfile(new SessionCache.UserProfileCallback() {
+            @Override
+            public void onAvailable(com.manilalinkup.app.models.UserProfileModel profile) {
+                EmployerProfileModel employer = profile.getEmployers();
+                if (employer == null) return;
+                Integer count = employer.getRatingCount();
+                Double avg = employer.getBayesianAvg();
+                if (count != null && count > 0 && avg != null) {
+                    ratingBarProfile.setRating(avg.floatValue());
+                    tvRatingSummary.setText(String.format("%.1f (%d %s)",
+                            avg, count, count == 1 ? "rating" : "ratings"));
+                    layoutRatingSummary.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onError() {}
         });
     }
 

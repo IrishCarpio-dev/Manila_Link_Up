@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -40,6 +41,7 @@ import okhttp3.ResponseBody;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -54,12 +56,14 @@ public class EmployerDashboard extends AppCompatActivity {
     private JobPostDashboardAdapter adapterJobPost;
     private List<JobPostDashboardModel> jobListJobCard;
     private ProgressBar progressBarLoadMore;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private TextView greetingNameText;
     private CardView jobAddJob;
     BottomNavigationView bottomNavigationViewEmployer;
 
     private ProgressDialog progressDialog;
     private boolean isLoading = false;
+    private boolean isRefreshing = false;
     private boolean hasMorePages = true;
     private String lastCreatedAt = null;
     private static final int PAGE_SIZE = 10;
@@ -73,6 +77,8 @@ public class EmployerDashboard extends AppCompatActivity {
         recyclerViewJobPost = findViewById(R.id.recycler_view_employer_own_posts);
         recyclerViewJobPost.setLayoutManager(new LinearLayoutManager(this));
         progressBarLoadMore = findViewById(R.id.progress_bar_load_more);
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this::refreshJobs);
         greetingNameText = findViewById(R.id.textview_greeting_name_employer);
 
         progressDialog = new ProgressDialog(this);
@@ -85,8 +91,18 @@ public class EmployerDashboard extends AppCompatActivity {
             @Override
             public void onJobClick(JobPostDashboardModel job) {
                 Intent intent = new Intent(EmployerDashboard.this, EmployerViewJobPost.class);
+                intent.putExtra("JOB_ID", job.getJobId());
                 intent.putExtra("JOB_TITLE", job.getJobTitle());
                 intent.putExtra("EMPLOYER_NAME", job.getEmployerName());
+                intent.putExtra("LOCATION", job.getJobPostLocation());
+                intent.putExtra("DURATION", job.getJob_duration());
+                intent.putExtra("SALARY", job.getSalary() != null ? job.getSalary() : 0.0);
+                intent.putExtra("DESCRIPTION", job.getDescription());
+                intent.putExtra("EXPIRES_AT", job.getExpiresAt());
+                intent.putExtra("HOW_LONG_POSTED", job.getHowLongJobIsPosted());
+                intent.putExtra("EMPLOYER_PHOTO", job.getEmployerProfilePicture());
+                intent.putStringArrayListExtra("TAG_IDS", new ArrayList<>(job.getTagIds() != null ? job.getTagIds() : Collections.emptyList()));
+                intent.putExtra("IS_OWNER", true);
                 startActivity(intent);
             }
             @Override
@@ -170,10 +186,20 @@ public class EmployerDashboard extends AppCompatActivity {
 
     }
 
+    private void refreshJobs() {
+        isRefreshing = true;
+        jobListJobCard.clear();
+        adapterJobPost.notifyDataSetChanged();
+        hasMorePages = true;
+        isLoading = false;
+        lastCreatedAt = null;
+        loadJobs();
+    }
+
     private void loadJobs() {
         if (isLoading || !hasMorePages) return;
         isLoading = true;
-        progressBarLoadMore.setVisibility(View.VISIBLE);
+        if (!isRefreshing) progressBarLoadMore.setVisibility(View.VISIBLE);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
@@ -199,6 +225,10 @@ public class EmployerDashboard extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<ApiResponse<List<JobModel>>> call, Response<ApiResponse<List<JobModel>>> response) {
                     isLoading = false;
+                    if (isRefreshing) {
+                        isRefreshing = false;
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                     progressBarLoadMore.setVisibility(View.GONE);
 
                     if (response.isSuccessful() && response.body() != null) {
@@ -222,6 +252,10 @@ public class EmployerDashboard extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<ApiResponse<List<JobModel>>> call, Throwable t) {
                     isLoading = false;
+                    if (isRefreshing) {
+                        isRefreshing = false;
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                     progressBarLoadMore.setVisibility(View.GONE);
                     ErrorUtils.showThrowableError(EmployerDashboard.this, t);
                 }
@@ -242,6 +276,9 @@ public class EmployerDashboard extends AppCompatActivity {
         );
         model.setJobId(job.getId());
         model.setTagIds(job.getTags());
+        model.setSalary(job.getSalary());
+        model.setDescription(job.getDescription());
+        model.setExpiresAt(job.getExpiresAt());
         return model;
     }
 

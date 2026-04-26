@@ -37,10 +37,22 @@
             tools:text="Seeker Name goes here" />
 
         <TextView
-            android:id="@+id/item_card_message_preview"
+            android:id="@+id/text_view_job_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/item_card_seeker_name"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/item_card_seeker_profile_picture"
+            android:fontFamily="sans-serif"
+            android:textColor="#1B3E9C"
+            android:textSize="11sp"
+            tools:text="Job Title" />
+
+        <TextView
+            android:id="@+id/item_card_message_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_view_job_title"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/item_card_seeker_profile_picture"
             android:fontFamily="sans-serif"

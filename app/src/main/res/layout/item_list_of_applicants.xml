@@ -66,12 +66,15 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/applicant_age"
+                    android:id="@+id/applicant_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/name_block_container"
                     android:layout_marginTop="2dp"
-                    tools:text="24 years old"
+                    android:drawableStart="@drawable/ic_star"
+                    android:drawablePadding="4dp"
+                    android:gravity="center_vertical"
+                    tools:text="4.2"
                     android:textColor="#757575"
                     android:textSize="14sp" />
 
@@ -79,7 +82,7 @@
                     android:id="@+id/location_block_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/applicant_age"
+                    android:layout_below="@id/applicant_rating"
                     android:layout_marginTop="6dp">
 
                     <LinearLayout
@@ -105,15 +108,33 @@
                 </RelativeLayout>
             </RelativeLayout>
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/applicant_status_chip"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:clickable="false"
-                tools:text="Pending"
-                android:textSize="11sp"
-                app:chipMinHeight="28dp" />
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btn_overflow"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="end"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_more_vert"
+                    android:contentDescription="More options" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/applicant_status_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:clickable="false"
+                    tools:text="Pending"
+                    android:textSize="11sp"
+                    app:chipMinHeight="28dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

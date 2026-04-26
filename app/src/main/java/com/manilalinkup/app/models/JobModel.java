@@ -7,6 +7,7 @@ public class JobModel {
     Double salary;
     List<String> tags;
     EmployerProfileModel employer;
+    boolean hasApplied;
 
     public JobModel() {}
 
@@ -21,4 +22,5 @@ public class JobModel {
     public EmployerProfileModel getEmployer() { return employer; }
     public String getCreatedAt() { return createdAt; }
     public String getFilledAt() { return filledAt; }
+    public boolean isHasApplied() { return hasApplied; }
 }

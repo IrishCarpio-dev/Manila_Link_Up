@@ -10,6 +10,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,6 +19,7 @@ import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.EmployerApplicantsAdapter;
 import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.models.ApplicantModel;
+import com.manilalinkup.app.models.SeekerProfileModel;
 import com.manilalinkup.app.models.ApplicationModel;
 import com.manilalinkup.app.models.GetApplicantsRequest;
 import com.manilalinkup.app.models.UpdateApplicationStatusRequest;
@@ -36,9 +38,11 @@ public class EmployerListOfApplicants extends AppCompatActivity {
 
     private MaterialToolbar toolbar;
     private RecyclerView applicantsRecyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private EmployerApplicantsAdapter applicantsAdapter;
     private List<ApplicantModel> applicantsList;
     private String jobId;
+    private String jobTitle;
     private ProgressDialog progressDialog;
 
     @Override
@@ -48,6 +52,7 @@ public class EmployerListOfApplicants extends AppCompatActivity {
         setContentView(R.layout.activity_employer_list_of_applicants);
 
         jobId = getIntent().getStringExtra("JOB_ID");
+        jobTitle = getIntent().getStringExtra("JOB_TITLE");
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -58,18 +63,26 @@ public class EmployerListOfApplicants extends AppCompatActivity {
         }
         toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.manila_blue);
+        swipeRefreshLayout.setOnRefreshListener(this::loadApplicants);
+
         applicantsRecyclerView = findViewById(R.id.recycler_view_applicants);
         applicantsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading applicants...");
         progressDialog.setCancelable(false);
 
         applicantsList = new ArrayList<>();
         applicantsAdapter = new EmployerApplicantsAdapter(applicantsList, new EmployerApplicantsAdapter.OnActionListener() {
             @Override
             public void onInterview(ApplicantModel applicant) {
-                updateStatus(applicant, 2);
+                new AlertDialog.Builder(EmployerListOfApplicants.this)
+                        .setTitle("Move to interview?")
+                        .setMessage("This will move the applicant to the interview stage.")
+                        .setPositiveButton("Confirm", (d, w) -> updateStatus(applicant, 2))
+                        .setNegativeButton("Cancel", null)
+                        .show();
             }
 
             @Override
@@ -83,21 +96,46 @@ public class EmployerListOfApplicants extends AppCompatActivity {
             }
 
             @Override
+            public void onReject(ApplicantModel applicant) {
+                new AlertDialog.Builder(EmployerListOfApplicants.this)
+                        .setTitle("Reject applicant?")
+                        .setMessage("This will reject this applicant's application.")
+                        .setPositiveButton("Reject", (d, w) -> updateStatus(applicant, 3))
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            }
+
+            @Override
             public void onOpenChat(ApplicantModel applicant) {
                 Intent intent = new Intent(EmployerListOfApplicants.this, ChatThreadEmployer.class);
                 intent.putExtra("CHAT_ID", applicant.getChatId());
+                intent.putExtra("APPLICATION_ID", applicant.getId());
+                intent.putExtra("SEEKER_UID", applicant.getSeekerUid());
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (currentUser != null) intent.putExtra("EMPLOYER_UID", currentUser.getUid());
+                if (jobTitle != null) intent.putExtra("JOB_TITLE", jobTitle);
+                SeekerProfileModel seeker = applicant.getSeeker();
+                if (seeker != null) {
+                    String name = (seeker.getFirstName() != null ? seeker.getFirstName() : "") +
+                            (seeker.getLastName() != null ? " " + seeker.getLastName() : "");
+                    intent.putExtra("COUNTERPART_NAME", name.trim());
+                }
                 startActivity(intent);
             }
         });
         applicantsRecyclerView.setAdapter(applicantsAdapter);
 
+        swipeRefreshLayout.setRefreshing(true);
         loadApplicants();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (!applicantsList.isEmpty()) loadApplicants();
+        if (!applicantsList.isEmpty()) {
+            swipeRefreshLayout.setRefreshing(true);
+            loadApplicants();
+        }
     }
 
     private void loadApplicants() {
@@ -105,14 +143,13 @@ public class EmployerListOfApplicants extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        progressDialog.show();
         user.getIdToken(true).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.getApplicants(new GetApplicantsRequest(jobId, null, null, null))
                     .enqueue(new Callback<ApiResponse<List<ApplicantModel>>>() {
                 @Override
                 public void onResponse(Call<ApiResponse<List<ApplicantModel>>> call, Response<ApiResponse<List<ApplicantModel>>> response) {
-                    progressDialog.dismiss();
+                    swipeRefreshLayout.setRefreshing(false);
                     if (response.isSuccessful() && response.body() != null) {
                         applicantsList.clear();
                         applicantsList.addAll(response.body().getData());
@@ -124,7 +161,7 @@ public class EmployerListOfApplicants extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ApiResponse<List<ApplicantModel>>> call, Throwable t) {
-                    progressDialog.dismiss();
+                    swipeRefreshLayout.setRefreshing(false);
                     ErrorUtils.showThrowableError(EmployerListOfApplicants.this, t);
                 }
             });
@@ -135,7 +172,7 @@ public class EmployerListOfApplicants extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        progressDialog.setMessage(newStatus == 5 ? "Hiring applicant..." : "Updating status...");
+        progressDialog.setMessage(newStatus == 5 ? "Hiring applicant..." : newStatus == 3 ? "Rejecting applicant..." : "Updating status...");
         progressDialog.show();
 
         user.getIdToken(true).addOnSuccessListener(result -> {
@@ -146,7 +183,7 @@ public class EmployerListOfApplicants extends AppCompatActivity {
                 public void onResponse(Call<ApiResponse<ApplicationModel>> call, Response<ApiResponse<ApplicationModel>> response) {
                     progressDialog.dismiss();
                     if (response.isSuccessful()) {
-                        String msg = newStatus == 2 ? "Moved to interview" : "Applicant hired!";
+                        String msg = newStatus == 2 ? "Moved to interview" : newStatus == 3 ? "Applicant rejected" : "Applicant hired!";
                         Toast.makeText(EmployerListOfApplicants.this, msg, Toast.LENGTH_SHORT).show();
                         loadApplicants();
                     } else {

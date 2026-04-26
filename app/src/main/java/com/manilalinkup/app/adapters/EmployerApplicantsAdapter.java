@@ -1,13 +1,18 @@
 package com.manilalinkup.app.adapters;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -23,6 +28,7 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
         void onInterview(ApplicantModel applicant);
         void onHire(ApplicantModel applicant);
         void onOpenChat(ApplicantModel applicant);
+        void onReject(ApplicantModel applicant);
     }
 
     private final List<ApplicantModel> applicants;
@@ -51,8 +57,9 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView profilePhoto;
-        TextView firstName, lastName, location, statusChip;
+        TextView firstName, lastName, location, rating, statusChip;
         Button btnInterview, btnHire, btnChat;
+        ImageButton btnOverflow;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,10 +67,26 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
             firstName    = itemView.findViewById(R.id.applicant_first_name);
             lastName     = itemView.findViewById(R.id.applicant_last_name);
             location     = itemView.findViewById(R.id.applicant_location);
+            rating       = itemView.findViewById(R.id.applicant_rating);
             statusChip   = itemView.findViewById(R.id.applicant_status_chip);
             btnInterview = itemView.findViewById(R.id.btn_interview);
             btnHire      = itemView.findViewById(R.id.btn_hire);
             btnChat      = itemView.findViewById(R.id.btn_open_chat);
+            btnOverflow  = itemView.findViewById(R.id.btn_overflow);
+        }
+
+        private void setStarTint(TextView tv, float fraction) {
+            Drawable[] drawables = tv.getCompoundDrawablesRelative();
+            if (drawables[0] == null) return;
+            Drawable star = DrawableCompat.wrap(drawables[0].mutate());
+            int grey   = Color.parseColor("#BDBDBD");
+            int yellow = Color.parseColor("#FFC107");
+            float f = Math.max(0f, Math.min(1f, fraction));
+            int r = (int) (Color.red(grey)   + f * (Color.red(yellow)   - Color.red(grey)));
+            int g = (int) (Color.green(grey) + f * (Color.green(yellow) - Color.green(grey)));
+            int b = (int) (Color.blue(grey)  + f * (Color.blue(yellow)  - Color.blue(grey)));
+            DrawableCompat.setTint(star, Color.rgb(r, g, b));
+            tv.setCompoundDrawablesRelative(star, drawables[1], drawables[2], drawables[3]);
         }
 
         void bind(ApplicantModel applicant, OnActionListener listener) {
@@ -72,6 +95,16 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
                 firstName.setText(seeker.getFirstName() != null ? seeker.getFirstName() : "");
                 lastName.setText(seeker.getLastName() != null ? seeker.getLastName() : "");
                 location.setText(seeker.getLocation() != null ? seeker.getLocation() : "");
+
+                Integer ratingCount = seeker.getRatingCount();
+                Double bayesianAvg = seeker.getBayesianAvg();
+                if (ratingCount != null && ratingCount > 0 && bayesianAvg != null) {
+                    rating.setText(String.format("%.1f", bayesianAvg));
+                    setStarTint(rating, (float) (bayesianAvg / 5.0));
+                } else {
+                    rating.setText("N/A");
+                    setStarTint(rating, 0f);
+                }
 
                 if (seeker.getProfilePhotoUrl() != null) {
                     Glide.with(itemView.getContext())
@@ -112,6 +145,23 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
             if (btnChat != null) {
                 btnChat.setVisibility((status >= 2 && applicant.getChatId() != null) ? View.VISIBLE : View.GONE);
                 btnChat.setOnClickListener(v -> { if (listener != null) listener.onOpenChat(applicant); });
+            }
+
+            if (btnOverflow != null) {
+                boolean canReject = status == 1 || status == 2;
+                btnOverflow.setVisibility(canReject ? View.VISIBLE : View.INVISIBLE);
+                btnOverflow.setOnClickListener(v -> {
+                    PopupMenu popup = new PopupMenu(v.getContext(), v);
+                    popup.getMenu().add(0, 0, 0, "Reject");
+                    popup.setOnMenuItemClickListener(item -> {
+                        if (item.getItemId() == 0 && listener != null) {
+                            listener.onReject(applicant);
+                            return true;
+                        }
+                        return false;
+                    });
+                    popup.show();
+                });
             }
         }
     }

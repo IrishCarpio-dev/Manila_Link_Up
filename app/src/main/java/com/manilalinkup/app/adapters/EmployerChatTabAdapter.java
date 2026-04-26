@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.models.ChatListItemModel;
+import com.manilalinkup.app.utilities.DateUtils;
 
 import java.util.List;
 
@@ -56,6 +57,7 @@ public class EmployerChatTabAdapter extends RecyclerView.Adapter<EmployerChatTab
     static class EmployerChatViewHolder extends RecyclerView.ViewHolder {
         private final ImageView seekerProfilePicture;
         private final TextView seekerName;
+        private final TextView jobTitle;
         private final TextView messagePreview;
         private final TextView messageTimeStamp;
         private final TextView unreadBadge;
@@ -64,6 +66,7 @@ public class EmployerChatTabAdapter extends RecyclerView.Adapter<EmployerChatTab
             super(itemView);
             seekerProfilePicture = itemView.findViewById(R.id.item_card_seeker_profile_picture);
             seekerName           = itemView.findViewById(R.id.item_card_seeker_name);
+            jobTitle             = itemView.findViewById(R.id.text_view_job_title);
             messagePreview       = itemView.findViewById(R.id.item_card_message_preview);
             messageTimeStamp     = itemView.findViewById(R.id.text_view_chat_timestamp);
             unreadBadge          = itemView.findViewById(R.id.text_view_unread_badge);
@@ -73,11 +76,15 @@ public class EmployerChatTabAdapter extends RecyclerView.Adapter<EmployerChatTab
                   OnChatClickListener clickListener,
                   OnChatLongClickListener longClickListener) {
             ChatListItemModel.CounterpartModel counterpart = chat.getCounterpart();
+            ChatListItemModel.JobSummaryModel job = chat.getJob();
 
             String name = counterpart != null ? counterpart.getName() : "Unknown";
             seekerName.setText(name);
+            if (jobTitle != null) {
+                jobTitle.setText(job != null && job.getTitle() != null ? job.getTitle() : "");
+            }
             messagePreview.setText(chat.getLastMessage() != null ? chat.getLastMessage() : "");
-            messageTimeStamp.setText(chat.getLastMessageAt() != null ? chat.getLastMessageAt() : "");
+            messageTimeStamp.setText(DateUtils.formatChatTimestamp(chat.getLastMessageAt()));
 
             if (unreadBadge != null) {
                 int unread = chat.getUnreadCount();
