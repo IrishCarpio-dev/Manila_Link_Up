@@ -132,8 +132,18 @@ public class AppliedSeekerActivity extends AppCompatActivity {
             intent.putExtra("APPLICATION_ID", job.getId());
             intent.putExtra("STATUS", job.getStatus() != null ? job.getStatus() : 1);
             intent.putExtra("SEEKER_HAS_COMPLETED", job.getSeekerCompletedAt() != null);
-            if (job.getJob() != null && job.getJob().getEmployer() != null) {
-                intent.putExtra("EMPLOYER_NAME", job.getJob().getEmployer().getFullName());
+            intent.putExtra("CREATED_AT", job.getCreatedAt());
+            if (job.getJob() != null) {
+                intent.putExtra("JOB_TITLE", job.getJob().getTitle());
+                intent.putExtra("LOCATION", job.getJob().getLocation());
+                intent.putExtra("SALARY", job.getJob().getSalary() != null ? job.getJob().getSalary() : 0.0);
+                intent.putExtra("DURATION", job.getJob().getDuration());
+                intent.putExtra("DESCRIPTION", job.getJob().getDescription());
+                intent.putExtra("EXPIRES_AT", job.getJob().getExpiresAt());
+                if (job.getJob().getEmployer() != null) {
+                    intent.putExtra("EMPLOYER_NAME", job.getJob().getEmployer().getFullName());
+                    intent.putExtra("EMPLOYER_PHOTO", job.getJob().getEmployer().getProfilePhotoUrl());
+                }
             }
             startActivity(intent);
         });
