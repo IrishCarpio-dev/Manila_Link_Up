@@ -211,6 +211,7 @@ public class EmployerDashboard extends AppCompatActivity {
         if (user == null) {
             isLoading = false;
             progressBarLoadMore.setVisibility(View.GONE);
+            if (isRefreshing) { isRefreshing = false; swipeRefreshLayout.setRefreshing(false); }
             return;
         }
 
@@ -218,6 +219,7 @@ public class EmployerDashboard extends AppCompatActivity {
             if (!tokenTask.isSuccessful()) {
                 isLoading = false;
                 progressBarLoadMore.setVisibility(View.GONE);
+                if (isRefreshing) { isRefreshing = false; swipeRefreshLayout.setRefreshing(false); }
                 return;
             }
 
