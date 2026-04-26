@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,7 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#1B3E9C"
+        android:background="@color/manila_blue"
         app:navigationIcon="?attr/homeAsUpIndicator"
         app:navigationIconTint="@color/white">
 
@@ -27,10 +27,15 @@
 
     </com.google.android.material.appbar.MaterialToolbar>
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar">
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -58,7 +63,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@android:drawable/ic_dialog_info"
-                        app:tint="@color/material_dynamic_primary50"
+                        app:tint="@color/manila_blue"
                         android:layout_marginEnd="12dp"/>
 
                     <LinearLayout
@@ -80,7 +85,7 @@
                             android:id="@+id/text_view_archive_jobs_description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Select the best applicant(s) suited for your job:\n\n• Review their Profile\n• Click ACCEPT to start a chat\n• Discuss your hiring process"
+                            android:text="Select the best applicant(s) suited for your job:\n\nâ€¢ Review their Profile\nâ€¢ Click ACCEPT to start a chat\nâ€¢ Discuss your hiring process"
                             android:textSize="14sp"
                             android:lineSpacingExtra="4dp"
                             android:textColor="#616161" />
@@ -116,5 +121,6 @@
         </RelativeLayout>
     </ScrollView>
 
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

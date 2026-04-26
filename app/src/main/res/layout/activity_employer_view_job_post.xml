@@ -12,7 +12,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#1B3E9C"
+        android:background="@color/manila_blue"
         app:navigationIconTint="@color/white"
         app:titleTextColor="@color/white"
         android:theme="@style/ThemeOverlay.ManilaBluToolbar">
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
-            android:backgroundTint="#1B3E9C"
+            android:backgroundTint="@color/manila_blue"
             android:text="View Applicants"
             android:textSize="16sp"
             android:layout_marginBottom="8dp"

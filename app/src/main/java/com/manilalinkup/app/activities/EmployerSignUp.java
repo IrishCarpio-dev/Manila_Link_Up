@@ -3,12 +3,12 @@ package com.manilalinkup.app.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,6 +32,9 @@ public class EmployerSignUp extends AppCompatActivity {
     TextInputLayout mobileNumber;
     TextInputLayout createPassword;
     TextInputLayout confirmPassword;
+    TextView labelCreatePassword;
+    TextView labelConfirmPassword;
+    TextView otpMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,47 +49,76 @@ public class EmployerSignUp extends AppCompatActivity {
         mobileNumber = findViewById(R.id.text_input_layout_phone_number_employer);
         createPassword = findViewById(R.id.text_input_create_password_employer);
         confirmPassword = findViewById(R.id.text_input_confirm_password_employer);
+        labelCreatePassword = findViewById(R.id.text_create_password);
+        labelConfirmPassword = findViewById(R.id.text_confirm_password);
+        otpMessage = findViewById(R.id.text_view_otp_message);
 
         progressDialog = new android.app.ProgressDialog(this);
         progressDialog.setMessage("Signing up...");
         progressDialog.setCancelable(false);
 
-        sendOTP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String employerNameInput = employerName.getEditText().getText().toString().trim();
-                String mobileNumberInput = mobileNumber.getEditText().getText().toString().trim();
-                String emailAddressInput = emailAddress.getEditText().getText().toString().trim();
-                String createPasswordInput = createPassword.getEditText().getText().toString().trim();
-                String confirmPasswordInput = confirmPassword.getEditText().getText().toString().trim();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            createPassword.setVisibility(View.GONE);
+            confirmPassword.setVisibility(View.GONE);
+            labelCreatePassword.setVisibility(View.GONE);
+            labelConfirmPassword.setVisibility(View.GONE);
+            otpMessage.setVisibility(View.GONE);
+            sendOTP.setText("Continue");
 
-                employerName.setError(null);
-                mobileNumber.setError(null);
-                emailAddress.setError(null);
-                createPassword.setError(null);
-                confirmPassword.setError(null);
+            if (currentUser.getEmail() != null) {
+                emailAddress.getEditText().setText(currentUser.getEmail());
+                emailAddress.setEnabled(false);
+            }
+        }
 
-                if (employerNameInput.isEmpty()) {
-                    employerName.setError("Full Name or Business Name is required");
-                    return;
-                }
+        sendOTP.setOnClickListener(v -> {
+            String employerNameInput = (employerName.getEditText() != null) ? employerName.getEditText().getText().toString().trim() : "";
+            String mobileNumberInput = (mobileNumber.getEditText() != null) ? mobileNumber.getEditText().getText().toString().trim() : "";
+            String emailAddressInput = (emailAddress.getEditText() != null) ? emailAddress.getEditText().getText().toString().trim() : "";
+            String createPasswordInput = (createPassword.getEditText() != null) ? createPassword.getEditText().getText().toString().trim() : "";
+            String confirmPasswordInput = (confirmPassword.getEditText() != null) ? confirmPassword.getEditText().getText().toString().trim() : "";
 
-                if (emailAddressInput.isEmpty()) {
-                    emailAddress.setError("Email address is required");
-                    return;
-                } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddressInput).matches()) {
-                    emailAddress.setError("Please enter a valid email address");
-                    return;
-                }
+            employerName.setError(null);
+            mobileNumber.setError(null);
+            emailAddress.setError(null);
+            createPassword.setError(null);
+            confirmPassword.setError(null);
 
-                if (mobileNumberInput.isEmpty()) {
-                    mobileNumber.setError("Mobile number is required");
-                    return;
-                } else if (mobileNumberInput.length() != 10 || !mobileNumberInput.startsWith("9")) {
-                    mobileNumber.setError("Must be 10 digits starting with 9 (e.g., 9123456789)");
-                    return;
-                }
+            if (employerNameInput.isEmpty()) {
+                employerName.setError("Full Name or Business Name is required");
+                return;
+            }
 
+            if (emailAddressInput.isEmpty()) {
+                emailAddress.setError("Email address is required");
+                return;
+            } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddressInput).matches()) {
+                emailAddress.setError("Please enter a valid email address");
+                return;
+            }
+
+            if (mobileNumberInput.isEmpty()) {
+                mobileNumber.setError("Mobile number is required");
+                return;
+            } else if (mobileNumberInput.length() != 10 || !mobileNumberInput.startsWith("9")) {
+                mobileNumber.setError("Must be 10 digits starting with 9 (e.g., 9123456789)");
+                return;
+            }
+
+            FirebaseUser sessionUser = mAuth.getCurrentUser();
+
+            if (sessionUser != null) {
+                progressDialog.show();
+                sessionUser.getIdToken(true).addOnCompleteListener(tokenTask -> {
+                    if (tokenTask.isSuccessful()) {
+                        sendProfileToLaravel(tokenTask.getResult().getToken(), employerNameInput, emailAddressInput, mobileNumberInput);
+                    } else {
+                        progressDialog.dismiss();
+                        Toast.makeText(EmployerSignUp.this, "Auth Failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
                 String passwordPattern = "^(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
 
                 if (createPasswordInput.isEmpty()) {
@@ -106,14 +138,11 @@ public class EmployerSignUp extends AppCompatActivity {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 mAuth.getCurrentUser().sendEmailVerification();
-
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 user.getIdToken(true).addOnCompleteListener(tokenTask -> {
                                     if (tokenTask.isSuccessful()) {
-                                        String idToken = tokenTask.getResult().getToken();
-
                                         sendProfileToLaravel(
-                                                idToken,
+                                                tokenTask.getResult().getToken(),
                                                 employerNameInput,
                                                 emailAddressInput,
                                                 mobileNumberInput
@@ -125,8 +154,6 @@ public class EmployerSignUp extends AppCompatActivity {
                                 Toast.makeText(EmployerSignUp.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
-
-
             }
         });
     }
@@ -146,11 +173,30 @@ public class EmployerSignUp extends AppCompatActivity {
                 progressDialog.dismiss();
 
                 if (response.isSuccessful()) {
-                    Toast.makeText(EmployerSignUp.this, "Registration successful! Please verify your email before logging in.", Toast.LENGTH_LONG).show();
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    boolean isSocialLogin = false;
 
-                    Intent intent = new Intent(EmployerSignUp.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    if (user != null) {
+                        for (com.google.firebase.auth.UserInfo profile : user.getProviderData()) {
+                            String providerId = profile.getProviderId();
+                            if (providerId.equals("facebook.com") || providerId.equals("google.com")) {
+                                isSocialLogin = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (isSocialLogin) {
+                        Toast.makeText(EmployerSignUp.this, "Welcome! Let's finish your profile.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(EmployerSignUp.this, EditEmployerProfileActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(EmployerSignUp.this, "Registration successful! Please verify your email before logging in.", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(EmployerSignUp.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 } else {
                     ErrorUtils.showErrorMessage(EmployerSignUp.this, response.errorBody());
                 }
@@ -163,5 +209,4 @@ public class EmployerSignUp extends AppCompatActivity {
             }
         });
     }
-
 }
