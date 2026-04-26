@@ -153,4 +153,11 @@ public interface ApiService {
     // Seeker Preferences
     @POST("api/seeker/preferences")
     Call<ApiResponse<SeekerPreferencesModel>> updateSeekerPreferences(@Body SeekerPreferencesModel request);
+
+    // Notifications
+    @GET("api/notifications")
+    Call<ApiResponse<List<com.manilalinkup.app.models.NotificationItemModel>>> getNotifications();
+
+    @POST("api/notifications/read-all")
+    Call<ResponseBody> markAllNotificationsRead();
 }
