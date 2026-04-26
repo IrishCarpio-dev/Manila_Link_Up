@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.utilities.ErrorUtils;
@@ -87,13 +86,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
         progressDialog.show();
 
-        ActionCodeSettings settings = ActionCodeSettings.newBuilder()
-                .setUrl("https://manilalinkup.firebaseapp.com")
-                .setHandleCodeInApp(true)
-                .setAndroidPackageName("com.manilalinkup.app", true, null)
-                .build();
-
-        mAuth.sendPasswordResetEmail(email, settings)
+        mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {
                     progressDialog.dismiss();
                     if (task.isSuccessful()) {
