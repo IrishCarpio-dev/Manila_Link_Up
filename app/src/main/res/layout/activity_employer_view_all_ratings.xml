@@ -79,7 +79,7 @@
                             android:id="@+id/text_view_archive_jobs_description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="â€¢ Evaluate ratings from previous Seeker(s) to gauge reliability.\nâ€¢ Read detailed reviews to understand their work ethics and compatibility."
+                            android:text="&#8226; Evaluate ratings from previous Seeker(s) to gauge reliability.\n&#8226; Read detailed reviews to understand their work ethics and compatibility."
                             android:textSize="14sp"
                             android:lineSpacingExtra="4dp"
                             android:textColor="#616161" />

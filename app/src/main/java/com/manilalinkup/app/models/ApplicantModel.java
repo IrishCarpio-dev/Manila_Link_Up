@@ -6,6 +6,7 @@ public class ApplicantModel {
     String jobId;
     Integer status;
     String chatId;
+    String employerCompletedAt;
     SeekerProfileModel seeker;
 
     public ApplicantModel() {}
@@ -15,5 +16,7 @@ public class ApplicantModel {
     public String getJobId() { return jobId; }
     public Integer getStatus() { return status; }
     public String getChatId() { return chatId; }
+    public String getEmployerCompletedAt() { return employerCompletedAt; }
+    public boolean isEmployerCompleted() { return employerCompletedAt != null; }
     public SeekerProfileModel getSeeker() { return seeker; }
 }

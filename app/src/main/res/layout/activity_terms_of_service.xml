@@ -111,7 +111,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="â€¢ You must provide accurate information regarding your skills and identity.\nâ€¢ You are responsible for your own safety when meeting employers for local tasks.\nâ€¢ Misrepresentation of services may lead to account suspension."
+                        android:text="&#8226; You must provide accurate information regarding your skills and identity.\n&#8226; You are responsible for your own safety when meeting employers for local tasks.\n&#8226; Misrepresentation of services may lead to account suspension."
                         android:textColor="#424242"
                         android:lineSpacingExtra="4dp"/>
                 </LinearLayout>
@@ -139,7 +139,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="â€¢ Job postings must be legitimate and lawful (e.g., tutoring, pet sitting).\nâ€¢ You agree to provide a safe working environment for seekers.\nâ€¢ Discriminatory job postings are strictly prohibited."
+                        android:text="&#8226; Job postings must be legitimate and lawful (e.g., tutoring, pet sitting).\n&#8226; You agree to provide a safe working environment for seekers.\n&#8226; Discriminatory job postings are strictly prohibited."
                         android:textColor="#424242"
                         android:lineSpacingExtra="4dp"/>
                 </LinearLayout>

@@ -40,7 +40,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" â€¢ " />
+                android:text=" &#8226; " />
 
             <TextView
                 android:id="@+id/item_card_calendar_placeholder"

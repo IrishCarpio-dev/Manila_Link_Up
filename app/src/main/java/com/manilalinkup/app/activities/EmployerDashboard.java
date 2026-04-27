@@ -103,6 +103,12 @@ public class EmployerDashboard extends AppCompatActivity {
                 intent.putExtra("EMPLOYER_PHOTO", job.getEmployerProfilePicture());
                 intent.putStringArrayListExtra("TAG_IDS", new ArrayList<>(job.getTagIds() != null ? job.getTagIds() : Collections.emptyList()));
                 intent.putExtra("IS_OWNER", true);
+                if (job.getApplicationId() != null) {
+                    intent.putExtra("APPLICATION_ID", job.getApplicationId());
+                    intent.putExtra("STATUS", job.getApplicationStatus() != null ? job.getApplicationStatus() : 1);
+                    intent.putExtra("EMPLOYER_HAS_COMPLETED", job.isEmployerHasCompleted());
+                    intent.putExtra("SEEKER_NAME", job.getSeekerName());
+                }
                 startActivity(intent);
             }
             @Override
@@ -205,6 +211,7 @@ public class EmployerDashboard extends AppCompatActivity {
         if (user == null) {
             isLoading = false;
             progressBarLoadMore.setVisibility(View.GONE);
+            if (isRefreshing) { isRefreshing = false; swipeRefreshLayout.setRefreshing(false); }
             return;
         }
 
@@ -212,6 +219,7 @@ public class EmployerDashboard extends AppCompatActivity {
             if (!tokenTask.isSuccessful()) {
                 isLoading = false;
                 progressBarLoadMore.setVisibility(View.GONE);
+                if (isRefreshing) { isRefreshing = false; swipeRefreshLayout.setRefreshing(false); }
                 return;
             }
 
@@ -279,6 +287,19 @@ public class EmployerDashboard extends AppCompatActivity {
         model.setSalary(job.getSalary());
         model.setDescription(job.getDescription());
         model.setExpiresAt(job.getExpiresAt());
+
+        com.manilalinkup.app.models.ApplicantModel hired = job.getHiredApplication();
+        if (hired != null) {
+            model.setApplicationId(hired.getId());
+            model.setApplicationStatus(hired.getStatus());
+            model.setEmployerHasCompleted(hired.isEmployerCompleted());
+            if (hired.getSeeker() != null) {
+                String firstName = hired.getSeeker().getFirstName() != null ? hired.getSeeker().getFirstName() : "";
+                String lastName = hired.getSeeker().getLastName() != null ? hired.getSeeker().getLastName() : "";
+                model.setSeekerName((firstName + " " + lastName).trim());
+            }
+        }
+
         return model;
     }
 
