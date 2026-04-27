@@ -60,6 +60,7 @@ public class SplashActivity extends AppCompatActivity {
         apiService.getUserProfile().enqueue(new Callback<ApiResponse<UserProfileModel>>() {
             @Override
             public void onResponse(Call<ApiResponse<UserProfileModel>> call, Response<ApiResponse<UserProfileModel>> response) {
+                if (isDestroyed()) return;
                 if (response.isSuccessful()) {
                     SessionCache.getInstance().setUserProfile(response.body().getData());
                     SessionCache.getInstance().refreshServiceTags(token, new SessionCache.ServiceTagsCallback() {
@@ -104,6 +105,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ApiResponse<UserProfileModel>> call, Throwable t) {
+                if (isDestroyed()) return;
                 mAuth.signOut();
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();

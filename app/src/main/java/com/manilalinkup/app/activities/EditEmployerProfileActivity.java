@@ -350,6 +350,7 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 progressDialog.dismiss();
+                if (isDestroyed()) return;
                 if (response.isSuccessful()) {
                     startActivity(new Intent(EditEmployerProfileActivity.this, EmployerDashboard.class));
                     finish();

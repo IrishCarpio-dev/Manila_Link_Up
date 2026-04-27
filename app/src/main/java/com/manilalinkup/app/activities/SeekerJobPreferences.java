@@ -262,6 +262,7 @@ public class SeekerJobPreferences extends AppCompatActivity {
             @Override
             public void onResponse(Call<ApiResponse<SeekerPreferencesModel>> call, Response<ApiResponse<SeekerPreferencesModel>> response) {
                 progressDialog.dismiss();
+                if (isDestroyed()) return;
                 if (response.isSuccessful()) {
                     Toast.makeText(SeekerJobPreferences.this, "Preferences Saved!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(SeekerJobPreferences.this, AllSetActivity.class));

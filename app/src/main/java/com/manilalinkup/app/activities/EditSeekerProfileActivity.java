@@ -335,6 +335,7 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 progressDialog.dismiss();
+                if (isDestroyed()) return;
                 if (response.isSuccessful()) {
                     Toast.makeText(EditSeekerProfileActivity.this, "Profile Setup Complete!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(EditSeekerProfileActivity.this, SeekerJobPreferences.class);

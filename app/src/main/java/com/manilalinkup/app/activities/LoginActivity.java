@@ -276,6 +276,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ApiResponse<UserProfileModel>> call, Response<ApiResponse<UserProfileModel>> response) {
                 progressDialog.dismiss();
+                if (isDestroyed()) return;
                 if (response.isSuccessful() && response.body().getData() != null) {
                     SessionCache.getInstance().setUserProfile(response.body().getData());
                     SessionCache.getInstance().refreshServiceTags(token, new SessionCache.ServiceTagsCallback() {
@@ -322,7 +323,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(Call<ApiResponse<UserProfileModel>> call, Throwable t) {
                 progressDialog.dismiss();
                 mAuth.signOut();
-
+                if (isDestroyed()) return;
                 ErrorUtils.showThrowableError(LoginActivity.this, t);
             }
         });

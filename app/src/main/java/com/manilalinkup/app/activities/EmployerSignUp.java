@@ -171,7 +171,7 @@ public class EmployerSignUp extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 progressDialog.dismiss();
-
+                if (isDestroyed()) return;
                 if (response.isSuccessful()) {
                     FirebaseUser user = mAuth.getCurrentUser();
                     boolean isSocialLogin = false;
