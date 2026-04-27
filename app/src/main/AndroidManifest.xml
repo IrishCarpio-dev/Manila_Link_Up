@@ -201,6 +201,11 @@
         <activity
             android:name=".activities.SubmitRatingActivity"
             android:exported="false" />
+        <activity
+            android:name=".activities.SeekerCompletedJobsActivity"
+            android:exported="false"
+            android:label="Completed Jobs"
+            android:parentActivityName=".activities.SeekerProfileActivity" />
 
         <service
             android:name=".services.MLUFirebaseMessagingService"
