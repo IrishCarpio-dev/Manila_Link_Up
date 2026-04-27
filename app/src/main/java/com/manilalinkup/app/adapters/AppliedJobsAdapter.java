@@ -12,6 +12,7 @@ import com.manilalinkup.app.R;
 import com.manilalinkup.app.models.AppliedJobModel;
 import com.manilalinkup.app.models.ArchiveJobModel;
 import com.manilalinkup.app.activities.EmployerAddJobActivity;
+import com.manilalinkup.app.activities.EmployerViewJobPost;
 
 import android.content.Intent;
 import android.widget.Button;
@@ -134,6 +135,28 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
             ArchiveJobModel jobAtBindingTime = archiveJobModelList.get(position);
 
             holder.bind(jobAtBindingTime);
+
+            holder.itemView.setOnClickListener(v -> {
+                int actualPos = holder.getBindingAdapterPosition();
+                if (actualPos == RecyclerView.NO_POSITION) return;
+
+                ArchiveJobModel currentJob = archiveJobModelList.get(actualPos);
+                Intent intent = new Intent(v.getContext(), EmployerViewJobPost.class);
+                intent.putExtra("JOB_ID", currentJob.getJobId());
+                intent.putExtra("JOB_TITLE", currentJob.getJobTitle());
+                intent.putExtra("DESCRIPTION", currentJob.getDescription());
+                intent.putExtra("LOCATION", currentJob.getLocation());
+                intent.putExtra("DURATION", currentJob.getDuration());
+                if (currentJob.getSalary() != null) {
+                    intent.putExtra("SALARY", currentJob.getSalary());
+                }
+                if (currentJob.getTags() != null) {
+                    intent.putStringArrayListExtra("TAG_IDS", new java.util.ArrayList<>(currentJob.getTags()));
+                }
+                intent.putExtra("IS_OWNER", true);
+                intent.putExtra("IS_ARCHIVED", true);
+                v.getContext().startActivity(intent);
+            });
 
             holder.repostButton.setOnClickListener(v -> {
                 int actualPos = holder.getBindingAdapterPosition();
