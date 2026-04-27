@@ -21,6 +21,8 @@ import com.manilalinkup.app.models.HideChatRequest;
 import com.manilalinkup.app.models.JobModel;
 import com.manilalinkup.app.models.MarkCompleteRequest;
 import com.manilalinkup.app.models.MarkReadRequest;
+import com.manilalinkup.app.models.NotificationItemModel;
+import com.manilalinkup.app.models.NotifyApplicationRequest;
 import com.manilalinkup.app.models.NotifyChatRequest;
 import com.manilalinkup.app.models.RatingModel;
 import com.manilalinkup.app.models.RegisterDeviceRequest;
@@ -132,6 +134,9 @@ public interface ApiService {
     @POST("api/chats/notify")
     Call<ResponseBody> notifyChat(@Body NotifyChatRequest request);
 
+    @POST("api/notifications/notify-applicant")
+    Call<ResponseBody> notifyApplication(@Body NotifyApplicationRequest request);
+
     // Ratings
     @POST("api/ratings")
     Call<ApiResponse<RatingModel>> submitRating(@Body SubmitRatingRequest request);
@@ -156,7 +161,7 @@ public interface ApiService {
 
     // Notifications
     @GET("api/notifications")
-    Call<ApiResponse<List<com.manilalinkup.app.models.NotificationItemModel>>> getNotifications();
+    Call<ApiResponse<List<NotificationItemModel>>> getNotifications();
 
     @POST("api/notifications/read-all")
     Call<ResponseBody> markAllNotificationsRead();

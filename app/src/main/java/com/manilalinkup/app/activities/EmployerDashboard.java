@@ -20,12 +20,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.adapters.JobPostDashboardAdapter;
 import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.NotificationItemModel;
 import com.manilalinkup.app.models.ArchiveJobRequest;
 import com.manilalinkup.app.models.GetJobsRequest;
 import com.manilalinkup.app.models.JobModel;
@@ -184,6 +186,35 @@ public class EmployerDashboard extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkUnreadNotifications();
+    }
+
+    private void checkUnreadNotifications() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+        user.getIdToken(false).addOnSuccessListener(result -> {
+            ApiService apiService = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
+            apiService.getNotifications().enqueue(new Callback<ApiResponse<List<NotificationItemModel>>>() {
+                @Override
+                public void onResponse(Call<ApiResponse<List<NotificationItemModel>>> call,
+                                       Response<ApiResponse<List<NotificationItemModel>>> response) {
+                    if (!response.isSuccessful() || response.body() == null || response.body().getData() == null) return;
+                    boolean hasUnread = false;
+                    for (NotificationItemModel n : response.body().getData()) {
+                        if (!n.isRead()) { hasUnread = true; break; }
+                    }
+                    BadgeDrawable badge = bottomNavigationViewEmployer.getOrCreateBadge(R.id.nav_notifications);
+                    badge.setVisible(hasUnread);
+                }
+                @Override
+                public void onFailure(Call<ApiResponse<List<NotificationItemModel>>> call, Throwable t) {}
+            });
+        });
     }
 
     private void refreshJobs() {

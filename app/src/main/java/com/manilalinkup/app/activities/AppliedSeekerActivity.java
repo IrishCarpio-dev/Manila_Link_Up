@@ -127,12 +127,17 @@ public class AppliedSeekerActivity extends AppCompatActivity {
     }
 
     private void initAdapter() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String seekerUid = currentUser != null ? currentUser.getUid() : "";
+
         appliedAdapter = new AppliedJobsAdapter(appliedList, job -> {
             Intent intent = new Intent(AppliedSeekerActivity.this, AppliedJobPostActivity.class);
             intent.putExtra("APPLICATION_ID", job.getId());
             intent.putExtra("STATUS", job.getStatus() != null ? job.getStatus() : 1);
             intent.putExtra("SEEKER_HAS_COMPLETED", job.getSeekerCompletedAt() != null);
             intent.putExtra("CREATED_AT", job.getCreatedAt());
+            intent.putExtra("CHAT_ID", job.getChatId());
+            intent.putExtra("SEEKER_UID", seekerUid);
             if (job.getJob() != null) {
                 intent.putExtra("JOB_TITLE", job.getJob().getTitle());
                 intent.putExtra("LOCATION", job.getJob().getLocation());
