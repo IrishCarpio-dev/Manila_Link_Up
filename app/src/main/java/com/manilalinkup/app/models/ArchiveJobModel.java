@@ -3,15 +3,25 @@ package com.manilalinkup.app.models;
 public class ArchiveJobModel {
     String id;
     String title;
+    String description;
+    String location;
+    Double salary;
+    String duration;
     String deletedAt;
     String filledAt;
     String expiresAt;
     HiredApplication hiredApplication;
+    java.util.List<String> tags;
 
     public ArchiveJobModel() {}
 
     public String getJobId() { return id; }
     public String getJobTitle() { return title; }
+    public String getDescription() { return description; }
+    public String getLocation() { return location; }
+    public Double getSalary() { return salary; }
+    public String getDuration() { return duration; }
+    public java.util.List<String> getTags() { return tags; }
 
     public String getStatusText() {
         if (hiredApplication != null) {

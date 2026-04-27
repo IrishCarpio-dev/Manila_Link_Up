@@ -219,7 +219,7 @@
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/nested_scroll_ratings"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/text_view_ratings"
                 android:fillViewport="true"
                 android:paddingStart="16dp"
@@ -246,34 +246,10 @@
             </androidx.core.widget.NestedScrollView>
 
             <TextView
-                android:id="@+id/text_view_all_job_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/nested_scroll_ratings"
-                android:fontFamily="sans-serif-medium"
-                android:paddingStart="16dp"
-                android:paddingTop="16dp"
-                android:text="Jobs Posted"
-                android:textColor="#212121"
-                android:textSize="16sp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_employer_jobs_posted"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/text_view_all_job_post"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_employer_job_list_profile">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-
-
-            <TextView
                 android:id="@+id/text_view_archive_jobs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/recycler_view_employer_jobs_posted"
+                android:layout_below="@id/nested_scroll_ratings"
                 android:fontFamily="sans-serif-medium"
                 android:paddingStart="16dp"
                 android:paddingTop="16dp"
@@ -288,7 +264,7 @@
                 android:layout_below="@id/text_view_archive_jobs"
                 android:fontFamily="sans-serif-light"
                 android:paddingStart="16dp"
-                android:text="Other people can't view your previous job posts. \n You can edit or post it again if you like."
+                android:text="Other people can't view your previous job posts. You can repost them if you like."
                 android:textColor="#212121"
                 android:textSize="14sp" />
 
