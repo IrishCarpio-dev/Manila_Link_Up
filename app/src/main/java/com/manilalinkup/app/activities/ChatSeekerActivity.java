@@ -15,6 +15,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.SeekerChatTabAdapter;
 import com.manilalinkup.app.models.ApiResponse;
@@ -26,7 +28,9 @@ import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -41,6 +45,8 @@ public class ChatSeekerActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationViewSeeker;
     private View emptyState;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private FirebaseFirestore db;
+    private final Map<String, ListenerRegistration> chatListeners = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,7 @@ public class ChatSeekerActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(this::loadChats);
 
         chatList = new ArrayList<>();
+        db = FirebaseFirestore.getInstance();
 
         seekerChatTabAdapter = new SeekerChatTabAdapter(
                 chatList,
@@ -97,6 +104,29 @@ public class ChatSeekerActivity extends AppCompatActivity {
         loadChats();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        for (ListenerRegistration reg : chatListeners.values()) reg.remove();
+        chatListeners.clear();
+    }
+
+    private void attachUnreadListeners() {
+        for (ListenerRegistration reg : chatListeners.values()) reg.remove();
+        chatListeners.clear();
+        for (ChatListItemModel chat : chatList) {
+            ListenerRegistration reg = db.collection("chats").document(chat.getId())
+                    .addSnapshotListener((snap, err) -> {
+                        if (err != null || snap == null) return;
+                        Long count = snap.getLong("unreadCountSeeker");
+                        chat.setUnreadCount(count != null ? count.intValue() : 0);
+                        int idx = chatList.indexOf(chat);
+                        if (idx >= 0) seekerChatTabAdapter.notifyItemChanged(idx);
+                    });
+            chatListeners.put(chat.getId(), reg);
+        }
+    }
+
     private void loadChats() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
@@ -114,6 +144,7 @@ public class ChatSeekerActivity extends AppCompatActivity {
                         if (emptyState != null) {
                             emptyState.setVisibility(chatList.isEmpty() ? View.VISIBLE : View.GONE);
                         }
+                        attachUnreadListeners();
                     }
                 }
 

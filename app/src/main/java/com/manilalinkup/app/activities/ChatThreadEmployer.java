@@ -185,6 +185,7 @@ public class ChatThreadEmployer extends AppCompatActivity {
         messagesRef.add(msg)
                 .addOnSuccessListener(ref -> {
                     btnSend.setEnabled(true);
+                    db.collection("chats").document(chatId).update("unreadCountSeeker", FieldValue.increment(1));
                     notifyRecipient(text);
                 })
                 .addOnFailureListener(e -> {
@@ -214,6 +215,7 @@ public class ChatThreadEmployer extends AppCompatActivity {
 
     private void markRead() {
         if (messagesRef == null || currentUid.isEmpty()) return;
+        db.collection("chats").document(chatId).update("unreadCountEmployer", 0);
         messagesRef.whereEqualTo("readAt", null)
                 .get()
                 .addOnSuccessListener(snapshots -> {

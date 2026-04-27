@@ -24,6 +24,7 @@ public class ChatListItemModel {
     public String getLastMessage() { return lastMessage; }
     public String getLastMessageAt() { return lastMessageAt; }
     public int getUnreadCount() { return unreadCount; }
+    public void setUnreadCount(int unreadCount) { this.unreadCount = unreadCount; }
     public CounterpartModel getCounterpart() { return counterpart; }
     public JobSummaryModel getJob() { return job; }
 

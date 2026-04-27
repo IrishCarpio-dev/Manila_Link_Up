@@ -86,8 +86,8 @@ public class SeekerChatTabAdapter extends RecyclerView.Adapter<SeekerChatTabAdap
             messagePreview.setText(chat.getLastMessage() != null ? chat.getLastMessage() : "");
             messageTimeStamp.setText(DateUtils.formatChatTimestamp(chat.getLastMessageAt()));
 
+            int unread = chat.getUnreadCount();
             if (unreadBadge != null) {
-                int unread = chat.getUnreadCount();
                 if (unread > 0) {
                     unreadBadge.setVisibility(View.VISIBLE);
                     unreadBadge.setText(String.valueOf(unread));
@@ -95,6 +95,9 @@ public class SeekerChatTabAdapter extends RecyclerView.Adapter<SeekerChatTabAdap
                     unreadBadge.setVisibility(View.GONE);
                 }
             }
+            messagePreview.setTypeface(null, unread > 0
+                    ? android.graphics.Typeface.BOLD
+                    : android.graphics.Typeface.NORMAL);
 
             if (counterpart != null && counterpart.getProfilePhotoUrl() != null) {
                 Glide.with(itemView.getContext())
