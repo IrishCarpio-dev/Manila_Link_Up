@@ -186,12 +186,7 @@ public class EmployerViewJobPost extends AppCompatActivity {
             return true;
         }
         if (item.getItemId() == R.id.menu_repost_job) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Repost Job")
-                    .setMessage("Repost \"" + jobTitle + "\" as a new job?")
-                    .setPositiveButton("Repost", (d, w) -> repostJob())
-                    .setNegativeButton("Cancel", null)
-                    .show();
+            repostJob();
             return true;
         }
         return super.onOptionsItemSelected(item);
