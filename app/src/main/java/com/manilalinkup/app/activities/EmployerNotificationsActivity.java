@@ -82,7 +82,6 @@ public class EmployerNotificationsActivity extends AppCompatActivity {
             return true;
         });
 
-        loadNotifications();
     }
 
     @Override

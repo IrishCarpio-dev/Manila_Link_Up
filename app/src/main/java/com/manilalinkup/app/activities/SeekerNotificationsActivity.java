@@ -82,7 +82,6 @@ public class SeekerNotificationsActivity extends AppCompatActivity {
             return true;
         });
 
-        loadNotifications();
     }
 
     @Override

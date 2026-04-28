@@ -172,6 +172,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
 
         loadServiceTags();
         loadJobs();
+        checkUnreadNotifications();
     }
 
     private void refreshJobs() {
@@ -264,12 +265,6 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 }
             });
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        checkUnreadNotifications();
     }
 
     private void checkUnreadNotifications() {

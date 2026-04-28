@@ -182,6 +182,7 @@ public class EmployerDashboard extends AppCompatActivity {
         });
 
         loadJobs();
+        checkUnreadNotifications();
 
         jobAddJob = findViewById(R.id.card_view_post_new_job);
         jobAddJob.setOnClickListener(new View.OnClickListener() {
@@ -192,12 +193,6 @@ public class EmployerDashboard extends AppCompatActivity {
             }
         });
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        checkUnreadNotifications();
     }
 
     private void checkUnreadNotifications() {
