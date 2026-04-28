@@ -72,6 +72,7 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
         private TextView job_location;
         private TextView job_duration;
         private TextView how_long_job_was_posted;
+        private TextView tvStatusBadge;
         private ImageView optionsButton;
         private ChipGroup chipGroupTags;
         public JobPostDashboardViewHolder(@NonNull View itemView) {
@@ -82,7 +83,7 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
             job_location = itemView.findViewById(R.id.item_card_location_placeholder);
             job_duration = itemView.findViewById(R.id.item_card_calendar_placeholder);
             how_long_job_was_posted = itemView.findViewById(R.id.item_card_how_long_job_post_posted_placeholder);
-
+            tvStatusBadge = itemView.findViewById(R.id.tv_status_badge);
             optionsButton = itemView.findViewById(R.id.image_view_job_card_options);
             chipGroupTags = itemView.findViewById(R.id.chip_group_job_card_tags);
         }
@@ -115,6 +116,16 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
 
             if (how_long_job_was_posted != null) {
                 how_long_job_was_posted.setText(jobBind.getHowLongJobIsPosted());
+            }
+
+            if (tvStatusBadge != null) {
+                Integer appStatus = jobBind.getApplicationStatus();
+                if (appStatus != null && appStatus == 5 && !jobBind.isEmployerHasCompleted()) {
+                    tvStatusBadge.setText("Hired");
+                    tvStatusBadge.setVisibility(View.VISIBLE);
+                } else {
+                    tvStatusBadge.setVisibility(View.GONE);
+                }
             }
 
             if (optionsButton != null) {

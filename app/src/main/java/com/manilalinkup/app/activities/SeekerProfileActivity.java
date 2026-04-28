@@ -14,21 +14,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
-import com.manilalinkup.app.adapters.ExperienceAdapter;
 import com.manilalinkup.app.adapters.RatingsProfileAdapter;
 import com.manilalinkup.app.models.ApiResponse;
-import com.manilalinkup.app.models.ExperienceModel;
 import com.manilalinkup.app.models.GetRatingsRequest;
 import com.manilalinkup.app.models.RatingModel;
 import com.manilalinkup.app.models.SeekerProfileModel;
+import com.manilalinkup.app.models.UserProfileModel;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.RetrofitClient;
 import com.manilalinkup.app.utilities.SessionCache;
+
+import static com.manilalinkup.app.utilities.RetrofitClient.BASE_URL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,26 +44,29 @@ public class SeekerProfileActivity extends AppCompatActivity {
     private RatingsProfileAdapter adapterRating;
     private final List<RatingModel> ratingProfileList = new ArrayList<>();
 
-    private RecyclerView recyclerViewExperience;
-    private ExperienceAdapter adapterExperience;
-    private List<ExperienceModel> experienceList;
-
     private BottomNavigationView bottomNavigationView;
     private ImageView settingsIcon;
-    private TextInputEditText summaryEditText;
     ImageView viewAllRatings;
     private LinearLayout layoutRatingSummary;
     private RatingBar ratingBarProfile;
     private TextView tvRatingSummary;
+    private TextView tvName;
+    private TextView tvLocation;
+    private ImageView ivProfilePic;
+    private ImageView ivVerification;
+    private TextView tvStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seeker_profile);
         settingsIcon = findViewById(R.id.image_view_seeker_settings_icon);
-        summaryEditText = findViewById(R.id.editText_summary);
         recyclerViewRatings = findViewById(R.id.recycler_view_ratings_card);
-        recyclerViewExperience = findViewById(R.id.recycler_view_experience);
+        tvName = findViewById(R.id.text_view_employer_name_profile);
+        tvLocation = findViewById(R.id.text_view_location_employer_profile);
+        ivProfilePic = findViewById(R.id.image_view_profile_picture);
+        ivVerification = findViewById(R.id.verification_checkmark_blue);
+        tvStatus = findViewById(R.id.text_status);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setSelectedItemId(R.id.nav_profile_seeker);
@@ -93,9 +97,8 @@ public class SeekerProfileActivity extends AppCompatActivity {
         tvRatingSummary = findViewById(R.id.tv_rating_summary);
 
         setupFeedbacksRecyclerView();
-        setupExperienceRecyclerView();
         setupClickListeners();
-        loadRatingStats();
+        loadProfileData();
 
         viewAllRatings = findViewById(R.id.item_card_see_more_ratings_seeker);
         viewAllRatings.setOnClickListener(new View.OnClickListener() {
@@ -108,12 +111,29 @@ public class SeekerProfileActivity extends AppCompatActivity {
 
     }
 
-    private void loadRatingStats() {
+    private void loadProfileData() {
         SessionCache.getInstance().ensureUserProfile(new SessionCache.UserProfileCallback() {
             @Override
-            public void onAvailable(com.manilalinkup.app.models.UserProfileModel profile) {
+            public void onAvailable(UserProfileModel profile) {
                 SeekerProfileModel seeker = profile.getSeekers();
                 if (seeker == null) return;
+
+                String firstName = seeker.getFirstName() != null ? seeker.getFirstName() : "";
+                String lastName = seeker.getLastName() != null ? seeker.getLastName() : "";
+                tvName.setText((firstName + " " + lastName).trim());
+
+                tvLocation.setText(seeker.getLocation() != null ? seeker.getLocation() : "");
+
+                ivVerification.setVisibility(Boolean.TRUE.equals(seeker.getVerified()) ? View.VISIBLE : View.GONE);
+                tvStatus.setVisibility(Boolean.TRUE.equals(seeker.getOpenForWork()) ? View.VISIBLE : View.GONE);
+
+                if (seeker.getProfilePhotoUrl() != null) {
+                    Glide.with(SeekerProfileActivity.this)
+                            .load(BASE_URL + seeker.getProfilePhotoUrl())
+                            .placeholder(R.drawable.ic_person_placeholder)
+                            .into(ivProfilePic);
+                }
+
                 Integer count = seeker.getRatingCount();
                 Double avg = seeker.getBayesianAvg();
                 if (count != null && count > 0 && avg != null) {
@@ -166,19 +186,6 @@ public class SeekerProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void setupExperienceRecyclerView() {
-        recyclerViewExperience.setLayoutManager(new LinearLayoutManager(this));
-
-        experienceList = new ArrayList<>();
-        experienceList.add(new ExperienceModel("Barista", "Starbucks - Manila", "Jan 2023 - Present"));
-        experienceList.add(new ExperienceModel("Delivery Rider", "GrabFood PH", "June 2022 - Dec 2022"));
-        experienceList.add(new ExperienceModel("Service Crew", "Jollibee Padre Faura", "Nov 2021 - May 2022"));
-
-        adapterExperience = new ExperienceAdapter(experienceList);
-        recyclerViewExperience.setAdapter(adapterExperience);
-    }
-
-
     private void setupClickListeners() {
         if (settingsIcon != null) {
             settingsIcon.setOnClickListener(v -> {
@@ -187,13 +194,6 @@ public class SeekerProfileActivity extends AppCompatActivity {
             });
         }
 
-        if (summaryEditText != null) {
-            summaryEditText.setOnFocusChangeListener((v, hasFocus) -> {
-                if (!hasFocus) {
-                    // Logic to save profile summary text
-                }
-            });
-        }
     }
 
     @Override

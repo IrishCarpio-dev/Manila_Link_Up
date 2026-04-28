@@ -259,7 +259,7 @@
                 android:layout_below="@id/text_input_layout_expires_at"
                 android:layout_margin="8dp"
                 android:fontFamily="sans-serif-medium"
-                android:text="Salary (â‚±)"
+                android:text="Salary (&#8369;)"
                 android:textColor="#212121"
                 android:textSize="16sp" />
 

@@ -7,29 +7,39 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
-import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.adapters.JobPostDashboardAdapter;
 import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.models.EmployerProfileModel;
+import com.manilalinkup.app.models.GetJobsRequest;
 import com.manilalinkup.app.models.GetRatingsRequest;
+import com.manilalinkup.app.models.JobModel;
 import com.manilalinkup.app.models.JobPostDashboardModel;
 import com.manilalinkup.app.models.RatingModel;
+import com.manilalinkup.app.models.UserProfileModel;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.RatingsProfileAdapter;
 import com.manilalinkup.app.utilities.ApiService;
+import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
 import com.manilalinkup.app.utilities.SessionCache;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import static com.manilalinkup.app.utilities.RetrofitClient.BASE_URL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +55,7 @@ public class EmployerProfileActivity extends AppCompatActivity {
     private RatingsProfileAdapter adapterRating;
     private JobPostDashboardAdapter adapterAllJobPost;
     private final List<RatingModel> ratingProfileList = new ArrayList<>();
-    private List<JobPostDashboardModel> allJobsPostedList;
+    private final List<JobPostDashboardModel> allJobsPostedList = new ArrayList<>();
     MaterialButton viewArchivedJobs;
     BottomNavigationView bottomNavigationViewEmployer;
     private ImageView settingsIcon;
@@ -53,6 +63,10 @@ public class EmployerProfileActivity extends AppCompatActivity {
     private LinearLayout layoutRatingSummary;
     private RatingBar ratingBarProfile;
     private TextView tvRatingSummary;
+    private TextView tvName;
+    private TextView tvLocation;
+    private ImageView ivProfilePic;
+    private ImageView ivVerification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +79,10 @@ public class EmployerProfileActivity extends AppCompatActivity {
         layoutRatingSummary = findViewById(R.id.layout_rating_summary);
         ratingBarProfile = findViewById(R.id.rating_bar_profile);
         tvRatingSummary = findViewById(R.id.tv_rating_summary);
+        tvName = findViewById(R.id.text_view_employer_name_profile);
+        tvLocation = findViewById(R.id.text_view_location_employer_profile);
+        ivProfilePic = findViewById(R.id.image_view_employee_profile_picture_placeholder);
+        ivVerification = findViewById(R.id.verification_checkmark_blue);
 
         settingsIcon.setOnClickListener(v -> {
             Intent intent = new Intent(EmployerProfileActivity.this, EmployerSettingsActivity.class);
@@ -77,53 +95,19 @@ public class EmployerProfileActivity extends AppCompatActivity {
         adapterRating = new RatingsProfileAdapter(ratingProfileList);
         recyclerViewRatings.setAdapter(adapterRating);
         loadRatings();
-        loadRatingStats();
+        loadProfileData();
 
         recyclerViewAllJobsPosted = findViewById(R.id.recycler_view_employer_jobs_posted);
         recyclerViewAllJobsPosted.setLayoutManager(new LinearLayoutManager(this));
-
-        allJobsPostedList = new ArrayList<JobPostDashboardModel>();
-        allJobsPostedList.add(new JobPostDashboardModel(
-                "Events/Catering Helper",
-                "Eng Bee Tin",
-                "Binondo, Manila",
-                "March 30, 2026",
-                "https://en.wikipedia.org/wiki/Eng_Bee_Tin",
-                "3 days ago"
-        ));
-        allJobsPostedList.add(new JobPostDashboardModel(
-                "Cafe Barista",
-                "Don Kopi",
-                "Malate, Manila",
-                "Full Time",
-                "https://www.freepik.com/vectors/coffee-shop-logo-design",
-                "7 days ago"
-        ));
-
-        allJobsPostedList.add(new JobPostDashboardModel(
-                "Store Assistant",
-                "Quick Smart Express",
-                "Quiapo, Manila",
-                "M | W | F",
-                "https://venngage.com/templates/logos/market-store-creative-logo-fc8535df-be09-4c80-8ea5-a69a34b2318e",
-                "10 days ago"
-        ));
-
-        allJobsPostedList.add(new JobPostDashboardModel(
-                "Artist Assistant",
-                "BINI Mika's Company",
-                "GMA, Manila",
-                "T | Th | F",
-                "https://www.thebeautyedit.ph/people/bini-members-and-their-beauty-looks/",
-                "1 day ago"
-        ));
-
 
         adapterAllJobPost = new JobPostDashboardAdapter(allJobsPostedList, true, new JobPostDashboardAdapter.OnJobClickListener() {
             @Override
             public void onJobClick(JobPostDashboardModel job) {
                 Intent intent = new Intent(EmployerProfileActivity.this, EmployerViewJobPost.class);
-                //not yet tested - irish
+                intent.putExtra("JOB_ID", job.getJobId());
+                intent.putExtra("JOB_TITLE", job.getJobTitle());
+                intent.putExtra("LOCATION", job.getJobPostLocation());
+                intent.putExtra("DURATION", job.getJob_duration());
                 startActivity(intent);
             }
             @Override
@@ -131,6 +115,7 @@ public class EmployerProfileActivity extends AppCompatActivity {
             }
         });
         recyclerViewAllJobsPosted.setAdapter(adapterAllJobPost);
+        loadJobs();
 
         bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
         bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_profile);
@@ -174,12 +159,25 @@ public class EmployerProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void loadRatingStats() {
+    private void loadProfileData() {
         SessionCache.getInstance().ensureUserProfile(new SessionCache.UserProfileCallback() {
             @Override
-            public void onAvailable(com.manilalinkup.app.models.UserProfileModel profile) {
+            public void onAvailable(UserProfileModel profile) {
                 EmployerProfileModel employer = profile.getEmployers();
                 if (employer == null) return;
+
+                tvName.setText(employer.getFullName() != null ? employer.getFullName() : "");
+                tvLocation.setText(employer.getAddress() != null ? employer.getAddress() : "");
+
+                ivVerification.setVisibility(Boolean.TRUE.equals(employer.getVerified()) ? View.VISIBLE : View.GONE);
+
+                if (employer.getProfilePhotoUrl() != null) {
+                    Glide.with(EmployerProfileActivity.this)
+                            .load(BASE_URL + employer.getProfilePhotoUrl())
+                            .placeholder(R.drawable.ic_person_placeholder)
+                            .into(ivProfilePic);
+                }
+
                 Integer count = employer.getRatingCount();
                 Double avg = employer.getBayesianAvg();
                 if (count != null && count > 0 && avg != null) {
@@ -193,6 +191,57 @@ public class EmployerProfileActivity extends AppCompatActivity {
             @Override
             public void onError() {}
         });
+    }
+
+    private void loadJobs() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+        user.getIdToken(false).addOnSuccessListener(result -> {
+            ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
+            api.getJobs(new GetJobsRequest(20, null, null, null, user.getUid(), null, null))
+                    .enqueue(new Callback<ApiResponse<List<JobModel>>>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse<List<JobModel>>> call,
+                                               Response<ApiResponse<List<JobModel>>> response) {
+                            if (response.isSuccessful() && response.body() != null
+                                    && response.body().getData() != null) {
+                                allJobsPostedList.clear();
+                                for (JobModel job : response.body().getData()) {
+                                    JobPostDashboardModel m = new JobPostDashboardModel(
+                                            job.getTitle(), "", job.getLocation(),
+                                            job.getDuration(), "", getRelativeTime(job.getCreatedAt()));
+                                    m.setJobId(job.getId());
+                                    allJobsPostedList.add(m);
+                                }
+                                adapterAllJobPost.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ApiResponse<List<JobModel>>> call, Throwable t) {
+                            ErrorUtils.showThrowableError(EmployerProfileActivity.this, t);
+                        }
+                    });
+        });
+    }
+
+    private String getRelativeTime(String createdAt) {
+        if (createdAt == null) return "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US);
+            Date date = sdf.parse(createdAt);
+            long diffMs = System.currentTimeMillis() - date.getTime();
+            long minutes = diffMs / 60000;
+            if (minutes < 60) return minutes <= 1 ? "just now" : minutes + " minutes ago";
+            long hours = minutes / 60;
+            if (hours < 24) return hours == 1 ? "1 hour ago" : hours + " hours ago";
+            long days = hours / 24;
+            if (days < 30) return days == 1 ? "1 day ago" : days + " days ago";
+            long months = days / 30;
+            return months == 1 ? "1 month ago" : months + " months ago";
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     private void loadRatings() {

@@ -63,4 +63,21 @@ public class JobPostDashboardModel {
     private boolean hasApplied;
     public boolean isHasApplied() { return hasApplied; }
     public void setHasApplied(boolean hasApplied) { this.hasApplied = hasApplied; }
+
+    private String applicationId;
+    private Integer applicationStatus;
+    private boolean employerHasCompleted;
+    private String seekerName;
+
+    public String getApplicationId() { return applicationId; }
+    public void setApplicationId(String applicationId) { this.applicationId = applicationId; }
+
+    public Integer getApplicationStatus() { return applicationStatus; }
+    public void setApplicationStatus(Integer applicationStatus) { this.applicationStatus = applicationStatus; }
+
+    public boolean isEmployerHasCompleted() { return employerHasCompleted; }
+    public void setEmployerHasCompleted(boolean employerHasCompleted) { this.employerHasCompleted = employerHasCompleted; }
+
+    public String getSeekerName() { return seekerName; }
+    public void setSeekerName(String seekerName) { this.seekerName = seekerName; }
 }

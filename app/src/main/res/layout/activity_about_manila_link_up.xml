@@ -108,7 +108,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="â€¢ User-friendly Login &amp; Registration\nâ€¢ Post local job opportunities\nâ€¢ Browse available jobs (Pet sitting, Tutoring, etc.)\nâ€¢ Detailed job descriptions\nâ€¢ Clean and responsive UI design"
+                        android:text="&#8226; User-friendly Login &amp; Registration\n&#8226; Post local job opportunities\n&#8226; Browse available jobs (Pet sitting, Tutoring, etc.)\n&#8226; Detailed job descriptions\n&#8226; Clean and responsive UI design"
                         android:textColor="?attr/colorOnSurface"
                         android:lineSpacingExtra="4dp"/>
                 </LinearLayout>
@@ -171,7 +171,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:lineSpacingExtra="6dp"
-                        android:text="â€¢ Precious Irish Carpio (Project Lead)\nâ€¢ Roehvique Caling\nâ€¢ Loraine Gulo\nâ€¢ Dino Dumanon"
+                        android:text="&#8226; Precious Irish Carpio (Project Lead)\n&#8226; Roehvique Caling\n&#8226; Loraine Gulo\n&#8226; Dino Dumanon"
                         android:textColor="?attr/colorOnSurface" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

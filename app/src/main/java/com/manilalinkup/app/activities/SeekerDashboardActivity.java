@@ -173,6 +173,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
         if (user == null) {
             isLoading = false;
             progressBarLoadMore.setVisibility(View.GONE);
+            if (isRefreshing) { isRefreshing = false; swipeRefreshLayout.setRefreshing(false); }
             return;
         }
 
@@ -182,6 +183,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
             if (!tokenTask.isSuccessful()) {
                 isLoading = false;
                 progressBarLoadMore.setVisibility(View.GONE);
+                if (isRefreshing) { isRefreshing = false; swipeRefreshLayout.setRefreshing(false); }
                 return;
             }
 

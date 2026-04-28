@@ -3,4 +3,5 @@
     <color name="manila_blue">#0D47A1</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="status_hired">#2E7D32</color>
 </resources>

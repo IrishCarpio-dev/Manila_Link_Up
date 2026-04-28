@@ -85,7 +85,7 @@
                             android:id="@+id/text_view_archive_jobs_description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Select the best applicant(s) suited for your job:\n\nâ€¢ Review their Profile\nâ€¢ Click ACCEPT to start a chat\nâ€¢ Discuss your hiring process"
+                            android:text="Select the best applicant(s) suited for your job:\n\n&#8226; Review their Profile\n&#8226; Click ACCEPT to start a chat\n&#8226; Discuss your hiring process"
                             android:textSize="14sp"
                             android:lineSpacingExtra="4dp"
                             android:textColor="#616161" />
