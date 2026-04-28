@@ -4,23 +4,26 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map;
 
 public class NotificationItemModel {
-    private int id;
+    private String id;
+    private String uid;
     private String type;
     private String title;
-    private String message;
-    @SerializedName("is_read")
-    private boolean isRead;
-    @SerializedName("created_at")
-    private String createdAt;
+    private String body;
     private Map<String, String> data;
+    @SerializedName("readAt")
+    private String readAt;
+    @SerializedName("createdAt")
+    private String createdAt;
 
-    public int getId() { return id; }
+    public String getId() { return id; }
+    public String getUid() { return uid; }
     public String getType() { return type; }
     public String getTitle() { return title; }
-    public String getMessage() { return message; }
-    public boolean isRead() { return isRead; }
-    public String getCreatedAt() { return createdAt; }
+    public String getBody() { return body; }
     public Map<String, String> getData() { return data; }
+    public String getReadAt() { return readAt; }
+    public String getCreatedAt() { return createdAt; }
+    public boolean isRead() { return readAt != null; }
 
     public String getDataValue(String key) {
         return (data != null) ? data.get(key) : null;

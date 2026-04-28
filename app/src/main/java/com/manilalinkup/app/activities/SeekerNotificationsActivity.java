@@ -17,6 +17,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.NotificationsAdapter;
 import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.GetNotificationsRequest;
+import com.manilalinkup.app.models.MarkNotificationReadRequest;
 import com.manilalinkup.app.models.NotificationItemModel;
 import com.manilalinkup.app.models.NotificationsModel;
 import com.manilalinkup.app.utilities.ApiService;
@@ -81,7 +83,6 @@ public class SeekerNotificationsActivity extends AppCompatActivity {
             }
             return true;
         });
-
     }
 
     @Override
@@ -98,7 +99,7 @@ public class SeekerNotificationsActivity extends AppCompatActivity {
 
         user.getIdToken(true).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
-            api.getNotifications().enqueue(new Callback<ApiResponse<List<NotificationItemModel>>>() {
+            api.getNotifications(new GetNotificationsRequest()).enqueue(new Callback<ApiResponse<List<NotificationItemModel>>>() {
                 @Override
                 public void onResponse(Call<ApiResponse<List<NotificationItemModel>>> call,
                                        Response<ApiResponse<List<NotificationItemModel>>> response) {
@@ -126,7 +127,7 @@ public class SeekerNotificationsActivity extends AppCompatActivity {
 
     private void markAllRead(String token) {
         ApiService api = RetrofitClient.getClient(token).create(ApiService.class);
-        api.markAllNotificationsRead().enqueue(new Callback<okhttp3.ResponseBody>() {
+        api.markNotificationsRead(new MarkNotificationReadRequest(true)).enqueue(new Callback<okhttp3.ResponseBody>() {
             @Override public void onResponse(Call<okhttp3.ResponseBody> call, Response<okhttp3.ResponseBody> response) {}
             @Override public void onFailure(Call<okhttp3.ResponseBody> call, Throwable t) {}
         });
@@ -136,24 +137,24 @@ public class SeekerNotificationsActivity extends AppCompatActivity {
         if (type == null) return;
         Intent intent;
         switch (type) {
-            case NotificationUtils.TYPE_CHAT_MESSAGE:
-                intent = new Intent(this, ChatSeekerActivity.class);
-                break;
-            case NotificationUtils.TYPE_APPLICATION_REVIEW:
-            case NotificationUtils.TYPE_INTERVIEW_SCHEDULED:
+            case NotificationUtils.TYPE_INTERVIEW_OFFER:
             case NotificationUtils.TYPE_HIRED:
-            case NotificationUtils.TYPE_APPLICATION_REJECTED:
-            case NotificationUtils.TYPE_JOB_CLOSED:
+            case NotificationUtils.TYPE_REJECTED:
+            case NotificationUtils.TYPE_JOB_FILLED:
+            case NotificationUtils.TYPE_JOB_COMPLETED:
                 intent = new Intent(this, AppliedSeekerActivity.class);
                 break;
             case NotificationUtils.TYPE_RATING_RECEIVED:
-            case NotificationUtils.TYPE_ID_APPROVED:
+            case NotificationUtils.TYPE_VERIFIED:
                 intent = new Intent(this, SeekerProfileActivity.class);
                 break;
-            case NotificationUtils.TYPE_PROFILE_INCOMPLETE:
-                intent = new Intent(this, EditSeekerProfileActivity.class);
+            case NotificationUtils.TYPE_VERIFICATION_REJECTED:
+                intent = new Intent(this, SeekerVerifyIdentityActivity.class);
                 break;
-            case NotificationUtils.TYPE_PREFERENCES_INCOMPLETE:
+            case NotificationUtils.TYPE_NEW_MATCHING_JOB:
+                intent = new Intent(this, SeekerDashboardActivity.class);
+                break;
+            case NotificationUtils.TYPE_PREFERENCES_NUDGE:
                 intent = new Intent(this, SeekerJobPreferences.class);
                 break;
             default:

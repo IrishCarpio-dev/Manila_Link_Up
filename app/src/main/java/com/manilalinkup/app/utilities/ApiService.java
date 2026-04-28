@@ -23,9 +23,12 @@ import com.manilalinkup.app.models.GetMessagesRequest;
 import com.manilalinkup.app.models.GetRatingsRequest;
 import com.manilalinkup.app.models.HideChatRequest;
 import com.manilalinkup.app.models.JobModel;
+import com.manilalinkup.app.models.GetNotificationsRequest;
 import com.manilalinkup.app.models.MarkCompleteRequest;
+import com.manilalinkup.app.models.MarkNotificationReadRequest;
 import com.manilalinkup.app.models.MarkReadRequest;
 import com.manilalinkup.app.models.NotificationItemModel;
+import com.manilalinkup.app.models.UnreadCountResponse;
 import com.manilalinkup.app.models.NotifyApplicationRequest;
 import com.manilalinkup.app.models.NotifyChatRequest;
 import com.manilalinkup.app.models.RatingModel;
@@ -170,9 +173,12 @@ public interface ApiService {
     Call<ApiResponse<SeekerPreferencesModel>> updateSeekerPreferences(@Body SeekerPreferencesModel request);
 
     // Notifications
-    @GET("api/notifications")
-    Call<ApiResponse<List<NotificationItemModel>>> getNotifications();
+    @POST("api/notifications/list")
+    Call<ApiResponse<List<NotificationItemModel>>> getNotifications(@Body GetNotificationsRequest request);
 
-    @POST("api/notifications/read-all")
-    Call<ResponseBody> markAllNotificationsRead();
+    @POST("api/notifications/markRead")
+    Call<ResponseBody> markNotificationsRead(@Body MarkNotificationReadRequest request);
+
+    @GET("api/notifications/unreadCount")
+    Call<UnreadCountResponse> getNotificationUnreadCount();
 }

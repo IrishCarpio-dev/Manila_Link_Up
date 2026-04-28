@@ -17,6 +17,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.NotificationsAdapter;
 import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.GetNotificationsRequest;
+import com.manilalinkup.app.models.MarkNotificationReadRequest;
 import com.manilalinkup.app.models.NotificationItemModel;
 import com.manilalinkup.app.models.NotificationsModel;
 import com.manilalinkup.app.utilities.ApiService;
@@ -81,7 +83,6 @@ public class EmployerNotificationsActivity extends AppCompatActivity {
             }
             return true;
         });
-
     }
 
     @Override
@@ -98,7 +99,7 @@ public class EmployerNotificationsActivity extends AppCompatActivity {
 
         user.getIdToken(true).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
-            api.getNotifications().enqueue(new Callback<ApiResponse<List<NotificationItemModel>>>() {
+            api.getNotifications(new GetNotificationsRequest()).enqueue(new Callback<ApiResponse<List<NotificationItemModel>>>() {
                 @Override
                 public void onResponse(Call<ApiResponse<List<NotificationItemModel>>> call,
                                        Response<ApiResponse<List<NotificationItemModel>>> response) {
@@ -126,7 +127,7 @@ public class EmployerNotificationsActivity extends AppCompatActivity {
 
     private void markAllRead(String token) {
         ApiService api = RetrofitClient.getClient(token).create(ApiService.class);
-        api.markAllNotificationsRead().enqueue(new Callback<okhttp3.ResponseBody>() {
+        api.markNotificationsRead(new MarkNotificationReadRequest(true)).enqueue(new Callback<okhttp3.ResponseBody>() {
             @Override public void onResponse(Call<okhttp3.ResponseBody> call, Response<okhttp3.ResponseBody> response) {}
             @Override public void onFailure(Call<okhttp3.ResponseBody> call, Throwable t) {}
         });
@@ -136,21 +137,19 @@ public class EmployerNotificationsActivity extends AppCompatActivity {
         if (type == null) return;
         Intent intent;
         switch (type) {
-            case NotificationUtils.TYPE_CHAT_MESSAGE:
-                intent = new Intent(this, ChatEmployerActivity.class);
-                break;
             case NotificationUtils.TYPE_NEW_APPLICANT:
                 intent = new Intent(this, EmployerListOfApplicants.class);
                 break;
             case NotificationUtils.TYPE_RATING_RECEIVED:
-            case NotificationUtils.TYPE_ID_APPROVED:
+            case NotificationUtils.TYPE_VERIFIED:
                 intent = new Intent(this, EmployerProfileActivity.class);
                 break;
-            case NotificationUtils.TYPE_JOB_EXPIRED:
-                intent = new Intent(this, EmployerDashboard.class);
+            case NotificationUtils.TYPE_VERIFICATION_REJECTED:
+                intent = new Intent(this, EmployerBusinessVerificationActivity.class);
                 break;
-            case NotificationUtils.TYPE_PROFILE_INCOMPLETE:
-                intent = new Intent(this, EditEmployerProfileActivity.class);
+            case NotificationUtils.TYPE_JOB_EXPIRING:
+            case NotificationUtils.TYPE_JOB_COMPLETED:
+                intent = new Intent(this, EmployerDashboard.class);
                 break;
             default:
                 return;

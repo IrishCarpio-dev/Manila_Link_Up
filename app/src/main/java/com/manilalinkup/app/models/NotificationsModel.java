@@ -7,11 +7,10 @@ public class NotificationsModel {
     private final String notifTimeStamp;
     private final boolean isRead;
     private final String type;
-    private final int notifId;
+    private final String notifId;
 
-    // Full constructor used by NotificationUtils
     public NotificationsModel(int imageType, String notifTitle, String descriptionNotif,
-                              String notifTimeStamp, boolean isRead, String type, int notifId) {
+                              String notifTimeStamp, boolean isRead, String type, String notifId) {
         this.imageType = imageType;
         this.notifTitle = notifTitle;
         this.descriptionNotif = descriptionNotif;
@@ -21,16 +20,15 @@ public class NotificationsModel {
         this.notifId = notifId;
     }
 
-    // Backwards-compatible constructor (treated as already-read, no type)
     public NotificationsModel(int imageType, String notifTitle, String descriptionNotif, String notifTimeStamp) {
-        this(imageType, notifTitle, descriptionNotif, notifTimeStamp, true, null, -1);
+        this(imageType, notifTitle, descriptionNotif, notifTimeStamp, true, null, null);
     }
 
-    public int getType()        { return imageType; }
-    public String getTitle()     { return notifTitle; }
+    public int getType()           { return imageType; }
+    public String getTitle()       { return notifTitle; }
     public String getDescription() { return descriptionNotif; }
-    public String getTimestamp() { return notifTimeStamp; }
-    public boolean isRead()      { return isRead; }
-    public String getNotifType() { return type; }
-    public int getNotifId()      { return notifId; }
+    public String getTimestamp()   { return notifTimeStamp; }
+    public boolean isRead()        { return isRead; }
+    public String getNotifType()   { return type; }
+    public String getNotifId()     { return notifId; }
 }
