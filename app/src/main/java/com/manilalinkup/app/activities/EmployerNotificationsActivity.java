@@ -1,22 +1,23 @@
 package com.manilalinkup.app.activities;
 
-import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.manilalinkup.app.adapters.NotificationsAdapter;
+import com.manilalinkup.app.utilities.EmployerNavHelper;
 import com.manilalinkup.app.models.NotificationsModel;
 import com.manilalinkup.app.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployerNotificationsActivity extends AppCompatActivity {
+public class EmployerNotificationsActivity extends BaseActivity {
 
     private RecyclerView recyclerViewNotifications;
     private NotificationsAdapter adapterNotif;
@@ -29,6 +30,11 @@ public class EmployerNotificationsActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_employer_notifications);
 
+        TextView headerTitle = findViewById(R.id.textview_greeting_employer);
+        headerTitle.setText("Notifications");
+        headerTitle.setTextSize(21);
+        headerTitle.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+
         recyclerViewNotifications = findViewById(R.id.recycler_view_employer_own_posts);
         recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(this));
 
@@ -39,27 +45,7 @@ public class EmployerNotificationsActivity extends AppCompatActivity {
         recyclerViewNotifications.setAdapter(adapterNotif);
 
         bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_notifications);
-        bottomNavigationViewEmployer.setOnItemSelectedListener(menuItem ->  {
-            if(menuItem.getItemId() == R.id.nav_home){
-                startActivity(new Intent(EmployerNotificationsActivity.this, EmployerDashboard.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }else if(menuItem.getItemId() == R.id.nav_add_job){
-                startActivity(new Intent(EmployerNotificationsActivity.this, EmployerAddJobActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }else if(menuItem.getItemId() == R.id.nav_chat) {
-                startActivity(new Intent(EmployerNotificationsActivity.this, ChatEmployerActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }else if(menuItem.getItemId() == R.id.nav_profile) {
-                startActivity(new Intent(EmployerNotificationsActivity.this, EmployerProfileActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }
-            return true;
-        });
+        EmployerNavHelper.setup(this, bottomNavigationViewEmployer, R.id.nav_notifications);
 
 
     }

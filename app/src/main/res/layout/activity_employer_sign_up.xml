@@ -11,11 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/design_default_color_background" />
+        <include layout="@layout/layout_toolbar" />
 
         <ImageView
             android:id="@+id/image_view_logo"
@@ -33,7 +29,7 @@
             android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:text="Sign Up"
-            android:textColor="#212121"
+            android:textColor="@color/dark_text"
             android:textSize="30sp" />
 
         <TextView
@@ -44,7 +40,7 @@
             android:fontFamily="sans-serif"
             android:gravity="center"
             android:text="Find the skill you need where you live."
-            android:textColor="#212121"
+            android:textColor="@color/dark_text"
             android:textSize="15sp" />
 
         <TextView
@@ -56,7 +52,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="sans-serif-black"
             android:text="Full Name/Business Name"
-            android:textColor="#212121"
+            android:textColor="@color/dark_text"
             android:textSize="16sp" />
 
         <TextView
@@ -81,7 +77,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="30dp"
             android:hint="Enter your name/business Name"
-            app:boxBackgroundColor="#F5F5F5"
+            app:boxBackgroundColor="@color/light_surface"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
@@ -104,7 +100,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-black"
             android:text="Email/Business Email"
-            android:textColor="#212121"
+            android:textColor="@color/dark_text"
             android:textSize="16sp" />
 
 
@@ -118,7 +114,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="30dp"
             android:hint="Enter your email or business email"
-            app:boxBackgroundColor="#F5F5F5"
+            app:boxBackgroundColor="@color/light_surface"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
@@ -141,7 +137,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-black"
             android:text="Mobile Number"
-            android:textColor="#212121"
+            android:textColor="@color/dark_text"
             android:textSize="16sp" />
 
 
@@ -155,7 +151,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="30dp"
             android:hint="Enter your mobile/ company number"
-            app:boxBackgroundColor="#F5F5F5"
+            app:boxBackgroundColor="@color/light_surface"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
@@ -183,7 +179,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-black"
             android:text="Create Password"
-            android:textColor="#212121"
+            android:textColor="@color/dark_text"
             android:textSize="16sp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -196,7 +192,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="30dp"
             android:hint="Create your Password"
-            app:boxBackgroundColor="#F5F5F5"
+            app:boxBackgroundColor="@color/light_surface"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
@@ -232,8 +228,8 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="30dp"
             android:hint="Confirm your Password"
-            android:textColor="#212121"
-            app:boxBackgroundColor="#F5F5F5"
+            android:textColor="@color/dark_text"
+            app:boxBackgroundColor="@color/light_surface"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
@@ -258,7 +254,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="sans-serif-medium"
             android:text="A verification link will be sent through your email"
-            android:textColor="#212121" />
+            android:textColor="@color/dark_text" />
 
 
         <com.google.android.material.button.MaterialButton

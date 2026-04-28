@@ -12,17 +12,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.view.View;
 import android.widget.Toast;
-import android.app.ProgressDialog;
 
 import com.bumptech.glide.Glide;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -46,8 +43,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditEmployerProfileActivity extends AppCompatActivity {
-    MaterialToolbar toolbar;
+public class EditEmployerProfileActivity extends BaseActivity {
     private EditText locationInput;
     private ImageView profileImage;
     private ImageView clearanceImage;
@@ -58,7 +54,6 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
     private Uri validIdUri;
     private ApiService apiService;
     private MaterialButton saveBtn;
-    private ProgressDialog progressDialog;
     private ImageUploadSelection selectedImageOption;
     private Button uploadClearanceButton;
     private Button replaceClearanceButton;
@@ -84,17 +79,8 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
         replaceIdButton = findViewById(R.id.btnReplaceID);
         etBirthDate = findViewById(R.id.etDOB);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+        setupToolbar(R.id.toolbar);
 
-        progressDialog = new android.app.ProgressDialog(this);
-        progressDialog.setMessage("Setting up profile...");
-        progressDialog.setCancelable(false);
 
         // Use .attachAddressAutocomplete() for complete address autocomplete
         AddressAutocompleteHelper.attachDistrictAutocomplete(locationInput);
@@ -154,11 +140,11 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
         });
 
         saveBtn.setOnClickListener(v -> {
-            progressDialog.show();
+            showProgress("Setting up profile...");
 
             FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
             FirebaseUser user = mAuth.getCurrentUser();
-            user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+            user.getIdToken(false).addOnCompleteListener(tokenTask -> {
                 if (tokenTask.isSuccessful()) {
                     String idToken = tokenTask.getResult().getToken();
                     setupProfile(idToken);
@@ -290,13 +276,13 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
         MultipartBody.Part validId = null;
 
         if (clearanceUri == null) {
-            progressDialog.dismiss();
+            hideProgress();
             Toast.makeText(this, "Please upload Clearance image", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (validIdUri == null) {
-            progressDialog.dismiss();
+            hideProgress();
             Toast.makeText(this, "Please upload valid ID image", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -306,13 +292,13 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
         validId = MultipartRequestBodyHelper.prepareImagePart(EditEmployerProfileActivity.this, validIdUri, "validId");
 
         if (clearance == null) {
-            progressDialog.dismiss();
+            hideProgress();
             Toast.makeText(this, "Error processing Clearance image", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (validId == null) {
-            progressDialog.dismiss();
+            hideProgress();
             Toast.makeText(this, "Error processing valid ID image", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -349,7 +335,8 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
         ).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progressDialog.dismiss();
+                hideProgress();
+                if (isDestroyed()) return;
                 if (response.isSuccessful()) {
                     startActivity(new Intent(EditEmployerProfileActivity.this, EmployerDashboard.class));
                     finish();
@@ -360,7 +347,7 @@ public class EditEmployerProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                progressDialog.dismiss();
+                hideProgress();
                 ErrorUtils.showThrowableError(EditEmployerProfileActivity.this, t);
             }
         });

@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
@@ -17,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.utilities.ErrorUtils;
 
-public class ResetPasswordActivity extends AppCompatActivity {
+public class ResetPasswordActivity extends BaseActivity {
 
     private FirebaseAuth mAuth;
     private TextInputLayout newPasswordLayout;
@@ -26,7 +25,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
     private LinearLayout layoutForm;
     private LinearLayout layoutError;
     private String oobCode;
-    private android.app.ProgressDialog progressDialog;
 
     private static final String PASSWORD_PATTERN = "^(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
 
@@ -49,9 +47,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
         MaterialButton btnReset = findViewById(R.id.btn_reset_password);
         MaterialButton btnRequestNew = findViewById(R.id.btn_request_new_link);
 
-        progressDialog = new android.app.ProgressDialog(this);
-        progressDialog.setMessage("Updating password...");
-        progressDialog.setCancelable(false);
 
         btnReset.setOnClickListener(v -> attemptPasswordReset());
         btnRequestNew.setOnClickListener(v -> {
@@ -126,11 +121,11 @@ public class ResetPasswordActivity extends AppCompatActivity {
             return;
         }
 
-        progressDialog.show();
+        showProgress("Updating password...");
 
         mAuth.confirmPasswordReset(oobCode, newPassword)
                 .addOnCompleteListener(task -> {
-                    progressDialog.dismiss();
+                    hideProgress();
                     if (task.isSuccessful()) {
                         navigateToLogin();
                     } else {

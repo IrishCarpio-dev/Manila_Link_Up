@@ -2,7 +2,6 @@ package com.manilalinkup.app.activities;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,11 +15,9 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,7 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditSeekerProfileActivity extends AppCompatActivity {
+public class EditSeekerProfileActivity extends BaseActivity {
     private EditText locationInput;
     private ImageView profileImage;
     private ImageView clearanceImage;
@@ -55,7 +52,6 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
     private Uri validIdUri;
     private ApiService apiService;
     private MaterialButton saveBtn;
-    private ProgressDialog progressDialog;
     private ImageUploadSelection selectedImageOption;
     private Button uploadClearanceButton;
     private Button replaceClearanceButton;
@@ -64,7 +60,6 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
     private EditText etBirthDate;
     private final Calendar aCalendar = Calendar.getInstance();
     private String formattedDateForApi = "";
-    MaterialToolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,17 +78,8 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
         etBirthDate = findViewById(R.id.etDOB);
 
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+        setupToolbar(R.id.toolbar);
 
-        progressDialog = new android.app.ProgressDialog(this);
-        progressDialog.setMessage("Setting up profile...");
-        progressDialog.setCancelable(false);
 
         // Use .attachAddressAutocomplete() for complete address autocomplete
         AddressAutocompleteHelper.attachDistrictAutocomplete(locationInput);
@@ -153,11 +139,11 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
         });
 
         saveBtn.setOnClickListener(v -> {
-            progressDialog.show();
+            showProgress("Setting up profile...");
 
             FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
             FirebaseUser user = mAuth.getCurrentUser();
-            user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+            user.getIdToken(false).addOnCompleteListener(tokenTask -> {
                 if (tokenTask.isSuccessful()) {
                     String idToken = tokenTask.getResult().getToken();
                     setupProfile(idToken);
@@ -276,26 +262,26 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
 
     private void setupProfile(String token) {
         if (formattedDateForApi.isBlank()) {
-            progressDialog.dismiss();
+            hideProgress();
             Toast.makeText(this, "Please fill Birth Date field.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (locationInput.getText().toString().isBlank()) {
-            progressDialog.dismiss();
+            hideProgress();
             Toast.makeText(this, "Please fill Location field.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (clearanceUri == null || validIdUri == null) {
-            progressDialog.dismiss();
+            hideProgress();
             Toast.makeText(this, "Please upload all required documents", Toast.LENGTH_SHORT).show();
             return;
         }
 
         String locationText = locationInput.getText().toString().trim();
         if (locationText.isEmpty()) {
-            progressDialog.dismiss();
+            hideProgress();
             Toast.makeText(this, "Please fill Location field.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -334,7 +320,8 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
         ).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progressDialog.dismiss();
+                hideProgress();
+                if (isDestroyed()) return;
                 if (response.isSuccessful()) {
                     Toast.makeText(EditSeekerProfileActivity.this, "Profile Setup Complete!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(EditSeekerProfileActivity.this, SeekerJobPreferences.class);
@@ -348,7 +335,7 @@ public class EditSeekerProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                progressDialog.dismiss();
+                hideProgress();
                 ErrorUtils.showThrowableError(EditSeekerProfileActivity.this, t);
             }
         });

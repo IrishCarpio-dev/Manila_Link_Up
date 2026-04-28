@@ -7,13 +7,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.manilalinkup.app.R;
 
-public class GetStarted extends AppCompatActivity {
+public class GetStarted extends BaseActivity {
 
     CardView jobSeekerCard;
     CardView employerCard;

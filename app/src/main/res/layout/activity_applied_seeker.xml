@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
             android:text="My Applications"
-            android:textColor="#212121"
+            android:textColor="@color/dark_text"
             android:textSize="18sp" />
     </LinearLayout>
 
@@ -88,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="No applications yet"
-        android:textColor="#212121"
+        android:textColor="@color/dark_text"
         android:textSize="18sp"
         android:fontFamily="sans-serif-black"/>
 

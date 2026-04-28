@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -18,31 +18,31 @@
         android:padding="16dp">
 
         <ImageView
-            android:id="@+id/item_card_employer_profile_picture"
+            android:id="@+id/item_card_profile_picture"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:scaleType="fitXY"
-            tools:src="@drawable/mikaemployer" />
+            tools:src="@drawable/ic_person_placeholder" />
 
         <TextView
-            android:id="@+id/item_card_employer_name"
+            android:id="@+id/item_card_contact_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="2dp"
-            android:layout_toEndOf="@id/item_card_employer_profile_picture"
+            android:layout_toEndOf="@id/item_card_profile_picture"
             android:fontFamily="sans-serif-medium"
-            android:textColor="#212121"
+            android:textColor="@color/dark_text"
             android:textSize="18sp"
-            tools:text="Employer Name goes here" />
+            tools:text="Contact Name" />
 
         <TextView
             android:id="@+id/text_view_job_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/item_card_employer_name"
+            android:layout_below="@id/item_card_contact_name"
             android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/item_card_employer_profile_picture"
+            android:layout_toEndOf="@id/item_card_profile_picture"
             android:fontFamily="sans-serif"
             android:textColor="@color/manila_blue"
             android:textSize="11sp"
@@ -54,9 +54,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/text_view_job_title"
             android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/item_card_employer_profile_picture"
+            android:layout_toEndOf="@id/item_card_profile_picture"
             android:fontFamily="sans-serif"
-            android:textColor="#616161"
+            android:textColor="@color/secondary_text"
             android:textSize="12sp"
             tools:text="Message details goes here" />
 
@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:textColor="#616161"
+            android:textColor="@color/secondary_text"
             tools:text="11:11pm" />
 
         <TextView

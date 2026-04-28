@@ -19,67 +19,9 @@
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu_icons" />
 
-    <androidx.cardview.widget.CardView
+    <include
         android:id="@+id/card_view_dashboard_top_seeker"
-        android:layout_width="match_parent"
-        android:layout_height="115dp"
-        app:cardBackgroundColor="@color/manila_blue">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="145dp"
-                android:layout_height="145dp"
-                android:layout_gravity="end|bottom"
-                android:alpha="0.25"
-                android:src="@drawable/bgheartadjustment" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textview_greeting_seeker"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Good morning, "
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/textview_greeting_name_seeker"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Seekername"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/search_bar_background"
-                    android:drawableStart="@drawable/search_icon"
-                    android:drawablePadding="10dp"
-                    android:hint="Find your next opportunity"
-                    android:padding="10dp" />
-
-            </LinearLayout>
-
-        </FrameLayout>
-
-    </androidx.cardview.widget.CardView>
+        layout="@layout/layout_dashboard_header" />
 
     <TextView
         android:id="@+id/text_view_recommendations"
@@ -89,7 +31,7 @@
         android:layout_margin="8dp"
         android:fontFamily="sans-serif-medium"
         android:text="Recommendations"
-        android:textColor="#212121"
+        android:textColor="@color/dark_text"
         android:textSize="18sp" />
 
     <ProgressBar

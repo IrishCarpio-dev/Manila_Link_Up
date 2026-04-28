@@ -8,7 +8,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -18,12 +17,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.utilities.LogoutHelper;
 
-public class SeekerSettingsActivity extends AppCompatActivity {
+public class SeekerSettingsActivity extends BaseActivity {
 
     private static final String TAG = "SeekerSettingsActivity";
 
     private TextView btnEditProfile, btnVerification, btnPrivacy;
     private TextView btnChangePassword, tvUserEmail;
+    private android.widget.ImageButton btnBack;
     private Switch switchNotifications;
     private TextView btnHelpCenter, btnTerms, btnAbout;
     private Button logoutButton;
@@ -54,6 +54,8 @@ public class SeekerSettingsActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
+        btnBack = findViewById(R.id.btn_back);
+
         // Account & Security
         tvUserEmail = findViewById(R.id.tv_user_email);
         btnEditProfile = findViewById(R.id.btn_edit_profile);
@@ -88,6 +90,7 @@ public class SeekerSettingsActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
+        btnBack.setOnClickListener(v -> finish());
 
         btnEditProfile.setOnClickListener(v -> {
             showSensitiveActionWarning(

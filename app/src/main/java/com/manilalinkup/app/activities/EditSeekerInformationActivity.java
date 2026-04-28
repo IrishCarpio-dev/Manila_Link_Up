@@ -3,11 +3,10 @@ package com.manilalinkup.app.activities;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.manilalinkup.app.R;
 
-public class EditSeekerInformationActivity extends AppCompatActivity {
+public class EditSeekerInformationActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -18,41 +18,9 @@
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_employer_icons" />
 
-    <androidx.cardview.widget.CardView
+    <include
         android:id="@+id/card_view_dashboard_top_employer"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        app:cardBackgroundColor="@color/manila_blue">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="145dp"
-                android:layout_height="145dp"
-                android:layout_gravity="end|bottom"
-                android:alpha="0.25"
-                android:src="@drawable/bgheartadjustment" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="24dp">
-
-                <TextView
-                    android:id="@+id/textview_greeting_employer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="Notifications"
-                    android:textColor="@color/white"
-                    android:textSize="21sp" />
-
-            </LinearLayout>
-        </FrameLayout>
-    </androidx.cardview.widget.CardView>
+        layout="@layout/layout_dashboard_header" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_employer_own_posts"

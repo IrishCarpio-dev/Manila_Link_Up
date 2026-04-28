@@ -45,7 +45,7 @@ public class EmployerChatTabAdapter extends RecyclerView.Adapter<EmployerChatTab
     @Override
     public EmployerChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_messages_employer_card, parent, false);
+                .inflate(R.layout.item_message_card, parent, false);
         return new EmployerChatViewHolder(view);
     }
 
@@ -55,8 +55,8 @@ public class EmployerChatTabAdapter extends RecyclerView.Adapter<EmployerChatTab
     }
 
     static class EmployerChatViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView seekerProfilePicture;
-        private final TextView seekerName;
+        private final ImageView contactProfilePicture;
+        private final TextView contactName;
         private final TextView jobTitle;
         private final TextView messagePreview;
         private final TextView messageTimeStamp;
@@ -64,8 +64,8 @@ public class EmployerChatTabAdapter extends RecyclerView.Adapter<EmployerChatTab
 
         EmployerChatViewHolder(@NonNull View itemView) {
             super(itemView);
-            seekerProfilePicture = itemView.findViewById(R.id.item_card_seeker_profile_picture);
-            seekerName           = itemView.findViewById(R.id.item_card_seeker_name);
+            contactProfilePicture = itemView.findViewById(R.id.item_card_profile_picture);
+            contactName           = itemView.findViewById(R.id.item_card_contact_name);
             jobTitle             = itemView.findViewById(R.id.text_view_job_title);
             messagePreview       = itemView.findViewById(R.id.item_card_message_preview);
             messageTimeStamp     = itemView.findViewById(R.id.text_view_chat_timestamp);
@@ -79,15 +79,15 @@ public class EmployerChatTabAdapter extends RecyclerView.Adapter<EmployerChatTab
             ChatListItemModel.JobSummaryModel job = chat.getJob();
 
             String name = counterpart != null ? counterpart.getName() : "Unknown";
-            seekerName.setText(name);
+            contactName.setText(name);
             if (jobTitle != null) {
                 jobTitle.setText(job != null && job.getTitle() != null ? job.getTitle() : "");
             }
             messagePreview.setText(chat.getLastMessage() != null ? chat.getLastMessage() : "");
             messageTimeStamp.setText(DateUtils.formatChatTimestamp(chat.getLastMessageAt()));
 
+            int unread = chat.getUnreadCount();
             if (unreadBadge != null) {
-                int unread = chat.getUnreadCount();
                 if (unread > 0) {
                     unreadBadge.setVisibility(View.VISIBLE);
                     unreadBadge.setText(String.valueOf(unread));
@@ -95,15 +95,18 @@ public class EmployerChatTabAdapter extends RecyclerView.Adapter<EmployerChatTab
                     unreadBadge.setVisibility(View.GONE);
                 }
             }
+            messagePreview.setTypeface(null, unread > 0
+                    ? android.graphics.Typeface.BOLD
+                    : android.graphics.Typeface.NORMAL);
 
             if (counterpart != null && counterpart.getProfilePhotoUrl() != null) {
                 Glide.with(itemView.getContext())
                         .load(counterpart.getProfilePhotoUrl())
                         .placeholder(R.drawable.ic_person_placeholder)
                         .circleCrop()
-                        .into(seekerProfilePicture);
+                        .into(contactProfilePicture);
             } else {
-                seekerProfilePicture.setImageResource(R.drawable.ic_person_placeholder);
+                contactProfilePicture.setImageResource(R.drawable.ic_person_placeholder);
             }
 
             itemView.setOnClickListener(v -> { if (clickListener != null) clickListener.onChatClick(chat); });

@@ -1,7 +1,7 @@
 package com.manilalinkup.app.activities;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -10,11 +10,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -40,11 +38,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SeekerJobPostActivity extends AppCompatActivity {
+public class SeekerJobPostActivity extends BaseActivity {
 
-    private MaterialToolbar toolbar;
     private MaterialButton btnApply;
-    private ProgressDialog progressDialog;
 
     private String jobId;
 
@@ -67,14 +63,7 @@ public class SeekerJobPostActivity extends AppCompatActivity {
         ArrayList<String> tagIds = getIntent().getStringArrayListExtra("TAG_IDS");
         boolean hasApplied       = getIntent().getBooleanExtra("HAS_APPLIED", false);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-        toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+        setupToolbar(R.id.toolbar);
 
         TextView tvToolbarEmployerName = findViewById(R.id.text_view_employer_name_job_post);
         TextView tvJobTitle            = findViewById(R.id.text_view_employer_job_title_placeholder);
@@ -97,7 +86,7 @@ public class SeekerJobPostActivity extends AppCompatActivity {
         if (howLongPosted != null) tvHowLongPosted.setText(howLongPosted);
 
         if (salary > 0) {
-            tvSalary.setText(String.format(Locale.US, "₱%.0f/day", salary));
+            tvSalary.setText(String.format(Locale.US, "â‚±%.0f/day", salary));
         } else {
             tvSalary.setVisibility(View.GONE);
             findViewById(R.id.money_logo).setVisibility(View.GONE);
@@ -119,8 +108,6 @@ public class SeekerJobPostActivity extends AppCompatActivity {
 
         populateTags(chipGroupTags, tagIds);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(false);
 
         btnApply = findViewById(R.id.btn_apply);
         if (hasApplied) {
@@ -147,16 +134,15 @@ public class SeekerJobPostActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        progressDialog.setMessage("Submitting application...");
-        progressDialog.show();
+        showProgress("Submitting application...");
 
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.applyJob(new ApplyJobRequest(jobId))
                     .enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    progressDialog.dismiss();
+                    hideProgress();
                     if (response.isSuccessful()) {
                         Toast.makeText(SeekerJobPostActivity.this, "Application submitted!", Toast.LENGTH_SHORT).show();
                         btnApply.setEnabled(false);
@@ -173,7 +159,7 @@ public class SeekerJobPostActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    progressDialog.dismiss();
+                    hideProgress();
                     ErrorUtils.showThrowableError(SeekerJobPostActivity.this, t);
                 }
             });
@@ -209,8 +195,8 @@ public class SeekerJobPostActivity extends AppCompatActivity {
 
     private String formatDate(String isoDate) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US);
-            Date date = sdf.parse(isoDate);
+            String datePart = isoDate.split("T")[0];
+            Date date = new SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(datePart);
             return new SimpleDateFormat("MMM d, yyyy", Locale.US).format(date);
         } catch (Exception e) {
             return isoDate;

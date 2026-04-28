@@ -4,17 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4F7F9"
+    android:background="@color/light_bg"
     android:fitsSystemWindows="true">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/manila_blue"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:navigationIcon="?attr/homeAsUpIndicator"
-        app:navigationIconTint="@color/white"/>
+    <include layout="@layout/layout_toolbar" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_view_type_message"
@@ -33,7 +26,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="@dimen/padding_standard"
             android:paddingVertical="4dp">
 
             <EditText
@@ -44,8 +37,8 @@
                 android:background="@null"
                 android:hint="Type a message..."
                 android:textColorHint="#9E9E9E"
-                android:minHeight="48dp"
-                android:textColor="#212121"
+                android:minHeight="@dimen/button_height"
+                android:textColor="@color/dark_text"
                 android:textSize="15sp" />
 
             <ImageButton
@@ -64,7 +57,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
         android:layout_above="@id/card_view_type_message"
-        android:background="#F4F7F9"
+        android:background="@color/light_bg"
         android:clipToPadding="false"
-        android:padding="8dp"/>
+        android:padding="@dimen/padding_small"/>
 </RelativeLayout>

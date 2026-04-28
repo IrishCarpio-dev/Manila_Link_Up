@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +23,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     private FirebaseAuth mAuth;
 
@@ -45,7 +44,7 @@ public class SplashActivity extends AppCompatActivity {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         } else {
-            user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+            user.getIdToken(false).addOnCompleteListener(tokenTask -> {
                 if (tokenTask.isSuccessful()) {
                     String idToken = tokenTask.getResult().getToken();
                     checkUserRole(idToken);
@@ -60,6 +59,7 @@ public class SplashActivity extends AppCompatActivity {
         apiService.getUserProfile().enqueue(new Callback<ApiResponse<UserProfileModel>>() {
             @Override
             public void onResponse(Call<ApiResponse<UserProfileModel>> call, Response<ApiResponse<UserProfileModel>> response) {
+                if (isDestroyed()) return;
                 if (response.isSuccessful()) {
                     SessionCache.getInstance().setUserProfile(response.body().getData());
                     SessionCache.getInstance().refreshServiceTags(token, new SessionCache.ServiceTagsCallback() {
@@ -104,6 +104,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ApiResponse<UserProfileModel>> call, Throwable t) {
+                if (isDestroyed()) return;
                 mAuth.signOut();
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();

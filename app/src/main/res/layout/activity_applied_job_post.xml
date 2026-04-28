@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4F7F9"
+    android:background="@color/light_bg"
     android:fillViewport="true"
     android:fitsSystemWindows="true">
 
@@ -24,7 +24,7 @@
             android:fontFamily="sans-serif-medium"
             android:text="Employer Name"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_body" />
 
     </com.google.android.material.appbar.MaterialToolbar>
 
@@ -44,12 +44,12 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_marginHorizontal="16dp"
+            android:layout_marginHorizontal="@dimen/padding_standard"
             android:layout_marginBottom="12dp"
             android:text="Cancel Application"
             android:textAllCaps="false"
             android:textColor="#D32F2F"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_body"
             android:visibility="gone"
             app:cornerRadius="12dp"
             app:strokeColor="#D32F2F"
@@ -60,13 +60,13 @@
             android:id="@+id/btn_mark_complete"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_marginHorizontal="16dp"
+            android:layout_marginHorizontal="@dimen/padding_standard"
             android:layout_marginBottom="12dp"
             android:backgroundTint="@color/manila_blue"
             android:text="Mark Job Complete"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_body"
             app:cornerRadius="12dp"
             android:visibility="gone" />
 
@@ -75,11 +75,11 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_marginHorizontal="16dp"
+            android:layout_marginHorizontal="@dimen/padding_standard"
             android:layout_marginBottom="12dp"
             android:text="Rate Employer"
             android:textAllCaps="false"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_body"
             app:cornerRadius="12dp"
             android:visibility="gone" />
 
@@ -124,8 +124,8 @@
                         android:layout_height="50dp"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginStart="@dimen/padding_large"
+                        android:layout_marginBottom="@dimen/padding_standard"
                         app:cardCornerRadius="25dp"
                         app:cardElevation="8dp"
                         app:cardPreventCornerOverlap="false">
@@ -146,7 +146,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
                         android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="@dimen/padding_standard"
                         android:contentDescription="Report"
                         android:scaleType="centerInside"
                         android:src="@drawable/report_caution_logo" />
@@ -165,16 +165,16 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#F4F7F9"
-                    android:padding="16dp">
+                    android:background="@color/light_bg"
+                    android:padding="@dimen/padding_standard">
 
                     <TextView
                         android:id="@+id/text_view_employer_job_title_placeholder"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-black"
-                        android:textColor="#212121"
-                        android:textSize="18sp"
+                        android:textColor="@color/dark_text"
+                        android:textSize="@dimen/text_large"
                         android:text="Employer Job Title" />
 
                     <TextView
@@ -183,12 +183,12 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentTop="true"
-                        android:paddingHorizontal="8dp"
+                        android:paddingHorizontal="@dimen/padding_small"
                         android:paddingVertical="4dp"
                         android:text="UNDER REVIEW"
                         android:textSize="10sp"
                         android:textStyle="bold"
-                        android:textColor="#212121"
+                        android:textColor="@color/dark_text"
                         android:background="@drawable/bg_status_pending" />
 
                     <TextView
@@ -197,86 +197,79 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/text_view_employer_job_title_placeholder"
                         android:fontFamily="sans-serif"
-                        android:textColor="#616161"
+                        android:textColor="@color/secondary_text"
                         android:textSize="12sp"
                         android:text="Employer Name" />
 
-                    <RelativeLayout
-                        android:id="@+id/relative_layout_details_job_post"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:id="@+id/location_logo"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_below="@id/text_view_employer_name_placeholder"
+                        android:layout_alignTop="@+id/text_view_location_placeholder"
+                        android:layout_marginTop="@dimen/padding_standard"
+                        android:src="@drawable/location3" />
+
+                    <TextView
+                        android:id="@+id/text_view_location_placeholder"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/text_view_employer_name_placeholder"
-                        android:background="#F4F7F9"
-                        android:padding="16dp">
+                        android:layout_marginStart="@dimen/padding_small"
+                        android:layout_marginTop="@dimen/padding_standard"
+                        android:layout_toEndOf="@id/location_logo"
+                        android:fontFamily="sans-serif"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="@dimen/text_small"
+                        android:text="Binondo, Manila" />
 
-                        <ImageView
-                            android:id="@+id/location_logo"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_alignTop="@+id/text_view_location_placeholder"
-                            android:layout_marginTop="3dp"
-                            android:src="@drawable/location3" />
+                    <ImageView
+                        android:id="@+id/money_logo"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignTop="@+id/text_view_salary_placeholder"
+                        android:layout_marginTop="3dp"
+                        android:src="@drawable/moneybill" />
 
-                        <TextView
-                            android:id="@+id/text_view_location_placeholder"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_toEndOf="@id/location_logo"
-                            android:fontFamily="sans-serif"
-                            android:textColor="#616161"
-                            android:textSize="14sp"
-                            android:text="Binondo, Manila" />
+                    <TextView
+                        android:id="@+id/text_view_salary_placeholder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_view_location_placeholder"
+                        android:layout_marginStart="@dimen/padding_small"
+                        android:layout_marginTop="4dp"
+                        android:layout_toEndOf="@id/money_logo"
+                        android:fontFamily="sans-serif"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="@dimen/text_small"
+                        android:text="P700/day" />
 
-                        <ImageView
-                            android:id="@+id/money_logo"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_alignTop="@+id/text_view_salary_placeholder"
-                            android:layout_marginTop="3dp"
-                            android:src="@drawable/moneybill" />
+                    <ImageView
+                        android:id="@+id/calendar_logo"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignTop="@id/text_view_calendar_placeholder"
+                        android:layout_marginTop="3dp"
+                        android:src="@drawable/bxscalendarcheck" />
 
-                        <TextView
-                            android:id="@+id/text_view_salary_placeholder"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/text_view_location_placeholder"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_toEndOf="@id/money_logo"
-                            android:fontFamily="sans-serif"
-                            android:textColor="#616161"
-                            android:textSize="14sp"
-                            android:text="P700/day" />
-
-                        <ImageView
-                            android:id="@+id/calendar_logo"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_alignTop="@id/text_view_calendar_placeholder"
-                            android:layout_marginTop="3dp"
-                            android:src="@drawable/bxscalendarcheck" />
-
-                        <TextView
-                            android:id="@+id/text_view_calendar_placeholder"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/text_view_salary_placeholder"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_toEndOf="@id/calendar_logo"
-                            android:fontFamily="sans-serif"
-                            android:textColor="#616161"
-                            android:textSize="14sp"
-                            android:text="Apr. 4-8, 2026" />
-
-                    </RelativeLayout>
+                    <TextView
+                        android:id="@+id/text_view_calendar_placeholder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_view_salary_placeholder"
+                        android:layout_marginStart="@dimen/padding_small"
+                        android:layout_marginTop="4dp"
+                        android:layout_toEndOf="@id/calendar_logo"
+                        android:fontFamily="sans-serif"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="@dimen/text_small"
+                        android:text="Apr. 4-8, 2026" />
 
                     <TextView
                         android:id="@+id/applied_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/relative_layout_details_job_post"
+                        android:layout_below="@id/text_view_calendar_placeholder"
                         android:text="Applied: Apr 08, 2026"
                         android:textSize="12sp"
                         android:textColor="#9E9E9E" />
@@ -289,8 +282,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/card_view_employer_info"
-                android:layout_margin="16dp"
-                android:textColor="#616161"
+                android:layout_margin="@dimen/padding_standard"
+                android:textColor="@color/secondary_text"
                 android:text="Job Description will go here" />
         </RelativeLayout>
 
