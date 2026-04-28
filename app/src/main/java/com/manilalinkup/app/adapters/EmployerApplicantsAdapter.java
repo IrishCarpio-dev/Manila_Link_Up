@@ -143,7 +143,7 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
 
             // Show chat button when chat exists (status >= 2)
             if (btnChat != null) {
-                btnChat.setVisibility((status >= 2 && applicant.getChatId() != null) ? View.VISIBLE : View.GONE);
+                btnChat.setVisibility(((status == 2 || status == 5) && applicant.getChatId() != null) ? View.VISIBLE : View.GONE);
                 btnChat.setOnClickListener(v -> { if (listener != null) listener.onOpenChat(applicant); });
             }
 

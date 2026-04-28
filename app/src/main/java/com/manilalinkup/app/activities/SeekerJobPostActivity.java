@@ -164,6 +164,9 @@ public class SeekerJobPostActivity extends AppCompatActivity {
                         btnApply.setText("Applied");
                         btnApply.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFBDBDBD));
                         btnApply.setTextColor(0xFF757575);
+                        Intent result = new Intent();
+                        result.putExtra("JOB_ID", jobId);
+                        setResult(RESULT_OK, result);
                         notifyEmployer(api);
                     } else {
                         ErrorUtils.showErrorMessage(SeekerJobPostActivity.this, response.errorBody());

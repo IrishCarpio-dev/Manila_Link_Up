@@ -55,11 +55,17 @@ public class EmployerViewJobPost extends AppCompatActivity {
 
     private String jobId;
     private String jobTitle;
+    private String description;
+    private String location;
+    private String duration;
+    private double salary;
+    private ArrayList<String> tagIds;
     private String applicationId;
     private String seekerName;
     private int currentStatus;
     private boolean employerHasCompleted;
     private boolean isOwner;
+    private boolean isArchived;
 
     private ProgressDialog progressDialog;
 
@@ -75,17 +81,18 @@ public class EmployerViewJobPost extends AppCompatActivity {
         currentStatus        = getIntent().getIntExtra("STATUS", 1);
         employerHasCompleted = getIntent().getBooleanExtra("EMPLOYER_HAS_COMPLETED", false);
         isOwner              = getIntent().getBooleanExtra("IS_OWNER", false);
+        isArchived           = getIntent().getBooleanExtra("IS_ARCHIVED", false);
 
         jobTitle              = getIntent().getStringExtra("JOB_TITLE");
         String employerName   = getIntent().getStringExtra("EMPLOYER_NAME");
-        String location       = getIntent().getStringExtra("LOCATION");
-        String duration       = getIntent().getStringExtra("DURATION");
-        double salary         = getIntent().getDoubleExtra("SALARY", 0.0);
-        String description    = getIntent().getStringExtra("DESCRIPTION");
+        location              = getIntent().getStringExtra("LOCATION");
+        duration              = getIntent().getStringExtra("DURATION");
+        salary                = getIntent().getDoubleExtra("SALARY", 0.0);
+        description           = getIntent().getStringExtra("DESCRIPTION");
         String expiresAt      = getIntent().getStringExtra("EXPIRES_AT");
         String howLongPosted  = getIntent().getStringExtra("HOW_LONG_POSTED");
         String employerPhoto  = getIntent().getStringExtra("EMPLOYER_PHOTO");
-        ArrayList<String> tagIds = getIntent().getStringArrayListExtra("TAG_IDS");
+        tagIds                = getIntent().getStringArrayListExtra("TAG_IDS");
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -161,6 +168,8 @@ public class EmployerViewJobPost extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         if (isOwner) {
             getMenuInflater().inflate(R.menu.menu_employer_view_job_post, menu);
+            menu.findItem(R.id.menu_archive_job).setVisible(!isArchived);
+            menu.findItem(R.id.menu_repost_job).setVisible(isArchived);
         }
         return true;
     }
@@ -174,6 +183,10 @@ public class EmployerViewJobPost extends AppCompatActivity {
                     .setPositiveButton("Archive", (d, w) -> archiveJob())
                     .setNegativeButton("Cancel", null)
                     .show();
+            return true;
+        }
+        if (item.getItemId() == R.id.menu_repost_job) {
+            repostJob();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -208,6 +221,22 @@ public class EmployerViewJobPost extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    private void repostJob() {
+        Intent intent = new Intent(this, EmployerAddJobActivity.class);
+        intent.putExtra("is_repost", true);
+        intent.putExtra("repost_title", jobTitle);
+        intent.putExtra("repost_description", description);
+        intent.putExtra("repost_location", location);
+        if (salary > 0) {
+            intent.putExtra("repost_salary", String.valueOf((long) salary));
+        }
+        intent.putExtra("repost_duration", duration);
+        if (tagIds != null) {
+            intent.putStringArrayListExtra("repost_tag_ids", tagIds);
+        }
+        startActivity(intent);
     }
 
     private void populateTags(ChipGroup chipGroup, List<String> tagIds) {

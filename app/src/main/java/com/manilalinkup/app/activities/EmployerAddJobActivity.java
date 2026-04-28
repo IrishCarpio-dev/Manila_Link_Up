@@ -109,6 +109,11 @@ public class EmployerAddJobActivity extends AppCompatActivity {
 
         postJobButton.setOnClickListener(v -> postJob());
 
+        Intent incoming = getIntent();
+        if (incoming.getBooleanExtra("is_repost", false)) {
+            prefillFromRepost(incoming);
+        }
+
         loadServiceTags();
 
         bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
@@ -133,6 +138,30 @@ public class EmployerAddJobActivity extends AppCompatActivity {
             }
             return true;
         });
+    }
+
+    private void prefillFromRepost(Intent intent) {
+        String title = intent.getStringExtra("repost_title");
+        String description = intent.getStringExtra("repost_description");
+        String location = intent.getStringExtra("repost_location");
+        String salary = intent.getStringExtra("repost_salary");
+        String duration = intent.getStringExtra("repost_duration");
+        ArrayList<String> tagIds = intent.getStringArrayListExtra("repost_tag_ids");
+
+        if (title != null) titleInput.setText(title);
+        if (description != null) descriptionInput.setText(description);
+        if (location != null) locationInput.setText(location);
+        if (salary != null) salaryInput.setText(salary);
+
+        if (duration != null) {
+            int spaceIdx = duration.indexOf(' ');
+            if (spaceIdx > 0) {
+                durationAmountInput.setText(duration.substring(0, spaceIdx));
+                rateDropdown.setText(duration.substring(spaceIdx + 1), false);
+            }
+        }
+
+        if (tagIds != null) selectedTagIds.addAll(tagIds);
     }
 
     private void loadServiceTags() {

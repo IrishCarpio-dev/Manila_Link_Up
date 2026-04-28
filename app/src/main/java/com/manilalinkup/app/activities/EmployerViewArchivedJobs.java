@@ -6,21 +6,34 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.adapters.AppliedJobsAdapter;
+import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.models.ArchiveJobModel;
+import com.manilalinkup.app.models.GetArchivedJobsRequest;
 import com.manilalinkup.app.R;
+import com.manilalinkup.app.utilities.ApiService;
+import com.manilalinkup.app.utilities.ErrorUtils;
+import com.manilalinkup.app.utilities.RetrofitClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class EmployerViewArchivedJobs extends AppCompatActivity {
 
-    MaterialToolbar toolbar;
-    RecyclerView recyclerView;
-    AppliedJobsAdapter.ArchiveJobAdapter adapter;
-    List<ArchiveJobModel> archiveList;
+    private MaterialToolbar toolbar;
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private AppliedJobsAdapter.ArchiveJobAdapter adapter;
+    private List<ArchiveJobModel> archiveList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,40 +48,53 @@ public class EmployerViewArchivedJobs extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        toolbar.setNavigationOnClickListener(v -> {
-            getOnBackPressedDispatcher().onBackPressed();
-        });
+        toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.manila_blue);
+        swipeRefreshLayout.setOnRefreshListener(this::loadArchivedJobs);
 
         recyclerView = findViewById(R.id.recycler_view_employer_archived_jobs);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         archiveList = new ArrayList<>();
-        loadDummyData();
-
         adapter = new AppliedJobsAdapter.ArchiveJobAdapter(archiveList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        swipeRefreshLayout.setRefreshing(true);
+        loadArchivedJobs();
     }
 
-    private void loadDummyData() {
-        archiveList.add(new ArchiveJobModel(
-                "101",
-                "Barista (Full Time)",
-                "EXPIRED (2 days ago)",
-                "Insight: 8 applicants were waiting for review."
-        ));
+    private void loadArchivedJobs() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            swipeRefreshLayout.setRefreshing(false);
+            return;
+        }
+        user.getIdToken(true).addOnSuccessListener(result -> {
+            ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
+            api.getArchivedJobs(new GetArchivedJobsRequest(null))
+                    .enqueue(new Callback<ApiResponse<List<ArchiveJobModel>>>() {
+                        @Override
+                        public void onResponse(Call<ApiResponse<List<ArchiveJobModel>>> call,
+                                               Response<ApiResponse<List<ArchiveJobModel>>> response) {
+                            swipeRefreshLayout.setRefreshing(false);
+                            if (response.isSuccessful() && response.body() != null
+                                    && response.body().getData() != null) {
+                                archiveList.clear();
+                                archiveList.addAll(response.body().getData());
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                ErrorUtils.showErrorMessage(EmployerViewArchivedJobs.this, response.errorBody());
+                            }
+                        }
 
-        archiveList.add(new ArchiveJobModel(
-                "102",
-                "Kitchen Helper",
-                "ARCHIVED (1 week ago)",
-                "Insight: Manually moved to archive."
-        ));
-
-        archiveList.add(new ArchiveJobModel(
-                "103",
-                "Delivery Rider",
-                "EXPIRED (5 days ago)",
-                "Insight: 15 views, 0 applicants."
-        ));
+                        @Override
+                        public void onFailure(Call<ApiResponse<List<ArchiveJobModel>>> call, Throwable t) {
+                            swipeRefreshLayout.setRefreshing(false);
+                            ErrorUtils.showThrowableError(EmployerViewArchivedJobs.this, t);
+                        }
+                    });
+        });
     }
 }

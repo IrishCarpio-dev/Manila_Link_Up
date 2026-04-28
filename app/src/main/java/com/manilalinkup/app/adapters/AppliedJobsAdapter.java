@@ -12,6 +12,7 @@ import com.manilalinkup.app.R;
 import com.manilalinkup.app.models.AppliedJobModel;
 import com.manilalinkup.app.models.ArchiveJobModel;
 import com.manilalinkup.app.activities.EmployerAddJobActivity;
+import com.manilalinkup.app.activities.EmployerViewJobPost;
 
 import android.content.Intent;
 import android.widget.Button;
@@ -135,47 +136,47 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
 
             holder.bind(jobAtBindingTime);
 
+            holder.itemView.setOnClickListener(v -> {
+                int actualPos = holder.getBindingAdapterPosition();
+                if (actualPos == RecyclerView.NO_POSITION) return;
+
+                ArchiveJobModel currentJob = archiveJobModelList.get(actualPos);
+                Intent intent = new Intent(v.getContext(), EmployerViewJobPost.class);
+                intent.putExtra("JOB_ID", currentJob.getJobId());
+                intent.putExtra("JOB_TITLE", currentJob.getJobTitle());
+                intent.putExtra("DESCRIPTION", currentJob.getDescription());
+                intent.putExtra("LOCATION", currentJob.getLocation());
+                intent.putExtra("DURATION", currentJob.getDuration());
+                if (currentJob.getSalary() != null) {
+                    intent.putExtra("SALARY", currentJob.getSalary());
+                }
+                if (currentJob.getTags() != null) {
+                    intent.putStringArrayListExtra("TAG_IDS", new java.util.ArrayList<>(currentJob.getTags()));
+                }
+                intent.putExtra("IS_OWNER", true);
+                intent.putExtra("IS_ARCHIVED", true);
+                v.getContext().startActivity(intent);
+            });
+
             holder.repostButton.setOnClickListener(v -> {
                 int actualPos = holder.getBindingAdapterPosition();
                 if (actualPos == RecyclerView.NO_POSITION) return;
 
                 ArchiveJobModel currentJob = archiveJobModelList.get(actualPos);
                 Intent intent = new Intent(v.getContext(), EmployerAddJobActivity.class);
-
-                intent.putExtra("job_id", currentJob.getJobId());
                 intent.putExtra("is_repost", true);
+                intent.putExtra("repost_title", currentJob.getJobTitle());
+                intent.putExtra("repost_description", currentJob.getDescription());
+                intent.putExtra("repost_location", currentJob.getLocation());
+                if (currentJob.getSalary() != null) {
+                    intent.putExtra("repost_salary", currentJob.getSalary().toString());
+                }
+                intent.putExtra("repost_duration", currentJob.getDuration());
+                if (currentJob.getTags() != null) {
+                    intent.putStringArrayListExtra("repost_tag_ids", new java.util.ArrayList<>(currentJob.getTags()));
+                }
                 v.getContext().startActivity(intent);
             });
-
-            holder.editButton.setOnClickListener(v -> {
-                int actualPos = holder.getBindingAdapterPosition();
-                if (actualPos == RecyclerView.NO_POSITION) return;
-
-                ArchiveJobModel currentJob = archiveJobModelList.get(actualPos);
-                Intent intent = new Intent(v.getContext(), EmployerAddJobActivity.class);
-
-                intent.putExtra("job_id", currentJob.getJobId());
-                v.getContext().startActivity(intent);
-            });
-
-            holder.deleteButton.setOnClickListener(v -> {
-                int actualPosition = holder.getBindingAdapterPosition();
-                if (actualPosition == RecyclerView.NO_POSITION) return;
-
-                ArchiveJobModel jobToDelete = archiveJobModelList.get(actualPosition);
-
-                new android.app.AlertDialog.Builder(v.getContext())
-                        .setTitle("Delete Post?")
-                        .setMessage("Are you sure you want to permanently delete " + jobToDelete.getJobTitle() + "?")
-                        .setPositiveButton("Delete", (dialog, which) -> {
-                            archiveJobModelList.remove(actualPosition);
-                            notifyItemRemoved(actualPosition);
-                            notifyItemRangeChanged(actualPosition, archiveJobModelList.size());
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .show();
-            });
-
         }
 
         static class ArchiveJobViewHolder extends RecyclerView.ViewHolder {
@@ -183,8 +184,6 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
             TextView statusText;
             TextView insightText;
             Button repostButton;
-            Button editButton;
-            Button deleteButton;
 
             public ArchiveJobViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -192,8 +191,6 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
                 statusText = itemView.findViewById(R.id.text_view_status_badge);
                 insightText = itemView.findViewById(R.id.text_view_insights_text);
                 repostButton = itemView.findViewById(R.id.button_repost_archived);
-                editButton = itemView.findViewById(R.id.button_edit_archived);
-                deleteButton = itemView.findViewById(R.id.button_delete_archived);
             }
 
             public void bind(ArchiveJobModel archiveJobBind) {

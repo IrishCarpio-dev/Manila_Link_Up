@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -54,6 +56,8 @@ public class SeekerDashboardActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private BottomNavigationView bottomNavigationView;
 
+    private ActivityResultLauncher<Intent> jobPostLauncher;
+
     private boolean isLoading = false;
     private boolean isRefreshing = false;
     private boolean hasMorePages = true;
@@ -67,6 +71,24 @@ public class SeekerDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_seeker_dashboard);
+
+        jobPostLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    String appliedJobId = result.getData().getStringExtra("JOB_ID");
+                    if (appliedJobId != null) {
+                        for (int i = 0; i < jobListJobCard.size(); i++) {
+                            if (appliedJobId.equals(jobListJobCard.get(i).getJobId())) {
+                                jobListJobCard.get(i).setHasApplied(true);
+                                adapterJobPost.notifyItemChanged(i);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        );
 
         recyclerViewJobPost = findViewById(R.id.recycler_view_job_posts_dashboard);
         recyclerViewJobPost.setLayoutManager(new LinearLayoutManager(this));
@@ -92,7 +114,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
                 intent.putExtra("EMPLOYER_PHOTO", job.getEmployerProfilePicture());
                 intent.putStringArrayListExtra("TAG_IDS", new ArrayList<>(job.getTagIds() != null ? job.getTagIds() : new ArrayList<>()));
                 intent.putExtra("HAS_APPLIED", job.isHasApplied());
-                startActivity(intent);
+                jobPostLauncher.launch(intent);
             }
 
             @Override

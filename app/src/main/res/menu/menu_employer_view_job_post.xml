@@ -7,4 +7,9 @@
         android:title="Archive"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/menu_repost_job"
+        android:title="Repost"
+        app:showAsAction="never" />
+
 </menu>

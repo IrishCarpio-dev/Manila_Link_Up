@@ -16,42 +16,62 @@
         app:navigationIconTint="@color/white">
 
         <TextView
-            android:id="@+id/text_view_archived_job_top_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-medium"
-            android:text="My Archived Jobs"
+            android:text="Completed Jobs"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <TextView
-        android:id="@+id/text_view_archive_jobs_description"
+    <LinearLayout
+        android:id="@+id/empty_state_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="12dp"
-        android:text="Archived posts are hidden from job seekers but can be reposted at any time."
-        android:textSize="14sp"
-        android:textStyle="italic"
-        android:background="@color/white" />
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:alpha="0.5"
+            android:src="@drawable/logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif-black"
+            android:text="No completed jobs yet"
+            android:textColor="#212121"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Jobs you've finished will appear here."
+            android:textColor="#757575"
+            android:textSize="14sp" />
+
+    </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/text_view_archive_jobs_description">
+        android:layout_below="@id/toolbar">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_employer_archived_jobs"
+            android:id="@+id/recycler_view_completed_jobs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingVertical="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_employer_view_archived_jobs" />
+            tools:listitem="@layout/item_applied_tab_card" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

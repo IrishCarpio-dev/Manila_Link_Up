@@ -6,6 +6,10 @@ import com.manilalinkup.app.models.ApplicationModel;
 import com.manilalinkup.app.models.AppliedJobModel;
 import com.manilalinkup.app.models.ApplyJobRequest;
 import com.manilalinkup.app.models.ArchiveJobRequest;
+import com.manilalinkup.app.models.ArchiveJobModel;
+import com.manilalinkup.app.models.GetArchivedJobsRequest;
+import com.manilalinkup.app.models.GetCompletedJobsRequest;
+import com.manilalinkup.app.models.CompletedJobsResponse;
 import com.manilalinkup.app.models.ChatListItemModel;
 import com.manilalinkup.app.models.ChatMessageModel;
 import com.manilalinkup.app.models.CreateJobRequest;
@@ -93,6 +97,9 @@ public interface ApiService {
     @POST("api/jobs/archive")
     Call<ResponseBody> archiveJob(@Body ArchiveJobRequest archiveJobRequest);
 
+    @POST("api/employer/archivedJobs")
+    Call<ApiResponse<List<ArchiveJobModel>>> getArchivedJobs(@Body GetArchivedJobsRequest request);
+
     // Applications
     @POST("api/jobs/apply")
     Call<ResponseBody> applyJob(@Body ApplyJobRequest request);
@@ -108,6 +115,9 @@ public interface ApiService {
 
     @POST("api/seeker/jobs")
     Call<SeekerJobsResponse> getSeekerJobs(@Body GetSeekerJobsRequest request);
+
+    @POST("api/seeker/completedJobs")
+    Call<CompletedJobsResponse> getCompletedJobs(@Body GetCompletedJobsRequest request);
 
     @POST("api/applications/updateStatus")
     Call<ApiResponse<ApplicationModel>> updateApplicationStatus(@Body UpdateApplicationStatusRequest request);
