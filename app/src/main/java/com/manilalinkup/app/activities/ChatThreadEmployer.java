@@ -1,7 +1,6 @@
 package com.manilalinkup.app.activities;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
@@ -49,7 +47,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChatThreadEmployer extends AppCompatActivity {
+public class ChatThreadEmployer extends BaseActivity {
 
     private RecyclerView recyclerView;
     private ChatAdapter adapter;
@@ -63,7 +61,6 @@ public class ChatThreadEmployer extends AppCompatActivity {
     private String applicationId;
     private String counterpartName;
     private int applicationStatus;
-    private ProgressDialog progressDialog;
 
     private LinearLayout buttonContainer;
     private MaterialButton btnSecondary;
@@ -87,18 +84,11 @@ public class ChatThreadEmployer extends AppCompatActivity {
         String seekerUid = getIntent().getStringExtra("SEEKER_UID");
         String employerUid = getIntent().getStringExtra("EMPLOYER_UID");
 
+        setupToolbar(R.id.toolbar);
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
         toolbar.setTitle(counterpartName != null ? counterpartName : "");
         if (jobTitle != null && !jobTitle.isEmpty()) toolbar.setSubtitle(jobTitle);
-        toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(false);
 
         buttonContainer = findViewById(R.id.button_container);
         btnSecondary = findViewById(R.id.button_accept_seeker);
@@ -284,15 +274,14 @@ public class ChatThreadEmployer extends AppCompatActivity {
     private void markComplete() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
-        progressDialog.setMessage("Marking as complete...");
-        progressDialog.show();
+        showProgress("Marking as complete...");
         user.getIdToken(true).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.markApplicationComplete(new MarkCompleteRequest(applicationId))
                     .enqueue(new Callback<ApiResponse<ApplicationModel>>() {
                         @Override
                         public void onResponse(Call<ApiResponse<ApplicationModel>> call, Response<ApiResponse<ApplicationModel>> response) {
-                            progressDialog.dismiss();
+                            hideProgress();
                             if (response.isSuccessful() && response.body() != null) {
                                 applicationStatus = 6;
                                 Toast.makeText(ChatThreadEmployer.this, "Marked as complete!", Toast.LENGTH_SHORT).show();
@@ -303,7 +292,7 @@ public class ChatThreadEmployer extends AppCompatActivity {
                         }
                         @Override
                         public void onFailure(Call<ApiResponse<ApplicationModel>> call, Throwable t) {
-                            progressDialog.dismiss();
+                            hideProgress();
                             ErrorUtils.showThrowableError(ChatThreadEmployer.this, t);
                         }
                     });
@@ -320,15 +309,14 @@ public class ChatThreadEmployer extends AppCompatActivity {
     private void updateStatus(int newStatus) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
-        progressDialog.setMessage(newStatus == 5 ? "Hiring applicant..." : "Rejecting applicant...");
-        progressDialog.show();
+        showProgress(newStatus == 5 ? "Hiring applicant..." : "Rejecting applicant...");
         user.getIdToken(true).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.updateApplicationStatus(new UpdateApplicationStatusRequest(applicationId, newStatus))
                     .enqueue(new Callback<ApiResponse<ApplicationModel>>() {
                         @Override
                         public void onResponse(Call<ApiResponse<ApplicationModel>> call, Response<ApiResponse<ApplicationModel>> response) {
-                            progressDialog.dismiss();
+                            hideProgress();
                             if (response.isSuccessful()) {
                                 String msg = newStatus == 5 ? "Applicant hired!" : "Applicant rejected";
                                 Toast.makeText(ChatThreadEmployer.this, msg, Toast.LENGTH_SHORT).show();
@@ -339,7 +327,7 @@ public class ChatThreadEmployer extends AppCompatActivity {
                         }
                         @Override
                         public void onFailure(Call<ApiResponse<ApplicationModel>> call, Throwable t) {
-                            progressDialog.dismiss();
+                            hideProgress();
                             ErrorUtils.showThrowableError(ChatThreadEmployer.this, t);
                         }
                     });

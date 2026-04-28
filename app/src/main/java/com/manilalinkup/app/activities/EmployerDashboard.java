@@ -3,7 +3,6 @@ package com.manilalinkup.app.activities;
 import static com.manilalinkup.app.utilities.RetrofitClient.BASE_URL;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,7 +48,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EmployerDashboard extends AppCompatActivity {
+public class EmployerDashboard extends BaseActivity {
 
     private RecyclerView recyclerViewJobPost;
     private JobPostDashboardAdapter adapterJobPost;
@@ -61,7 +59,6 @@ public class EmployerDashboard extends AppCompatActivity {
     private CardView jobAddJob;
     BottomNavigationView bottomNavigationViewEmployer;
 
-    private ProgressDialog progressDialog;
     private boolean isLoading = false;
     private boolean isRefreshing = false;
     private boolean hasMorePages = true;
@@ -80,10 +77,6 @@ public class EmployerDashboard extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this::refreshJobs);
         greetingNameText = findViewById(R.id.textview_greeting_name_employer);
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Archiving job...");
-        progressDialog.setCancelable(false);
 
         jobListJobCard = new ArrayList<>();
 
@@ -321,14 +314,14 @@ public class EmployerDashboard extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        progressDialog.show();
+        showProgress("Archiving job...");
         user.getIdToken(true).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.archiveJob(new ArchiveJobRequest(job.getJobId()))
                     .enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    progressDialog.dismiss();
+                    hideProgress();
                     if (response.isSuccessful()) {
                         jobListJobCard.remove(position);
                         adapterJobPost.notifyItemRemoved(position);
@@ -341,7 +334,7 @@ public class EmployerDashboard extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    progressDialog.dismiss();
+                    hideProgress();
                     ErrorUtils.showThrowableError(EmployerDashboard.this, t);
                 }
             });

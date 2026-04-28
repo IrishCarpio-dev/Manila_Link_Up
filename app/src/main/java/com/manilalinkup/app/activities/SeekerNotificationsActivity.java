@@ -6,7 +6,6 @@ import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -22,7 +21,7 @@ import com.manilalinkup.app.models.NotificationsModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SeekerNotificationsActivity extends AppCompatActivity {
+public class SeekerNotificationsActivity extends BaseActivity {
     private RecyclerView recyclerViewNotifications;
     private NotificationsAdapter adapterNotif;
     private List<NotificationsModel> notifListCard;

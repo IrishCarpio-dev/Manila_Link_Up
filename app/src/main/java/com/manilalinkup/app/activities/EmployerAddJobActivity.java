@@ -1,7 +1,6 @@
 package com.manilalinkup.app.activities;
 
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.chip.Chip;
@@ -50,7 +48,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EmployerAddJobActivity extends AppCompatActivity {
+public class EmployerAddJobActivity extends BaseActivity {
 
     BottomNavigationView bottomNavigationViewEmployer;
     TextInputLayout titleLayout, locationLayout, descriptionLayout, expiresAtLayout;
@@ -58,7 +56,6 @@ public class EmployerAddJobActivity extends AppCompatActivity {
     AutoCompleteTextView rateDropdown;
     ExtendedFloatingActionButton postJobButton;
     TextView greetingNameText, tvServiceTagsError;
-    ProgressDialog progressDialog;
     EditText locationInput;
     ChipGroup chipGroupServiceTags;
 
@@ -88,10 +85,6 @@ public class EmployerAddJobActivity extends AppCompatActivity {
         locationInput = findViewById(R.id.edit_text_location);
         chipGroupServiceTags = findViewById(R.id.chip_group_service_tags);
         tvServiceTagsError = findViewById(R.id.text_view_service_tags_error);
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Posting job...");
-        progressDialog.setCancelable(false);
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null && currentUser.getDisplayName() != null) {
@@ -378,7 +371,7 @@ public class EmployerAddJobActivity extends AppCompatActivity {
             return;
         }
 
-        progressDialog.show();
+        showProgress("Posting job...");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         user.getIdToken(true).addOnCompleteListener(tokenTask -> {
@@ -388,7 +381,7 @@ public class EmployerAddJobActivity extends AppCompatActivity {
                 String duration = durationAmountStr + " " + durationUnit;
                 submitCreateJob(token, uid, title, description, location, formattedExpiresAt, duration, salary);
             } else {
-                progressDialog.dismiss();
+                hideProgress();
                 Toast.makeText(this, "Authentication failed. Please try again.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -402,7 +395,7 @@ public class EmployerAddJobActivity extends AppCompatActivity {
         apiService.createJob(request).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progressDialog.dismiss();
+                hideProgress();
                 if (response.isSuccessful()) {
                     Toast.makeText(EmployerAddJobActivity.this, "Job posted!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(EmployerAddJobActivity.this, EmployerDashboard.class));
@@ -414,7 +407,7 @@ public class EmployerAddJobActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                progressDialog.dismiss();
+                hideProgress();
                 ErrorUtils.showThrowableError(EmployerAddJobActivity.this, t);
             }
         });

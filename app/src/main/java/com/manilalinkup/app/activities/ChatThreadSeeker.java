@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,7 +37,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChatThreadSeeker extends AppCompatActivity {
+public class ChatThreadSeeker extends BaseActivity {
 
     private RecyclerView recyclerView;
     private ChatAdapter adapter;
@@ -66,15 +65,10 @@ public class ChatThreadSeeker extends AppCompatActivity {
         String seekerUid = getIntent().getStringExtra("SEEKER_UID");
         String employerUid = getIntent().getStringExtra("EMPLOYER_UID");
 
+        setupToolbar(R.id.toolbar);
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
         toolbar.setTitle(counterpartName != null ? counterpartName : "");
         if (jobTitle != null && !jobTitle.isEmpty()) toolbar.setSubtitle(jobTitle);
-        toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
         recyclerView = findViewById(R.id.recycler_chat_messages);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

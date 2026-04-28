@@ -1,7 +1,6 @@
 package com.manilalinkup.app.activities;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -47,14 +45,13 @@ import retrofit2.Response;
 
 import com.manilalinkup.app.R;
 
-public class SeekerJobPreferences extends AppCompatActivity {
+public class SeekerJobPreferences extends BaseActivity {
     private TextInputEditText minSalaryInput, durationAmountInput;
     private AutoCompleteTextView rateDropdown;
     private EditText preferredLocationInput;
     private ChipGroup chipGroupServiceTags;
     private TextView tvServiceTagsError, greetingNameText;
     private ExtendedFloatingActionButton btnSave;
-    private ProgressDialog progressDialog;
 
     private final List<ServiceTagModel> serviceTagList = new ArrayList<>();
     private final Set<String> selectedTagIds = new LinkedHashSet<>();
@@ -83,10 +80,6 @@ public class SeekerJobPreferences extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Saving preferences...");
-        progressDialog.setCancelable(false);
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null && currentUser.getDisplayName() != null) {
@@ -235,10 +228,10 @@ public class SeekerJobPreferences extends AppCompatActivity {
             return;
         }
 
-        progressDialog.show();
+        showProgress("Saving preferences...");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
-            progressDialog.dismiss();
+            hideProgress();
             return;
         }
         user.getIdToken(true).addOnCompleteListener(tokenTask -> {
@@ -247,7 +240,7 @@ public class SeekerJobPreferences extends AppCompatActivity {
                 String duration = durationValue + " " + durationUnit;
                 submitSeekerPreference(token, location, duration, salary);
             } else {
-                progressDialog.dismiss();
+                hideProgress();
                 Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -261,7 +254,7 @@ public class SeekerJobPreferences extends AppCompatActivity {
         apiService.updateSeekerPreferences(preference).enqueue(new Callback<ApiResponse<SeekerPreferencesModel>>() {
             @Override
             public void onResponse(Call<ApiResponse<SeekerPreferencesModel>> call, Response<ApiResponse<SeekerPreferencesModel>> response) {
-                progressDialog.dismiss();
+                hideProgress();
                 if (isDestroyed()) return;
                 if (response.isSuccessful()) {
                     Toast.makeText(SeekerJobPreferences.this, "Preferences Saved!", Toast.LENGTH_SHORT).show();
@@ -273,7 +266,7 @@ public class SeekerJobPreferences extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<ApiResponse<SeekerPreferencesModel>> call, Throwable t) {
-                progressDialog.dismiss();
+                hideProgress();
                 ErrorUtils.showThrowableError(SeekerJobPreferences.this, t);
             }
         });

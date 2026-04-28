@@ -9,7 +9,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -19,7 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.utilities.LogoutHelper;
 
-public class EmployerSettingsActivity extends AppCompatActivity {
+public class EmployerSettingsActivity extends BaseActivity {
 
     private static final String TAG = "EmployerSettingsActivity";
 

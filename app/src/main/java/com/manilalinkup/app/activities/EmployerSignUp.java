@@ -7,7 +7,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
@@ -23,8 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EmployerSignUp extends AppCompatActivity {
-    private android.app.ProgressDialog progressDialog;
+public class EmployerSignUp extends BaseActivity {
     private com.google.firebase.auth.FirebaseAuth mAuth;
     MaterialButton sendOTP;
     TextInputLayout employerName;
@@ -52,10 +50,6 @@ public class EmployerSignUp extends AppCompatActivity {
         labelCreatePassword = findViewById(R.id.text_create_password);
         labelConfirmPassword = findViewById(R.id.text_confirm_password);
         otpMessage = findViewById(R.id.text_view_otp_message);
-
-        progressDialog = new android.app.ProgressDialog(this);
-        progressDialog.setMessage("Signing up...");
-        progressDialog.setCancelable(false);
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
@@ -109,12 +103,12 @@ public class EmployerSignUp extends AppCompatActivity {
             FirebaseUser sessionUser = mAuth.getCurrentUser();
 
             if (sessionUser != null) {
-                progressDialog.show();
+                showProgress("Signing up...");
                 sessionUser.getIdToken(true).addOnCompleteListener(tokenTask -> {
                     if (tokenTask.isSuccessful()) {
                         sendProfileToLaravel(tokenTask.getResult().getToken(), employerNameInput, emailAddressInput, mobileNumberInput);
                     } else {
-                        progressDialog.dismiss();
+                        hideProgress();
                         Toast.makeText(EmployerSignUp.this, "Auth Failed", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -133,7 +127,7 @@ public class EmployerSignUp extends AppCompatActivity {
                     return;
                 }
 
-                progressDialog.show();
+                showProgress("Signing up...");
                 mAuth.createUserWithEmailAndPassword(emailAddressInput, createPasswordInput)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
@@ -150,7 +144,7 @@ public class EmployerSignUp extends AppCompatActivity {
                                     }
                                 });
                             } else {
-                                progressDialog.dismiss();
+                                hideProgress();
                                 Toast.makeText(EmployerSignUp.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
@@ -170,7 +164,7 @@ public class EmployerSignUp extends AppCompatActivity {
         apiService.registerEmployer(request).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progressDialog.dismiss();
+                hideProgress();
                 if (isDestroyed()) return;
                 if (response.isSuccessful()) {
                     FirebaseUser user = mAuth.getCurrentUser();
@@ -204,7 +198,7 @@ public class EmployerSignUp extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                progressDialog.dismiss();
+                hideProgress();
                 ErrorUtils.showThrowableError(EmployerSignUp.this, t);
             }
         });

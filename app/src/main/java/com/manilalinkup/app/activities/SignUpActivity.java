@@ -9,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
@@ -28,8 +27,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import okhttp3.ResponseBody;
 
-public class SignUpActivity extends AppCompatActivity {
-    private android.app.ProgressDialog progressDialog;
+public class SignUpActivity extends BaseActivity {
     private com.google.firebase.auth.FirebaseAuth mAuth;
     MaterialButton sendOTP;
     TextInputLayout firstName;
@@ -66,10 +64,6 @@ public class SignUpActivity extends AppCompatActivity {
         labelCreatePassword = findViewById(R.id.text_create_password);
         labelConfirmPassword = findViewById(R.id.text_confirm_password);
         otpMessage = findViewById(R.id.text_view_otp_message);
-
-        progressDialog = new android.app.ProgressDialog(this);
-        progressDialog.setMessage("Creating account...");
-        progressDialog.setCancelable(false);
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
@@ -155,14 +149,14 @@ public class SignUpActivity extends AppCompatActivity {
                 }
 
                 if (sessionUser != null) {
-                    progressDialog.show();
+                    showProgress("Creating account...");
                     sessionUser.getIdToken(true).addOnCompleteListener(tokenTask -> {
                         if (tokenTask.isSuccessful()) {
                             sendProfileToLaravel(tokenTask.getResult().getToken(), sessionUser.getUid(),
                                     firstnameInput, middleNameInput, lastnameInput, suffixInput,
                                     emailAddressInput, mobileNumberInput);
                         } else {
-                            progressDialog.dismiss();
+                            hideProgress();
                             Toast.makeText(SignUpActivity.this, "Auth Failed", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -175,7 +169,7 @@ public class SignUpActivity extends AppCompatActivity {
                     if (!createPasswordInput.matches(passwordPattern)) { createPassword.setError("Weak password"); return; }
                     if (!createPasswordInput.equals(confirmPasswordInput)) { confirmPassword.setError("Mismatch"); return; }
 
-                    progressDialog.show();
+                    showProgress("Creating account...");
                     mAuth.createUserWithEmailAndPassword(emailAddressInput, createPasswordInput)
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
@@ -189,7 +183,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         }
                                     });
                                 } else {
-                                    progressDialog.dismiss();
+                                    hideProgress();
                                     Toast.makeText(SignUpActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
@@ -217,7 +211,7 @@ public class SignUpActivity extends AppCompatActivity {
         apiService.registerSeeker(request).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                progressDialog.dismiss();
+                hideProgress();
                 if (isDestroyed()) return;
                 if (response.isSuccessful()) {
                     FirebaseUser user = mAuth.getCurrentUser();
@@ -251,7 +245,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                progressDialog.dismiss();
+                hideProgress();
                 ErrorUtils.showThrowableError(SignUpActivity.this, t);
             }
         });

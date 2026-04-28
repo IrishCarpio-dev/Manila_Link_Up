@@ -1,7 +1,6 @@
 package com.manilalinkup.app.activities;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,11 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -46,9 +43,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EmployerViewJobPost extends AppCompatActivity {
+public class EmployerViewJobPost extends BaseActivity {
 
-    private MaterialToolbar toolbar;
     private MaterialButton viewApplicantsButton;
     private Button btnMarkComplete;
     private Button btnRate;
@@ -67,7 +63,6 @@ public class EmployerViewJobPost extends AppCompatActivity {
     private boolean isOwner;
     private boolean isArchived;
 
-    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,14 +89,7 @@ public class EmployerViewJobPost extends AppCompatActivity {
         String employerPhoto  = getIntent().getStringExtra("EMPLOYER_PHOTO");
         tagIds                = getIntent().getStringArrayListExtra("TAG_IDS");
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-        toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+        setupToolbar(R.id.toolbar);
 
         TextView tvToolbarEmployerName = findViewById(R.id.text_view_employer_name_job_post);
         TextView tvJobTitle            = findViewById(R.id.text_view_employer_job_title_placeholder);
@@ -124,7 +112,7 @@ public class EmployerViewJobPost extends AppCompatActivity {
         if (howLongPosted != null) tvHowLongPosted.setText(howLongPosted);
 
         if (salary > 0) {
-            tvSalary.setText(String.format(Locale.US, "₱%.0f/day", salary));
+            tvSalary.setText(String.format(Locale.US, "â‚±%.0f/day", salary));
         } else {
             tvSalary.setVisibility(View.GONE);
             findViewById(R.id.money_logo).setVisibility(View.GONE);
@@ -146,8 +134,6 @@ public class EmployerViewJobPost extends AppCompatActivity {
 
         populateTags(chipGroupTags, tagIds);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(false);
 
         viewApplicantsButton = findViewById(R.id.button_view_applicants);
         viewApplicantsButton.setOnClickListener(v -> {
@@ -196,8 +182,7 @@ public class EmployerViewJobPost extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        progressDialog.setMessage("Archiving job...");
-        progressDialog.show();
+        showProgress("Archiving job...");
 
         user.getIdToken(true).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
@@ -205,7 +190,7 @@ public class EmployerViewJobPost extends AppCompatActivity {
                     .enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    progressDialog.dismiss();
+                    hideProgress();
                     if (response.isSuccessful()) {
                         Toast.makeText(EmployerViewJobPost.this, "Job archived", Toast.LENGTH_SHORT).show();
                         finish();
@@ -216,7 +201,7 @@ public class EmployerViewJobPost extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    progressDialog.dismiss();
+                    hideProgress();
                     ErrorUtils.showThrowableError(EmployerViewJobPost.this, t);
                 }
             });
@@ -293,8 +278,7 @@ public class EmployerViewJobPost extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        progressDialog.setMessage("Marking as complete...");
-        progressDialog.show();
+        showProgress("Marking as complete...");
 
         user.getIdToken(true).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
@@ -302,7 +286,7 @@ public class EmployerViewJobPost extends AppCompatActivity {
                     .enqueue(new Callback<ApiResponse<ApplicationModel>>() {
                 @Override
                 public void onResponse(Call<ApiResponse<ApplicationModel>> call, Response<ApiResponse<ApplicationModel>> response) {
-                    progressDialog.dismiss();
+                    hideProgress();
                     if (response.isSuccessful() && response.body() != null) {
                         ApplicationModel updated = response.body().getData();
                         currentStatus = updated.getStatus() != null ? updated.getStatus() : currentStatus;
@@ -316,7 +300,7 @@ public class EmployerViewJobPost extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ApiResponse<ApplicationModel>> call, Throwable t) {
-                    progressDialog.dismiss();
+                    hideProgress();
                     ErrorUtils.showThrowableError(EmployerViewJobPost.this, t);
                 }
             });

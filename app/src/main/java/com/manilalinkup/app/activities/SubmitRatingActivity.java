@@ -1,6 +1,5 @@
 package com.manilalinkup.app.activities;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,9 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
@@ -27,9 +24,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SubmitRatingActivity extends AppCompatActivity {
+public class SubmitRatingActivity extends BaseActivity {
 
-    private MaterialToolbar toolbar;
     private RatingBar ratingBar;
     private EditText commentInput;
     private Button submitButton;
@@ -38,7 +34,6 @@ public class SubmitRatingActivity extends AppCompatActivity {
     private String applicationId;
     private String counterpartName;
 
-    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +47,7 @@ public class SubmitRatingActivity extends AppCompatActivity {
         String existingComment = getIntent().getStringExtra("EXISTING_COMMENT");
         boolean isLocked = getIntent().getBooleanExtra("IS_LOCKED", false);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-        toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+        setupToolbar(R.id.toolbar);
 
         titleText    = findViewById(R.id.text_rating_title);
         ratingBar    = findViewById(R.id.rating_bar);
@@ -69,8 +58,6 @@ public class SubmitRatingActivity extends AppCompatActivity {
             titleText.setText("Rate " + counterpartName);
         }
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(false);
 
         if (existingScore > 0) {
             ratingBar.setRating(existingScore);
@@ -102,8 +89,7 @@ public class SubmitRatingActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        progressDialog.setMessage("Submitting rating...");
-        progressDialog.show();
+        showProgress("Submitting rating...");
 
         user.getIdToken(true).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
@@ -111,7 +97,7 @@ public class SubmitRatingActivity extends AppCompatActivity {
                     .enqueue(new Callback<ApiResponse<RatingModel>>() {
                 @Override
                 public void onResponse(Call<ApiResponse<RatingModel>> call, Response<ApiResponse<RatingModel>> response) {
-                    progressDialog.dismiss();
+                    hideProgress();
                     if (response.isSuccessful()) {
                         Toast.makeText(SubmitRatingActivity.this, "Rating submitted!", Toast.LENGTH_SHORT).show();
                         finish();
@@ -122,7 +108,7 @@ public class SubmitRatingActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ApiResponse<RatingModel>> call, Throwable t) {
-                    progressDialog.dismiss();
+                    hideProgress();
                     ErrorUtils.showThrowableError(SubmitRatingActivity.this, t);
                 }
             });

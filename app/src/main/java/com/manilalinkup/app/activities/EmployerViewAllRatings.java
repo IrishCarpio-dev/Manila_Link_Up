@@ -4,11 +4,9 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
@@ -26,9 +24,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EmployerViewAllRatings extends AppCompatActivity {
+public class EmployerViewAllRatings extends BaseActivity {
 
-    MaterialToolbar toolbar;
     private RecyclerView recyclerView;
     private EmployerAllRatingsAdapter adapter;
     private final List<RatingModel> ratingsList = new ArrayList<>();
@@ -39,14 +36,7 @@ public class EmployerViewAllRatings extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_employer_view_all_ratings);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-        toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+        setupToolbar(R.id.toolbar);
 
         recyclerView = findViewById(R.id.recycler_ratings_views);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
