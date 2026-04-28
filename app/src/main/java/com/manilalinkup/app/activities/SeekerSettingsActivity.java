@@ -23,6 +23,7 @@ public class SeekerSettingsActivity extends BaseActivity {
 
     private TextView btnEditProfile, btnVerification, btnPrivacy;
     private TextView btnChangePassword, tvUserEmail;
+    private android.widget.ImageButton btnBack;
     private Switch switchNotifications;
     private TextView btnHelpCenter, btnTerms, btnAbout;
     private Button logoutButton;
@@ -53,6 +54,8 @@ public class SeekerSettingsActivity extends BaseActivity {
     }
 
     private void initializeViews() {
+        btnBack = findViewById(R.id.btn_back);
+
         // Account & Security
         tvUserEmail = findViewById(R.id.tv_user_email);
         btnEditProfile = findViewById(R.id.btn_edit_profile);
@@ -87,6 +90,7 @@ public class SeekerSettingsActivity extends BaseActivity {
     }
 
     private void setupClickListeners() {
+        btnBack.setOnClickListener(v -> finish());
 
         btnEditProfile.setOnClickListener(v -> {
             showSensitiveActionWarning(
