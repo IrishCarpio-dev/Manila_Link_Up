@@ -17,19 +17,16 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.activities.AppliedSeekerActivity;
-import com.manilalinkup.app.activities.ChatEmployerActivity;
-import com.manilalinkup.app.activities.ChatSeekerActivity;
-import com.manilalinkup.app.activities.ChatThreadEmployer;
-import com.manilalinkup.app.activities.ChatThreadSeeker;
-import com.manilalinkup.app.activities.EditEmployerProfileActivity;
-import com.manilalinkup.app.activities.EditSeekerProfileActivity;
+import com.manilalinkup.app.activities.EmployerBusinessVerificationActivity;
 import com.manilalinkup.app.activities.EmployerDashboard;
 import com.manilalinkup.app.activities.EmployerListOfApplicants;
 import com.manilalinkup.app.activities.EmployerNotificationsActivity;
 import com.manilalinkup.app.activities.EmployerProfileActivity;
+import com.manilalinkup.app.activities.SeekerDashboardActivity;
 import com.manilalinkup.app.activities.SeekerJobPreferences;
 import com.manilalinkup.app.activities.SeekerNotificationsActivity;
 import com.manilalinkup.app.activities.SeekerProfileActivity;
+import com.manilalinkup.app.activities.SeekerVerifyIdentityActivity;
 import com.manilalinkup.app.models.RegisterDeviceRequest;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.NotificationUtils;
@@ -87,46 +84,41 @@ public class MLUFirebaseMessagingService extends FirebaseMessagingService {
 
     private Intent buildDeepLinkIntent(String type, Map<String, String> data) {
         if (type == null) return defaultIntent();
-        String role   = data.get("role");
-        String chatId = data.get("chatId");
+        String role = data.get("role");
 
         switch (type) {
-            case NotificationUtils.TYPE_CHAT_MESSAGE: {
-                boolean isEmployer = "employer".equals(role);
-                Class<?> target = isEmployer ? ChatThreadEmployer.class : ChatThreadSeeker.class;
-                Intent i = new Intent(this, target);
-                if (chatId != null) i.putExtra("CHAT_ID", chatId);
-                return i;
-            }
-
             // --- Seeker notifications ---
-            case NotificationUtils.TYPE_APPLICATION_REVIEW:
-            case NotificationUtils.TYPE_INTERVIEW_SCHEDULED:
+            case NotificationUtils.TYPE_INTERVIEW_OFFER:
             case NotificationUtils.TYPE_HIRED:
-            case NotificationUtils.TYPE_APPLICATION_REJECTED:
-            case NotificationUtils.TYPE_JOB_CLOSED:
+            case NotificationUtils.TYPE_REJECTED:
+            case NotificationUtils.TYPE_JOB_FILLED:
+            case NotificationUtils.TYPE_JOB_COMPLETED:
                 return new Intent(this, AppliedSeekerActivity.class);
 
+            case NotificationUtils.TYPE_NEW_MATCHING_JOB:
+                return new Intent(this, SeekerDashboardActivity.class);
+
+            case NotificationUtils.TYPE_PREFERENCES_NUDGE:
+                return new Intent(this, SeekerJobPreferences.class);
+
+            case NotificationUtils.TYPE_VERIFICATION_REJECTED:
+                if ("employer".equals(role)) return new Intent(this, EmployerBusinessVerificationActivity.class);
+                return new Intent(this, SeekerVerifyIdentityActivity.class);
+
+            // --- Shared notifications ---
             case NotificationUtils.TYPE_RATING_RECEIVED:
                 if ("employer".equals(role)) return new Intent(this, EmployerProfileActivity.class);
                 return new Intent(this, SeekerProfileActivity.class);
 
-            case NotificationUtils.TYPE_ID_APPROVED:
+            case NotificationUtils.TYPE_VERIFIED:
                 if ("employer".equals(role)) return new Intent(this, EmployerNotificationsActivity.class);
                 return new Intent(this, SeekerNotificationsActivity.class);
-
-            case NotificationUtils.TYPE_PROFILE_INCOMPLETE:
-                if ("employer".equals(role)) return new Intent(this, EditEmployerProfileActivity.class);
-                return new Intent(this, EditSeekerProfileActivity.class);
-
-            case NotificationUtils.TYPE_PREFERENCES_INCOMPLETE:
-                return new Intent(this, SeekerJobPreferences.class);
 
             // --- Employer notifications ---
             case NotificationUtils.TYPE_NEW_APPLICANT:
                 return new Intent(this, EmployerListOfApplicants.class);
 
-            case NotificationUtils.TYPE_JOB_EXPIRED:
+            case NotificationUtils.TYPE_JOB_EXPIRING:
                 return new Intent(this, EmployerDashboard.class);
 
             default:
