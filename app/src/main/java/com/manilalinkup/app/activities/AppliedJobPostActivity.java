@@ -252,8 +252,8 @@ public class AppliedJobPostActivity extends BaseActivity {
 
     private String formatDate(String isoDate) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US);
-            Date date = sdf.parse(isoDate);
+            String datePart = isoDate.split("T")[0];
+            Date date = new SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(datePart);
             return new SimpleDateFormat("MMM d, yyyy", Locale.US).format(date);
         } catch (Exception e) {
             return isoDate;
