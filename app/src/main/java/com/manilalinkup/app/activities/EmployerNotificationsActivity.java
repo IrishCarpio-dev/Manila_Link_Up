@@ -17,8 +17,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.NotificationsAdapter;
 import com.manilalinkup.app.models.ApiResponse;
-import com.manilalinkup.app.models.GetNotificationsRequest;
-import com.manilalinkup.app.models.MarkNotificationReadRequest;
 import com.manilalinkup.app.models.NotificationItemModel;
 import com.manilalinkup.app.models.NotificationsModel;
 import com.manilalinkup.app.utilities.ApiService;
@@ -99,7 +97,7 @@ public class EmployerNotificationsActivity extends AppCompatActivity {
 
         user.getIdToken(true).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
-            api.getNotifications(new GetNotificationsRequest()).enqueue(new Callback<ApiResponse<List<NotificationItemModel>>>() {
+            api.getNotifications(null, null, null).enqueue(new Callback<ApiResponse<List<NotificationItemModel>>>() {
                 @Override
                 public void onResponse(Call<ApiResponse<List<NotificationItemModel>>> call,
                                        Response<ApiResponse<List<NotificationItemModel>>> response) {
@@ -127,7 +125,7 @@ public class EmployerNotificationsActivity extends AppCompatActivity {
 
     private void markAllRead(String token) {
         ApiService api = RetrofitClient.getClient(token).create(ApiService.class);
-        api.markNotificationsRead(new MarkNotificationReadRequest(true)).enqueue(new Callback<okhttp3.ResponseBody>() {
+        api.markAllNotificationsRead().enqueue(new Callback<okhttp3.ResponseBody>() {
             @Override public void onResponse(Call<okhttp3.ResponseBody> call, Response<okhttp3.ResponseBody> response) {}
             @Override public void onFailure(Call<okhttp3.ResponseBody> call, Throwable t) {}
         });

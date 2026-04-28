@@ -23,7 +23,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.models.ApplyJobRequest;
-import com.manilalinkup.app.models.NotifyApplicationRequest;
 import com.manilalinkup.app.models.ServiceTagModel;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
@@ -168,7 +167,6 @@ public class SeekerJobPostActivity extends AppCompatActivity {
                         Intent result = new Intent();
                         result.putExtra("JOB_ID", jobId);
                         setResult(RESULT_OK, result);
-                        notifyEmployer(api);
                     } else {
                         ErrorUtils.showErrorMessage(SeekerJobPostActivity.this, response.errorBody());
                     }
@@ -181,14 +179,6 @@ public class SeekerJobPostActivity extends AppCompatActivity {
                 }
             });
         });
-    }
-
-    private void notifyEmployer(ApiService api) {
-        api.notifyApplication(new NotifyApplicationRequest(jobId))
-                .enqueue(new Callback<ResponseBody>() {
-                    @Override public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {}
-                    @Override public void onFailure(Call<ResponseBody> call, Throwable t) {}
-                });
     }
 
     private void populateTags(ChipGroup chipGroup, List<String> tagIds) {
