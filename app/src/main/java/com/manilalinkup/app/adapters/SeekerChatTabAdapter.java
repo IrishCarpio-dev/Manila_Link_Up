@@ -45,7 +45,7 @@ public class SeekerChatTabAdapter extends RecyclerView.Adapter<SeekerChatTabAdap
     @Override
     public SeekerChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_messages_seeker_card, parent, false);
+                .inflate(R.layout.item_message_card, parent, false);
         return new SeekerChatViewHolder(view);
     }
 
@@ -55,8 +55,8 @@ public class SeekerChatTabAdapter extends RecyclerView.Adapter<SeekerChatTabAdap
     }
 
     static class SeekerChatViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView employerProfilePicture;
-        private final TextView employerName;
+        private final ImageView contactProfilePicture;
+        private final TextView contactName;
         private final TextView jobTitle;
         private final TextView messagePreview;
         private final TextView messageTimeStamp;
@@ -64,8 +64,8 @@ public class SeekerChatTabAdapter extends RecyclerView.Adapter<SeekerChatTabAdap
 
         SeekerChatViewHolder(@NonNull View itemView) {
             super(itemView);
-            employerProfilePicture = itemView.findViewById(R.id.item_card_employer_profile_picture);
-            employerName           = itemView.findViewById(R.id.item_card_employer_name);
+            contactProfilePicture = itemView.findViewById(R.id.item_card_profile_picture);
+            contactName           = itemView.findViewById(R.id.item_card_contact_name);
             jobTitle               = itemView.findViewById(R.id.text_view_job_title);
             messagePreview         = itemView.findViewById(R.id.item_card_message_preview);
             messageTimeStamp       = itemView.findViewById(R.id.text_view_chat_timestamp);
@@ -79,7 +79,7 @@ public class SeekerChatTabAdapter extends RecyclerView.Adapter<SeekerChatTabAdap
             ChatListItemModel.JobSummaryModel job = chat.getJob();
 
             String name = counterpart != null ? counterpart.getName() : "Unknown";
-            employerName.setText(name);
+            contactName.setText(name);
             if (jobTitle != null) {
                 jobTitle.setText(job != null && job.getTitle() != null ? job.getTitle() : "");
             }
@@ -104,9 +104,9 @@ public class SeekerChatTabAdapter extends RecyclerView.Adapter<SeekerChatTabAdap
                         .load(counterpart.getProfilePhotoUrl())
                         .placeholder(R.drawable.ic_person_placeholder)
                         .circleCrop()
-                        .into(employerProfilePicture);
+                        .into(contactProfilePicture);
             } else {
-                employerProfilePicture.setImageResource(R.drawable.ic_person_placeholder);
+                contactProfilePicture.setImageResource(R.drawable.ic_person_placeholder);
             }
 
             itemView.setOnClickListener(v -> { if (clickListener != null) clickListener.onChatClick(chat); });

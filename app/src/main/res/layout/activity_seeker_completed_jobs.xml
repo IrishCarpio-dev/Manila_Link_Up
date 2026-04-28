@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4F7F9"
+    android:background="@color/light_bg"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -47,7 +47,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="sans-serif-black"
             android:text="No completed jobs yet"
-            android:textColor="#212121"
+            android:textColor="@color/dark_text"
             android:textSize="18sp" />
 
         <TextView

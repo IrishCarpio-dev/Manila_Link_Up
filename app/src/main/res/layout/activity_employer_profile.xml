@@ -67,7 +67,7 @@
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation_view"
         android:layout_below="@id/card_view_dashboard_top_employer"
-        android:background="#F4F7F9"
+        android:background="@color/light_bg"
         android:fillViewport="true">
 
         <RelativeLayout
@@ -81,7 +81,7 @@
                 android:id="@+id/card_view_job_post_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="#F4F7F9"
+                app:cardBackgroundColor="@color/light_bg"
                 app:cardCornerRadius="0dp"
                 app:cardElevation="4dp">
 
@@ -120,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/card_view_job_post_header"
                 android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="#F4F7F9"
+                app:cardBackgroundColor="@color/light_bg"
                 app:cardCornerRadius="0dp"
                 app:cardElevation="4dp">
 
@@ -137,7 +137,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-black"
-                        android:textColor="#212121"
+                        android:textColor="@color/dark_text"
                         android:textSize="18sp"
                         android:text="Maria Dela Cruz" />
 
@@ -147,7 +147,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/text_view_employer_name_profile"
                         android:fontFamily="sans-serif"
-                        android:textColor="#616161"
+                        android:textColor="@color/secondary_text"
                         android:textSize="12sp"
                         android:text="Padre Faura, Manila" />
 
@@ -177,7 +177,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
-                            android:textColor="#616161"
+                            android:textColor="@color/secondary_text"
                             android:textSize="12sp" />
                     </LinearLayout>
 
@@ -203,7 +203,7 @@
                 android:paddingStart="16dp"
                 android:paddingBottom="4dp"
                 android:text="Feedbacks received from Seekers"
-                android:textColor="#212121"
+                android:textColor="@color/dark_text"
                 android:textSize="16sp" />
 
             <ImageView
@@ -225,23 +225,13 @@
                 android:paddingStart="16dp"
                 android:paddingBottom="8dp">
 
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_ratings_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_view_ratings_card"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/item_ratings_card">
-
-                    </androidx.recyclerview.widget.RecyclerView>
-
-
-                </LinearLayout>
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_ratings_card" />
 
             </androidx.core.widget.NestedScrollView>
 
@@ -254,7 +244,7 @@
                 android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:text="Archive Jobs"
-                android:textColor="#212121"
+                android:textColor="@color/dark_text"
                 android:textSize="16sp" />
 
             <TextView
@@ -265,7 +255,7 @@
                 android:fontFamily="sans-serif-light"
                 android:paddingStart="16dp"
                 android:text="Other people can't view your previous job posts. You can repost them if you like."
-                android:textColor="#212121"
+                android:textColor="@color/dark_text"
                 android:textSize="14sp" />
 
             <com.google.android.material.button.MaterialButton
@@ -278,7 +268,7 @@
                 android:text="View Archived Jobs"
                 android:textAllCaps="false"
                 android:textColor="@color/manila_blue"
-                app:backgroundTint="#F4F7F9"
+                app:backgroundTint="@color/light_bg"
                 app:cornerRadius="8dp"
                 app:strokeColor="@color/manila_blue"
                 app:strokeWidth="2dp" />

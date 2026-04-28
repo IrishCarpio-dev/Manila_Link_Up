@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="24dp">
+                android:padding="@dimen/padding_large">
 
                 <TextView
                     android:id="@+id/textview_greeting_employer"
@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:text="Add Job for "
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/text_body" />
 
                 <TextView
                     android:id="@+id/textview_greeting_name_employer"
@@ -56,25 +56,10 @@
                     android:layout_height="wrap_content"
                     android:text="Employer Name"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/text_body" />
             </LinearLayout>
         </FrameLayout>
     </androidx.cardview.widget.CardView>
-
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/button_post_job"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/bottom_navigation_view"
-        android:layout_centerInParent="true"
-        android:layout_margin="8dp"
-        android:text="Post Job"
-        android:textColor="@color/white"
-        app:backgroundTint="@color/manila_blue"
-        app:elevation="8dp"
-        app:icon="@android:drawable/ic_input_add"
-        app:iconTint="@color/white" />
 
 
     <ScrollView
@@ -88,16 +73,16 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:padding="@dimen/padding_standard">
 
             <TextView
                 android:id="@+id/text_view_employer_job_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/padding_small"
                 android:fontFamily="sans-serif-black"
                 android:text="Post a New Job"
-                android:textColor="#212121"
+                android:textColor="@color/dark_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -105,11 +90,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_view_employer_job_add"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/padding_small"
                 android:fontFamily="sans-serif-medium"
                 android:text="Job Title"
-                android:textColor="#212121"
-                android:textSize="16sp" />
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_body" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_job_title"
@@ -117,10 +102,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_view_employer_job_title"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/padding_standard"
+                android:layout_marginEnd="@dimen/padding_standard"
                 android:hint="e.g. Pet Sitter, House Cleaner, Tindero"
-                app:boxBackgroundColor="#F5F5F5"
+                app:boxBackgroundColor="@color/light_surface"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
@@ -140,11 +125,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_input_layout_job_title"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/padding_small"
                 android:fontFamily="sans-serif-medium"
                 android:text="Job Location"
-                android:textColor="#212121"
-                android:textSize="16sp" />
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_body" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_job_location"
@@ -152,10 +137,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_view_employer_job_location"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/padding_standard"
+                android:layout_marginEnd="@dimen/padding_standard"
                 android:hint="e.g. Sta.Ana, Manila, Sampaloc, Manila"
-                app:boxBackgroundColor="#F5F5F5"
+                app:boxBackgroundColor="@color/light_surface"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
@@ -180,11 +165,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_input_layout_job_location"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/padding_small"
                 android:fontFamily="sans-serif-medium"
                 android:text="Job Description"
-                android:textColor="#212121"
-                android:textSize="16sp" />
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_body" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/_text_input_job_description"
@@ -192,10 +177,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_view_job_description"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/padding_standard"
+                android:layout_marginEnd="@dimen/padding_standard"
                 android:hint="What are you looking for?"
-                app:boxBackgroundColor="#F5F5F5"
+                app:boxBackgroundColor="@color/light_surface"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
@@ -220,11 +205,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/_text_input_job_description"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/padding_small"
                 android:fontFamily="sans-serif-medium"
                 android:text="Expires At"
-                android:textColor="#212121"
-                android:textSize="16sp" />
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_body" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_input_layout_expires_at"
@@ -232,10 +217,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_view_expires_at"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/padding_standard"
+                android:layout_marginEnd="@dimen/padding_standard"
                 android:hint="Select expiry date"
-                app:boxBackgroundColor="#F5F5F5"
+                app:boxBackgroundColor="@color/light_surface"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
@@ -257,18 +242,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_input_layout_expires_at"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/padding_small"
                 android:fontFamily="sans-serif-medium"
                 android:text="Salary (&#8369;)"
-                android:textColor="#212121"
-                android:textSize="16sp" />
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_body" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/salary_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_view_salary_label"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="@dimen/padding_standard"
                 >
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -276,13 +261,13 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="@dimen/padding_standard"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/text_view_salary_rate"
                     android:hint="e.g. 500"
-                    app:boxBackgroundColor="#F5F5F5"
+                    app:boxBackgroundColor="@color/light_surface"
                     app:boxCornerRadiusBottomEnd="8dp"
                     app:boxCornerRadiusBottomStart="8dp"
                     app:boxCornerRadiusTopEnd="8dp"
@@ -306,8 +291,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:fontFamily="sans-serif-medium"
                     android:text="/hr"
-                    android:textColor="#212121"
-                    android:textSize="16sp" />
+                    android:textColor="@color/dark_text"
+                    android:textSize="@dimen/text_body" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -316,19 +301,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/salary_layout"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/padding_small"
                 android:fontFamily="sans-serif-medium"
                 android:text="Duration"
-                android:textColor="#212121"
-                android:textSize="16sp" />
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_body" />
 
             <LinearLayout
                 android:id="@+id/layout_duration_row"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_view_duration_label"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="@dimen/padding_standard"
+                android:layout_marginEnd="@dimen/padding_standard"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
@@ -339,7 +324,7 @@
                     android:layout_marginEnd="4dp"
                     android:layout_weight="1"
                     android:hint="e.g. 2"
-                    app:boxBackgroundColor="#F5F5F5"
+                    app:boxBackgroundColor="@color/light_surface"
                     app:boxCornerRadiusBottomEnd="8dp"
                     app:boxCornerRadiusBottomStart="8dp"
                     app:boxCornerRadiusTopEnd="8dp"
@@ -361,7 +346,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_weight="1"
                     android:hint="Unit"
-                    app:boxBackgroundColor="#F5F5F5"
+                    app:boxBackgroundColor="@color/light_surface"
                     app:boxCornerRadiusBottomEnd="8dp"
                     app:boxCornerRadiusBottomStart="8dp"
                     app:boxCornerRadiusTopEnd="8dp"
@@ -389,19 +374,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/layout_duration_row"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/padding_small"
                 android:fontFamily="sans-serif-medium"
                 android:text="Service(s)"
-                android:textColor="#212121"
-                android:textSize="16sp" />
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/text_body" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chip_group_service_tags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_view_service_tags_label"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp" />
+                android:layout_marginStart="@dimen/padding_standard"
+                android:layout_marginEnd="@dimen/padding_standard" />
 
             <TextView
                 android:id="@+id/text_view_service_tags_error"
@@ -415,5 +400,19 @@
 
         </RelativeLayout>
     </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/button_post_job"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_navigation_view"
+        android:layout_centerInParent="true"
+        android:layout_margin="8dp"
+        android:text="Post Job"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/manila_blue"
+        app:elevation="8dp"
+        app:icon="@android:drawable/ic_input_add"
+        app:iconTint="@color/white" />
 
 </RelativeLayout>

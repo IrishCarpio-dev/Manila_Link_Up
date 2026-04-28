@@ -175,7 +175,7 @@ public class EmployerDashboard extends BaseActivity {
             return;
         }
 
-        user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+        user.getIdToken(false).addOnCompleteListener(tokenTask -> {
             if (!tokenTask.isSuccessful()) {
                 isLoading = false;
                 progressBarLoadMore.setVisibility(View.GONE);
@@ -282,7 +282,7 @@ public class EmployerDashboard extends BaseActivity {
         if (user == null) return;
 
         showProgress("Archiving job...");
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.archiveJob(new ArchiveJobRequest(job.getJobId()))
                     .enqueue(new Callback<ResponseBody>() {

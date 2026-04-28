@@ -11,11 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/design_default_color_background" />
+        <include layout="@layout/layout_toolbar" />
 
 
         <ImageView
@@ -45,9 +41,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/image_view_insert_photo"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/padding_small"
             android:text="Upload Profile Photo"
-            android:textColor="#212121" />
+            android:textColor="@color/dark_text" />
 
         <TextView
             android:id="@+id/lblClearance"
@@ -57,8 +53,8 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="32dp"
             android:text="Upload Clearance"
-            android:textColor="#212121"
-            android:textSize="18sp"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/text_large"
             android:textStyle="bold" />
 
         <TextView
@@ -98,9 +94,9 @@
         <ImageView
             android:id="@+id/image_view_clearance_preview"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="@dimen/image_preview_height"
             android:layout_below="@id/subClearance"
-            android:layout_marginVertical="16dp"
+            android:layout_marginVertical="@dimen/padding_standard"
             android:layout_marginHorizontal="30dp"
             android:layout_centerHorizontal="true"
             android:scaleType="centerCrop"
@@ -112,10 +108,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/image_view_clearance_preview"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/padding_standard"
             android:text="Upload Valid ID"
-            android:textColor="#212121"
-            android:textSize="18sp"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/text_large"
             android:textStyle="bold" />
 
         <TextView
@@ -156,9 +152,9 @@
         <ImageView
             android:id="@+id/image_view_id_preview"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="@dimen/image_preview_height"
             android:layout_below="@id/subID"
-            android:layout_marginVertical="16dp"
+            android:layout_marginVertical="@dimen/padding_standard"
             android:layout_marginHorizontal="30dp"
             android:layout_centerHorizontal="true"
             android:scaleType="centerCrop"
@@ -170,19 +166,19 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/image_view_id_preview"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/padding_large"
             android:text="Current Location"
-            android:textColor="#212121"
-            android:textSize="16sp"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/text_body"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/etLocation"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="@dimen/button_height"
             android:layout_below="@id/lblLocation"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/padding_small"
             android:layout_marginEnd="30dp"
             android:background="#F0F0F0"
             android:hint="Select your location"
@@ -195,19 +191,19 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/etLocation"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/padding_standard"
             android:text="Date of Birth"
-            android:textColor="#212121"
-            android:textSize="16sp"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/text_body"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/etDOB"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="@dimen/button_height"
             android:layout_below="@id/lblDOB"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/padding_small"
             android:layout_marginEnd="30dp"
             android:background="#F0F0F0"
             android:hint="YYYY-MM-DD"

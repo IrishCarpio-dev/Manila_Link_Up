@@ -33,7 +33,7 @@
             android:layout_marginTop="2dp"
             android:layout_toEndOf="@id/item_card_notif_image_type"
             android:fontFamily="sans-serif-medium"
-            android:textColor="#212121"
+            android:textColor="@color/dark_text"
             android:textSize="18sp"
             tools:text="Notification Title Goes here" />
 
@@ -45,7 +45,7 @@
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/item_card_notif_image_type"
             android:fontFamily="sans-serif"
-            android:textColor="#616161"
+            android:textColor="@color/secondary_text"
             android:textSize="12sp"
             tools:text="Notification details goes here" />
 
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:textColor="#616161"
+            android:textColor="@color/secondary_text"
             tools:text="3h" />
 
     </RelativeLayout>

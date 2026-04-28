@@ -275,7 +275,7 @@ public class ChatThreadEmployer extends BaseActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
         showProgress("Marking as complete...");
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.markApplicationComplete(new MarkCompleteRequest(applicationId))
                     .enqueue(new Callback<ApiResponse<ApplicationModel>>() {
@@ -310,7 +310,7 @@ public class ChatThreadEmployer extends BaseActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
         showProgress(newStatus == 5 ? "Hiring applicant..." : "Rejecting applicant...");
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.updateApplicationStatus(new UpdateApplicationStatusRequest(applicationId, newStatus))
                     .enqueue(new Callback<ApiResponse<ApplicationModel>>() {

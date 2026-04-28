@@ -174,7 +174,7 @@ public class AppliedJobPostActivity extends BaseActivity {
 
         showProgress("Cancelling application...");
 
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.withdrawApplication(new WithdrawApplicationRequest(applicationId))
                     .enqueue(new Callback<ResponseBody>() {
@@ -214,7 +214,7 @@ public class AppliedJobPostActivity extends BaseActivity {
 
         showProgress("Marking as complete...");
 
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.markApplicationComplete(new MarkCompleteRequest(applicationId))
                     .enqueue(new Callback<ApiResponse<ApplicationModel>>() {

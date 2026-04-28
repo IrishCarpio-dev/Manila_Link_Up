@@ -1,6 +1,8 @@
 package com.manilalinkup.app.activities;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,6 +29,11 @@ public class EmployerNotificationsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_employer_notifications);
+
+        TextView headerTitle = findViewById(R.id.textview_greeting_employer);
+        headerTitle.setText("Notifications");
+        headerTitle.setTextSize(21);
+        headerTitle.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
 
         recyclerViewNotifications = findViewById(R.id.recycler_view_employer_own_posts);
         recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(this));

@@ -234,7 +234,7 @@ public class SeekerJobPreferences extends BaseActivity {
             hideProgress();
             return;
         }
-        user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+        user.getIdToken(false).addOnCompleteListener(tokenTask -> {
             if(tokenTask.isSuccessful()){
                 String token = tokenTask.getResult().getToken();
                 String duration = durationValue + " " + durationUnit;

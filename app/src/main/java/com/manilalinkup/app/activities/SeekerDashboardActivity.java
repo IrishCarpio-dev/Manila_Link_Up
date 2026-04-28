@@ -164,7 +164,7 @@ public class SeekerDashboardActivity extends BaseActivity {
 
         String mode = isCuratedExhausted ? "all" : "curated";
 
-        user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+        user.getIdToken(false).addOnCompleteListener(tokenTask -> {
             if (!tokenTask.isSuccessful()) {
                 isLoading = false;
                 progressBarLoadMore.setVisibility(View.GONE);

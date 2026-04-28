@@ -85,7 +85,7 @@ public class SeekerCompletedJobsActivity extends BaseActivity {
             swipeRefreshLayout.setRefreshing(false);
             return;
         }
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.getCompletedJobs(new GetCompletedJobsRequest(null, null))
                     .enqueue(new Callback<CompletedJobsResponse>() {

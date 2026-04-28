@@ -3,6 +3,7 @@ package com.manilalinkup.app.utilities;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -13,11 +14,14 @@ public class RetrofitClient {
 
     private static OkHttpClient getHttpClient(String token) {
         if (sharedHttpClient == null) {
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             sharedHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(30, TimeUnit.SECONDS)
                     .readTimeout(30, TimeUnit.SECONDS)
                     .writeTimeout(60, TimeUnit.SECONDS)
                     .retryOnConnectionFailure(true)
+                    .addInterceptor(logging)
                     .build();
         }
         return sharedHttpClient.newBuilder()

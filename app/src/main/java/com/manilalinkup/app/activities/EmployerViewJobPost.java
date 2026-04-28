@@ -112,7 +112,7 @@ public class EmployerViewJobPost extends BaseActivity {
         if (howLongPosted != null) tvHowLongPosted.setText(howLongPosted);
 
         if (salary > 0) {
-            tvSalary.setText(String.format(Locale.US, "â‚±%.0f/day", salary));
+            tvSalary.setText(String.format(Locale.US, "₱%.0f/hr", salary));
         } else {
             tvSalary.setVisibility(View.GONE);
             findViewById(R.id.money_logo).setVisibility(View.GONE);
@@ -184,7 +184,7 @@ public class EmployerViewJobPost extends BaseActivity {
 
         showProgress("Archiving job...");
 
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.archiveJob(new ArchiveJobRequest(jobId))
                     .enqueue(new Callback<ResponseBody>() {
@@ -280,7 +280,7 @@ public class EmployerViewJobPost extends BaseActivity {
 
         showProgress("Marking as complete...");
 
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.markApplicationComplete(new MarkCompleteRequest(applicationId))
                     .enqueue(new Callback<ApiResponse<ApplicationModel>>() {

@@ -129,7 +129,7 @@ public class EmployerListOfApplicants extends BaseActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.getApplicants(new GetApplicantsRequest(jobId, null, null, null))
                     .enqueue(new Callback<ApiResponse<List<ApplicantModel>>>() {
@@ -160,7 +160,7 @@ public class EmployerListOfApplicants extends BaseActivity {
 
         showProgress(newStatus == 5 ? "Hiring applicant..." : newStatus == 3 ? "Rejecting applicant..." : "Updating status...");
 
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.updateApplicationStatus(new UpdateApplicationStatusRequest(applicant.getId(), newStatus))
                     .enqueue(new Callback<ApiResponse<ApplicationModel>>() {

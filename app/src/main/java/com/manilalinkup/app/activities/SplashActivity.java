@@ -44,7 +44,7 @@ public class SplashActivity extends BaseActivity {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         } else {
-            user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+            user.getIdToken(false).addOnCompleteListener(tokenTask -> {
                 if (tokenTask.isSuccessful()) {
                     String idToken = tokenTask.getResult().getToken();
                     checkUserRole(idToken);

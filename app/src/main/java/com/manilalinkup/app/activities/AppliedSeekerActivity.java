@@ -67,7 +67,7 @@ public class AppliedSeekerActivity extends BaseActivity {
         if (user == null) return;
 
         swipeRefreshLayout.setRefreshing(true);
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.getAppliedJobs(new GetAppliedJobsRequest(null, null, null))
                     .enqueue(new Callback<ApiResponse<List<AppliedJobModel>>>() {
