@@ -20,6 +20,7 @@ import com.manilalinkup.app.models.AppliedJobModel;
 import com.manilalinkup.app.models.GetAppliedJobsRequest;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
+import com.manilalinkup.app.utilities.SeekerNavHelper;
 import com.manilalinkup.app.utilities.RetrofitClient;
 
 import java.util.ArrayList;
@@ -44,27 +45,7 @@ public class AppliedSeekerActivity extends BaseActivity {
         setContentView(R.layout.activity_applied_seeker);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationView.setSelectedItemId(R.id.nav_activity_seeker);
-        bottomNavigationView.setOnItemSelectedListener(menuItem -> {
-            if (menuItem.getItemId() == R.id.nav_home_seeker) {
-                startActivity(new Intent(AppliedSeekerActivity.this, SeekerDashboardActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (menuItem.getItemId() == R.id.nav_notifications_seeker) {
-                startActivity(new Intent(AppliedSeekerActivity.this, EmployerNotificationsActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (menuItem.getItemId() == R.id.nav_chat_seeker) {
-                startActivity(new Intent(AppliedSeekerActivity.this, ChatSeekerActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (menuItem.getItemId() == R.id.nav_profile_seeker) {
-                startActivity(new Intent(AppliedSeekerActivity.this, SeekerProfileActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }
-            return true;
-        });
+        SeekerNavHelper.setup(this, bottomNavigationView, R.id.nav_activity_seeker);
 
         recyclerView = findViewById(R.id.recycler_view_employer_own_posts);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);

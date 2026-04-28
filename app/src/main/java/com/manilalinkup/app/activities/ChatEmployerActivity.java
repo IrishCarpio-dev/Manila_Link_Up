@@ -23,6 +23,7 @@ import com.manilalinkup.app.models.ChatListItemModel;
 import com.manilalinkup.app.models.GetChatsRequest;
 import com.manilalinkup.app.models.HideChatRequest;
 import com.manilalinkup.app.utilities.ApiService;
+import com.manilalinkup.app.utilities.EmployerNavHelper;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
 
@@ -82,23 +83,7 @@ public class ChatEmployerActivity extends BaseActivity {
         recyclerViewChat.setAdapter(employerChatTabAdapter);
 
         bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_chat);
-        bottomNavigationViewEmployer.setOnItemSelectedListener(menuItem -> {
-            if (menuItem.getItemId() == R.id.nav_home) {
-                startActivity(new Intent(this, EmployerDashboard.class));
-                overridePendingTransition(0, 0);
-            } else if (menuItem.getItemId() == R.id.nav_notifications) {
-                startActivity(new Intent(this, EmployerNotificationsActivity.class));
-                overridePendingTransition(0, 0);
-            } else if (menuItem.getItemId() == R.id.nav_add_job) {
-                startActivity(new Intent(this, EmployerAddJobActivity.class));
-                overridePendingTransition(0, 0);
-            } else if (menuItem.getItemId() == R.id.nav_profile) {
-                startActivity(new Intent(this, EmployerProfileActivity.class));
-                overridePendingTransition(0, 0);
-            }
-            return true;
-        });
+        EmployerNavHelper.setup(this, bottomNavigationViewEmployer, R.id.nav_chat);
     }
 
     @Override

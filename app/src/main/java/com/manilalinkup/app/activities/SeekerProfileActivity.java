@@ -2,7 +2,7 @@ package com.manilalinkup.app.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
+import com.manilalinkup.app.utilities.SeekerNavHelper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -68,28 +68,7 @@ public class SeekerProfileActivity extends BaseActivity {
         tvStatus = findViewById(R.id.text_status);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationView.setSelectedItemId(R.id.nav_profile_seeker);
-        bottomNavigationView.setOnItemSelectedListener(menuItem ->  {
-            if(menuItem.getItemId() == R.id.nav_home_seeker){
-                startActivity(new Intent(SeekerProfileActivity.this, SeekerDashboardActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }else if(menuItem.getItemId() == R.id.nav_notifications_seeker) {
-                //No notif yet for seeker
-                startActivity(new Intent(SeekerProfileActivity.this, SeekerNotificationsActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }else if(menuItem.getItemId() == R.id.nav_activity_seeker) {
-                startActivity(new Intent(SeekerProfileActivity.this, AppliedSeekerActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }else if(menuItem.getItemId() == R.id.nav_chat_seeker) {
-                startActivity(new Intent(SeekerProfileActivity.this, ChatSeekerActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }
-            return true;
-        });
+        SeekerNavHelper.setup(this, bottomNavigationView, R.id.nav_profile_seeker);
 
         layoutRatingSummary = findViewById(R.id.layout_rating_summary);
         ratingBarProfile = findViewById(R.id.rating_bar_profile);
@@ -195,14 +174,4 @@ public class SeekerProfileActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (bottomNavigationView != null) {
-            MenuItem profileItem = bottomNavigationView.getMenu().findItem(R.id.nav_profile);
-            if (profileItem != null) {
-                profileItem.setChecked(true);
-            }
-        }
-    }
 }

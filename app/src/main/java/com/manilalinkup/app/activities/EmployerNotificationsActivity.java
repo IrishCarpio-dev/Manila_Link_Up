@@ -1,6 +1,5 @@
 package com.manilalinkup.app.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -9,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.manilalinkup.app.adapters.NotificationsAdapter;
+import com.manilalinkup.app.utilities.EmployerNavHelper;
 import com.manilalinkup.app.models.NotificationsModel;
 import com.manilalinkup.app.R;
 
@@ -38,27 +38,7 @@ public class EmployerNotificationsActivity extends BaseActivity {
         recyclerViewNotifications.setAdapter(adapterNotif);
 
         bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_notifications);
-        bottomNavigationViewEmployer.setOnItemSelectedListener(menuItem ->  {
-            if(menuItem.getItemId() == R.id.nav_home){
-                startActivity(new Intent(EmployerNotificationsActivity.this, EmployerDashboard.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }else if(menuItem.getItemId() == R.id.nav_add_job){
-                startActivity(new Intent(EmployerNotificationsActivity.this, EmployerAddJobActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }else if(menuItem.getItemId() == R.id.nav_chat) {
-                startActivity(new Intent(EmployerNotificationsActivity.this, ChatEmployerActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }else if(menuItem.getItemId() == R.id.nav_profile) {
-                startActivity(new Intent(EmployerNotificationsActivity.this, EmployerProfileActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }
-            return true;
-        });
+        EmployerNavHelper.setup(this, bottomNavigationViewEmployer, R.id.nav_notifications);
 
 
     }

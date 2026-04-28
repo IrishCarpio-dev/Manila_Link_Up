@@ -24,6 +24,7 @@ import com.manilalinkup.app.models.GetChatsRequest;
 import com.manilalinkup.app.models.HideChatRequest;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
+import com.manilalinkup.app.utilities.SeekerNavHelper;
 import com.manilalinkup.app.utilities.RetrofitClient;
 
 import java.util.ArrayList;
@@ -78,23 +79,7 @@ public class ChatSeekerActivity extends BaseActivity {
         recyclerViewChat.setAdapter(seekerChatTabAdapter);
 
         bottomNavigationViewSeeker = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationViewSeeker.setSelectedItemId(R.id.nav_chat_seeker);
-        bottomNavigationViewSeeker.setOnItemSelectedListener(menuItem -> {
-            if (menuItem.getItemId() == R.id.nav_home_seeker) {
-                startActivity(new Intent(this, SeekerDashboardActivity.class));
-                overridePendingTransition(0, 0);
-            } else if (menuItem.getItemId() == R.id.nav_notifications_seeker) {
-                startActivity(new Intent(this, SeekerNotificationsActivity.class));
-                overridePendingTransition(0, 0);
-            } else if (menuItem.getItemId() == R.id.nav_activity_seeker) {
-                startActivity(new Intent(this, AppliedSeekerActivity.class));
-                overridePendingTransition(0, 0);
-            } else if (menuItem.getItemId() == R.id.nav_profile_seeker) {
-                startActivity(new Intent(this, SeekerProfileActivity.class));
-                overridePendingTransition(0, 0);
-            }
-            return true;
-        });
+        SeekerNavHelper.setup(this, bottomNavigationViewSeeker, R.id.nav_chat_seeker);
     }
 
     @Override

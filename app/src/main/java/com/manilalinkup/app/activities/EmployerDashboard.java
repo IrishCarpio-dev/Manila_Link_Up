@@ -5,7 +5,7 @@ import static com.manilalinkup.app.utilities.RetrofitClient.BASE_URL;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
+import com.manilalinkup.app.utilities.EmployerNavHelper;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.adapters.JobPostDashboardAdapter;
@@ -138,39 +137,7 @@ public class EmployerDashboard extends BaseActivity {
         }
 
         bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_home);
-        bottomNavigationViewEmployer.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-
-                if (id == R.id.nav_home) {
-                    return true;
-                } else if (id == R.id.nav_profile) {
-                    Intent intent = new Intent(EmployerDashboard.this, EmployerProfileActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                    return true;
-                } else if (id == R.id.nav_notifications) {
-                    Intent intent = new Intent(EmployerDashboard.this, EmployerNotificationsActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                    return true;
-                } else if (id == R.id.nav_add_job) {
-                    Intent intent = new Intent(EmployerDashboard.this, EmployerAddJobActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                    return true;
-                } else if (id == R.id.nav_chat) {
-                    Intent intent = new Intent(EmployerDashboard.this, ChatEmployerActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                    return true;
-                }
-
-                return false;
-            }
-        });
+        EmployerNavHelper.setup(this, bottomNavigationViewEmployer, R.id.nav_home);
 
         loadJobs();
 
