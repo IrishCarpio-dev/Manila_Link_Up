@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,6 +68,9 @@ public class EmployerSettingsActivity extends AppCompatActivity {
         btnAbout = findViewById(R.id.btn_about);
 
         logoutButton = findViewById(R.id.btn_logout);
+
+        ImageButton btnBack = findViewById(R.id.btn_back);
+        if (btnBack != null) btnBack.setOnClickListener(v -> finish());
     }
 
     private boolean checkViewsExist() {

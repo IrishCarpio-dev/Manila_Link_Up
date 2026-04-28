@@ -75,26 +75,9 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button_delete_archived"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Delete"
-                android:textColor="#D32F2F" />
-
-            <Button
-                android:id="@+id/button_edit_archived"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Edit"
-                android:textColor="@color/manila_blue" />
-
-            <Button
                 android:id="@+id/button_repost_archived"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:backgroundTint="@color/manila_blue"
                 android:text="Repost"
                 android:textColor="@color/white" />
