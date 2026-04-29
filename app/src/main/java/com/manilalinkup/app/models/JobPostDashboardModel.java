@@ -80,4 +80,8 @@ public class JobPostDashboardModel {
 
     public String getSeekerName() { return seekerName; }
     public void setSeekerName(String seekerName) { this.seekerName = seekerName; }
+
+    private String chatId;
+    public String getChatId() { return chatId; }
+    public void setChatId(String chatId) { this.chatId = chatId; }
 }
