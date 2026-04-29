@@ -110,6 +110,33 @@
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/filter_row"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_below="@id/tab_bar"
+        android:background="@color/white"
+        android:elevation="1dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="12dp"
+            android:gravity="center_vertical"
+            android:text="Status:"
+            android:textColor="@color/dark_text"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/spinner_status_filter"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
+
     <!-- Active tab content -->
 
     <LinearLayout
@@ -117,7 +144,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation_view"
-        android:layout_below="@id/tab_bar"
+        android:layout_below="@id/filter_row"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone">
@@ -151,7 +178,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation_view"
-        android:layout_below="@id/tab_bar">
+        android:layout_below="@id/filter_row">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_employer_own_posts"

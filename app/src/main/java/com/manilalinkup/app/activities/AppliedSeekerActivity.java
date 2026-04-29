@@ -3,7 +3,10 @@ package com.manilalinkup.app.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -54,6 +57,10 @@ public class AppliedSeekerActivity extends BaseActivity {
     private View indicatorActive;
     private View indicatorCompleted;
 
+    private LinearLayout filterRow;
+    private Spinner spinnerFilter;
+    private Integer selectedStatus = null;
+
     private boolean completedLoaded = false;
     private boolean activeTab = true;
 
@@ -95,6 +102,28 @@ public class AppliedSeekerActivity extends BaseActivity {
         initCompletedAdapter();
         completedRecyclerView.setAdapter(completedAdapter);
 
+        filterRow = findViewById(R.id.filter_row);
+        spinnerFilter = findViewById(R.id.spinner_status_filter);
+
+        String[] filterOptions = {"All statuses", "Pending", "Interview", "Rejected", "Hired"};
+        Integer[] statusValues = {null, 1, 2, 3, 5};
+        ArrayAdapter<String> filterAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, filterOptions);
+        filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFilter.setAdapter(filterAdapter);
+        spinnerFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Integer newStatus = statusValues[position];
+                if (newStatus != selectedStatus && (newStatus == null || !newStatus.equals(selectedStatus))) {
+                    selectedStatus = newStatus;
+                    fetchAppliedJobs();
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
         tabActive.setOnClickListener(v -> selectTab(true));
         tabCompleted.setOnClickListener(v -> selectTab(false));
 
@@ -106,6 +135,7 @@ public class AppliedSeekerActivity extends BaseActivity {
         activeTab = active;
 
         if (active) {
+            filterRow.setVisibility(View.VISIBLE);
             swipeRefreshLayout.setVisibility(View.VISIBLE);
             completedSwipeRefresh.setVisibility(View.GONE);
             completedEmptyState.setVisibility(View.GONE);
@@ -119,6 +149,7 @@ public class AppliedSeekerActivity extends BaseActivity {
             tvTabCompleted.setTextColor(getResources().getColor(R.color.dark_text, getTheme()));
             indicatorCompleted.setVisibility(View.INVISIBLE);
         } else {
+            filterRow.setVisibility(View.GONE);
             swipeRefreshLayout.setVisibility(View.GONE);
             emptyState.setVisibility(View.GONE);
             completedSwipeRefresh.setVisibility(View.VISIBLE);
@@ -147,7 +178,7 @@ public class AppliedSeekerActivity extends BaseActivity {
         swipeRefreshLayout.setRefreshing(true);
         user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
-            api.getAppliedJobs(new GetAppliedJobsRequest(null, null, null))
+            api.getAppliedJobs(new GetAppliedJobsRequest(null, null, selectedStatus))
                     .enqueue(new Callback<ApiResponse<List<AppliedJobModel>>>() {
                         @Override
                         public void onResponse(Call<ApiResponse<List<AppliedJobModel>>> call,
