@@ -87,7 +87,7 @@ public class SeekerJobPostActivity extends BaseActivity {
         if (howLongPosted != null) tvHowLongPosted.setText(howLongPosted);
 
         if (salary > 0) {
-            tvSalary.setText(String.format(Locale.US, "â‚±%.0f/day", salary));
+            tvSalary.setText(String.format(Locale.US, "₱%.0f/hr", salary));
         } else {
             tvSalary.setVisibility(View.GONE);
             findViewById(R.id.money_logo).setVisibility(View.GONE);

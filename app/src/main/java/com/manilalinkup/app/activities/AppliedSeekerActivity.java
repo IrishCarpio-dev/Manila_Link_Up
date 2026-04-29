@@ -256,6 +256,8 @@ public class AppliedSeekerActivity extends BaseActivity {
             intent.putExtra("STATUS", job.getStatus() != null ? job.getStatus() : 1);
             intent.putExtra("SEEKER_HAS_COMPLETED", job.getSeekerCompletedAt() != null);
             intent.putExtra("CREATED_AT", job.getCreatedAt());
+            intent.putExtra("CHAT_ID", job.getChatId());
+            intent.putExtra("SEEKER_UID", job.getSeekerUid());
             if (job.getJob() != null) {
                 intent.putExtra("JOB_TITLE", job.getJob().getTitle());
                 intent.putExtra("LOCATION", job.getJob().getLocation());
