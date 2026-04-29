@@ -75,16 +75,38 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <TextView
+    <LinearLayout
         android:id="@+id/empty_state_chats"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation_view"
         android:layout_below="@id/card_view_dashboard_top_employer"
-        android:text="No conversations yet"
-        android:textColor="#9E9E9E"
-        android:textSize="16sp"
-        android:visibility="gone" />
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:alpha="0.5"
+            android:src="@drawable/logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif-black"
+            android:text="No conversations yet"
+            android:textColor="@color/dark_text"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Messages will appear here."
+            android:textColor="#757575"
+            android:textSize="14sp" />
+    </LinearLayout>
 
 </RelativeLayout>

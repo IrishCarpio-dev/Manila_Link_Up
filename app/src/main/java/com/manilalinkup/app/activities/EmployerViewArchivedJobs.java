@@ -1,6 +1,8 @@
 package com.manilalinkup.app.activities;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,6 +31,7 @@ public class EmployerViewArchivedJobs extends BaseActivity {
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private LinearLayout emptyState;
     private AppliedJobsAdapter.ArchiveJobAdapter adapter;
     private List<ArchiveJobModel> archiveList;
 
@@ -44,6 +47,8 @@ public class EmployerViewArchivedJobs extends BaseActivity {
         swipeRefreshLayout.setColorSchemeResources(R.color.manila_blue);
         swipeRefreshLayout.setOnRefreshListener(this::loadArchivedJobs);
 
+        emptyState = findViewById(R.id.empty_state_layout);
+
         recyclerView = findViewById(R.id.recycler_view_employer_archived_jobs);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -53,6 +58,16 @@ public class EmployerViewArchivedJobs extends BaseActivity {
 
         swipeRefreshLayout.setRefreshing(true);
         loadArchivedJobs();
+    }
+
+    private void updateEmptyState() {
+        if (archiveList.isEmpty()) {
+            emptyState.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            emptyState.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void loadArchivedJobs() {
@@ -77,12 +92,14 @@ public class EmployerViewArchivedJobs extends BaseActivity {
                             } else {
                                 ErrorUtils.showErrorMessage(EmployerViewArchivedJobs.this, response.errorBody());
                             }
+                            updateEmptyState();
                         }
 
                         @Override
                         public void onFailure(Call<ApiResponse<List<ArchiveJobModel>>> call, Throwable t) {
                             swipeRefreshLayout.setRefreshing(false);
                             ErrorUtils.showThrowableError(EmployerViewArchivedJobs.this, t);
+                            updateEmptyState();
                         }
                     });
         });

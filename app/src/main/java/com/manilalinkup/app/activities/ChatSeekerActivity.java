@@ -12,10 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
+
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.SeekerChatTabAdapter;
 import com.manilalinkup.app.models.ApiResponse;
@@ -104,6 +108,14 @@ public class ChatSeekerActivity extends BaseActivity {
                         if (err != null || snap == null) return;
                         Long count = snap.getLong("unreadCountSeeker");
                         chat.setUnreadCount(count != null ? count.intValue() : 0);
+                        String lastMsg = snap.getString("lastMessage");
+                        Timestamp lastMsgAt = snap.getTimestamp("lastMessageAt");
+                        if (lastMsg != null) chat.setLastMessage(lastMsg);
+                        if (lastMsgAt != null) {
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", java.util.Locale.US);
+                            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                            chat.setLastMessageAt(sdf.format(lastMsgAt.toDate()));
+                        }
                         int idx = chatList.indexOf(chat);
                         if (idx >= 0) seekerChatTabAdapter.notifyItemChanged(idx);
                     });

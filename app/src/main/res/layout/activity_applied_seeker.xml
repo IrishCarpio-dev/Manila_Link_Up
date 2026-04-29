@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/design_default_color_background"
     android:fitsSystemWindows="true">
 
@@ -48,31 +48,76 @@
         app:menu="@menu/bottom_nav_menu_icons" />
 
     <LinearLayout
-        android:id="@+id/section_header_container"
+        android:id="@+id/tab_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/card_view_dashboard_top_employer"
         android:background="@color/white"
         android:elevation="2dp"
-        android:orientation="horizontal"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="16dp">
+        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/tab_active"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-black"
-            android:text="My Applications"
-            android:textColor="@color/dark_text"
-            android:textSize="18sp" />
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="12dp">
+
+            <TextView
+                android:id="@+id/tv_tab_active"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="Active"
+                android:textColor="@color/manila_blue"
+                android:textSize="15sp" />
+
+            <View
+                android:id="@+id/indicator_active"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/manila_blue" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_completed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="12dp">
+
+            <TextView
+                android:id="@+id/tv_tab_completed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="Completed"
+                android:textColor="@color/dark_text"
+                android:textSize="15sp" />
+
+            <View
+                android:id="@+id/indicator_completed"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/manila_blue"
+                android:visibility="invisible" />
+        </LinearLayout>
     </LinearLayout>
+
+    <!-- Active tab content -->
 
     <LinearLayout
         android:id="@+id/empty_state_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/section_header_container"
         android:layout_above="@id/bottom_navigation_view"
+        android:layout_below="@id/tab_bar"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone">
@@ -84,13 +129,13 @@
             android:src="@drawable/logo" />
 
         <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="No applications yet"
-        android:textColor="@color/dark_text"
-        android:textSize="18sp"
-        android:fontFamily="sans-serif-black"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif-black"
+            android:text="No applications yet"
+            android:textColor="@color/dark_text"
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -106,7 +151,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation_view"
-        android:layout_below="@id/section_header_container">
+        android:layout_below="@id/tab_bar">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_employer_own_posts"
@@ -114,7 +159,58 @@
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_applied_tab_card" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <!-- Completed tab content -->
+
+    <LinearLayout
+        android:id="@+id/empty_state_completed"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation_view"
+        android:layout_below="@id/tab_bar"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:alpha="0.5"
+            android:src="@drawable/logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif-black"
+            android:text="No completed jobs yet"
+            android:textColor="@color/dark_text"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Jobs you've finished will appear here."
+            android:textColor="#757575"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_completed"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation_view"
+        android:layout_below="@id/tab_bar"
+        android:visibility="gone">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_completed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_applied_tab_card" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

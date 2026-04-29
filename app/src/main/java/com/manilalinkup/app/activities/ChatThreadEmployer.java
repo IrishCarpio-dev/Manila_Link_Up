@@ -175,7 +175,11 @@ public class ChatThreadEmployer extends BaseActivity {
         messagesRef.add(msg)
                 .addOnSuccessListener(ref -> {
                     btnSend.setEnabled(true);
-                    db.collection("chats").document(chatId).update("unreadCountSeeker", FieldValue.increment(1));
+                    Map<String, Object> chatUpdate = new HashMap<>();
+                    chatUpdate.put("unreadCountSeeker", FieldValue.increment(1));
+                    chatUpdate.put("lastMessage", text);
+                    chatUpdate.put("lastMessageAt", FieldValue.serverTimestamp());
+                    db.collection("chats").document(chatId).update(chatUpdate);
                     notifyRecipient(text);
                 })
                 .addOnFailureListener(e -> {
