@@ -10,7 +10,7 @@ public class SeekerProfileModel {
     String address;
     Date birthDate;
     String location;
-    String profilePhotoUrl;
+    String profilePhoto;
     Boolean isProfileSet;
     Boolean isVerified;
     Boolean isOpenForWork;
@@ -27,7 +27,7 @@ public class SeekerProfileModel {
             Date birthDate,
             String location,
             String mobileNumber,
-            String profilePhotoUrl,
+            String profilePhoto,
             Boolean isProfileSet,
             Boolean isVerified,
             Boolean isOpenForWork,
@@ -40,7 +40,7 @@ public class SeekerProfileModel {
         this.birthDate = birthDate;
         this.location = location;
         this.mobileNumber = mobileNumber;
-        this.profilePhotoUrl = profilePhotoUrl;
+        this.profilePhoto = profilePhoto;
         this.isProfileSet = isProfileSet;
         this.isVerified = isVerified;
         this.isOpenForWork = isOpenForWork;
@@ -61,7 +61,7 @@ public class SeekerProfileModel {
 
     public String getMobileNumber() { return mobileNumber; }
 
-    public String getProfilePhotoUrl() { return profilePhotoUrl; }
+    public String getProfilePhoto() { return profilePhoto; }
 
     public Boolean getProfileSet() { return isProfileSet; }
 

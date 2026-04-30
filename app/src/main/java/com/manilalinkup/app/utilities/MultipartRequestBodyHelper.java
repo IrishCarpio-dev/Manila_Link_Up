@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.Base64;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -53,6 +55,25 @@ public class MultipartRequestBodyHelper {
             return null;
         }
     }
+    public static MultipartBody.Part prepareProfilePhotoBase64Part(Context context, Uri uri) {
+        try {
+            InputStream isp = context.getContentResolver().openInputStream(uri);
+            Bitmap bitmap = BitmapFactory.decodeStream(isp);
+            isp.close();
+
+            bitmap = cropToSquare(bitmap, PROFILE_SIZE);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+            String base64 = Base64.encodeToString(baos.toByteArray(), Base64.NO_WRAP);
+
+            return MultipartBody.Part.createFormData("profilePhoto", base64);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static RequestBody createPartFromString(String descriptionString) {
         return RequestBody.create(MediaType.parse("text/plain"), descriptionString);
     }

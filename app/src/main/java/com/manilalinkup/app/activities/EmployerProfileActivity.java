@@ -31,7 +31,8 @@ import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
 import com.manilalinkup.app.utilities.SessionCache;
 
-import static com.manilalinkup.app.utilities.RetrofitClient.BASE_URL;
+import android.util.Base64;
+import com.manilalinkup.app.utilities.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,9 +121,10 @@ public class EmployerProfileActivity extends BaseActivity {
 
                 ivVerification.setVisibility(Boolean.TRUE.equals(employer.getVerified()) ? View.VISIBLE : View.GONE);
 
-                if (employer.getProfilePhotoUrl() != null) {
+                if (employer.getProfilePhoto() != null) {
+                    byte[] photoBytes = ImageUtils.decodeBase64Safe(employer.getProfilePhoto());
                     Glide.with(EmployerProfileActivity.this)
-                            .load(BASE_URL + employer.getProfilePhotoUrl())
+                            .load(photoBytes)
                             .placeholder(R.drawable.ic_person_placeholder)
                             .into(ivProfilePic);
                 }

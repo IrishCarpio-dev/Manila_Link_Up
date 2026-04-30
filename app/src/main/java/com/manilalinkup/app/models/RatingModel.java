@@ -32,10 +32,10 @@ public class RatingModel {
     public JobInfo getJob() { return job; }
 
     public static class RaterInfo {
-        String uid, name, profilePhotoUrl;
+        String uid, name, profilePhoto;
         public String getUid() { return uid; }
         public String getName() { return name; }
-        public String getProfilePhotoUrl() { return profilePhotoUrl; }
+        public String getProfilePhoto() { return profilePhoto; }
     }
 
     public static class JobInfo {

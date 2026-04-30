@@ -9,6 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Base64;
+import com.manilalinkup.app.utilities.ImageUtils;
+
 import com.bumptech.glide.Glide;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.models.ChatListItemModel;
@@ -99,9 +102,10 @@ public class SeekerChatTabAdapter extends RecyclerView.Adapter<SeekerChatTabAdap
                     ? android.graphics.Typeface.BOLD
                     : android.graphics.Typeface.NORMAL);
 
-            if (counterpart != null && counterpart.getProfilePhotoUrl() != null) {
+            if (counterpart != null && counterpart.getProfilePhoto() != null) {
+                byte[] photoBytes = ImageUtils.decodeBase64Safe(counterpart.getProfilePhoto());
                 Glide.with(itemView.getContext())
-                        .load(counterpart.getProfilePhotoUrl())
+                        .load(photoBytes)
                         .placeholder(R.drawable.ic_person_placeholder)
                         .circleCrop()
                         .into(contactProfilePicture);

@@ -31,10 +31,10 @@ public class ChatListItemModel {
     public JobSummaryModel getJob() { return job; }
 
     public static class CounterpartModel {
-        String uid, name, profilePhotoUrl;
+        String uid, name, profilePhoto;
         public String getUid() { return uid; }
         public String getName() { return name; }
-        public String getProfilePhotoUrl() { return profilePhotoUrl; }
+        public String getProfilePhoto() { return profilePhoto; }
     }
 
     public static class JobSummaryModel {

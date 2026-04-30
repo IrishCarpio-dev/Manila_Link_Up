@@ -84,7 +84,7 @@ public class EmployerListOfApplicants extends BaseActivity {
             intent.putExtra("FIRST_NAME", seeker.getFirstName());
             intent.putExtra("LAST_NAME", seeker.getLastName());
             intent.putExtra("LOCATION", seeker.getLocation());
-            intent.putExtra("PROFILE_PHOTO_URL", seeker.getProfilePhotoUrl());
+            intent.putExtra("PROFILE_PHOTO_URL", seeker.getProfilePhoto());
             intent.putExtra("RATING_COUNT", seeker.getRatingCount() != null ? seeker.getRatingCount() : 0);
             intent.putExtra("BAYESIAN_AVG", seeker.getBayesianAvg() != null ? seeker.getBayesianAvg() : 0.0);
         }

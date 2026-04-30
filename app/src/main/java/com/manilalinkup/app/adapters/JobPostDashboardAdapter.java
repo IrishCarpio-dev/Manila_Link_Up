@@ -11,6 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Base64;
+import com.manilalinkup.app.utilities.ImageUtils;
+
 import com.bumptech.glide.Glide;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -91,12 +94,18 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
         public void bind(JobPostDashboardModel jobBind, OnJobClickListener listener, boolean showOptionsMenu, Map<String, String> tagLabelsById){
 
             if (employer_pfp != null) {
-                Glide.with(itemView.getContext())
-                        .load(jobBind.getEmployerProfilePicture())
-                        .override(50, 50)
-                        .placeholder(R.drawable.user_placeholder)
-                        .circleCrop()
-                        .into(employer_pfp);
+                String pic = jobBind.getEmployerProfilePicture();
+                if (pic != null && !pic.isEmpty()) {
+                    byte[] photoBytes = ImageUtils.decodeBase64Safe(pic);
+                    Glide.with(itemView.getContext())
+                            .load(photoBytes)
+                            .override(50, 50)
+                            .placeholder(R.drawable.user_placeholder)
+                            .circleCrop()
+                            .into(employer_pfp);
+                } else {
+                    employer_pfp.setImageResource(R.drawable.user_placeholder);
+                }
             }
             if (employer_name != null) {
                 employer_name.setText(jobBind.getEmployerName());

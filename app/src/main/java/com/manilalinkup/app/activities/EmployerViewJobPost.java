@@ -14,6 +14,9 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 
+import android.util.Base64;
+import com.manilalinkup.app.utilities.ImageUtils;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
@@ -126,9 +129,11 @@ public class EmployerViewJobPost extends BaseActivity {
         }
 
         if (employerPhoto != null && !employerPhoto.isEmpty()) {
+            byte[] photoBytes = ImageUtils.decodeBase64Safe(employerPhoto);
             Glide.with(this)
-                    .load(employerPhoto)
+                    .load(photoBytes)
                     .apply(RequestOptions.circleCropTransform())
+                    .placeholder(R.drawable.ic_person_placeholder)
                     .into(ivProfilePicture);
         }
 

@@ -1,6 +1,5 @@
 package com.manilalinkup.app.activities;
 
-import static com.manilalinkup.app.utilities.RetrofitClient.BASE_URL;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -243,7 +242,7 @@ public class SeekerDashboardActivity extends BaseActivity {
 
     private JobPostDashboardModel mapToDisplayModel(JobModel job) {
         String employerName = job.getEmployer() != null ? job.getEmployer().getFullName() : "";
-        String photoUrl = job.getEmployer() != null ? BASE_URL + job.getEmployer().getProfilePhotoUrl() : "";
+        String photoUrl = job.getEmployer() != null ? job.getEmployer().getProfilePhoto() : null;
         JobPostDashboardModel model = new JobPostDashboardModel(
             job.getTitle(),
             employerName,

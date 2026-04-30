@@ -5,7 +5,7 @@ public class EmployerProfileModel {
     String email;
     String address;
     String mobileNumber;
-    String profilePhotoUrl;
+    String profilePhoto;
     Boolean isProfileSet;
     Boolean isVerified;
     Integer ratingCount;
@@ -17,7 +17,7 @@ public class EmployerProfileModel {
             String email,
             String address,
             String mobileNumber,
-            String profilePhotoUrl,
+            String profilePhoto,
             Boolean isProfileSet,
             Boolean isVerified
     ) {
@@ -25,7 +25,7 @@ public class EmployerProfileModel {
         this.email = email;
         this.address = address;
         this.mobileNumber = mobileNumber;
-        this.profilePhotoUrl = profilePhotoUrl;
+        this.profilePhoto = profilePhoto;
         this.isProfileSet = isProfileSet;
         this.isVerified = isVerified;
     }
@@ -38,7 +38,7 @@ public class EmployerProfileModel {
 
     public String getMobileNumber() { return mobileNumber; }
 
-    public String getProfilePhotoUrl() { return profilePhotoUrl; }
+    public String getProfilePhoto() { return profilePhoto; }
 
     public Boolean getProfileSet() { return isProfileSet; }
 

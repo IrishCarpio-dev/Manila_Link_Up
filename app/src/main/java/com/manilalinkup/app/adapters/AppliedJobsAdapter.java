@@ -7,6 +7,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import android.util.Base64;
+import com.manilalinkup.app.utilities.ImageUtils;
+
 import com.bumptech.glide.Glide;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.models.AppliedJobModel;
@@ -47,10 +50,15 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
             holder.jobTitle.setText(application.getJob().getTitle());
             if (application.getJob().getEmployer() != null) {
                 holder.employerName.setText(application.getJob().getEmployer().getFullName());
-                Glide.with(holder.itemView.getContext())
-                        .load(application.getJob().getEmployer().getProfilePhotoUrl())
-                        .circleCrop()
-                        .into(holder.employerLogo);
+                String employerPhoto = application.getJob().getEmployer().getProfilePhoto();
+                if (employerPhoto != null) {
+                    byte[] photoBytes = ImageUtils.decodeBase64Safe(employerPhoto);
+                    Glide.with(holder.itemView.getContext())
+                            .load(photoBytes)
+                            .circleCrop()
+                            .placeholder(R.drawable.ic_person_placeholder)
+                            .into(holder.employerLogo);
+                }
             }
         }
 

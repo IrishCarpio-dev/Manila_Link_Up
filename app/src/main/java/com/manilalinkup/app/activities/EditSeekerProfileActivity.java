@@ -286,7 +286,7 @@ public class EditSeekerProfileActivity extends BaseActivity {
             return;
         }
 
-        MultipartBody.Part profilePhoto = (profilePhotoUri != null) ? MultipartRequestBodyHelper.prepareImagePart(this, profilePhotoUri, "profilePhoto") : null;
+        MultipartBody.Part profilePhoto = (profilePhotoUri != null) ? MultipartRequestBodyHelper.prepareProfilePhotoBase64Part(this, profilePhotoUri) : null;
         MultipartBody.Part clearance = MultipartRequestBodyHelper.prepareImagePart(this, clearanceUri, "clearance");
         MultipartBody.Part validId = MultipartRequestBodyHelper.prepareImagePart(this, validIdUri, "validId");
 

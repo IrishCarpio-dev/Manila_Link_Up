@@ -68,7 +68,7 @@ public class SeekerCompletedJobsActivity extends BaseActivity {
                 intent.putExtra("EXPIRES_AT", job.getJob().getExpiresAt());
                 if (job.getJob().getEmployer() != null) {
                     intent.putExtra("EMPLOYER_NAME", job.getJob().getEmployer().getFullName());
-                    intent.putExtra("EMPLOYER_PHOTO", job.getJob().getEmployer().getProfilePhotoUrl());
+                    intent.putExtra("EMPLOYER_PHOTO", job.getJob().getEmployer().getProfilePhoto());
                 }
             }
             startActivity(intent);

@@ -8,6 +8,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import android.util.Base64;
+import com.manilalinkup.app.utilities.ImageUtils;
+
 import com.bumptech.glide.Glide;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.models.RatingModel;
@@ -39,11 +42,16 @@ public class EmployerAllRatingsAdapter extends RecyclerView.Adapter<EmployerAllR
             String[] parts = name.split(" ", 2);
             holder.firstname.setText(parts.length > 0 ? parts[0] : "");
             holder.lastname.setText(parts.length > 1 ? parts[1] : "");
-            Glide.with(holder.itemView.getContext())
-                    .load(rater.getProfilePhotoUrl())
-                    .placeholder(R.drawable.ic_person_placeholder)
-                    .circleCrop()
-                    .into(holder.imageProfile);
+            if (rater.getProfilePhoto() != null) {
+                byte[] photoBytes = ImageUtils.decodeBase64Safe(rater.getProfilePhoto());
+                Glide.with(holder.itemView.getContext())
+                        .load(photoBytes)
+                        .placeholder(R.drawable.ic_person_placeholder)
+                        .circleCrop()
+                        .into(holder.imageProfile);
+            } else {
+                holder.imageProfile.setImageResource(R.drawable.ic_person_placeholder);
+            }
         }
 
         holder.ratingMessage.setText(rating.getComment() != null ? rating.getComment() : "");

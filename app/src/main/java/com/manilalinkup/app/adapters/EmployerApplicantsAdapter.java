@@ -12,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Base64;
+import com.manilalinkup.app.utilities.ImageUtils;
+
 import com.bumptech.glide.Glide;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.models.ApplicantModel;
@@ -94,9 +97,10 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
                     setStarTint(rating, 0f);
                 }
 
-                if (seeker.getProfilePhotoUrl() != null) {
+                if (seeker.getProfilePhoto() != null) {
+                    byte[] photoBytes = ImageUtils.decodeBase64Safe(seeker.getProfilePhoto());
                     Glide.with(itemView.getContext())
-                            .load(seeker.getProfilePhotoUrl())
+                            .load(photoBytes)
                             .placeholder(R.drawable.ic_person_placeholder)
                             .circleCrop()
                             .into(profilePhoto);

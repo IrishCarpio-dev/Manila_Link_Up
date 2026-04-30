@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import androidx.core.graphics.drawable.DrawableCompat;
 
+import android.util.Base64;
+import com.manilalinkup.app.utilities.ImageUtils;
+
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -80,8 +83,9 @@ public class ApplicantProfileActivity extends BaseActivity {
 
         String photoUrl = getIntent().getStringExtra("PROFILE_PHOTO_URL");
         if (photoUrl != null) {
+            byte[] photoBytes = ImageUtils.decodeBase64Safe(photoUrl);
             Glide.with(this)
-                    .load(photoUrl)
+                    .load(photoBytes)
                     .placeholder(R.drawable.ic_person_placeholder)
                     .circleCrop()
                     .into(profilePhoto);
