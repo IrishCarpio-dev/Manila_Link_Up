@@ -22,6 +22,7 @@ import com.manilalinkup.app.models.GetRatingsRequest;
 import com.manilalinkup.app.models.HideChatRequest;
 import com.manilalinkup.app.models.JobModel;
 import com.manilalinkup.app.models.MarkCompleteRequest;
+import com.manilalinkup.app.models.NotificationItemModel;
 import com.manilalinkup.app.models.NotifyChatRequest;
 import com.manilalinkup.app.models.RatingModel;
 import com.manilalinkup.app.models.RegisterDeviceRequest;
@@ -32,6 +33,7 @@ import com.manilalinkup.app.models.SeekerJobsResponse;
 import com.manilalinkup.app.models.SeekerPreferencesModel;
 import com.manilalinkup.app.models.SeekerRequest;
 import com.manilalinkup.app.models.ServiceTagModel;
+import com.manilalinkup.app.models.UnreadCountResponse;
 import com.manilalinkup.app.models.UpdateApplicationStatusRequest;
 import com.manilalinkup.app.models.UserProfileModel;
 import com.manilalinkup.app.models.WithdrawApplicationRequest;
@@ -47,6 +49,8 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -87,6 +91,9 @@ public interface ApiService {
 
     @POST("api/jobs/list")
     Call<ApiResponse<List<JobModel>>> getJobs(@Body GetJobsRequest getJobsRequest);
+
+    @GET("api/jobs/{id}")
+    Call<ApiResponse<JobModel>> getJob(@Path("id") String id);
 
     @POST("api/jobs/archive")
     Call<ResponseBody> archiveJob(@Body ArchiveJobRequest archiveJobRequest);
@@ -150,4 +157,14 @@ public interface ApiService {
     // Seeker Preferences
     @POST("api/seeker/preferences")
     Call<ApiResponse<SeekerPreferencesModel>> updateSeekerPreferences(@Body SeekerPreferencesModel request);
+
+    // Notifications
+    @GET("api/notifications")
+    Call<ApiResponse<List<NotificationItemModel>>> getNotifications(@Query("limit") Integer limit, @Query("startAfter") String startAfter, @Query("unreadOnly") Boolean unreadOnly);
+
+    @POST("api/notifications/read-all")
+    Call<ResponseBody> markAllNotificationsRead();
+
+    @GET("api/notifications/unread-count")
+    Call<UnreadCountResponse> getNotificationUnreadCount();
 }

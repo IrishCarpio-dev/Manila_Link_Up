@@ -35,6 +35,7 @@
             android:src="@drawable/ic_more_vert"
             android:visibility="gone" />
 
+
         <TextView
             android:id="@+id/item_card_job_title_placeholder"
             android:layout_width="wrap_content"

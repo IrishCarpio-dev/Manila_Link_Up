@@ -21,8 +21,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
+import com.google.android.material.badge.BadgeDrawable;
 import com.manilalinkup.app.adapters.JobPostDashboardAdapter;
 import com.manilalinkup.app.models.GetSeekerJobsRequest;
+import com.manilalinkup.app.models.UnreadCountResponse;
 import com.manilalinkup.app.models.JobModel;
 import com.manilalinkup.app.models.SeekerJobsResponse;
 import com.manilalinkup.app.models.JobPostDashboardModel;
@@ -134,6 +136,35 @@ public class SeekerDashboardActivity extends BaseActivity {
 
         loadServiceTags();
         loadJobs();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadUnreadCount();
+    }
+
+    private void loadUnreadCount() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+        user.getIdToken(false).addOnSuccessListener(result -> {
+            ApiService apiService = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
+            apiService.getNotificationUnreadCount().enqueue(new Callback<UnreadCountResponse>() {
+                @Override
+                public void onResponse(Call<UnreadCountResponse> call, Response<UnreadCountResponse> response) {
+                    if (!isFinishing() && response.isSuccessful() && response.body() != null) {
+                        int count = response.body().getCount();
+                        if (count > 0) {
+                            BadgeDrawable badge = bottomNavigationView.getOrCreateBadge(R.id.nav_notifications_seeker);
+                            badge.setNumber(count);
+                        } else {
+                            bottomNavigationView.removeBadge(R.id.nav_notifications_seeker);
+                        }
+                    }
+                }
+                @Override public void onFailure(Call<UnreadCountResponse> call, Throwable t) {}
+            });
+        });
     }
 
     private void refreshJobs() {

@@ -99,7 +99,7 @@ public class EmployerListOfApplicants extends BaseActivity {
 
         user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
-            api.getApplicants(new GetApplicantsRequest(jobId, null, null, null))
+            api.getApplicants(new GetApplicantsRequest(jobId, 50, null, null))
                     .enqueue(new Callback<ApiResponse<List<ApplicantModel>>>() {
                 @Override
                 public void onResponse(Call<ApiResponse<List<ApplicantModel>>> call, Response<ApiResponse<List<ApplicantModel>>> response) {
