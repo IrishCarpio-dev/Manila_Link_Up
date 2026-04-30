@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.manilalinkup.app.utilities.EmployerNavHelper;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +57,7 @@ public class EmployerDashboard extends BaseActivity {
     private List<JobPostDashboardModel> jobListJobCard;
     private ProgressBar progressBarLoadMore;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private LinearLayout emptyState;
     private TextView greetingNameText;
     private CardView jobAddJob;
     BottomNavigationView bottomNavigationViewEmployer;
@@ -76,6 +78,7 @@ public class EmployerDashboard extends BaseActivity {
         recyclerViewJobPost.setLayoutManager(new LinearLayoutManager(this));
         progressBarLoadMore = findViewById(R.id.progress_bar_load_more);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        emptyState = findViewById(R.id.empty_state_layout);
         swipeRefreshLayout.setOnRefreshListener(this::refreshJobs);
         greetingNameText = findViewById(R.id.textview_greeting_name_employer);
 
@@ -235,6 +238,10 @@ public class EmployerDashboard extends BaseActivity {
                         List<JobModel> jobs = response.body().getData();
                         if (jobs == null || jobs.isEmpty()) {
                             hasMorePages = false;
+                            if (jobListJobCard.isEmpty()) {
+                                emptyState.setVisibility(View.VISIBLE);
+                                recyclerViewJobPost.setVisibility(View.GONE);
+                            }
                             return;
                         }
                         if (jobs.size() < PAGE_SIZE) hasMorePages = false;
@@ -258,6 +265,10 @@ public class EmployerDashboard extends BaseActivity {
                     }
                     progressBarLoadMore.setVisibility(View.GONE);
                     ErrorUtils.showThrowableError(EmployerDashboard.this, t);
+                    if (jobListJobCard.isEmpty()) {
+                        emptyState.setVisibility(View.VISIBLE);
+                        recyclerViewJobPost.setVisibility(View.GONE);
+                    }
                 }
             });
         });
@@ -326,6 +337,10 @@ public class EmployerDashboard extends BaseActivity {
                         adapterJobPost.notifyItemRemoved(position);
                         adapterJobPost.notifyItemRangeChanged(position, jobListJobCard.size());
                         Toast.makeText(EmployerDashboard.this, "Job archived", Toast.LENGTH_SHORT).show();
+                        if (jobListJobCard.isEmpty()) {
+                            emptyState.setVisibility(View.VISIBLE);
+                            recyclerViewJobPost.setVisibility(View.GONE);
+                        }
                     } else {
                         ErrorUtils.showErrorMessage(EmployerDashboard.this, response.errorBody());
                     }

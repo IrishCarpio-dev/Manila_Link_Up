@@ -2,12 +2,14 @@ package com.manilalinkup.app.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
 
 import androidx.activity.EdgeToEdge;
 
@@ -37,6 +39,7 @@ import retrofit2.Response;
 public class AppliedJobPostActivity extends BaseActivity {
 
     private MaterialButton btnCancel;
+    private MaterialButton btnChat;
     private MaterialButton btnMarkComplete;
     private MaterialButton btnRate;
     private MaterialButton btnMessageEmployer;
@@ -58,6 +61,8 @@ public class AppliedJobPostActivity extends BaseActivity {
 
         applicationId      = getIntent().getStringExtra("APPLICATION_ID");
         employerName       = getIntent().getStringExtra("EMPLOYER_NAME");
+        chatId             = getIntent().getStringExtra("CHAT_ID");
+        seekerUid          = getIntent().getStringExtra("SEEKER_UID");
         currentStatus      = getIntent().getIntExtra("STATUS", 1);
         seekerHasCompleted = getIntent().getBooleanExtra("SEEKER_HAS_COMPLETED", false);
         chatId             = getIntent().getStringExtra("CHAT_ID");
@@ -94,7 +99,7 @@ public class AppliedJobPostActivity extends BaseActivity {
         if (description != null)  tvDescription.setText(description);
 
         if (salary > 0) {
-            tvSalary.setText(String.format(Locale.US, "â‚±%.0f/day", salary));
+            tvSalary.setText(String.format(Locale.US, "₱%.0f/hr", salary));
         } else {
             tvSalary.setVisibility(View.GONE);
             findViewById(R.id.money_logo).setVisibility(View.GONE);
@@ -113,9 +118,10 @@ public class AppliedJobPostActivity extends BaseActivity {
 
         applyStatusBadge(tvStatusBadge, currentStatus);
 
-        btnCancel         = findViewById(R.id.button_cancel_application);
-        btnMarkComplete   = findViewById(R.id.btn_mark_complete);
-        btnRate           = findViewById(R.id.btn_rate);
+        btnCancel          = findViewById(R.id.button_cancel_application);
+        btnChat            = findViewById(R.id.btn_chat);
+        btnMarkComplete    = findViewById(R.id.btn_mark_complete);
+        btnRate            = findViewById(R.id.btn_rate);
         btnMessageEmployer = findViewById(R.id.btn_message_employer);
 
         updateActionVisibility();
@@ -152,15 +158,28 @@ public class AppliedJobPostActivity extends BaseActivity {
     }
 
     private void updateActionVisibility() {
-        // Cancel: only for pending (1) or interview (2)
-        btnCancel.setVisibility(currentStatus == 1 || currentStatus == 2 ? View.VISIBLE : View.GONE);
-        btnCancel.setOnClickListener(v -> confirmCancel());
+        if (currentStatus == 1 || currentStatus == 2) {
+            btnCancel.setVisibility(View.VISIBLE);
+            btnCancel.setText("Withdraw");
+            btnCancel.setOnClickListener(v -> confirmCancel());
+        } else if (currentStatus == 5 && !seekerHasCompleted) {
+            btnCancel.setVisibility(View.VISIBLE);
+            btnCancel.setText("Complete");
+            int gray = ContextCompat.getColor(this, R.color.button_gray);
+            btnCancel.setBackgroundTintList(ColorStateList.valueOf(gray));
+            btnCancel.setTextColor(ContextCompat.getColor(this, R.color.white));
+            btnCancel.setStrokeWidth(0);
+            btnCancel.setRippleColor(ColorStateList.valueOf(android.graphics.Color.parseColor("#40FFFFFF")));
+            btnCancel.setOnClickListener(v -> confirmMarkComplete());
+        } else {
+            btnCancel.setVisibility(View.GONE);
+        }
 
-        // Mark complete: hired and seeker hasn't marked yet
-        btnMarkComplete.setVisibility(currentStatus == 5 && !seekerHasCompleted ? View.VISIBLE : View.GONE);
-        btnMarkComplete.setOnClickListener(v -> confirmMarkComplete());
+        btnChat.setVisibility((currentStatus == 2 || currentStatus == 5) && chatId != null ? View.VISIBLE : View.GONE);
+        btnChat.setOnClickListener(v -> openChat());
 
-        // Rate: completed
+        btnMarkComplete.setVisibility(View.GONE);
+
         btnRate.setVisibility(currentStatus == 6 ? View.VISIBLE : View.GONE);
         btnRate.setOnClickListener(v -> openRating());
 

@@ -13,14 +13,14 @@ public class DateUtils {
         if (raw == null || raw.isEmpty()) return "";
 
         SimpleDateFormat[] parsers = {
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US),
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US),
+            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX", Locale.US),
+            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US),
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US),
         };
+        parsers[2].setTimeZone(TimeZone.getTimeZone("UTC"));
 
         Date date = null;
         for (SimpleDateFormat parser : parsers) {
-            parser.setTimeZone(TimeZone.getTimeZone("UTC"));
             try {
                 date = parser.parse(raw);
                 break;

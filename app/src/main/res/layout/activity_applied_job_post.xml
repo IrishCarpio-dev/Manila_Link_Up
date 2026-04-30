@@ -28,76 +28,112 @@
 
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_save_apply_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@android:color/transparent"
-        android:orientation="horizontal"
-        android:paddingHorizontal="48dp"
-        android:paddingBottom="8dp"
-        android:weightSum="1">
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="8dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_cancel_application"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginHorizontal="@dimen/padding_standard"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="12dp"
-            android:text="Cancel Application"
+            android:text="Withdraw"
             android:textAllCaps="false"
             android:textColor="#D32F2F"
             android:textSize="@dimen/text_body"
             android:visibility="gone"
             app:cornerRadius="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_chat"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_goneMarginEnd="0dp"
             app:strokeColor="#D32F2F"
             app:strokeWidth="1.5dp"
             app:rippleColor="#15D32F2F" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_chat"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@color/manila_blue"
+            android:text="Chat"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_body"
+            android:visibility="gone"
+            app:cornerRadius="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/button_cancel_application"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_mark_complete"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginHorizontal="@dimen/padding_standard"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
             android:layout_marginBottom="12dp"
             android:backgroundTint="@color/manila_blue"
             android:text="Mark Job Complete"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/text_body"
+            android:visibility="gone"
             app:cornerRadius="12dp"
-            android:visibility="gone" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_rate"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginHorizontal="@dimen/padding_standard"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
             android:layout_marginBottom="12dp"
             android:text="Rate Employer"
             android:textAllCaps="false"
             android:textSize="@dimen/text_body"
+            android:visibility="gone"
             app:cornerRadius="12dp"
-            android:visibility="gone" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_message_employer"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginHorizontal="16dp"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
             android:layout_marginBottom="12dp"
             android:backgroundTint="@color/manila_blue"
             android:text="Message Employer"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_body"
+            android:visibility="gone"
             app:cornerRadius="12dp"
-            android:visibility="gone" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -215,75 +251,90 @@
                         android:textSize="12sp"
                         android:text="Employer Name" />
 
-                    <ImageView
-                        android:id="@+id/location_logo"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_below="@id/text_view_employer_name_placeholder"
-                        android:layout_alignTop="@+id/text_view_location_placeholder"
-                        android:layout_marginTop="@dimen/padding_standard"
-                        android:src="@drawable/location3" />
-
-                    <TextView
-                        android:id="@+id/text_view_location_placeholder"
+                    <LinearLayout
+                        android:id="@+id/row_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/text_view_employer_name_placeholder"
-                        android:layout_marginStart="@dimen/padding_small"
                         android:layout_marginTop="@dimen/padding_standard"
-                        android:layout_toEndOf="@id/location_logo"
-                        android:fontFamily="sans-serif"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="@dimen/text_small"
-                        android:text="Binondo, Manila" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/money_logo"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_alignTop="@+id/text_view_salary_placeholder"
-                        android:layout_marginTop="3dp"
-                        android:src="@drawable/moneybill" />
+                        <ImageView
+                            android:id="@+id/location_logo"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/location3" />
 
-                    <TextView
-                        android:id="@+id/text_view_salary_placeholder"
+                        <TextView
+                            android:id="@+id/text_view_location_placeholder"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/padding_small"
+                            android:fontFamily="sans-serif"
+                            android:textColor="@color/secondary_text"
+                            android:textSize="@dimen/text_small"
+                            android:text="Binondo, Manila" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/row_salary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/text_view_location_placeholder"
-                        android:layout_marginStart="@dimen/padding_small"
+                        android:layout_below="@id/row_location"
                         android:layout_marginTop="4dp"
-                        android:layout_toEndOf="@id/money_logo"
-                        android:fontFamily="sans-serif"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="@dimen/text_small"
-                        android:text="P700/day" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/calendar_logo"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_alignTop="@id/text_view_calendar_placeholder"
-                        android:layout_marginTop="3dp"
-                        android:src="@drawable/bxscalendarcheck" />
+                        <ImageView
+                            android:id="@+id/money_logo"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/moneybill" />
 
-                    <TextView
-                        android:id="@+id/text_view_calendar_placeholder"
+                        <TextView
+                            android:id="@+id/text_view_salary_placeholder"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/padding_small"
+                            android:fontFamily="sans-serif"
+                            android:textColor="@color/secondary_text"
+                            android:textSize="@dimen/text_small"
+                            android:text="&#8369;700/hr" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/row_calendar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/text_view_salary_placeholder"
-                        android:layout_marginStart="@dimen/padding_small"
+                        android:layout_below="@id/row_salary"
                         android:layout_marginTop="4dp"
-                        android:layout_toEndOf="@id/calendar_logo"
-                        android:fontFamily="sans-serif"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="@dimen/text_small"
-                        android:text="Apr. 4-8, 2026" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/calendar_logo"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/bxscalendarcheck" />
+
+                        <TextView
+                            android:id="@+id/text_view_calendar_placeholder"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/padding_small"
+                            android:fontFamily="sans-serif"
+                            android:textColor="@color/secondary_text"
+                            android:textSize="@dimen/text_small"
+                            android:text="Apr. 4-8, 2026" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/applied_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/text_view_calendar_placeholder"
+                        android:layout_below="@id/row_calendar"
+                        android:layout_marginTop="4dp"
                         android:text="Applied: Apr 08, 2026"
                         android:textSize="12sp"
                         android:textColor="#9E9E9E" />
