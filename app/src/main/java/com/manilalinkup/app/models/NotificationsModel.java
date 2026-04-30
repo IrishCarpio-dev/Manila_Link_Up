@@ -8,9 +8,10 @@ public class NotificationsModel {
     private final boolean isRead;
     private final String type;
     private final String notifId;
+    private final String jobId;
 
     public NotificationsModel(int imageType, String notifTitle, String descriptionNotif,
-                              String notifTimeStamp, boolean isRead, String type, String notifId) {
+                              String notifTimeStamp, boolean isRead, String type, String notifId, String jobId) {
         this.imageType = imageType;
         this.notifTitle = notifTitle;
         this.descriptionNotif = descriptionNotif;
@@ -18,10 +19,16 @@ public class NotificationsModel {
         this.isRead = isRead;
         this.type = type;
         this.notifId = notifId;
+        this.jobId = jobId;
+    }
+
+    public NotificationsModel(int imageType, String notifTitle, String descriptionNotif,
+                              String notifTimeStamp, boolean isRead, String type, String notifId) {
+        this(imageType, notifTitle, descriptionNotif, notifTimeStamp, isRead, type, notifId, null);
     }
 
     public NotificationsModel(int imageType, String notifTitle, String descriptionNotif, String notifTimeStamp) {
-        this(imageType, notifTitle, descriptionNotif, notifTimeStamp, true, null, null);
+        this(imageType, notifTitle, descriptionNotif, notifTimeStamp, true, null, null, null);
     }
 
     public int getType()           { return imageType; }
@@ -31,4 +38,5 @@ public class NotificationsModel {
     public boolean isRead()        { return isRead; }
     public String getNotifType()   { return type; }
     public String getNotifId()     { return notifId; }
+    public String getJobId()       { return jobId; }
 }

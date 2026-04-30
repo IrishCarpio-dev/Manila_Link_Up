@@ -10,9 +10,9 @@ public class NotificationItemModel {
     private String title;
     private String body;
     private Map<String, String> data;
-    @SerializedName("readAt")
+    @SerializedName(value = "readAt", alternate = {"read_at"})
     private String readAt;
-    @SerializedName("createdAt")
+    @SerializedName(value = "createdAt", alternate = {"created_at"})
     private String createdAt;
 
     public String getId() { return id; }

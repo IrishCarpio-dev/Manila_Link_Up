@@ -55,8 +55,7 @@ public class EmployerNotificationsActivity extends BaseActivity {
         adapterNotif  = new NotificationsAdapter(notifListCard);
         recyclerViewNotifications.setAdapter(adapterNotif);
 
-        adapterNotif.setOnItemClickListener(notification ->
-                handleNotificationClick(notification.getNotifType()));
+        adapterNotif.setOnItemClickListener(this::handleNotificationClick);
 
         bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
         EmployerNavHelper.setup(this, bottomNavigationViewEmployer, R.id.nav_notifications);
@@ -110,12 +109,14 @@ public class EmployerNotificationsActivity extends BaseActivity {
         });
     }
 
-    private void handleNotificationClick(String type) {
+    private void handleNotificationClick(NotificationsModel notification) {
+        String type = notification.getNotifType();
         if (type == null) return;
         Intent intent;
         switch (type) {
             case NotificationUtils.TYPE_NEW_APPLICANT:
-                intent = new Intent(this, EmployerListOfApplicants.class);
+                intent = new Intent(this, EmployerViewJobPost.class);
+                intent.putExtra("JOB_ID", notification.getJobId());
                 break;
             case NotificationUtils.TYPE_RATING_RECEIVED:
             case NotificationUtils.TYPE_VERIFIED:
@@ -125,8 +126,10 @@ public class EmployerNotificationsActivity extends BaseActivity {
                 intent = new Intent(this, EmployerBusinessVerificationActivity.class);
                 break;
             case NotificationUtils.TYPE_JOB_EXPIRING:
+                intent = new Intent(this, EmployerViewJobPost.class);
+                break;
             case NotificationUtils.TYPE_JOB_COMPLETED:
-                intent = new Intent(this, EmployerDashboard.class);
+                intent = new Intent(this, EmployerViewArchivedJobs.class);
                 break;
             default:
                 return;

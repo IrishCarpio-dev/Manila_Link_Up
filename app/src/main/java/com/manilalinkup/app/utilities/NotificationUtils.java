@@ -30,15 +30,71 @@ public class NotificationUtils {
     public static NotificationsModel toDisplayModel(NotificationItemModel item) {
         int icon = iconForType(item.getType());
         String timestamp = relativeTime(item.getCreatedAt());
-        return new NotificationsModel(
-                icon,
-                item.getTitle(),
-                item.getBody(),
-                timestamp,
-                item.isRead(),
-                item.getType(),
-                item.getId()
-        );
+        String title = buildTitle(item);
+        String description = buildDescription(item);
+        String jobId = firstDataValue(item, "jobId", "job_id");
+        return new NotificationsModel(icon, title, description, timestamp, item.isRead(), item.getType(), item.getId(), jobId);
+    }
+
+    private static String buildTitle(NotificationItemModel item) {
+        if (item.getType() == null) return safe(item.getTitle());
+        switch (item.getType()) {
+            case TYPE_RATING_RECEIVED:
+                return "New Rating Notification";
+            case TYPE_JOB_EXPIRING:
+            case TYPE_JOB_COMPLETED: {
+                String jobTitle = item.getDataValue("jobTitle");
+                return jobTitle != null && !jobTitle.isEmpty() ? jobTitle : safe(item.getTitle());
+            }
+            default:
+                return safe(item.getTitle());
+        }
+    }
+
+    private static String buildDescription(NotificationItemModel item) {
+        if (item.getType() == null) return safe(item.getBody());
+        switch (item.getType()) {
+            case TYPE_NEW_APPLICANT: {
+                String name = firstDataValue(item, "seekerName", "seeker_name", "applicantName", "applicant_name");
+                String jobTitle = item.getDataValue("jobTitle");
+                if (name != null && !name.isEmpty() && jobTitle != null && !jobTitle.isEmpty())
+                    return name + " applied for " + jobTitle;
+                if (name != null && !name.isEmpty()) return name + " applied";
+                return safe(item.getBody());
+            }
+            case TYPE_RATING_RECEIVED: {
+                String name = firstDataValue(item, "raterName", "rater_name", "seekerName", "seeker_name", "applicantName", "applicant_name");
+                String jobTitle = item.getDataValue("jobTitle");
+                String jobId = firstDataValue(item, "jobId", "job_id");
+                String jobRef = (jobTitle != null && !jobTitle.isEmpty()) ? jobTitle : jobId;
+                if (name != null && !name.isEmpty() && jobRef != null && !jobRef.isEmpty())
+                    return "You received a rating from " + name + " for " + jobRef + ".";
+                if (name != null && !name.isEmpty())
+                    return "You received a rating from " + name + ".";
+                return safe(item.getBody());
+            }
+            case TYPE_JOB_EXPIRING:
+                return "Expires in 24 hours";
+            case TYPE_JOB_COMPLETED: {
+                String name = firstDataValue(item, "seekerName", "seeker_name", "applicantName", "applicant_name");
+                if (name != null) return name + " marked this job complete";
+                return safe(item.getBody());
+            }
+            default:
+                return safe(item.getBody());
+        }
+    }
+
+    private static String firstDataValue(NotificationItemModel item, String... keys) {
+        for (String key : keys) {
+            String v = item.getDataValue(key);
+            if (v != null && !v.isEmpty()) return v;
+        }
+        return null;
+    }
+
+    private static String safe(String s) {
+        return s != null ? s : "";
     }
 
     public static int iconForType(String type) {
@@ -58,9 +114,11 @@ public class NotificationUtils {
                 return R.drawable.ic_verified_notif;
             case TYPE_REJECTED:
             case TYPE_JOB_FILLED:
-            case TYPE_JOB_EXPIRING:
-            case TYPE_JOB_COMPLETED:
                 return R.drawable.ic_job_notif;
+            case TYPE_JOB_EXPIRING:
+                return R.drawable.ic_job_expiring_notif;
+            case TYPE_JOB_COMPLETED:
+                return R.drawable.ic_job_completed_notif;
             case TYPE_NEW_MATCHING_JOB:
                 return R.drawable.people_notif_icon;
             default:
