@@ -17,6 +17,8 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.activities.AppliedSeekerActivity;
+import com.manilalinkup.app.activities.ChatThreadEmployer;
+import com.manilalinkup.app.activities.ChatThreadSeeker;
 import com.manilalinkup.app.activities.EmployerBusinessVerificationActivity;
 import com.manilalinkup.app.activities.EmployerDashboard;
 import com.manilalinkup.app.activities.EmployerListOfApplicants;
@@ -87,6 +89,14 @@ public class MLUFirebaseMessagingService extends FirebaseMessagingService {
         String role = data.get("role");
 
         switch (type) {
+            case "chat_message": {
+                String chatId = data.get("chatId");
+                Class<?> target = "employer".equals(role) ? ChatThreadEmployer.class : ChatThreadSeeker.class;
+                Intent i = new Intent(this, target);
+                if (chatId != null) i.putExtra("CHAT_ID", chatId);
+                return i;
+            }
+
             // --- Seeker notifications ---
             case NotificationUtils.TYPE_INTERVIEW_OFFER:
             case NotificationUtils.TYPE_HIRED:
