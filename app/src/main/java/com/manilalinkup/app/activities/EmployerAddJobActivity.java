@@ -374,7 +374,7 @@ public class EmployerAddJobActivity extends BaseActivity {
         showProgress("Posting job...");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+        user.getIdToken(false).addOnCompleteListener(tokenTask -> {
             if (tokenTask.isSuccessful()) {
                 String token = tokenTask.getResult().getToken();
                 String uid = user.getUid();

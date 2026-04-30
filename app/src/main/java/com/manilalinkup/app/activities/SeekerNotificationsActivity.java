@@ -74,7 +74,7 @@ public class SeekerNotificationsActivity extends BaseActivity {
 
         showLoading();
 
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.getNotifications(null, null, null).enqueue(new Callback<ApiResponse<List<NotificationItemModel>>>() {
                 @Override
