@@ -98,7 +98,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
                         android:fontFamily="sans-serif"
-                        android:textColor="#616161"
+                        android:textColor="@color/secondary_text"
                         android:textSize="12sp"
                         tools:text="5 months ago" />
 
@@ -112,7 +112,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="16dp"
                     android:fontFamily="sans-serif"
-                    android:textColor="#212121"
+                    android:textColor="@color/dark_text"
                     android:textSize="14sp"
                     tools:text="Message preview of the rater goes here" />
 

@@ -15,7 +15,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,7 +26,7 @@ import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.CredentialAdapter;
 import com.manilalinkup.app.models.CredentialModel;
 
-public class SeekerVerifyIdentityActivity extends AppCompatActivity {
+public class SeekerVerifyIdentityActivity extends BaseActivity {
 
     // General UI
     private ImageView btnBack;

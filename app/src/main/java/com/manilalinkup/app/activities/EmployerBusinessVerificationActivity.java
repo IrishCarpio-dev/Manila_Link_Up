@@ -14,7 +14,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +25,7 @@ import com.manilalinkup.app.models.CredentialModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployerBusinessVerificationActivity extends AppCompatActivity {
+public class EmployerBusinessVerificationActivity extends BaseActivity {
 
     private ImageView btnBack, imgMainPreview;
     private Spinner spinnerDocType;

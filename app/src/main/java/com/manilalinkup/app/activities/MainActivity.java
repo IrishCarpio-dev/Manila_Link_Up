@@ -5,12 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.manilalinkup.app.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     MaterialButton loginButton;
     MaterialButton signupButton;

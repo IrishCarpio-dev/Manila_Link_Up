@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4F7F9"
+    android:background="@color/light_bg"
     android:fillViewport="true"
     android:fitsSystemWindows="true">
 
@@ -69,7 +69,7 @@
                 android:layout_alignParentEnd="true"
                 android:fontFamily="sans-serif"
                 android:text="Skip"
-                android:textColor="#212121"
+                android:textColor="@color/dark_text"
                 android:textSize="16sp" />
 
             <TextView
@@ -82,7 +82,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="Choose your Preferred Services:"
-                android:textColor="#212121"
+                android:textColor="@color/dark_text"
                 android:textSize="16sp" />
 
             <com.google.android.material.chip.ChipGroup
@@ -122,7 +122,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
                     android:text="Minimum Salary: "
-                    android:textColor="#212121"
+                    android:textColor="@color/dark_text"
                     android:textSize="16sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -156,7 +156,7 @@
                 android:layout_margin="8dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="Duration"
-                android:textColor="#212121"
+                android:textColor="@color/dark_text"
                 android:textSize="16sp" />
 
             <LinearLayout
@@ -176,7 +176,7 @@
                     android:layout_marginEnd="4dp"
                     android:layout_weight="1"
                     android:hint="e.g. 8"
-                    app:boxBackgroundColor="#F5F5F5"
+                    app:boxBackgroundColor="@color/light_surface"
                     app:boxCornerRadiusBottomEnd="8dp"
                     app:boxCornerRadiusBottomStart="8dp"
                     app:boxCornerRadiusTopEnd="8dp"
@@ -199,7 +199,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_weight="1"
                     android:hint="Unit"
-                    app:boxBackgroundColor="#F5F5F5"
+                    app:boxBackgroundColor="@color/light_surface"
                     app:boxCornerRadiusBottomEnd="8dp"
                     app:boxCornerRadiusBottomStart="8dp"
                     app:boxCornerRadiusTopEnd="8dp"
@@ -231,7 +231,7 @@
                 android:layout_margin="8dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="Preferred Location"
-                android:textColor="#212121"
+                android:textColor="@color/dark_text"
                 android:textSize="16sp" />
 
             <com.google.android.material.textfield.TextInputLayout

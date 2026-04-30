@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -21,6 +20,7 @@ import com.manilalinkup.app.models.AppliedJobModel;
 import com.manilalinkup.app.models.GetAppliedJobsRequest;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
+import com.manilalinkup.app.utilities.SeekerNavHelper;
 import com.manilalinkup.app.utilities.RetrofitClient;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AppliedSeekerActivity extends AppCompatActivity {
+public class AppliedSeekerActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private LinearLayout emptyState;
@@ -45,27 +45,7 @@ public class AppliedSeekerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_applied_seeker);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationView.setSelectedItemId(R.id.nav_activity_seeker);
-        bottomNavigationView.setOnItemSelectedListener(menuItem -> {
-            if (menuItem.getItemId() == R.id.nav_home_seeker) {
-                startActivity(new Intent(AppliedSeekerActivity.this, SeekerDashboardActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (menuItem.getItemId() == R.id.nav_notifications_seeker) {
-                startActivity(new Intent(AppliedSeekerActivity.this, EmployerNotificationsActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (menuItem.getItemId() == R.id.nav_chat_seeker) {
-                startActivity(new Intent(AppliedSeekerActivity.this, ChatSeekerActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (menuItem.getItemId() == R.id.nav_profile_seeker) {
-                startActivity(new Intent(AppliedSeekerActivity.this, SeekerProfileActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }
-            return true;
-        });
+        SeekerNavHelper.setup(this, bottomNavigationView, R.id.nav_activity_seeker);
 
         recyclerView = findViewById(R.id.recycler_view_employer_own_posts);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
@@ -87,7 +67,7 @@ public class AppliedSeekerActivity extends AppCompatActivity {
         if (user == null) return;
 
         swipeRefreshLayout.setRefreshing(true);
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.getAppliedJobs(new GetAppliedJobsRequest(null, null, null))
                     .enqueue(new Callback<ApiResponse<List<AppliedJobModel>>>() {

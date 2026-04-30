@@ -4,11 +4,10 @@ package com.manilalinkup.app.activities;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.manilalinkup.app.R;
 
-public class AboutActivity extends AppCompatActivity {
+public class AboutActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

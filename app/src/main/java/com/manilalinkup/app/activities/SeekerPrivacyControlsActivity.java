@@ -8,11 +8,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.manilalinkup.app.R;
 
-public class SeekerPrivacyControlsActivity extends AppCompatActivity {
+public class SeekerPrivacyControlsActivity extends BaseActivity {
 
     private ImageView btnBack;
     private Switch switchPublicProfile;

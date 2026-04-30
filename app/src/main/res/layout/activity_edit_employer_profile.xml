@@ -11,11 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/design_default_color_background" />
+        <include layout="@layout/layout_toolbar" />
 
 
         <ImageView
@@ -47,7 +43,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
             android:text="Upload Profile Photo"
-            android:textColor="#212121" />
+            android:textColor="@color/dark_text" />
 
         <TextView
             android:id="@+id/lblClearance"
@@ -57,7 +53,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="32dp"
             android:text="Upload Clearance"
-            android:textColor="#212121"
+            android:textColor="@color/dark_text"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -114,7 +110,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="16dp"
             android:text="Upload Valid ID"
-            android:textColor="#212121"
+            android:textColor="@color/dark_text"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -172,7 +168,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="24dp"
             android:text="Current Location"
-            android:textColor="#212121"
+            android:textColor="@color/dark_text"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -197,7 +193,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="16dp"
             android:text="Date of Birth"
-            android:textColor="#212121"
+            android:textColor="@color/dark_text"
             android:textSize="16sp"
             android:textStyle="bold" />
 

@@ -7,7 +7,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +19,7 @@ import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.models.NotificationItemModel;
 import com.manilalinkup.app.models.NotificationsModel;
 import com.manilalinkup.app.utilities.ApiService;
+import com.manilalinkup.app.utilities.EmployerNavHelper;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.NotificationUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
@@ -31,7 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EmployerNotificationsActivity extends AppCompatActivity {
+public class EmployerNotificationsActivity extends BaseActivity {
 
     private RecyclerView recyclerViewNotifications;
     private NotificationsAdapter adapterNotif;
@@ -59,28 +59,7 @@ public class EmployerNotificationsActivity extends AppCompatActivity {
                 handleNotificationClick(notification.getNotifType()));
 
         bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_notifications);
-        bottomNavigationViewEmployer.setOnItemSelectedListener(menuItem -> {
-            int id = menuItem.getItemId();
-            if (id == R.id.nav_home) {
-                startActivity(new Intent(this, EmployerDashboard.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (id == R.id.nav_add_job) {
-                startActivity(new Intent(this, EmployerAddJobActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (id == R.id.nav_chat) {
-                startActivity(new Intent(this, ChatEmployerActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (id == R.id.nav_profile) {
-                startActivity(new Intent(this, EmployerProfileActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }
-            return true;
-        });
+        EmployerNavHelper.setup(this, bottomNavigationViewEmployer, R.id.nav_notifications);
     }
 
     @Override

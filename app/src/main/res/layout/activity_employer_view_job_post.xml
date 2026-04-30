@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4F7F9"
+    android:background="@color/light_bg"
     android:fillViewport="true"
     android:fitsSystemWindows="true">
 
@@ -162,7 +162,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#F4F7F9"
+                    android:background="@color/light_bg"
                     android:padding="16dp">
 
                     <TextView
@@ -170,7 +170,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-black"
-                        android:textColor="#212121"
+                        android:textColor="@color/dark_text"
                         android:textSize="18sp"
                         android:text="Employer Job Title" />
 
@@ -180,7 +180,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/text_view_employer_job_title_placeholder"
                         android:fontFamily="sans-serif"
-                        android:textColor="#616161"
+                        android:textColor="@color/secondary_text"
                         android:textSize="12sp"
                         android:text="Employer Name" />
 
@@ -189,7 +189,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/text_view_employer_name_placeholder"
-                        android:background="#F4F7F9"
+                        android:background="@color/light_bg"
                         android:padding="16dp">
 
                         <ImageView
@@ -207,7 +207,7 @@
                             android:layout_marginStart="8dp"
                             android:layout_toEndOf="@id/location_logo"
                             android:fontFamily="sans-serif"
-                            android:textColor="#616161"
+                            android:textColor="@color/secondary_text"
                             android:textSize="14sp"
                             android:text="Binondo, Manila" />
 
@@ -228,7 +228,7 @@
                             android:layout_marginTop="4dp"
                             android:layout_toEndOf="@id/money_logo"
                             android:fontFamily="sans-serif"
-                            android:textColor="#616161"
+                            android:textColor="@color/secondary_text"
                             android:textSize="14sp"
                             android:text="P700/day" />
 
@@ -249,7 +249,7 @@
                             android:layout_marginTop="4dp"
                             android:layout_toEndOf="@id/calendar_logo"
                             android:fontFamily="sans-serif"
-                            android:textColor="#616161"
+                            android:textColor="@color/secondary_text"
                             android:textSize="14sp"
                             android:text="Apr. 4-8, 2026" />
 
@@ -270,7 +270,7 @@
                             android:layout_marginTop="4dp"
                             android:layout_toEndOf="@id/expires_logo"
                             android:fontFamily="sans-serif"
-                            android:textColor="#616161"
+                            android:textColor="@color/secondary_text"
                             android:textSize="14sp" />
 
                     </RelativeLayout>
@@ -300,7 +300,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/card_view_employer_info"
                 android:layout_margin="16dp"
-                android:textColor="#616161"
+                android:textColor="@color/secondary_text"
                 android:text="Job Description will go here" />
         </RelativeLayout>
 

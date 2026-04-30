@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -15,6 +14,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.SeekerChatTabAdapter;
 import com.manilalinkup.app.models.ApiResponse;
@@ -23,17 +24,20 @@ import com.manilalinkup.app.models.GetChatsRequest;
 import com.manilalinkup.app.models.HideChatRequest;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
+import com.manilalinkup.app.utilities.SeekerNavHelper;
 import com.manilalinkup.app.utilities.RetrofitClient;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChatSeekerActivity extends AppCompatActivity {
+public class ChatSeekerActivity extends BaseActivity {
 
     private RecyclerView recyclerViewChat;
     private SeekerChatTabAdapter seekerChatTabAdapter;
@@ -41,6 +45,8 @@ public class ChatSeekerActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationViewSeeker;
     private View emptyState;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private FirebaseFirestore db;
+    private final Map<String, ListenerRegistration> chatListeners = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,7 @@ public class ChatSeekerActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(this::loadChats);
 
         chatList = new ArrayList<>();
+        db = FirebaseFirestore.getInstance();
 
         seekerChatTabAdapter = new SeekerChatTabAdapter(
                 chatList,
@@ -72,23 +79,7 @@ public class ChatSeekerActivity extends AppCompatActivity {
         recyclerViewChat.setAdapter(seekerChatTabAdapter);
 
         bottomNavigationViewSeeker = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationViewSeeker.setSelectedItemId(R.id.nav_chat_seeker);
-        bottomNavigationViewSeeker.setOnItemSelectedListener(menuItem -> {
-            if (menuItem.getItemId() == R.id.nav_home_seeker) {
-                startActivity(new Intent(this, SeekerDashboardActivity.class));
-                overridePendingTransition(0, 0);
-            } else if (menuItem.getItemId() == R.id.nav_notifications_seeker) {
-                startActivity(new Intent(this, SeekerNotificationsActivity.class));
-                overridePendingTransition(0, 0);
-            } else if (menuItem.getItemId() == R.id.nav_activity_seeker) {
-                startActivity(new Intent(this, AppliedSeekerActivity.class));
-                overridePendingTransition(0, 0);
-            } else if (menuItem.getItemId() == R.id.nav_profile_seeker) {
-                startActivity(new Intent(this, SeekerProfileActivity.class));
-                overridePendingTransition(0, 0);
-            }
-            return true;
-        });
+        SeekerNavHelper.setup(this, bottomNavigationViewSeeker, R.id.nav_chat_seeker);
     }
 
     @Override
@@ -97,11 +88,34 @@ public class ChatSeekerActivity extends AppCompatActivity {
         loadChats();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        for (ListenerRegistration reg : chatListeners.values()) reg.remove();
+        chatListeners.clear();
+    }
+
+    private void attachUnreadListeners() {
+        for (ListenerRegistration reg : chatListeners.values()) reg.remove();
+        chatListeners.clear();
+        for (ChatListItemModel chat : chatList) {
+            ListenerRegistration reg = db.collection("chats").document(chat.getId())
+                    .addSnapshotListener((snap, err) -> {
+                        if (err != null || snap == null) return;
+                        Long count = snap.getLong("unreadCountSeeker");
+                        chat.setUnreadCount(count != null ? count.intValue() : 0);
+                        int idx = chatList.indexOf(chat);
+                        if (idx >= 0) seekerChatTabAdapter.notifyItemChanged(idx);
+                    });
+            chatListeners.put(chat.getId(), reg);
+        }
+    }
+
     private void loadChats() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.getChats(new GetChatsRequest(20, null)).enqueue(new Callback<ApiResponse<List<ChatListItemModel>>>() {
                 @Override
@@ -114,6 +128,7 @@ public class ChatSeekerActivity extends AppCompatActivity {
                         if (emptyState != null) {
                             emptyState.setVisibility(chatList.isEmpty() ? View.VISIBLE : View.GONE);
                         }
+                        attachUnreadListeners();
                     }
                 }
 
@@ -139,7 +154,7 @@ public class ChatSeekerActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.hideChat(new HideChatRequest(chat.getId())).enqueue(new Callback<ResponseBody>() {
                 @Override

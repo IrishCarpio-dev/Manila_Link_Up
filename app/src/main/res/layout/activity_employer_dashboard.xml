@@ -20,47 +20,9 @@
         app:menu="@menu/bottom_nav_employer_icons"
         app:elevation="10dp"/>
 
-    <androidx.cardview.widget.CardView
+    <include
         android:id="@+id/card_view_dashboard_top_employer"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        app:cardBackgroundColor="@color/manila_blue">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="145dp"
-                android:layout_height="145dp"
-                android:layout_gravity="end|bottom"
-                android:alpha="0.25"
-                android:src="@drawable/bgheartadjustment" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="24dp">
-
-                <TextView
-                    android:id="@+id/textview_greeting_employer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Good morning, "
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/textview_greeting_name_employer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Employer Name"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-            </LinearLayout>
-        </FrameLayout>
-    </androidx.cardview.widget.CardView>
+        layout="@layout/layout_dashboard_header" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view_post_new_job"
@@ -123,7 +85,7 @@
         android:layout_margin="8dp"
         android:fontFamily="sans-serif-medium"
         android:text="My Job Posts"
-        android:textColor="#212121"
+        android:textColor="@color/dark_text"
         android:textSize="18sp" />
 
     <ProgressBar

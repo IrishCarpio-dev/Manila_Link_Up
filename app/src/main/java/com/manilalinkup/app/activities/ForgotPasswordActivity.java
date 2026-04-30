@@ -7,7 +7,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
@@ -16,14 +15,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.utilities.ErrorUtils;
 
-public class ForgotPasswordActivity extends AppCompatActivity {
+public class ForgotPasswordActivity extends BaseActivity {
 
     private FirebaseAuth mAuth;
     private TextInputLayout emailLayout;
     private LinearLayout layoutForm;
     private LinearLayout layoutSuccess;
     private TextView textViewSuccessMessage;
-    private android.app.ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +43,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         TextView textViewBackToLogin = findViewById(R.id.text_view_back_to_login);
         TextView textViewResend = findViewById(R.id.text_view_resend);
 
-        progressDialog = new android.app.ProgressDialog(this);
-        progressDialog.setMessage("Sending reset link...");
-        progressDialog.setCancelable(false);
 
         btnSend.setOnClickListener(v -> sendResetLink());
 
@@ -84,11 +79,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             return;
         }
 
-        progressDialog.show();
+        showProgress("Sending reset link...");
 
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {
-                    progressDialog.dismiss();
+                    hideProgress();
                     if (task.isSuccessful()) {
                         showSuccessState(email);
                     } else {

@@ -7,7 +7,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +22,7 @@ import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.NotificationUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.utilities.SeekerNavHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SeekerNotificationsActivity extends AppCompatActivity {
+public class SeekerNotificationsActivity extends BaseActivity {
 
     private RecyclerView recyclerViewNotifications;
     private NotificationsAdapter adapterNotif;
@@ -59,28 +59,7 @@ public class SeekerNotificationsActivity extends AppCompatActivity {
                 handleNotificationClick(notification.getNotifType()));
 
         bottomNavigationViewSeeker = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationViewSeeker.setSelectedItemId(R.id.nav_notifications_seeker);
-        bottomNavigationViewSeeker.setOnItemSelectedListener(menuItem -> {
-            int id = menuItem.getItemId();
-            if (id == R.id.nav_home_seeker) {
-                startActivity(new Intent(this, SeekerDashboardActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (id == R.id.nav_activity_seeker) {
-                startActivity(new Intent(this, AppliedSeekerActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (id == R.id.nav_chat_seeker) {
-                startActivity(new Intent(this, ChatSeekerActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (id == R.id.nav_profile_seeker) {
-                startActivity(new Intent(this, SeekerProfileActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }
-            return true;
-        });
+        SeekerNavHelper.setup(this, bottomNavigationViewSeeker, R.id.nav_notifications_seeker);
     }
 
     @Override

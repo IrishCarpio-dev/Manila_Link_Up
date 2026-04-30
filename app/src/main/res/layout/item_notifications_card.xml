@@ -44,7 +44,7 @@
             android:layout_toEndOf="@id/item_card_notif_image_type"
             android:layout_alignParentEnd="true"
             android:fontFamily="sans-serif-medium"
-            android:textColor="#212121"
+            android:textColor="@color/dark_text"
             android:textSize="15sp"
             tools:text="Notification Title" />
 
@@ -58,7 +58,7 @@
             android:layout_toEndOf="@id/item_card_notif_image_type"
             android:layout_alignParentEnd="true"
             android:fontFamily="sans-serif"
-            android:textColor="#616161"
+            android:textColor="@color/secondary_text"
             android:textSize="12sp"
             tools:text="Notification details go here" />
 
@@ -69,7 +69,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:fontFamily="sans-serif"
-            android:textColor="#9E9E9E"
+            android:textColor="@color/secondary_text"
             android:textSize="11sp"
             tools:text="3h ago" />
 

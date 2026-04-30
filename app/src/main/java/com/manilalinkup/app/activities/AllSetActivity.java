@@ -7,12 +7,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.manilalinkup.app.R;
 
-public class AllSetActivity extends AppCompatActivity {
+public class AllSetActivity extends BaseActivity {
     MaterialButton getStarted;
     ImageView imgLogo;
     TextView txtTitle, txtSubtitle;

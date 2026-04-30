@@ -1,18 +1,15 @@
 package com.manilalinkup.app.activities;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
@@ -34,16 +31,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EmployerListOfApplicants extends AppCompatActivity {
+public class EmployerListOfApplicants extends BaseActivity {
 
-    private MaterialToolbar toolbar;
     private RecyclerView applicantsRecyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private EmployerApplicantsAdapter applicantsAdapter;
     private List<ApplicantModel> applicantsList;
     private String jobId;
     private String jobTitle;
-    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +49,7 @@ public class EmployerListOfApplicants extends AppCompatActivity {
         jobId = getIntent().getStringExtra("JOB_ID");
         jobTitle = getIntent().getStringExtra("JOB_TITLE");
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-        toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+        setupToolbar(R.id.toolbar);
 
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeResources(R.color.manila_blue);
@@ -70,8 +58,6 @@ public class EmployerListOfApplicants extends AppCompatActivity {
         applicantsRecyclerView = findViewById(R.id.recycler_view_applicants);
         applicantsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(false);
 
         applicantsList = new ArrayList<>();
         applicantsAdapter = new EmployerApplicantsAdapter(applicantsList, new EmployerApplicantsAdapter.OnActionListener() {
@@ -143,7 +129,7 @@ public class EmployerListOfApplicants extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.getApplicants(new GetApplicantsRequest(jobId, null, null, null))
                     .enqueue(new Callback<ApiResponse<List<ApplicantModel>>>() {
@@ -172,16 +158,15 @@ public class EmployerListOfApplicants extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        progressDialog.setMessage(newStatus == 5 ? "Hiring applicant..." : newStatus == 3 ? "Rejecting applicant..." : "Updating status...");
-        progressDialog.show();
+        showProgress(newStatus == 5 ? "Hiring applicant..." : newStatus == 3 ? "Rejecting applicant..." : "Updating status...");
 
-        user.getIdToken(true).addOnSuccessListener(result -> {
+        user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.updateApplicationStatus(new UpdateApplicationStatusRequest(applicant.getId(), newStatus))
                     .enqueue(new Callback<ApiResponse<ApplicationModel>>() {
                 @Override
                 public void onResponse(Call<ApiResponse<ApplicationModel>> call, Response<ApiResponse<ApplicationModel>> response) {
-                    progressDialog.dismiss();
+                    hideProgress();
                     if (response.isSuccessful()) {
                         String msg = newStatus == 2 ? "Moved to interview" : newStatus == 3 ? "Applicant rejected" : "Applicant hired!";
                         Toast.makeText(EmployerListOfApplicants.this, msg, Toast.LENGTH_SHORT).show();
@@ -193,7 +178,7 @@ public class EmployerListOfApplicants extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ApiResponse<ApplicationModel>> call, Throwable t) {
-                    progressDialog.dismiss();
+                    hideProgress();
                     ErrorUtils.showThrowableError(EmployerListOfApplicants.this, t);
                 }
             });

@@ -90,7 +90,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-black"
                         android:text="Name of Seeker"
-                        android:textColor="#212121"
+                        android:textColor="@color/dark_text"
                         android:textSize="20sp" />
 
                     <ImageView
@@ -139,7 +139,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
-                            android:textColor="#616161"
+                            android:textColor="@color/secondary_text"
                             android:textSize="12sp" />
                     </LinearLayout>
 
@@ -189,7 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Feedbacks received from Employers"
-                    android:textColor="#212121"
+                    android:textColor="@color/dark_text"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 

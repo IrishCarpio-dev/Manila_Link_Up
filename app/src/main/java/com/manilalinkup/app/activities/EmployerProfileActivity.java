@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +26,7 @@ import com.manilalinkup.app.models.UserProfileModel;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.RatingsProfileAdapter;
 import com.manilalinkup.app.utilities.ApiService;
+import com.manilalinkup.app.utilities.EmployerNavHelper;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
 import com.manilalinkup.app.utilities.SessionCache;
@@ -40,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EmployerProfileActivity extends AppCompatActivity {
+public class EmployerProfileActivity extends BaseActivity {
 
     private RecyclerView recyclerViewRatings;
     private RatingsProfileAdapter adapterRating;
@@ -87,27 +87,7 @@ public class EmployerProfileActivity extends AppCompatActivity {
         loadProfileData();
 
         bottomNavigationViewEmployer = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationViewEmployer.setSelectedItemId(R.id.nav_profile);
-        bottomNavigationViewEmployer.setOnItemSelectedListener(menuItem ->  {
-            if(menuItem.getItemId() == R.id.nav_home){
-                startActivity(new Intent(EmployerProfileActivity.this, EmployerDashboard.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }else if(menuItem.getItemId() == R.id.nav_notifications) {
-                startActivity(new Intent(EmployerProfileActivity.this, EmployerNotificationsActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }else if(menuItem.getItemId() == R.id.nav_add_job) {
-                startActivity(new Intent(EmployerProfileActivity.this, EmployerAddJobActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }else if(menuItem.getItemId() == R.id.nav_chat) {
-                startActivity(new Intent(EmployerProfileActivity.this, ChatEmployerActivity.class));
-                overridePendingTransition(0, 0);
-                return true;
-            }
-            return true;
-        });
+        EmployerNavHelper.setup(this, bottomNavigationViewEmployer, R.id.nav_profile);
 
         viewAllRatings = findViewById(R.id.item_card_see_more_ratings_arrow);
         viewAllRatings.setOnClickListener(new View.OnClickListener() {

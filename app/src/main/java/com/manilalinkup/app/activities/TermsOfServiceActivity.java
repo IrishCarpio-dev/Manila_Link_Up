@@ -5,11 +5,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.manilalinkup.app.R;
 
-public class TermsOfServiceActivity extends AppCompatActivity {
+public class TermsOfServiceActivity extends BaseActivity {
 
     // Declaring UI components
     private ImageButton btnBack;

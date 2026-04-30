@@ -5,7 +5,7 @@ import static com.manilalinkup.app.utilities.RetrofitClient.BASE_URL;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
+import com.manilalinkup.app.utilities.SeekerNavHelper;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -13,13 +13,11 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
@@ -46,7 +44,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SeekerDashboardActivity extends AppCompatActivity {
+public class SeekerDashboardActivity extends BaseActivity {
 
     private RecyclerView recyclerViewJobPost;
     private JobPostDashboardAdapter adapterJobPost;
@@ -135,39 +133,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
         });
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view_seeker);
-        bottomNavigationView.setSelectedItemId(R.id.nav_home_seeker);
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-
-                if (id == R.id.nav_home_seeker) {
-                    return true;
-                } else if (id == R.id.nav_profile_seeker) {
-                    Intent intent = new Intent(SeekerDashboardActivity.this, SeekerProfileActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                    return true;
-                }else if (id == R.id.nav_notifications_seeker) {
-                    Intent intent = new Intent(SeekerDashboardActivity.this, SeekerNotificationsActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                    return true;
-                }else if (id == R.id.nav_activity_seeker) {
-                    Intent intent = new Intent(SeekerDashboardActivity.this, AppliedSeekerActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                    return true;
-                } else if (id == R.id.nav_chat_seeker) {
-                    Intent intent = new Intent(SeekerDashboardActivity.this, ChatSeekerActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                    return true;
-                }
-
-                return false;
-            }
-        });
+        SeekerNavHelper.setup(this, bottomNavigationView, R.id.nav_home_seeker);
 
         loadServiceTags();
         loadJobs();
@@ -229,7 +195,7 @@ public class SeekerDashboardActivity extends AppCompatActivity {
 
         String mode = isCuratedExhausted ? "all" : "curated";
 
-        user.getIdToken(true).addOnCompleteListener(tokenTask -> {
+        user.getIdToken(false).addOnCompleteListener(tokenTask -> {
             if (!tokenTask.isSuccessful()) {
                 isLoading = false;
                 progressBarLoadMore.setVisibility(View.GONE);

@@ -7,12 +7,7 @@
     android:background="@color/design_default_color_background"
     android:fitsSystemWindows="true">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/design_default_color_background"
-        android:paddingStart="8dp" />
+    <include layout="@layout/layout_toolbar" />
 
     <ImageView
         android:id="@+id/image_view_logo"
@@ -31,7 +26,7 @@
         android:layout_marginTop="13dp"
         android:fontFamily="sans-serif-black"
         android:text="MNL LinkUp"
-        android:textColor="#212121"
+        android:textColor="@color/dark_text"
         android:textSize="24sp" />
 
     <TextView
@@ -43,7 +38,7 @@
         android:fontFamily="sans-serif-black"
         android:gravity="center"
         android:text="Let's get started."
-        android:textColor="#212121"
+        android:textColor="@color/dark_text"
         android:textSize="30sp" />
 
     <TextView
@@ -54,7 +49,7 @@
         android:fontFamily="sans-serif"
         android:gravity="center"
         android:text="How will you use Manila LinkUp today?"
-        android:textColor="#616161" />
+        android:textColor="@color/secondary_text" />
 
 
     <androidx.cardview.widget.CardView
@@ -157,7 +152,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
             android:text="Already have an Account? Try to"
-            android:textColor="#616161" />
+            android:textColor="@color/secondary_text" />
 
         <TextView
             android:id="@+id/text_view_back_log_in"

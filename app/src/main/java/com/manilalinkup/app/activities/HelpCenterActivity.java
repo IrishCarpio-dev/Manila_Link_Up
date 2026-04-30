@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.FAQAdapter;
 import com.manilalinkup.app.models.FAQModel;
 
-public class HelpCenterActivity extends AppCompatActivity {
+public class HelpCenterActivity extends BaseActivity {
 
     private Button btnContactSupport;
     private ImageView btnBack;
