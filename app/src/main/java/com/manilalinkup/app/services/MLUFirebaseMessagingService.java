@@ -115,8 +115,13 @@ public class MLUFirebaseMessagingService extends FirebaseMessagingService {
                 return new Intent(this, SeekerNotificationsActivity.class);
 
             // --- Employer notifications ---
-            case NotificationUtils.TYPE_NEW_APPLICANT:
-                return new Intent(this, EmployerListOfApplicants.class);
+            case NotificationUtils.TYPE_NEW_APPLICANT: {
+                Intent i = new Intent(this, EmployerListOfApplicants.class);
+                String jobId = data.get("jobId");
+                if (jobId == null) jobId = data.get("job_id");
+                if (jobId != null) i.putExtra("JOB_ID", jobId);
+                return i;
+            }
 
             case NotificationUtils.TYPE_JOB_EXPIRING:
                 return new Intent(this, EmployerDashboard.class);

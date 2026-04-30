@@ -49,6 +49,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -90,6 +91,9 @@ public interface ApiService {
 
     @POST("api/jobs/list")
     Call<ApiResponse<List<JobModel>>> getJobs(@Body GetJobsRequest getJobsRequest);
+
+    @GET("api/jobs/{id}")
+    Call<ApiResponse<JobModel>> getJob(@Path("id") String id);
 
     @POST("api/jobs/archive")
     Call<ResponseBody> archiveJob(@Body ArchiveJobRequest archiveJobRequest);

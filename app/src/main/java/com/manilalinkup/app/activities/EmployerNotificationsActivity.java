@@ -11,11 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import static com.manilalinkup.app.utilities.RetrofitClient.BASE_URL;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.NotificationsAdapter;
 import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.JobModel;
 import com.manilalinkup.app.models.NotificationItemModel;
 import com.manilalinkup.app.models.NotificationsModel;
 import com.manilalinkup.app.utilities.ApiService;
@@ -115,9 +118,8 @@ public class EmployerNotificationsActivity extends BaseActivity {
         Intent intent;
         switch (type) {
             case NotificationUtils.TYPE_NEW_APPLICANT:
-                intent = new Intent(this, EmployerViewJobPost.class);
-                intent.putExtra("JOB_ID", notification.getJobId());
-                break;
+                fetchJobAndOpen(notification.getJobId());
+                return;
             case NotificationUtils.TYPE_RATING_RECEIVED:
             case NotificationUtils.TYPE_VERIFIED:
                 intent = new Intent(this, EmployerProfileActivity.class);
@@ -135,6 +137,69 @@ public class EmployerNotificationsActivity extends BaseActivity {
                 return;
         }
         startActivity(intent);
+    }
+
+    private void fetchJobAndOpen(String jobId) {
+        if (jobId == null) return;
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        showProgress("Loading...");
+
+        user.getIdToken(false).addOnSuccessListener(result -> {
+            ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
+            api.getJob(jobId).enqueue(new Callback<ApiResponse<JobModel>>() {
+                @Override
+                public void onResponse(Call<ApiResponse<JobModel>> call,
+                                       Response<ApiResponse<JobModel>> response) {
+                    hideProgress();
+                    if (response.isSuccessful() && response.body() != null
+                            && response.body().getData() != null) {
+                        startActivity(buildJobIntent(response.body().getData()));
+                    } else {
+                        ErrorUtils.showErrorMessage(EmployerNotificationsActivity.this, response.errorBody());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ApiResponse<JobModel>> call, Throwable t) {
+                    hideProgress();
+                    ErrorUtils.showThrowableError(EmployerNotificationsActivity.this, t);
+                }
+            });
+        });
+    }
+
+    private Intent buildJobIntent(JobModel job) {
+        String employerName = job.getEmployer() != null ? job.getEmployer().getFullName() : null;
+        String photoUrl     = job.getEmployer() != null ? BASE_URL + job.getEmployer().getProfilePhotoUrl() : null;
+        Intent intent = new Intent(this, EmployerViewJobPost.class);
+        intent.putExtra("JOB_ID",          job.getId());
+        intent.putExtra("JOB_TITLE",       job.getTitle());
+        intent.putExtra("EMPLOYER_NAME",   employerName);
+        intent.putExtra("LOCATION",        job.getLocation());
+        intent.putExtra("DURATION",        job.getDuration());
+        intent.putExtra("SALARY",          job.getSalary() != null ? job.getSalary() : 0.0);
+        intent.putExtra("DESCRIPTION",     job.getDescription());
+        intent.putExtra("EXPIRES_AT",      job.getExpiresAt());
+        intent.putExtra("HOW_LONG_POSTED", NotificationUtils.relativeTime(job.getCreatedAt()));
+        intent.putExtra("EMPLOYER_PHOTO",  photoUrl);
+        intent.putExtra("IS_OWNER",        true);
+        if (job.getTags() != null) {
+            intent.putStringArrayListExtra("TAG_IDS", new ArrayList<>(job.getTags()));
+        }
+        com.manilalinkup.app.models.ApplicantModel hired = job.getHiredApplication();
+        if (hired != null) {
+            intent.putExtra("APPLICATION_ID",       hired.getId());
+            intent.putExtra("STATUS",               hired.getStatus() != null ? hired.getStatus() : 1);
+            intent.putExtra("EMPLOYER_HAS_COMPLETED", hired.isEmployerCompleted());
+            if (hired.getSeeker() != null) {
+                String fn = hired.getSeeker().getFirstName() != null ? hired.getSeeker().getFirstName() : "";
+                String ln = hired.getSeeker().getLastName()  != null ? hired.getSeeker().getLastName()  : "";
+                intent.putExtra("SEEKER_NAME", (fn + " " + ln).trim());
+            }
+        }
+        return intent;
     }
 
     private void showLoading() {
