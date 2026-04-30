@@ -230,7 +230,7 @@
                             android:fontFamily="sans-serif"
                             android:textColor="@color/secondary_text"
                             android:textSize="14sp"
-                            android:text="P700/day" />
+                            android:text="P700/hr" />
 
                         <ImageView
                             android:id="@+id/calendar_logo"

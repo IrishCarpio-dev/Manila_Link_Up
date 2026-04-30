@@ -5,10 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,17 +21,14 @@ import java.util.List;
 
 public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerApplicantsAdapter.ViewHolder> {
 
-    public interface OnActionListener {
-        void onInterview(ApplicantModel applicant);
-        void onHire(ApplicantModel applicant);
-        void onOpenChat(ApplicantModel applicant);
-        void onReject(ApplicantModel applicant);
+    public interface OnItemClickListener {
+        void onItemClick(ApplicantModel applicant);
     }
 
     private final List<ApplicantModel> applicants;
-    private final OnActionListener listener;
+    private final OnItemClickListener listener;
 
-    public EmployerApplicantsAdapter(List<ApplicantModel> applicants, OnActionListener listener) {
+    public EmployerApplicantsAdapter(List<ApplicantModel> applicants, OnItemClickListener listener) {
         this.applicants = applicants;
         this.listener = listener;
     }
@@ -58,8 +52,6 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView profilePhoto;
         TextView firstName, lastName, location, rating, statusChip;
-        Button btnInterview, btnHire, btnChat;
-        ImageButton btnOverflow;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,10 +61,6 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
             location     = itemView.findViewById(R.id.applicant_location);
             rating       = itemView.findViewById(R.id.applicant_rating);
             statusChip   = itemView.findViewById(R.id.applicant_status_chip);
-            btnInterview = itemView.findViewById(R.id.btn_interview);
-            btnHire      = itemView.findViewById(R.id.btn_hire);
-            btnChat      = itemView.findViewById(R.id.btn_open_chat);
-            btnOverflow  = itemView.findViewById(R.id.btn_overflow);
         }
 
         private void setStarTint(TextView tv, float fraction) {
@@ -89,7 +77,7 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
             tv.setCompoundDrawablesRelative(star, drawables[1], drawables[2], drawables[3]);
         }
 
-        void bind(ApplicantModel applicant, OnActionListener listener) {
+        void bind(ApplicantModel applicant, OnItemClickListener listener) {
             SeekerProfileModel seeker = applicant.getSeeker();
             if (seeker != null) {
                 firstName.setText(seeker.getFirstName() != null ? seeker.getFirstName() : "");
@@ -129,40 +117,7 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
                 }
             }
 
-            // Show Interview button only for pending applicants
-            if (btnInterview != null) {
-                btnInterview.setVisibility(status == 1 ? View.VISIBLE : View.GONE);
-                btnInterview.setOnClickListener(v -> { if (listener != null) listener.onInterview(applicant); });
-            }
-
-            // Show Hire button for pending or interview stage
-            if (btnHire != null) {
-                btnHire.setVisibility((status == 1 || status == 2) ? View.VISIBLE : View.GONE);
-                btnHire.setOnClickListener(v -> { if (listener != null) listener.onHire(applicant); });
-            }
-
-            // Show chat button when chat exists (status >= 2)
-            if (btnChat != null) {
-                btnChat.setVisibility(((status == 2 || status == 5) && applicant.getChatId() != null) ? View.VISIBLE : View.GONE);
-                btnChat.setOnClickListener(v -> { if (listener != null) listener.onOpenChat(applicant); });
-            }
-
-            if (btnOverflow != null) {
-                boolean canReject = status == 1 || status == 2;
-                btnOverflow.setVisibility(canReject ? View.VISIBLE : View.INVISIBLE);
-                btnOverflow.setOnClickListener(v -> {
-                    PopupMenu popup = new PopupMenu(v.getContext(), v);
-                    popup.getMenu().add(0, 0, 0, "Reject");
-                    popup.setOnMenuItemClickListener(item -> {
-                        if (item.getItemId() == 0 && listener != null) {
-                            listener.onReject(applicant);
-                            return true;
-                        }
-                        return false;
-                    });
-                    popup.show();
-                });
-            }
+            itemView.setOnClickListener(v -> { if (listener != null) listener.onItemClick(applicant); });
         }
     }
 }

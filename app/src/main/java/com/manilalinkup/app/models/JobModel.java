@@ -9,6 +9,8 @@ public class JobModel {
     EmployerProfileModel employer;
     boolean hasApplied;
     ApplicantModel hiredApplication;
+    Integer applicationStatus;
+    String chatId;
 
     public JobModel() {}
 
@@ -25,4 +27,6 @@ public class JobModel {
     public String getFilledAt() { return filledAt; }
     public boolean isHasApplied() { return hasApplied; }
     public ApplicantModel getHiredApplication() { return hiredApplication; }
+    public Integer getApplicationStatus() { return applicationStatus; }
+    public String getChatId() { return chatId; }
 }

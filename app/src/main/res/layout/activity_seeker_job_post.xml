@@ -198,7 +198,7 @@
                             android:fontFamily="sans-serif"
                             android:textColor="@color/secondary_text"
                             android:textSize="14sp"
-                            tools:text="₱700/day" />
+                            tools:text="₱700/hr" />
 
                         <ImageView
                             android:id="@+id/calendar_logo"

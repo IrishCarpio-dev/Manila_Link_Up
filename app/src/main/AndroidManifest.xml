@@ -74,6 +74,9 @@
             android:name=".activities.EmployerListOfApplicants"
             android:exported="false" />
         <activity
+            android:name=".activities.ApplicantProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.EmployerProfileActivity"
             android:exported="false" />
         <activity

@@ -74,7 +74,7 @@
             android:layout_height="20dp"
             android:layout_below="@id/text_view_chat_timestamp"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/bg_status_pending"
+            android:background="@drawable/bg_unread_badge"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="10sp"

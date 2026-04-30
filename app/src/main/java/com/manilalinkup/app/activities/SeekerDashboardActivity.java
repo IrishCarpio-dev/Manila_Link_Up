@@ -75,8 +75,8 @@ public class SeekerDashboardActivity extends BaseActivity {
                     if (appliedJobId != null) {
                         for (int i = 0; i < jobListJobCard.size(); i++) {
                             if (appliedJobId.equals(jobListJobCard.get(i).getJobId())) {
-                                jobListJobCard.get(i).setHasApplied(true);
-                                adapterJobPost.notifyItemChanged(i);
+                                jobListJobCard.remove(i);
+                                adapterJobPost.notifyItemRemoved(i);
                                 break;
                             }
                         }
@@ -108,7 +108,6 @@ public class SeekerDashboardActivity extends BaseActivity {
                 intent.putExtra("HOW_LONG_POSTED", job.getHowLongJobIsPosted());
                 intent.putExtra("EMPLOYER_PHOTO", job.getEmployerProfilePicture());
                 intent.putStringArrayListExtra("TAG_IDS", new ArrayList<>(job.getTagIds() != null ? job.getTagIds() : new ArrayList<>()));
-                intent.putExtra("HAS_APPLIED", job.isHasApplied());
                 jobPostLauncher.launch(intent);
             }
 
@@ -259,6 +258,8 @@ public class SeekerDashboardActivity extends BaseActivity {
         model.setDescription(job.getDescription());
         model.setExpiresAt(job.getExpiresAt());
         model.setHasApplied(job.isHasApplied());
+        model.setApplicationStatus(job.getApplicationStatus());
+        model.setChatId(job.getChatId());
         return model;
     }
 

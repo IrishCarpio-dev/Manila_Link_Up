@@ -43,6 +43,8 @@ public class SeekerJobPostActivity extends BaseActivity {
     private MaterialButton btnApply;
 
     private String jobId;
+    private String jobTitle;
+    private String employerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +53,8 @@ public class SeekerJobPostActivity extends BaseActivity {
         setContentView(R.layout.activity_seeker_job_post);
 
         jobId                    = getIntent().getStringExtra("JOB_ID");
-        String jobTitle          = getIntent().getStringExtra("JOB_TITLE");
-        String employerName      = getIntent().getStringExtra("EMPLOYER_NAME");
+        jobTitle                 = getIntent().getStringExtra("JOB_TITLE");
+        employerName             = getIntent().getStringExtra("EMPLOYER_NAME");
         String location          = getIntent().getStringExtra("LOCATION");
         String duration          = getIntent().getStringExtra("DURATION");
         double salary            = getIntent().getDoubleExtra("SALARY", 0.0);
@@ -61,7 +63,6 @@ public class SeekerJobPostActivity extends BaseActivity {
         String howLongPosted     = getIntent().getStringExtra("HOW_LONG_POSTED");
         String employerPhoto     = getIntent().getStringExtra("EMPLOYER_PHOTO");
         ArrayList<String> tagIds = getIntent().getStringArrayListExtra("TAG_IDS");
-        boolean hasApplied       = getIntent().getBooleanExtra("HAS_APPLIED", false);
 
         setupToolbar(R.id.toolbar);
 
@@ -86,7 +87,7 @@ public class SeekerJobPostActivity extends BaseActivity {
         if (howLongPosted != null) tvHowLongPosted.setText(howLongPosted);
 
         if (salary > 0) {
-            tvSalary.setText(String.format(Locale.US, "â‚±%.0f/day", salary));
+            tvSalary.setText(String.format(Locale.US, "₱%.0f/hr", salary));
         } else {
             tvSalary.setVisibility(View.GONE);
             findViewById(R.id.money_logo).setVisibility(View.GONE);
@@ -110,14 +111,7 @@ public class SeekerJobPostActivity extends BaseActivity {
 
 
         btnApply = findViewById(R.id.btn_apply);
-        if (hasApplied) {
-            btnApply.setEnabled(false);
-            btnApply.setText("Applied");
-            btnApply.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFFBDBDBD));
-            btnApply.setTextColor(0xFF757575);
-        } else {
-            btnApply.setOnClickListener(v -> confirmAndApply());
-        }
+        btnApply.setOnClickListener(v -> confirmAndApply());
     }
 
     private void confirmAndApply() {
