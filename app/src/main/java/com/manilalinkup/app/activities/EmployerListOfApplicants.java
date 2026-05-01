@@ -99,6 +99,7 @@ public class EmployerListOfApplicants extends BaseActivity {
         intent.putExtra("STATUS", applicant.getStatus() != null ? applicant.getStatus() : 1);
         intent.putExtra("CHAT_ID", applicant.getChatId());
         intent.putExtra("JOB_TITLE", jobTitle);
+        intent.putExtra("EMPLOYER_HAS_COMPLETED", applicant.isEmployerCompleted());
 
         SeekerProfileModel seeker = applicant.getSeeker();
         if (seeker != null) {

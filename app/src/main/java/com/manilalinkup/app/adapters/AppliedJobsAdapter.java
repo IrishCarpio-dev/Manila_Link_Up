@@ -176,6 +176,16 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
                 if (currentJob.getTags() != null) {
                     intent.putStringArrayListExtra("TAG_IDS", new java.util.ArrayList<>(currentJob.getTags()));
                 }
+                if (currentJob.getApplicationId() != null) {
+                    intent.putExtra("APPLICATION_ID", currentJob.getApplicationId());
+                }
+                Integer appStatus = currentJob.getApplicationStatus();
+                if (appStatus != null) {
+                    intent.putExtra("STATUS", appStatus);
+                }
+                intent.putExtra("EMPLOYER_HAS_COMPLETED", currentJob.isEmployerCompleted());
+                intent.putExtra("SEEKER_NAME", currentJob.getSeekerName());
+                intent.putExtra("IS_RATE_ENABLED", Boolean.TRUE.equals(currentJob.isRateEnabled()));
                 intent.putExtra("IS_OWNER", true);
                 intent.putExtra("IS_ARCHIVED", true);
                 v.getContext().startActivity(intent);

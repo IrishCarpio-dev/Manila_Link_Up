@@ -58,6 +58,7 @@ public class SeekerCompletedJobsActivity extends BaseActivity {
             intent.putExtra("APPLICATION_ID", job.getId());
             intent.putExtra("STATUS", job.getStatus() != null ? job.getStatus() : 6);
             intent.putExtra("SEEKER_HAS_COMPLETED", job.getSeekerCompletedAt() != null);
+            intent.putExtra("IS_RATE_ENABLED", Boolean.TRUE.equals(job.isRateEnabled()));
             intent.putExtra("CREATED_AT", job.getCreatedAt());
             if (job.getJob() != null) {
                 intent.putExtra("JOB_TITLE", job.getJob().getTitle());

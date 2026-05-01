@@ -10,6 +10,7 @@ public class AppliedJobModel {
     String updatedAt;
     String employerCompletedAt;
     String seekerCompletedAt;
+    Boolean isRateEnabled;
     JobModel job;
 
     public AppliedJobModel() {}
@@ -23,5 +24,6 @@ public class AppliedJobModel {
     public String getUpdatedAt() { return updatedAt; }
     public String getEmployerCompletedAt() { return employerCompletedAt; }
     public String getSeekerCompletedAt() { return seekerCompletedAt; }
+    public Boolean isRateEnabled() { return isRateEnabled; }
     public JobModel getJob() { return job; }
 }
