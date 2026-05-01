@@ -15,7 +15,9 @@ import com.manilalinkup.app.models.CompletedJobsResponse;
 import com.manilalinkup.app.models.ChatListItemModel;
 import com.manilalinkup.app.models.CreateJobRequest;
 import com.manilalinkup.app.models.EmployerRequest;
+import com.manilalinkup.app.models.ApplicantsResponse;
 import com.manilalinkup.app.models.GetApplicantsRequest;
+import com.manilalinkup.app.models.AppliedJobsResponse;
 import com.manilalinkup.app.models.GetAppliedJobsRequest;
 import com.manilalinkup.app.models.GetSeekerJobsRequest;
 import com.manilalinkup.app.models.GetChatsRequest;
@@ -107,10 +109,10 @@ public interface ApiService {
     Call<ResponseBody> withdrawApplication(@Body WithdrawApplicationRequest request);
 
     @POST("api/jobs/applicants")
-    Call<ApiResponse<List<ApplicantModel>>> getApplicants(@Body GetApplicantsRequest request);
+    Call<ApplicantsResponse> getApplicants(@Body GetApplicantsRequest request);
 
     @POST("api/seeker/appliedJobs")
-    Call<ApiResponse<List<AppliedJobModel>>> getAppliedJobs(@Body GetAppliedJobsRequest request);
+    Call<AppliedJobsResponse> getAppliedJobs(@Body GetAppliedJobsRequest request);
 
     @POST("api/seeker/jobs")
     Call<SeekerJobsResponse> getSeekerJobs(@Body GetSeekerJobsRequest request);
