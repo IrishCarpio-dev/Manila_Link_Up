@@ -16,8 +16,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.NotificationsAdapter;
 import com.manilalinkup.app.models.ApiResponse;
+import com.manilalinkup.app.models.JobModel;
 import com.manilalinkup.app.models.NotificationItemModel;
 import com.manilalinkup.app.models.NotificationsModel;
+import static com.manilalinkup.app.utilities.RetrofitClient.BASE_URL;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.NotificationUtils;
@@ -55,8 +57,7 @@ public class SeekerNotificationsActivity extends BaseActivity {
         adapterNotif  = new NotificationsAdapter(notifListCard);
         recyclerViewNotifications.setAdapter(adapterNotif);
 
-        adapterNotif.setOnItemClickListener(notification ->
-                handleNotificationClick(notification.getNotifType()));
+        adapterNotif.setOnItemClickListener(this::handleNotificationClick);
 
         bottomNavigationViewSeeker = findViewById(R.id.bottom_navigation_view);
         SeekerNavHelper.setup(this, bottomNavigationViewSeeker, R.id.nav_notifications_seeker);
@@ -110,13 +111,16 @@ public class SeekerNotificationsActivity extends BaseActivity {
         });
     }
 
-    private void handleNotificationClick(String type) {
+    private void handleNotificationClick(NotificationsModel notification) {
+        String type = notification.getNotifType();
         if (type == null) return;
         Intent intent;
         switch (type) {
             case NotificationUtils.TYPE_INTERVIEW_OFFER:
             case NotificationUtils.TYPE_HIRED:
-            case NotificationUtils.TYPE_REJECTED:
+            case NotificationUtils.TYPE_NEW_MATCHING_JOB:
+                fetchJobAndOpen(notification.getJobId());
+                return;
             case NotificationUtils.TYPE_JOB_FILLED:
             case NotificationUtils.TYPE_JOB_COMPLETED:
                 intent = new Intent(this, AppliedSeekerActivity.class);
@@ -128,9 +132,6 @@ public class SeekerNotificationsActivity extends BaseActivity {
             case NotificationUtils.TYPE_VERIFICATION_REJECTED:
                 intent = new Intent(this, SeekerVerifyIdentityActivity.class);
                 break;
-            case NotificationUtils.TYPE_NEW_MATCHING_JOB:
-                intent = new Intent(this, SeekerDashboardActivity.class);
-                break;
             case NotificationUtils.TYPE_PREFERENCES_NUDGE:
                 intent = new Intent(this, SeekerJobPreferences.class);
                 break;
@@ -138,6 +139,57 @@ public class SeekerNotificationsActivity extends BaseActivity {
                 return;
         }
         startActivity(intent);
+    }
+
+    private void fetchJobAndOpen(String jobId) {
+        if (jobId == null) return;
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        showProgress("Loading...");
+
+        user.getIdToken(false).addOnSuccessListener(result -> {
+            ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
+            api.getJob(jobId).enqueue(new Callback<ApiResponse<JobModel>>() {
+                @Override
+                public void onResponse(Call<ApiResponse<JobModel>> call,
+                                       Response<ApiResponse<JobModel>> response) {
+                    hideProgress();
+                    if (response.isSuccessful() && response.body() != null
+                            && response.body().getData() != null) {
+                        startActivity(buildJobIntent(response.body().getData()));
+                    } else {
+                        ErrorUtils.showErrorMessage(SeekerNotificationsActivity.this, response.errorBody());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ApiResponse<JobModel>> call, Throwable t) {
+                    hideProgress();
+                    ErrorUtils.showThrowableError(SeekerNotificationsActivity.this, t);
+                }
+            });
+        });
+    }
+
+    private Intent buildJobIntent(JobModel job) {
+        String employerName = job.getEmployer() != null ? job.getEmployer().getFullName() : null;
+        String photoUrl     = job.getEmployer() != null ? BASE_URL + job.getEmployer().getProfilePhotoUrl() : null;
+        Intent intent = new Intent(this, SeekerJobPostActivity.class);
+        intent.putExtra("JOB_ID",          job.getId());
+        intent.putExtra("JOB_TITLE",       job.getTitle());
+        intent.putExtra("EMPLOYER_NAME",   employerName);
+        intent.putExtra("LOCATION",        job.getLocation());
+        intent.putExtra("DURATION",        job.getDuration());
+        intent.putExtra("SALARY",          job.getSalary() != null ? job.getSalary() : 0.0);
+        intent.putExtra("DESCRIPTION",     job.getDescription());
+        intent.putExtra("EXPIRES_AT",      job.getExpiresAt());
+        intent.putExtra("HOW_LONG_POSTED", NotificationUtils.relativeTime(job.getCreatedAt()));
+        intent.putExtra("EMPLOYER_PHOTO",  photoUrl);
+        if (job.getTags() != null) {
+            intent.putStringArrayListExtra("TAG_IDS", new ArrayList<>(job.getTags()));
+        }
+        return intent;
     }
 
     private void showLoading() {
