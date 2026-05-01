@@ -21,8 +21,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.android.material.badge.BadgeDrawable;
 import com.manilalinkup.app.adapters.JobPostDashboardAdapter;
 import com.manilalinkup.app.models.ArchiveJobRequest;
+import com.manilalinkup.app.models.UnreadCountResponse;
 import com.manilalinkup.app.models.GetJobsRequest;
 import com.manilalinkup.app.models.JobListResponse;
 import com.manilalinkup.app.models.JobModel;
@@ -134,6 +136,7 @@ public class EmployerDashboard extends BaseActivity {
         EmployerNavHelper.setup(this, bottomNavigationViewEmployer, R.id.nav_home);
 
         loadJobs();
+        loadUnreadCount();
 
         jobAddJob = findViewById(R.id.card_view_post_new_job);
         jobAddJob.setOnClickListener(new View.OnClickListener() {
@@ -144,6 +147,35 @@ public class EmployerDashboard extends BaseActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadUnreadCount();
+    }
+
+    private void loadUnreadCount() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+        user.getIdToken(false).addOnSuccessListener(result -> {
+            ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
+            api.getNotificationUnreadCount().enqueue(new Callback<UnreadCountResponse>() {
+                @Override
+                public void onResponse(Call<UnreadCountResponse> call, Response<UnreadCountResponse> response) {
+                    if (!isFinishing() && response.isSuccessful() && response.body() != null) {
+                        int count = response.body().getCount();
+                        if (count > 0) {
+                            BadgeDrawable badge = bottomNavigationViewEmployer.getOrCreateBadge(R.id.nav_notifications);
+                            badge.setNumber(count);
+                        } else {
+                            bottomNavigationViewEmployer.removeBadge(R.id.nav_notifications);
+                        }
+                    }
+                }
+                @Override public void onFailure(Call<UnreadCountResponse> call, Throwable t) {}
+            });
+        });
     }
 
     private void refreshJobs() {

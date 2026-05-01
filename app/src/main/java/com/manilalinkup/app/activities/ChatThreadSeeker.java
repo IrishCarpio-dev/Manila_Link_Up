@@ -154,7 +154,7 @@ public class ChatThreadSeeker extends BaseActivity {
                     chatUpdate.put("unreadCountEmployer", FieldValue.increment(1));
                     chatUpdate.put("lastMessage", text);
                     chatUpdate.put("lastMessageAt", FieldValue.serverTimestamp());
-                    db.collection("chats").document(chatId).update(chatUpdate);
+                    db.collection("chats").document(chatId).set(chatUpdate, SetOptions.merge());
                     notifyRecipient(text);
                 })
                 .addOnFailureListener(e -> {
@@ -184,7 +184,9 @@ public class ChatThreadSeeker extends BaseActivity {
 
     private void markRead() {
         if (messagesRef == null || currentUid.isEmpty()) return;
-        db.collection("chats").document(chatId).update("unreadCountSeeker", 0);
+        Map<String, Object> readUpdate = new HashMap<>();
+        readUpdate.put("unreadCountSeeker", 0);
+        db.collection("chats").document(chatId).set(readUpdate, SetOptions.merge());
         messagesRef.whereEqualTo("readAt", null)
                 .get()
                 .addOnSuccessListener(snapshots -> {

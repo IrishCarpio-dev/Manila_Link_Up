@@ -45,11 +45,13 @@ public class AppliedJobPostActivity extends BaseActivity {
     private MaterialButton btnChat;
     private MaterialButton btnMarkComplete;
     private MaterialButton btnRate;
+    private MaterialButton btnMessageEmployer;
 
     private String applicationId;
     private String employerName;
     private String chatId;
     private String seekerUid;
+    private String jobTitle;
     private int currentStatus;
     private boolean seekerHasCompleted;
 
@@ -66,8 +68,10 @@ public class AppliedJobPostActivity extends BaseActivity {
         seekerUid          = getIntent().getStringExtra("SEEKER_UID");
         currentStatus      = getIntent().getIntExtra("STATUS", 1);
         seekerHasCompleted = getIntent().getBooleanExtra("SEEKER_HAS_COMPLETED", false);
+        chatId             = getIntent().getStringExtra("CHAT_ID");
+        seekerUid          = getIntent().getStringExtra("SEEKER_UID");
 
-        String jobTitle      = getIntent().getStringExtra("JOB_TITLE");
+        jobTitle             = getIntent().getStringExtra("JOB_TITLE");
         String location      = getIntent().getStringExtra("LOCATION");
         double salary        = getIntent().getDoubleExtra("SALARY", 0.0);
         String duration      = getIntent().getStringExtra("DURATION");
@@ -119,10 +123,11 @@ public class AppliedJobPostActivity extends BaseActivity {
 
         applyStatusBadge(tvStatusBadge, currentStatus);
 
-        btnCancel       = findViewById(R.id.button_cancel_application);
-        btnChat         = findViewById(R.id.btn_chat);
-        btnMarkComplete = findViewById(R.id.btn_mark_complete);
-        btnRate         = findViewById(R.id.btn_rate);
+        btnCancel          = findViewById(R.id.button_cancel_application);
+        btnChat            = findViewById(R.id.btn_chat);
+        btnMarkComplete    = findViewById(R.id.btn_mark_complete);
+        btnRate            = findViewById(R.id.btn_rate);
+        btnMessageEmployer = findViewById(R.id.btn_message_employer);
 
         updateActionVisibility();
     }
@@ -182,15 +187,11 @@ public class AppliedJobPostActivity extends BaseActivity {
 
         btnRate.setVisibility(currentStatus == 6 ? View.VISIBLE : View.GONE);
         btnRate.setOnClickListener(v -> openRating());
-    }
 
-    private void openChat() {
-        Intent intent = new Intent(this, ChatThreadSeeker.class);
-        intent.putExtra("CHAT_ID", chatId);
-        intent.putExtra("SEEKER_UID", seekerUid);
-        intent.putExtra("JOB_TITLE", getIntent().getStringExtra("JOB_TITLE"));
-        intent.putExtra("COUNTERPART_NAME", employerName);
-        startActivity(intent);
+        // Message: interview, hired, or completed — only when a chat thread exists
+        boolean canMessage = (currentStatus == 2 || currentStatus == 5 || currentStatus == 6) && chatId != null;
+        btnMessageEmployer.setVisibility(canMessage ? View.VISIBLE : View.GONE);
+        btnMessageEmployer.setOnClickListener(v -> openChat());
     }
 
     private void confirmCancel() {
@@ -282,6 +283,15 @@ public class AppliedJobPostActivity extends BaseActivity {
         Intent intent = new Intent(this, SubmitRatingActivity.class);
         intent.putExtra("APPLICATION_ID", applicationId);
         intent.putExtra("COUNTERPART_NAME", employerName != null ? employerName : "Employer");
+        startActivity(intent);
+    }
+
+    private void openChat() {
+        Intent intent = new Intent(this, ChatThreadSeeker.class);
+        intent.putExtra("CHAT_ID", chatId);
+        intent.putExtra("JOB_TITLE", jobTitle);
+        intent.putExtra("COUNTERPART_NAME", employerName != null ? employerName : "Employer");
+        intent.putExtra("SEEKER_UID", seekerUid);
         startActivity(intent);
     }
 
