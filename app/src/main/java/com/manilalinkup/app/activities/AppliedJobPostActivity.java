@@ -42,7 +42,6 @@ public class AppliedJobPostActivity extends BaseActivity {
 
     private MaterialButton btnCancel;
     private MaterialButton btnChat;
-    private MaterialButton btnMarkComplete;
     private MaterialButton btnRate;
 
     private String applicationId;
@@ -118,10 +117,9 @@ public class AppliedJobPostActivity extends BaseActivity {
 
         applyStatusBadge(tvStatusBadge, currentStatus);
 
-        btnCancel       = findViewById(R.id.button_cancel_application);
-        btnChat         = findViewById(R.id.btn_chat);
-        btnMarkComplete = findViewById(R.id.btn_mark_complete);
-        btnRate         = findViewById(R.id.btn_rate);
+        btnCancel = findViewById(R.id.button_cancel_application);
+        btnChat   = findViewById(R.id.btn_chat);
+        btnRate   = findViewById(R.id.btn_rate);
 
         updateActionVisibility();
     }
@@ -176,8 +174,6 @@ public class AppliedJobPostActivity extends BaseActivity {
 
         btnChat.setVisibility((currentStatus == 2 || currentStatus == 5) && chatId != null ? View.VISIBLE : View.GONE);
         btnChat.setOnClickListener(v -> openChat());
-
-        btnMarkComplete.setVisibility(View.GONE);
 
         btnRate.setVisibility(currentStatus == 6 ? View.VISIBLE : View.GONE);
         btnRate.setOnClickListener(v -> openRating());
