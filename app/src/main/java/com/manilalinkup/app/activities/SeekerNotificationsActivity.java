@@ -174,7 +174,7 @@ public class SeekerNotificationsActivity extends BaseActivity {
 
     private Intent buildJobIntent(JobModel job) {
         String employerName = job.getEmployer() != null ? job.getEmployer().getFullName() : null;
-        String photoUrl     = job.getEmployer() != null ? BASE_URL + job.getEmployer().getProfilePhotoUrl() : null;
+        String photoUrl     = job.getEmployer() != null ? job.getEmployer().getProfilePhoto() : null;
         Intent intent = new Intent(this, SeekerJobPostActivity.class);
         intent.putExtra("JOB_ID",          job.getId());
         intent.putExtra("JOB_TITLE",       job.getTitle());
