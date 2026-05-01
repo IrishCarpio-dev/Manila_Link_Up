@@ -59,7 +59,6 @@ public class SeekerDashboardActivity extends BaseActivity {
     private boolean isCuratedExhausted = false;
     private String lastExpiresAt = null;
     private String lastCreatedAt = null;
-    private static final int PAGE_SIZE = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,7 +169,7 @@ public class SeekerDashboardActivity extends BaseActivity {
 
             String token = tokenTask.getResult().getToken();
             ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
-            GetSeekerJobsRequest request = new GetSeekerJobsRequest(mode, PAGE_SIZE, lastExpiresAt, lastCreatedAt);
+            GetSeekerJobsRequest request = new GetSeekerJobsRequest(mode, null, lastExpiresAt, lastCreatedAt);
 
             apiService.getSeekerJobs(request).enqueue(new Callback<SeekerJobsResponse>() {
                 @Override

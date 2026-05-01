@@ -22,6 +22,7 @@ import com.manilalinkup.app.models.GetAppliedJobsRequest;
 import com.manilalinkup.app.models.GetSeekerJobsRequest;
 import com.manilalinkup.app.models.GetChatsRequest;
 import com.manilalinkup.app.models.GetJobsRequest;
+import com.manilalinkup.app.models.JobListResponse;
 import com.manilalinkup.app.models.GetRatingsRequest;
 import com.manilalinkup.app.models.HideChatRequest;
 import com.manilalinkup.app.models.JobModel;
@@ -93,7 +94,7 @@ public interface ApiService {
     Call<ResponseBody> createJob(@Body CreateJobRequest createJobRequest);
 
     @POST("api/jobs/list")
-    Call<ApiResponse<List<JobModel>>> getJobs(@Body GetJobsRequest getJobsRequest);
+    Call<JobListResponse> getJobs(@Body GetJobsRequest getJobsRequest);
 
     @POST("api/jobs/archive")
     Call<ResponseBody> archiveJob(@Body ArchiveJobRequest archiveJobRequest);
