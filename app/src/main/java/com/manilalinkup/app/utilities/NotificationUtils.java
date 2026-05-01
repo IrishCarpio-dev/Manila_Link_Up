@@ -42,10 +42,17 @@ public class NotificationUtils {
             case TYPE_RATING_RECEIVED:
                 return "New Rating Notification";
             case TYPE_JOB_EXPIRING:
-            case TYPE_JOB_COMPLETED: {
-                String jobTitle = item.getDataValue("jobTitle");
-                return jobTitle != null && !jobTitle.isEmpty() ? jobTitle : safe(item.getTitle());
-            }
+                return "Expiring Soon";
+            case TYPE_JOB_COMPLETED:
+                return "You got a new rating!";
+            case TYPE_INTERVIEW_OFFER:
+                return "Interview Offer";
+            case TYPE_HIRED:
+                return "You're Hired!";
+            case TYPE_JOB_FILLED:
+                return "Position Filled";
+            case TYPE_NEW_MATCHING_JOB:
+                return "New Job Match";
             default:
                 return safe(item.getTitle());
         }
@@ -73,11 +80,45 @@ public class NotificationUtils {
                     return "You received a rating from " + name + ".";
                 return safe(item.getBody());
             }
-            case TYPE_JOB_EXPIRING:
-                return "Expires in 24 hours";
+            case TYPE_JOB_EXPIRING: {
+                String jobTitle = item.getDataValue("jobTitle");
+                if (jobTitle != null && !jobTitle.isEmpty()) return jobTitle + " is about to expire.";
+                return "Your job is about to expire.";
+            }
             case TYPE_JOB_COMPLETED: {
                 String name = firstDataValue(item, "seekerName", "seeker_name", "applicantName", "applicant_name");
-                if (name != null) return name + " marked this job complete";
+                String jobTitle = item.getDataValue("jobTitle");
+                if (name != null && !name.isEmpty() && jobTitle != null && !jobTitle.isEmpty())
+                    return name + " from " + jobTitle + " gave you a rating.";
+                if (name != null && !name.isEmpty()) return name + " gave you a rating.";
+                return safe(item.getBody());
+            }
+            case TYPE_INTERVIEW_OFFER: {
+                String employer = firstDataValue(item, "employerName", "employer_name");
+                String jobTitle = item.getDataValue("jobTitle");
+                if (employer != null && !employer.isEmpty() && jobTitle != null && !jobTitle.isEmpty())
+                    return employer + " wants to interview you for " + jobTitle + ".";
+                if (employer != null && !employer.isEmpty())
+                    return employer + " wants to interview you.";
+                return safe(item.getBody());
+            }
+            case TYPE_HIRED: {
+                String employer = firstDataValue(item, "employerName", "employer_name");
+                String jobTitle = item.getDataValue("jobTitle");
+                if (employer != null && !employer.isEmpty() && jobTitle != null && !jobTitle.isEmpty())
+                    return "Congratulations! " + employer + " hired you for " + jobTitle + ".";
+                if (employer != null && !employer.isEmpty())
+                    return "Congratulations! " + employer + " hired you.";
+                return safe(item.getBody());
+            }
+            case TYPE_JOB_FILLED: {
+                String jobTitle = item.getDataValue("jobTitle");
+                if (jobTitle != null && !jobTitle.isEmpty()) return jobTitle + " has been filled.";
+                return safe(item.getBody());
+            }
+            case TYPE_NEW_MATCHING_JOB: {
+                String jobTitle = item.getDataValue("jobTitle");
+                if (jobTitle != null && !jobTitle.isEmpty()) return jobTitle + " matches your preferences.";
                 return safe(item.getBody());
             }
             default:
@@ -112,7 +153,6 @@ public class NotificationUtils {
             case TYPE_VERIFIED:
             case TYPE_VERIFICATION_REJECTED:
                 return R.drawable.ic_verified_notif;
-            case TYPE_REJECTED:
             case TYPE_JOB_FILLED:
                 return R.drawable.ic_job_notif;
             case TYPE_JOB_EXPIRING:

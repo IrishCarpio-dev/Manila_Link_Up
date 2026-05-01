@@ -128,10 +128,10 @@ public class EmployerNotificationsActivity extends BaseActivity {
                 intent = new Intent(this, EmployerBusinessVerificationActivity.class);
                 break;
             case NotificationUtils.TYPE_JOB_EXPIRING:
-                intent = new Intent(this, EmployerViewJobPost.class);
-                break;
+                fetchJobAndOpen(notification.getJobId());
+                return;
             case NotificationUtils.TYPE_JOB_COMPLETED:
-                intent = new Intent(this, EmployerViewArchivedJobs.class);
+                intent = new Intent(this, EmployerViewAllRatings.class);
                 break;
             default:
                 return;
