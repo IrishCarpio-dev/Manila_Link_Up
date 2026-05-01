@@ -16,8 +16,8 @@ import android.widget.Toast;
 
 import androidx.core.graphics.drawable.DrawableCompat;
 
-import android.util.Base64;
 import com.manilalinkup.app.utilities.ImageUtils;
+import com.manilalinkup.app.utilities.ProfilePhotoCache;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
@@ -81,16 +81,18 @@ public class ApplicantProfileActivity extends BaseActivity {
         TextView tvRating = findViewById(R.id.tv_rating);
         TextView tvLocation = findViewById(R.id.tv_location);
 
-        String photoUrl = getIntent().getStringExtra("PROFILE_PHOTO_URL");
-        if (photoUrl != null) {
-            byte[] photoBytes = ImageUtils.decodeBase64Safe(photoUrl);
-            Glide.with(this)
-                    .load(photoBytes)
-                    .placeholder(R.drawable.ic_person_placeholder)
-                    .circleCrop()
-                    .into(profilePhoto);
-        } else {
-            profilePhoto.setImageResource(R.drawable.ic_person_placeholder);
+        profilePhoto.setImageResource(R.drawable.ic_person_placeholder);
+        if (seekerUid != null) {
+            ProfilePhotoCache.getInstance().load(seekerUid, base64 -> {
+                if (base64 != null) {
+                    byte[] photoBytes = ImageUtils.decodeBase64Safe(base64);
+                    Glide.with(this)
+                            .load(photoBytes)
+                            .placeholder(R.drawable.ic_person_placeholder)
+                            .circleCrop()
+                            .into(profilePhoto);
+                }
+            });
         }
 
         String name = (firstName != null ? firstName : "") + (lastName != null ? " " + lastName : "");

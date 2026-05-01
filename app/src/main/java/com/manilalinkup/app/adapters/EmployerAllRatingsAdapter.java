@@ -8,8 +8,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Base64;
 import com.manilalinkup.app.utilities.ImageUtils;
+import com.manilalinkup.app.utilities.ProfilePhotoCache;
 
 import com.bumptech.glide.Glide;
 import com.manilalinkup.app.R;
@@ -42,15 +42,22 @@ public class EmployerAllRatingsAdapter extends RecyclerView.Adapter<EmployerAllR
             String[] parts = name.split(" ", 2);
             holder.firstname.setText(parts.length > 0 ? parts[0] : "");
             holder.lastname.setText(parts.length > 1 ? parts[1] : "");
-            if (rater.getProfilePhoto() != null) {
-                byte[] photoBytes = ImageUtils.decodeBase64Safe(rater.getProfilePhoto());
-                Glide.with(holder.itemView.getContext())
-                        .load(photoBytes)
-                        .placeholder(R.drawable.ic_person_placeholder)
-                        .circleCrop()
-                        .into(holder.imageProfile);
-            } else {
-                holder.imageProfile.setImageResource(R.drawable.ic_person_placeholder);
+            String raterUid = rater.getUid();
+            holder.imageProfile.setTag(raterUid);
+            holder.imageProfile.setImageResource(R.drawable.ic_person_placeholder);
+            if (raterUid != null) {
+                if (rater.getProfilePhoto() != null) {
+                    ProfilePhotoCache.getInstance().put(raterUid, rater.getProfilePhoto());
+                }
+                ProfilePhotoCache.getInstance().load(raterUid, base64 -> {
+                    if (raterUid.equals(holder.imageProfile.getTag()) && base64 != null) {
+                        byte[] photoBytes = ImageUtils.decodeBase64Safe(base64);
+                        Glide.with(holder.itemView.getContext())
+                                .load(photoBytes)
+                                .circleCrop()
+                                .into(holder.imageProfile);
+                    }
+                });
             }
         }
 

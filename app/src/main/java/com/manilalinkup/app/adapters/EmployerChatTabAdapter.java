@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Base64;
 import com.manilalinkup.app.utilities.ImageUtils;
+import com.manilalinkup.app.utilities.ProfilePhotoCache;
 
 import com.bumptech.glide.Glide;
 import com.manilalinkup.app.R;
@@ -102,15 +102,22 @@ public class EmployerChatTabAdapter extends RecyclerView.Adapter<EmployerChatTab
                     ? android.graphics.Typeface.BOLD
                     : android.graphics.Typeface.NORMAL);
 
-            if (counterpart != null && counterpart.getProfilePhoto() != null) {
-                byte[] photoBytes = ImageUtils.decodeBase64Safe(counterpart.getProfilePhoto());
-                Glide.with(itemView.getContext())
-                        .load(photoBytes)
-                        .placeholder(R.drawable.ic_person_placeholder)
-                        .circleCrop()
-                        .into(contactProfilePicture);
-            } else {
-                contactProfilePicture.setImageResource(R.drawable.ic_person_placeholder);
+            String counterpartUid = counterpart != null ? counterpart.getUid() : null;
+            contactProfilePicture.setTag(counterpartUid);
+            contactProfilePicture.setImageResource(R.drawable.ic_person_placeholder);
+            if (counterpartUid != null) {
+                if (counterpart.getProfilePhoto() != null) {
+                    ProfilePhotoCache.getInstance().put(counterpartUid, counterpart.getProfilePhoto());
+                }
+                ProfilePhotoCache.getInstance().load(counterpartUid, base64 -> {
+                    if (counterpartUid.equals(contactProfilePicture.getTag()) && base64 != null) {
+                        byte[] photoBytes = ImageUtils.decodeBase64Safe(base64);
+                        Glide.with(itemView.getContext())
+                                .load(photoBytes)
+                                .circleCrop()
+                                .into(contactProfilePicture);
+                    }
+                });
             }
 
             itemView.setOnClickListener(v -> { if (clickListener != null) clickListener.onChatClick(chat); });

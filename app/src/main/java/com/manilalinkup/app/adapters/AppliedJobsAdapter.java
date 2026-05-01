@@ -7,8 +7,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Base64;
 import com.manilalinkup.app.utilities.ImageUtils;
+import com.manilalinkup.app.utilities.ProfilePhotoCache;
 
 import com.bumptech.glide.Glide;
 import com.manilalinkup.app.R;
@@ -50,13 +50,28 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
             holder.jobTitle.setText(application.getJob().getTitle());
             if (application.getJob().getEmployer() != null) {
                 holder.employerName.setText(application.getJob().getEmployer().getFullName());
-                String employerPhoto = application.getJob().getEmployer().getProfilePhoto();
-                if (employerPhoto != null) {
-                    byte[] photoBytes = ImageUtils.decodeBase64Safe(employerPhoto);
+                String employerUid = application.getJob().getEmployer().getUid();
+                String embeddedPhoto = application.getJob().getEmployer().getProfilePhoto();
+                holder.employerLogo.setTag(employerUid);
+                holder.employerLogo.setImageResource(R.drawable.ic_person_placeholder);
+                if (employerUid != null) {
+                    if (embeddedPhoto != null) {
+                        ProfilePhotoCache.getInstance().put(employerUid, embeddedPhoto);
+                    }
+                    ProfilePhotoCache.getInstance().load(employerUid, base64 -> {
+                        if (employerUid.equals(holder.employerLogo.getTag()) && base64 != null) {
+                            byte[] photoBytes = ImageUtils.decodeBase64Safe(base64);
+                            Glide.with(holder.itemView.getContext())
+                                    .load(photoBytes)
+                                    .circleCrop()
+                                    .into(holder.employerLogo);
+                        }
+                    });
+                } else if (embeddedPhoto != null) {
+                    byte[] photoBytes = ImageUtils.decodeBase64Safe(embeddedPhoto);
                     Glide.with(holder.itemView.getContext())
                             .load(photoBytes)
                             .circleCrop()
-                            .placeholder(R.drawable.ic_person_placeholder)
                             .into(holder.employerLogo);
                 }
             }

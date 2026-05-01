@@ -2,6 +2,8 @@ package com.manilalinkup.app.utilities;
 
 import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.models.ApplicantModel;
+import com.manilalinkup.app.models.GetProfilePhotoRequest;
+import com.manilalinkup.app.models.ProfilePhotoResponse;
 import com.manilalinkup.app.models.ApplicationModel;
 import com.manilalinkup.app.models.AppliedJobModel;
 import com.manilalinkup.app.models.ApplyJobRequest;
@@ -80,6 +82,9 @@ public interface ApiService {
 
     @GET("api/user/profile")
     Call<ApiResponse<UserProfileModel>> getUserProfile();
+
+    @POST("api/profile-photo")
+    Call<ProfilePhotoResponse> getProfilePhoto(@Body GetProfilePhotoRequest request);
 
     // Jobs
     @POST("api/jobs")

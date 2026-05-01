@@ -31,6 +31,7 @@ import com.manilalinkup.app.models.ServiceTagModel;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
+import com.manilalinkup.app.utilities.ProfilePhotoCache;
 import com.manilalinkup.app.utilities.RetrofitClient;
 import com.manilalinkup.app.utilities.SessionCache;
 
@@ -63,7 +64,7 @@ public class EmployerDashboard extends BaseActivity {
     private boolean isRefreshing = false;
     private boolean hasMorePages = true;
     private String lastCreatedAt = null;
-    private static final int PAGE_SIZE = 10;
+    private static final int PAGE_SIZE = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,19 +106,10 @@ public class EmployerDashboard extends BaseActivity {
                 }
                 startActivity(intent);
             }
-            @Override
-            public void onRemoveClick(JobPostDashboardModel job, int position) {
-                new AlertDialog.Builder(EmployerDashboard.this)
-                        .setTitle("Archive job?")
-                        .setMessage("Are you sure you want to archive \"" + job.getJobTitle() + "\"?")
-                        .setPositiveButton("Archive", (d, w) -> archiveJob(job, position))
-                        .setNegativeButton("Cancel", null)
-                        .show();
-            }
         });
 
-        adapterJobPost.setShowOptionsMenu(true);
-        recyclerViewJobPost.setAdapter(adapterJobPost);
+
+            recyclerViewJobPost.setAdapter(adapterJobPost);
 
         loadServiceTags();
 
@@ -243,7 +235,11 @@ public class EmployerDashboard extends BaseActivity {
 
     private JobPostDashboardModel mapToDisplayModel(JobModel job) {
         String employerName = job.getEmployer() != null ? job.getEmployer().getFullName() : "";
+        String employerUid = job.getEmployer() != null ? job.getEmployer().getUid() : null;
         String photoUrl = job.getEmployer() != null ? job.getEmployer().getProfilePhoto() : null;
+        if (employerUid != null && photoUrl != null) {
+            ProfilePhotoCache.getInstance().put(employerUid, photoUrl);
+        }
         JobPostDashboardModel model = new JobPostDashboardModel(
             job.getTitle(),
             employerName,
@@ -253,6 +249,7 @@ public class EmployerDashboard extends BaseActivity {
             getRelativeTime(job.getCreatedAt())
         );
         model.setJobId(job.getId());
+        model.setEmployerUid(employerUid);
         model.setTagIds(job.getTags());
         model.setSalary(job.getSalary());
         model.setDescription(job.getDescription());

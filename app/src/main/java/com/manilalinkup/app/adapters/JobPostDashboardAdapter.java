@@ -5,14 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Base64;
 import com.manilalinkup.app.utilities.ImageUtils;
+import com.manilalinkup.app.utilities.ProfilePhotoCache;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.chip.Chip;
@@ -26,22 +25,16 @@ import java.util.Map;
 public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboardAdapter.JobPostDashboardViewHolder> {
     public interface OnJobClickListener {
         void onJobClick(JobPostDashboardModel job);
-        void onRemoveClick(JobPostDashboardModel job, int position);
     }
     private final List<JobPostDashboardModel> jobPostDashboardModelList;
     OnJobClickListener listener;
     boolean isProfileView;
-    private boolean showOptionsMenu = false;
     private Map<String, String> tagLabelsById = Collections.emptyMap();
 
     public JobPostDashboardAdapter(List<JobPostDashboardModel> jobPostDashboardModelList, boolean isProfileView, OnJobClickListener listener) {
         this.jobPostDashboardModelList = jobPostDashboardModelList;
         this.isProfileView = isProfileView;
         this.listener = listener;
-    }
-
-    public void setShowOptionsMenu(boolean showOptionsMenu) {
-        this.showOptionsMenu = showOptionsMenu;
     }
 
     public void setTagLabelsById(Map<String, String> tagLabelsById) {
@@ -65,7 +58,7 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
     @Override
     public void onBindViewHolder(@NonNull JobPostDashboardViewHolder holder, int position) {
         JobPostDashboardModel currentJob = jobPostDashboardModelList.get(position);
-        holder.bind(currentJob, listener, showOptionsMenu, tagLabelsById);
+        holder.bind(currentJob, listener, tagLabelsById);
     }
 
     static class JobPostDashboardViewHolder extends RecyclerView.ViewHolder {
@@ -76,7 +69,6 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
         private TextView job_duration;
         private TextView how_long_job_was_posted;
         private TextView tvStatusBadge;
-        private ImageView optionsButton;
         private ChipGroup chipGroupTags;
         public JobPostDashboardViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -87,24 +79,34 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
             job_duration = itemView.findViewById(R.id.item_card_calendar_placeholder);
             how_long_job_was_posted = itemView.findViewById(R.id.item_card_how_long_job_post_posted_placeholder);
             tvStatusBadge = itemView.findViewById(R.id.tv_status_badge);
-            optionsButton = itemView.findViewById(R.id.image_view_job_card_options);
             chipGroupTags = itemView.findViewById(R.id.chip_group_job_card_tags);
         }
 
-        public void bind(JobPostDashboardModel jobBind, OnJobClickListener listener, boolean showOptionsMenu, Map<String, String> tagLabelsById){
+        public void bind(JobPostDashboardModel jobBind, OnJobClickListener listener, Map<String, String> tagLabelsById){
 
             if (employer_pfp != null) {
-                String pic = jobBind.getEmployerProfilePicture();
-                if (pic != null && !pic.isEmpty()) {
-                    byte[] photoBytes = ImageUtils.decodeBase64Safe(pic);
+                String uid = jobBind.getEmployerUid();
+                String embedded = jobBind.getEmployerProfilePicture();
+                employer_pfp.setTag(uid);
+                employer_pfp.setImageResource(R.drawable.user_placeholder);
+                if (uid != null) {
+                    ProfilePhotoCache.getInstance().load(uid, base64 -> {
+                        if (uid.equals(employer_pfp.getTag()) && base64 != null) {
+                            byte[] photoBytes = ImageUtils.decodeBase64Safe(base64);
+                            Glide.with(itemView.getContext())
+                                    .load(photoBytes)
+                                    .override(50, 50)
+                                    .circleCrop()
+                                    .into(employer_pfp);
+                        }
+                    });
+                } else if (embedded != null && !embedded.isEmpty()) {
+                    byte[] photoBytes = ImageUtils.decodeBase64Safe(embedded);
                     Glide.with(itemView.getContext())
                             .load(photoBytes)
                             .override(50, 50)
-                            .placeholder(R.drawable.user_placeholder)
                             .circleCrop()
                             .into(employer_pfp);
-                } else {
-                    employer_pfp.setImageResource(R.drawable.user_placeholder);
                 }
             }
             if (employer_name != null) {
@@ -135,25 +137,6 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
                 } else {
                     tvStatusBadge.setVisibility(View.GONE);
                 }
-            }
-
-            if (optionsButton != null) {
-                optionsButton.setVisibility(showOptionsMenu ? View.VISIBLE : View.GONE);
-                optionsButton.setOnClickListener(v -> {
-                    int currentPosition = getAbsoluteAdapterPosition();
-                    if (listener == null || currentPosition == RecyclerView.NO_POSITION) return;
-
-                    PopupMenu popup = new PopupMenu(v.getContext(), v);
-                    popup.getMenuInflater().inflate(R.menu.menu_job_post_card_options, popup.getMenu());
-                    popup.setOnMenuItemClickListener(item -> {
-                        if (item.getItemId() == R.id.menu_archive_job) {
-                            listener.onRemoveClick(jobBind, currentPosition);
-                            return true;
-                        }
-                        return false;
-                    });
-                    popup.show();
-                });
             }
 
             if (chipGroupTags != null) {

@@ -1,6 +1,7 @@
 package com.manilalinkup.app.models;
 
 public class EmployerProfileModel {
+    String uid;
     String fullName;
     String email;
     String address;
@@ -29,6 +30,8 @@ public class EmployerProfileModel {
         this.isProfileSet = isProfileSet;
         this.isVerified = isVerified;
     }
+
+    public String getUid() { return uid; }
 
     public String getFullName() { return fullName; }
 

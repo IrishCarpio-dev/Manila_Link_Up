@@ -62,6 +62,7 @@ public class LogoutHelper {
 
     private static void finalPerformSignOut(Activity activity, FirebaseAuth mAuth) {
         SessionCache.getInstance().clear();
+        ProfilePhotoCache.getInstance().clear();
 
         mAuth.signOut();
 
