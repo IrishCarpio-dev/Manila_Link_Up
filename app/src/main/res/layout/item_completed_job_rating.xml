@@ -22,6 +22,7 @@
         android:layout_marginTop="4dp">
 
         <ImageView
+            android:id="@+id/iv_completed_job_star"
             android:layout_width="13dp"
             android:layout_height="13dp"
             android:src="@drawable/ic_star" />
