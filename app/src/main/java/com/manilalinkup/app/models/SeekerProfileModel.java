@@ -13,6 +13,7 @@ public class SeekerProfileModel {
     String profilePhoto;
     Boolean isProfileSet;
     Boolean isVerified;
+    String rejectedAt;
     Boolean isOpenForWork;
     SeekerPreferencesModel preferences;
     Integer ratingCount;
@@ -66,6 +67,8 @@ public class SeekerProfileModel {
     public Boolean getProfileSet() { return isProfileSet; }
 
     public Boolean getVerified() { return isVerified; }
+
+    public String getRejectedAt() { return rejectedAt; }
 
     public Boolean getOpenForWork() { return isOpenForWork; }
 

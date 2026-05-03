@@ -28,7 +28,7 @@ import com.manilalinkup.app.activities.SeekerDashboardActivity;
 import com.manilalinkup.app.activities.SeekerJobPreferences;
 import com.manilalinkup.app.activities.SeekerNotificationsActivity;
 import com.manilalinkup.app.activities.SeekerProfileActivity;
-import com.manilalinkup.app.activities.SeekerVerifyIdentityActivity;
+import com.manilalinkup.app.activities.SeekerVerificationRejectedActivity;
 import com.manilalinkup.app.models.RegisterDeviceRequest;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.NotificationUtils;
@@ -113,7 +113,7 @@ public class MLUFirebaseMessagingService extends FirebaseMessagingService {
 
             case NotificationUtils.TYPE_VERIFICATION_REJECTED:
                 if ("employer".equals(role)) return new Intent(this, EmployerBusinessVerificationActivity.class);
-                return new Intent(this, SeekerVerifyIdentityActivity.class);
+                return new Intent(this, SeekerVerificationRejectedActivity.class);
 
             // --- Shared notifications ---
             case NotificationUtils.TYPE_RATING_RECEIVED:

@@ -209,6 +209,9 @@
             android:exported="false"
             android:label="Completed Jobs"
             android:parentActivityName=".activities.SeekerProfileActivity" />
+        <activity
+            android:name=".activities.SeekerVerificationRejectedActivity"
+            android:exported="false" />
 
         <service
             android:name=".services.MLUFirebaseMessagingService"

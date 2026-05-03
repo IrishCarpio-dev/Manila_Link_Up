@@ -130,7 +130,7 @@ public class SeekerNotificationsActivity extends BaseActivity {
                 intent = new Intent(this, SeekerProfileActivity.class);
                 break;
             case NotificationUtils.TYPE_VERIFICATION_REJECTED:
-                intent = new Intent(this, SeekerVerifyIdentityActivity.class);
+                intent = new Intent(this, SeekerVerificationRejectedActivity.class);
                 break;
             case NotificationUtils.TYPE_PREFERENCES_NUDGE:
                 intent = new Intent(this, SeekerJobPreferences.class);

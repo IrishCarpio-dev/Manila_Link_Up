@@ -27,6 +27,7 @@ import com.manilalinkup.app.models.ServiceTagModel;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.models.UserProfileModel;
 import com.manilalinkup.app.utilities.SessionCache;
 
 import java.text.SimpleDateFormat;
@@ -120,6 +121,16 @@ public class SeekerJobPostActivity extends BaseActivity {
     }
 
     private void confirmAndApply() {
+        UserProfileModel profile = SessionCache.getInstance().getUserProfile();
+        boolean isVerified = profile != null
+            && profile.getSeekers() != null
+            && Boolean.TRUE.equals(profile.getSeekers().getVerified());
+        if (!isVerified) {
+            Toast.makeText(this,
+                "Your account is pending verification. You'll be able to apply once approved.",
+                Toast.LENGTH_LONG).show();
+            return;
+        }
         new AlertDialog.Builder(this)
                 .setTitle("Apply for Job")
                 .setMessage("Are you sure you want to apply for this job?")
