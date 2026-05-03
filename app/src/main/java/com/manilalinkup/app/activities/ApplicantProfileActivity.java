@@ -56,7 +56,7 @@ public class ApplicantProfileActivity extends BaseActivity {
     private int status;
     private boolean employerHasCompleted;
 
-    private MaterialButton btnHire, btnComplete, btnInterview, btnChat, btnRate, btnLoadMore;
+    private MaterialButton btnHire, btnComplete, btnInterview, btnChat, btnLoadMore;
     private LinearLayout containerCompletedJobs;
     private TextView tvNoCompletedJobs;
     private ProgressBar progressRatings, progressLoadMore;
@@ -134,7 +134,6 @@ public class ApplicantProfileActivity extends BaseActivity {
         btnComplete = findViewById(R.id.btn_complete);
         btnInterview = findViewById(R.id.btn_interview);
         btnChat = findViewById(R.id.btn_chat);
-        btnRate = findViewById(R.id.btn_rate);
         containerCompletedJobs = findViewById(R.id.container_completed_jobs);
         tvNoCompletedJobs = findViewById(R.id.tv_no_completed_jobs);
         progressRatings = findViewById(R.id.progress_ratings);
@@ -166,7 +165,6 @@ public class ApplicantProfileActivity extends BaseActivity {
                         .show());
 
         btnChat.setOnClickListener(v -> openChat());
-        btnRate.setOnClickListener(v -> openRating());
 
         btnLoadMore.setOnClickListener(v -> loadCompletedJobs(nextCursor));
 
@@ -202,7 +200,6 @@ public class ApplicantProfileActivity extends BaseActivity {
         btnComplete.setVisibility(View.GONE);
         btnInterview.setVisibility(View.GONE);
         btnChat.setVisibility(View.GONE);
-        btnRate.setVisibility(View.GONE);
 
         switch (status) {
             case 1:
@@ -216,9 +213,6 @@ public class ApplicantProfileActivity extends BaseActivity {
             case 5:
                 if (!employerHasCompleted) btnComplete.setVisibility(View.VISIBLE);
                 btnChat.setVisibility(View.VISIBLE);
-                break;
-            case 6:
-                btnRate.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -296,16 +290,6 @@ public class ApplicantProfileActivity extends BaseActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) intent.putExtra("EMPLOYER_UID", currentUser.getUid());
         if (jobTitle != null) intent.putExtra("JOB_TITLE", jobTitle);
-        String firstName = getIntent().getStringExtra("FIRST_NAME");
-        String lastName = getIntent().getStringExtra("LAST_NAME");
-        String counterpartName = (firstName != null ? firstName : "") + (lastName != null ? " " + lastName : "");
-        intent.putExtra("COUNTERPART_NAME", counterpartName.trim());
-        startActivity(intent);
-    }
-
-    private void openRating() {
-        Intent intent = new Intent(this, SubmitRatingActivity.class);
-        intent.putExtra("APPLICATION_ID", applicationId);
         String firstName = getIntent().getStringExtra("FIRST_NAME");
         String lastName = getIntent().getStringExtra("LAST_NAME");
         String counterpartName = (firstName != null ? firstName : "") + (lastName != null ? " " + lastName : "");
