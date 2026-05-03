@@ -56,10 +56,14 @@ public class ApplicantProfileActivity extends BaseActivity {
     private int status;
     private boolean employerHasCompleted;
 
-    private MaterialButton btnHire, btnComplete, btnInterview, btnChat, btnRate;
+    private MaterialButton btnHire, btnComplete, btnInterview, btnChat, btnRate, btnLoadMore;
     private LinearLayout containerCompletedJobs;
     private TextView tvNoCompletedJobs;
-    private ProgressBar progressRatings;
+    private ProgressBar progressRatings, progressLoadMore;
+
+    private String nextCursor = null;
+    private boolean hasMore = false;
+    private boolean isLoadingMore = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +138,8 @@ public class ApplicantProfileActivity extends BaseActivity {
         containerCompletedJobs = findViewById(R.id.container_completed_jobs);
         tvNoCompletedJobs = findViewById(R.id.tv_no_completed_jobs);
         progressRatings = findViewById(R.id.progress_ratings);
+        progressLoadMore = findViewById(R.id.progress_load_more);
+        btnLoadMore = findViewById(R.id.btn_load_more);
 
         btnHire.setOnClickListener(v ->
                 new AlertDialog.Builder(this)
@@ -162,8 +168,10 @@ public class ApplicantProfileActivity extends BaseActivity {
         btnChat.setOnClickListener(v -> openChat());
         btnRate.setOnClickListener(v -> openRating());
 
+        btnLoadMore.setOnClickListener(v -> loadCompletedJobs(nextCursor));
+
         refreshButtons();
-        loadCompletedJobs();
+        loadCompletedJobs(null);
     }
 
     @Override
@@ -305,42 +313,59 @@ public class ApplicantProfileActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void loadCompletedJobs() {
-        if (seekerUid == null) return;
-        progressRatings.setVisibility(View.VISIBLE);
+    private void loadCompletedJobs(String cursor) {
+        if (seekerUid == null || isLoadingMore) return;
+
+        if (cursor == null) {
+            progressRatings.setVisibility(View.VISIBLE);
+        } else {
+            isLoadingMore = true;
+            btnLoadMore.setVisibility(View.GONE);
+            progressLoadMore.setVisibility(View.VISIBLE);
+        }
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             progressRatings.setVisibility(View.GONE);
-            tvNoCompletedJobs.setVisibility(View.VISIBLE);
+            progressLoadMore.setVisibility(View.GONE);
+            isLoadingMore = false;
+            if (cursor == null) tvNoCompletedJobs.setVisibility(View.VISIBLE);
             return;
         }
 
         user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
-            api.getCompletedJobs(new GetCompletedJobsRequest(seekerUid, null, null))
+            api.getCompletedJobs(new GetCompletedJobsRequest(seekerUid, null, cursor))
                     .enqueue(new Callback<CompletedJobsResponse>() {
                 @Override
                 public void onResponse(Call<CompletedJobsResponse> call, Response<CompletedJobsResponse> response) {
                     progressRatings.setVisibility(View.GONE);
+                    progressLoadMore.setVisibility(View.GONE);
+                    isLoadingMore = false;
                     if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                         List<AppliedJobModel> jobs = response.body().getData();
-                        if (jobs.isEmpty()) {
+                        if (cursor == null && jobs.isEmpty()) {
                             tvNoCompletedJobs.setVisibility(View.VISIBLE);
                         } else {
                             for (AppliedJobModel job : jobs) {
                                 addCompletedJobItem(job);
                             }
                         }
+                        hasMore = response.body().isHasMore();
+                        nextCursor = response.body().getNextCursor();
+                        btnLoadMore.setVisibility(hasMore ? View.VISIBLE : View.GONE);
                     } else {
-                        tvNoCompletedJobs.setVisibility(View.VISIBLE);
+                        if (cursor == null) tvNoCompletedJobs.setVisibility(View.VISIBLE);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<CompletedJobsResponse> call, Throwable t) {
                     progressRatings.setVisibility(View.GONE);
-                    tvNoCompletedJobs.setVisibility(View.VISIBLE);
+                    progressLoadMore.setVisibility(View.GONE);
+                    isLoadingMore = false;
+                    if (cursor == null) tvNoCompletedJobs.setVisibility(View.VISIBLE);
+                    btnLoadMore.setVisibility(hasMore ? View.VISIBLE : View.GONE);
                 }
             });
         });
