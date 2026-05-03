@@ -12,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.manilalinkup.app.utilities.ImageUtils;
+import com.manilalinkup.app.utilities.ProfilePhotoCache;
+
 import com.bumptech.glide.Glide;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.models.ApplicantModel;
@@ -94,14 +97,22 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
                     setStarTint(rating, 0f);
                 }
 
-                if (seeker.getProfilePhotoUrl() != null) {
-                    Glide.with(itemView.getContext())
-                            .load(seeker.getProfilePhotoUrl())
-                            .placeholder(R.drawable.ic_person_placeholder)
-                            .circleCrop()
-                            .into(profilePhoto);
-                } else {
-                    profilePhoto.setImageResource(R.drawable.ic_person_placeholder);
+                String uid = applicant.getSeekerUid();
+                profilePhoto.setTag(uid);
+                profilePhoto.setImageResource(R.drawable.ic_person_placeholder);
+                if (uid != null) {
+                    if (seeker.getProfilePhoto() != null) {
+                        ProfilePhotoCache.getInstance().put(uid, seeker.getProfilePhoto());
+                    }
+                    ProfilePhotoCache.getInstance().load(uid, base64 -> {
+                        if (uid.equals(profilePhoto.getTag()) && base64 != null) {
+                            byte[] photoBytes = ImageUtils.decodeBase64Safe(base64);
+                            Glide.with(itemView.getContext())
+                                    .load(photoBytes)
+                                    .circleCrop()
+                                    .into(profilePhoto);
+                        }
+                    });
                 }
             }
 

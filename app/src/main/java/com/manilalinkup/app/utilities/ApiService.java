@@ -2,6 +2,8 @@ package com.manilalinkup.app.utilities;
 
 import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.models.ApplicantModel;
+import com.manilalinkup.app.models.GetProfilePhotoRequest;
+import com.manilalinkup.app.models.ProfilePhotoResponse;
 import com.manilalinkup.app.models.ApplicationModel;
 import com.manilalinkup.app.models.AppliedJobModel;
 import com.manilalinkup.app.models.ApplyJobRequest;
@@ -13,11 +15,14 @@ import com.manilalinkup.app.models.CompletedJobsResponse;
 import com.manilalinkup.app.models.ChatListItemModel;
 import com.manilalinkup.app.models.CreateJobRequest;
 import com.manilalinkup.app.models.EmployerRequest;
+import com.manilalinkup.app.models.ApplicantsResponse;
 import com.manilalinkup.app.models.GetApplicantsRequest;
+import com.manilalinkup.app.models.AppliedJobsResponse;
 import com.manilalinkup.app.models.GetAppliedJobsRequest;
 import com.manilalinkup.app.models.GetSeekerJobsRequest;
 import com.manilalinkup.app.models.GetChatsRequest;
 import com.manilalinkup.app.models.GetJobsRequest;
+import com.manilalinkup.app.models.JobListResponse;
 import com.manilalinkup.app.models.GetRatingsRequest;
 import com.manilalinkup.app.models.HideChatRequest;
 import com.manilalinkup.app.models.JobModel;
@@ -85,12 +90,15 @@ public interface ApiService {
     @GET("api/user/profile")
     Call<ApiResponse<UserProfileModel>> getUserProfile();
 
+    @POST("api/profile-photo")
+    Call<ProfilePhotoResponse> getProfilePhoto(@Body GetProfilePhotoRequest request);
+
     // Jobs
     @POST("api/jobs")
     Call<ResponseBody> createJob(@Body CreateJobRequest createJobRequest);
 
     @POST("api/jobs/list")
-    Call<ApiResponse<List<JobModel>>> getJobs(@Body GetJobsRequest getJobsRequest);
+    Call<JobListResponse> getJobs(@Body GetJobsRequest getJobsRequest);
 
     @GET("api/jobs/{id}")
     Call<ApiResponse<JobModel>> getJob(@Path("id") String id);
@@ -109,10 +117,10 @@ public interface ApiService {
     Call<ResponseBody> withdrawApplication(@Body WithdrawApplicationRequest request);
 
     @POST("api/jobs/applicants")
-    Call<ApiResponse<List<ApplicantModel>>> getApplicants(@Body GetApplicantsRequest request);
+    Call<ApplicantsResponse> getApplicants(@Body GetApplicantsRequest request);
 
     @POST("api/seeker/appliedJobs")
-    Call<ApiResponse<List<AppliedJobModel>>> getAppliedJobs(@Body GetAppliedJobsRequest request);
+    Call<AppliedJobsResponse> getAppliedJobs(@Body GetAppliedJobsRequest request);
 
     @POST("api/seeker/jobs")
     Call<SeekerJobsResponse> getSeekerJobs(@Body GetSeekerJobsRequest request);

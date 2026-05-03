@@ -287,7 +287,7 @@ public class EditEmployerProfileActivity extends BaseActivity {
             return;
         }
 
-        profilePhoto = MultipartRequestBodyHelper.prepareImagePart(EditEmployerProfileActivity.this, profilePhotoUri, "profilePhoto");
+        profilePhoto = (profilePhotoUri != null) ? MultipartRequestBodyHelper.prepareProfilePhotoBase64Part(EditEmployerProfileActivity.this, profilePhotoUri) : null;
         clearance = MultipartRequestBodyHelper.prepareImagePart(EditEmployerProfileActivity.this, clearanceUri, "clearance");
         validId = MultipartRequestBodyHelper.prepareImagePart(EditEmployerProfileActivity.this, validIdUri, "validId");
 

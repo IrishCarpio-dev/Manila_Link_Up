@@ -4,6 +4,7 @@ import java.util.List;
 
 public class JobPostDashboardModel {
     String jobId;
+    String employerUid;
     String jobTitle, employerName, jobPostLocation, job_duration,howLongJobIsPosted;
     String employerProfilePicture;
     List<String> tagIds;
@@ -43,6 +44,9 @@ public class JobPostDashboardModel {
 
     public String getJobId() { return jobId; }
     public void setJobId(String jobId) { this.jobId = jobId; }
+
+    public String getEmployerUid() { return employerUid; }
+    public void setEmployerUid(String employerUid) { this.employerUid = employerUid; }
 
     public List<String> getTagIds() { return tagIds; }
     public void setTagIds(List<String> tagIds) { this.tagIds = tagIds; }

@@ -13,6 +13,8 @@ import androidx.core.content.ContextCompat;
 
 import androidx.activity.EdgeToEdge;
 
+import com.manilalinkup.app.utilities.ImageUtils;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
@@ -40,15 +42,12 @@ public class AppliedJobPostActivity extends BaseActivity {
 
     private MaterialButton btnCancel;
     private MaterialButton btnChat;
-    private MaterialButton btnMarkComplete;
     private MaterialButton btnRate;
-    private MaterialButton btnMessageEmployer;
 
     private String applicationId;
     private String employerName;
     private String chatId;
     private String seekerUid;
-    private String jobTitle;
     private int currentStatus;
     private boolean seekerHasCompleted;
 
@@ -65,10 +64,8 @@ public class AppliedJobPostActivity extends BaseActivity {
         seekerUid          = getIntent().getStringExtra("SEEKER_UID");
         currentStatus      = getIntent().getIntExtra("STATUS", 1);
         seekerHasCompleted = getIntent().getBooleanExtra("SEEKER_HAS_COMPLETED", false);
-        chatId             = getIntent().getStringExtra("CHAT_ID");
-        seekerUid          = getIntent().getStringExtra("SEEKER_UID");
 
-        jobTitle             = getIntent().getStringExtra("JOB_TITLE");
+        String jobTitle      = getIntent().getStringExtra("JOB_TITLE");
         String location      = getIntent().getStringExtra("LOCATION");
         double salary        = getIntent().getDoubleExtra("SALARY", 0.0);
         String duration      = getIntent().getStringExtra("DURATION");
@@ -110,19 +107,19 @@ public class AppliedJobPostActivity extends BaseActivity {
         }
 
         if (employerPhoto != null && !employerPhoto.isEmpty()) {
+            byte[] photoBytes = ImageUtils.decodeBase64Safe(employerPhoto);
             Glide.with(this)
-                    .load(employerPhoto)
+                    .load(photoBytes)
                     .apply(RequestOptions.circleCropTransform())
+                    .placeholder(R.drawable.ic_person_placeholder)
                     .into(ivEmployerPhoto);
         }
 
         applyStatusBadge(tvStatusBadge, currentStatus);
 
-        btnCancel          = findViewById(R.id.button_cancel_application);
-        btnChat            = findViewById(R.id.btn_chat);
-        btnMarkComplete    = findViewById(R.id.btn_mark_complete);
-        btnRate            = findViewById(R.id.btn_rate);
-        btnMessageEmployer = findViewById(R.id.btn_message_employer);
+        btnCancel = findViewById(R.id.button_cancel_application);
+        btnChat   = findViewById(R.id.btn_chat);
+        btnRate   = findViewById(R.id.btn_rate);
 
         updateActionVisibility();
     }
@@ -178,15 +175,8 @@ public class AppliedJobPostActivity extends BaseActivity {
         btnChat.setVisibility((currentStatus == 2 || currentStatus == 5) && chatId != null ? View.VISIBLE : View.GONE);
         btnChat.setOnClickListener(v -> openChat());
 
-        btnMarkComplete.setVisibility(View.GONE);
-
         btnRate.setVisibility(currentStatus == 6 ? View.VISIBLE : View.GONE);
         btnRate.setOnClickListener(v -> openRating());
-
-        // Message: interview, hired, or completed — only when a chat thread exists
-        boolean canMessage = (currentStatus == 2 || currentStatus == 5 || currentStatus == 6) && chatId != null;
-        btnMessageEmployer.setVisibility(canMessage ? View.VISIBLE : View.GONE);
-        btnMessageEmployer.setOnClickListener(v -> openChat());
     }
 
     private void confirmCancel() {
@@ -284,9 +274,9 @@ public class AppliedJobPostActivity extends BaseActivity {
     private void openChat() {
         Intent intent = new Intent(this, ChatThreadSeeker.class);
         intent.putExtra("CHAT_ID", chatId);
-        intent.putExtra("JOB_TITLE", jobTitle);
-        intent.putExtra("COUNTERPART_NAME", employerName != null ? employerName : "Employer");
         intent.putExtra("SEEKER_UID", seekerUid);
+        intent.putExtra("JOB_TITLE", getIntent().getStringExtra("JOB_TITLE"));
+        intent.putExtra("COUNTERPART_NAME", employerName);
         startActivity(intent);
     }
 

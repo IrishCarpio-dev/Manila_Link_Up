@@ -126,6 +126,7 @@ public class ChatSeekerActivity extends BaseActivity {
     private void loadChats() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
+        swipeRefreshLayout.setRefreshing(true);
 
         user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);

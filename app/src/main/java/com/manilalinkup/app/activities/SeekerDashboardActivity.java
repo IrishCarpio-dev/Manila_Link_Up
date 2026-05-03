@@ -1,6 +1,5 @@
 package com.manilalinkup.app.activities;
 
-import static com.manilalinkup.app.utilities.RetrofitClient.BASE_URL;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,6 +30,7 @@ import com.manilalinkup.app.models.JobPostDashboardModel;
 import com.manilalinkup.app.models.ServiceTagModel;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
+import com.manilalinkup.app.utilities.ProfilePhotoCache;
 import com.manilalinkup.app.utilities.RetrofitClient;
 import com.manilalinkup.app.utilities.SessionCache;
 
@@ -61,7 +61,6 @@ public class SeekerDashboardActivity extends BaseActivity {
     private boolean isCuratedExhausted = false;
     private String lastExpiresAt = null;
     private String lastCreatedAt = null;
-    private static final int PAGE_SIZE = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,9 +112,6 @@ public class SeekerDashboardActivity extends BaseActivity {
                 jobPostLauncher.launch(intent);
             }
 
-            @Override
-            public void onRemoveClick(JobPostDashboardModel job, int position) {
-            }
         });
         recyclerViewJobPost.setAdapter(adapterJobPost);
 
@@ -204,7 +200,7 @@ public class SeekerDashboardActivity extends BaseActivity {
 
             String token = tokenTask.getResult().getToken();
             ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
-            GetSeekerJobsRequest request = new GetSeekerJobsRequest(mode, PAGE_SIZE, lastExpiresAt, lastCreatedAt);
+            GetSeekerJobsRequest request = new GetSeekerJobsRequest(mode, null, lastExpiresAt, lastCreatedAt);
 
             apiService.getSeekerJobs(request).enqueue(new Callback<SeekerJobsResponse>() {
                 @Override
@@ -274,7 +270,11 @@ public class SeekerDashboardActivity extends BaseActivity {
 
     private JobPostDashboardModel mapToDisplayModel(JobModel job) {
         String employerName = job.getEmployer() != null ? job.getEmployer().getFullName() : "";
-        String photoUrl = job.getEmployer() != null ? BASE_URL + job.getEmployer().getProfilePhotoUrl() : "";
+        String employerUid = job.getEmployer() != null ? job.getEmployer().getUid() : null;
+        String photoUrl = job.getEmployer() != null ? job.getEmployer().getProfilePhoto() : null;
+        if (employerUid != null && photoUrl != null) {
+            ProfilePhotoCache.getInstance().put(employerUid, photoUrl);
+        }
         JobPostDashboardModel model = new JobPostDashboardModel(
             job.getTitle(),
             employerName,
@@ -284,6 +284,7 @@ public class SeekerDashboardActivity extends BaseActivity {
             getRelativeTime(job.getCreatedAt())
         );
         model.setJobId(job.getId());
+        model.setEmployerUid(employerUid);
         model.setTagIds(job.getTags());
         model.setSalary(job.getSalary());
         model.setDescription(job.getDescription());

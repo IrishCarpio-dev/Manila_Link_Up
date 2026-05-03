@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -19,8 +20,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.AppliedJobsAdapter;
-import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.models.AppliedJobModel;
+import com.manilalinkup.app.models.AppliedJobsResponse;
 import com.manilalinkup.app.models.CompletedJobsResponse;
 import com.manilalinkup.app.models.GetAppliedJobsRequest;
 import com.manilalinkup.app.models.GetCompletedJobsRequest;
@@ -61,6 +62,16 @@ public class AppliedSeekerActivity extends BaseActivity {
     private Spinner spinnerFilter;
     private Integer selectedStatus = null;
 
+    private ProgressBar loadingMoreProgress;
+
+    private String appliedNextCursor = null;
+    private boolean appliedHasMore = false;
+    private boolean appliedIsLoadingMore = false;
+
+    private String completedNextCursor = null;
+    private boolean completedHasMore = false;
+    private boolean completedIsLoadingMore = false;
+
     private boolean completedLoaded = false;
     private boolean activeTab = true;
 
@@ -82,25 +93,51 @@ public class AppliedSeekerActivity extends BaseActivity {
         indicatorActive = findViewById(R.id.indicator_active);
         indicatorCompleted = findViewById(R.id.indicator_completed);
 
+        loadingMoreProgress = findViewById(R.id.loading_more_progress);
+
         recyclerView = findViewById(R.id.recycler_view_employer_own_posts);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         emptyState = findViewById(R.id.empty_state_layout);
         swipeRefreshLayout.setColorSchemeResources(R.color.manila_blue);
-        swipeRefreshLayout.setOnRefreshListener(this::fetchAppliedJobs);
+        swipeRefreshLayout.setOnRefreshListener(() -> fetchAppliedJobs(false));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         appliedList = new ArrayList<>();
         initAppliedAdapter();
         recyclerView.setAdapter(appliedAdapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView rv, int dx, int dy) {
+                if (dy <= 0) return;
+                LinearLayoutManager lm = (LinearLayoutManager) rv.getLayoutManager();
+                if (lm == null) return;
+                if (!appliedIsLoadingMore && appliedHasMore &&
+                        lm.findLastVisibleItemPosition() >= lm.getItemCount() - 3) {
+                    fetchAppliedJobs(true);
+                }
+            }
+        });
 
         completedRecyclerView = findViewById(R.id.recycler_view_completed);
         completedSwipeRefresh = findViewById(R.id.swipe_refresh_completed);
         completedEmptyState = findViewById(R.id.empty_state_completed);
         completedSwipeRefresh.setColorSchemeResources(R.color.manila_blue);
-        completedSwipeRefresh.setOnRefreshListener(this::fetchCompletedJobs);
+        completedSwipeRefresh.setOnRefreshListener(() -> fetchCompletedJobs(false));
         completedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         completedList = new ArrayList<>();
         initCompletedAdapter();
         completedRecyclerView.setAdapter(completedAdapter);
+        completedRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView rv, int dx, int dy) {
+                if (dy <= 0) return;
+                LinearLayoutManager lm = (LinearLayoutManager) rv.getLayoutManager();
+                if (lm == null) return;
+                if (!completedIsLoadingMore && completedHasMore &&
+                        lm.findLastVisibleItemPosition() >= lm.getItemCount() - 3) {
+                    fetchCompletedJobs(true);
+                }
+            }
+        });
 
         filterRow = findViewById(R.id.filter_row);
         spinnerFilter = findViewById(R.id.spinner_status_filter);
@@ -117,7 +154,7 @@ public class AppliedSeekerActivity extends BaseActivity {
                 Integer newStatus = statusValues[position];
                 if (newStatus != selectedStatus && (newStatus == null || !newStatus.equals(selectedStatus))) {
                     selectedStatus = newStatus;
-                    fetchAppliedJobs();
+                    fetchAppliedJobs(false);
                 }
             }
             @Override
@@ -127,7 +164,7 @@ public class AppliedSeekerActivity extends BaseActivity {
         tabActive.setOnClickListener(v -> selectTab(true));
         tabCompleted.setOnClickListener(v -> selectTab(false));
 
-        fetchAppliedJobs();
+        fetchAppliedJobs(false);
     }
 
     private void selectTab(boolean active) {
@@ -164,31 +201,47 @@ public class AppliedSeekerActivity extends BaseActivity {
 
             if (!completedLoaded) {
                 completedLoaded = true;
-                fetchCompletedJobs();
+                fetchCompletedJobs(false);
             } else {
                 checkEmptyState(completedList, completedEmptyState, completedRecyclerView);
             }
         }
     }
 
-    private void fetchAppliedJobs() {
+    private void fetchAppliedJobs(boolean loadMore) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
-
-        swipeRefreshLayout.setRefreshing(true);
+        if (loadMore) {
+            if (appliedIsLoadingMore || !appliedHasMore) return;
+            appliedIsLoadingMore = true;
+            loadingMoreProgress.setVisibility(View.VISIBLE);
+        } else {
+            appliedNextCursor = null;
+            swipeRefreshLayout.setRefreshing(true);
+        }
+        String cursor = loadMore ? appliedNextCursor : null;
         user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
-            api.getAppliedJobs(new GetAppliedJobsRequest(null, null, selectedStatus))
-                    .enqueue(new Callback<ApiResponse<List<AppliedJobModel>>>() {
+            api.getAppliedJobs(new GetAppliedJobsRequest(null, cursor, selectedStatus))
+                    .enqueue(new Callback<AppliedJobsResponse>() {
                         @Override
-                        public void onResponse(Call<ApiResponse<List<AppliedJobModel>>> call,
-                                               Response<ApiResponse<List<AppliedJobModel>>> response) {
+                        public void onResponse(Call<AppliedJobsResponse> call,
+                                               Response<AppliedJobsResponse> response) {
                             swipeRefreshLayout.setRefreshing(false);
+                            appliedIsLoadingMore = false;
+                            loadingMoreProgress.setVisibility(View.GONE);
                             if (response.isSuccessful() && response.body() != null
                                     && response.body().getData() != null) {
-                                appliedList.clear();
+                                if (!loadMore) appliedList.clear();
+                                int insertPos = appliedList.size();
                                 appliedList.addAll(response.body().getData());
-                                appliedAdapter.notifyDataSetChanged();
+                                if (loadMore) {
+                                    appliedAdapter.notifyItemRangeInserted(insertPos, response.body().getData().size());
+                                } else {
+                                    appliedAdapter.notifyDataSetChanged();
+                                }
+                                appliedHasMore = response.body().isHasMore();
+                                appliedNextCursor = response.body().getNextCursor();
                             } else {
                                 ErrorUtils.showErrorMessage(AppliedSeekerActivity.this, response.errorBody());
                             }
@@ -196,8 +249,10 @@ public class AppliedSeekerActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<ApiResponse<List<AppliedJobModel>>> call, Throwable t) {
+                        public void onFailure(Call<AppliedJobsResponse> call, Throwable t) {
                             swipeRefreshLayout.setRefreshing(false);
+                            appliedIsLoadingMore = false;
+                            loadingMoreProgress.setVisibility(View.GONE);
                             ErrorUtils.showThrowableError(AppliedSeekerActivity.this, t);
                             checkEmptyState(appliedList, emptyState, recyclerView);
                         }
@@ -205,24 +260,40 @@ public class AppliedSeekerActivity extends BaseActivity {
         });
     }
 
-    private void fetchCompletedJobs() {
+    private void fetchCompletedJobs(boolean loadMore) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
-
-        completedSwipeRefresh.setRefreshing(true);
+        if (loadMore) {
+            if (completedIsLoadingMore || !completedHasMore) return;
+            completedIsLoadingMore = true;
+            loadingMoreProgress.setVisibility(View.VISIBLE);
+        } else {
+            completedNextCursor = null;
+            completedSwipeRefresh.setRefreshing(true);
+        }
+        String cursor = loadMore ? completedNextCursor : null;
         user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
-            api.getCompletedJobs(new GetCompletedJobsRequest(null, null))
+            api.getCompletedJobs(new GetCompletedJobsRequest(null, cursor))
                     .enqueue(new Callback<CompletedJobsResponse>() {
                         @Override
                         public void onResponse(Call<CompletedJobsResponse> call,
                                                Response<CompletedJobsResponse> response) {
                             completedSwipeRefresh.setRefreshing(false);
+                            completedIsLoadingMore = false;
+                            loadingMoreProgress.setVisibility(View.GONE);
                             if (response.isSuccessful() && response.body() != null
                                     && response.body().getData() != null) {
-                                completedList.clear();
+                                if (!loadMore) completedList.clear();
+                                int insertPos = completedList.size();
                                 completedList.addAll(response.body().getData());
-                                completedAdapter.notifyDataSetChanged();
+                                if (loadMore) {
+                                    completedAdapter.notifyItemRangeInserted(insertPos, response.body().getData().size());
+                                } else {
+                                    completedAdapter.notifyDataSetChanged();
+                                }
+                                completedHasMore = response.body().isHasMore();
+                                completedNextCursor = response.body().getNextCursor();
                             } else {
                                 ErrorUtils.showErrorMessage(AppliedSeekerActivity.this, response.errorBody());
                             }
@@ -232,6 +303,8 @@ public class AppliedSeekerActivity extends BaseActivity {
                         @Override
                         public void onFailure(Call<CompletedJobsResponse> call, Throwable t) {
                             completedSwipeRefresh.setRefreshing(false);
+                            completedIsLoadingMore = false;
+                            loadingMoreProgress.setVisibility(View.GONE);
                             ErrorUtils.showThrowableError(AppliedSeekerActivity.this, t);
                             checkEmptyState(completedList, completedEmptyState, completedRecyclerView);
                         }
@@ -267,7 +340,7 @@ public class AppliedSeekerActivity extends BaseActivity {
                 intent.putExtra("EXPIRES_AT", job.getJob().getExpiresAt());
                 if (job.getJob().getEmployer() != null) {
                     intent.putExtra("EMPLOYER_NAME", job.getJob().getEmployer().getFullName());
-                    intent.putExtra("EMPLOYER_PHOTO", job.getJob().getEmployer().getProfilePhotoUrl());
+                    intent.putExtra("EMPLOYER_PHOTO", job.getJob().getEmployer().getProfilePhoto());
                 }
             }
             startActivity(intent);
@@ -290,7 +363,7 @@ public class AppliedSeekerActivity extends BaseActivity {
                 intent.putExtra("EXPIRES_AT", job.getJob().getExpiresAt());
                 if (job.getJob().getEmployer() != null) {
                     intent.putExtra("EMPLOYER_NAME", job.getJob().getEmployer().getFullName());
-                    intent.putExtra("EMPLOYER_PHOTO", job.getJob().getEmployer().getProfilePhotoUrl());
+                    intent.putExtra("EMPLOYER_PHOTO", job.getJob().getEmployer().getProfilePhoto());
                 }
             }
             startActivity(intent);

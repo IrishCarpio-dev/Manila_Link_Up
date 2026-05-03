@@ -28,7 +28,8 @@ import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.RetrofitClient;
 import com.manilalinkup.app.utilities.SessionCache;
 
-import static com.manilalinkup.app.utilities.RetrofitClient.BASE_URL;
+import android.util.Base64;
+import com.manilalinkup.app.utilities.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,9 +106,10 @@ public class SeekerProfileActivity extends BaseActivity {
                 ivVerification.setVisibility(Boolean.TRUE.equals(seeker.getVerified()) ? View.VISIBLE : View.GONE);
                 tvStatus.setVisibility(Boolean.TRUE.equals(seeker.getOpenForWork()) ? View.VISIBLE : View.GONE);
 
-                if (seeker.getProfilePhotoUrl() != null) {
+                if (seeker.getProfilePhoto() != null) {
+                    byte[] photoBytes = ImageUtils.decodeBase64Safe(seeker.getProfilePhoto());
                     Glide.with(SeekerProfileActivity.this)
-                            .load(BASE_URL + seeker.getProfilePhotoUrl())
+                            .load(photoBytes)
                             .placeholder(R.drawable.ic_person_placeholder)
                             .into(ivProfilePic);
                 }

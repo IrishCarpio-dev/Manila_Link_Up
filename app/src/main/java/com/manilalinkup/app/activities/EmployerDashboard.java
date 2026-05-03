@@ -1,6 +1,5 @@
 package com.manilalinkup.app.activities;
 
-import static com.manilalinkup.app.utilities.RetrofitClient.BASE_URL;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -24,16 +23,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.android.material.badge.BadgeDrawable;
 import com.manilalinkup.app.adapters.JobPostDashboardAdapter;
-import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.models.ArchiveJobRequest;
 import com.manilalinkup.app.models.UnreadCountResponse;
 import com.manilalinkup.app.models.GetJobsRequest;
+import com.manilalinkup.app.models.JobListResponse;
 import com.manilalinkup.app.models.JobModel;
 import com.manilalinkup.app.models.JobPostDashboardModel;
 import com.manilalinkup.app.models.ServiceTagModel;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
+import com.manilalinkup.app.utilities.ProfilePhotoCache;
 import com.manilalinkup.app.utilities.RetrofitClient;
 import com.manilalinkup.app.utilities.SessionCache;
 
@@ -65,8 +65,8 @@ public class EmployerDashboard extends BaseActivity {
     private boolean isLoading = false;
     private boolean isRefreshing = false;
     private boolean hasMorePages = true;
-    private String lastCreatedAt = null;
-    private static final int PAGE_SIZE = 10;
+    private String nextCursorPrimary = null;
+    private String nextCursorExpiresAt = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,19 +108,10 @@ public class EmployerDashboard extends BaseActivity {
                 }
                 startActivity(intent);
             }
-            @Override
-            public void onRemoveClick(JobPostDashboardModel job, int position) {
-                new AlertDialog.Builder(EmployerDashboard.this)
-                        .setTitle("Archive job?")
-                        .setMessage("Are you sure you want to archive \"" + job.getJobTitle() + "\"?")
-                        .setPositiveButton("Archive", (d, w) -> archiveJob(job, position))
-                        .setNegativeButton("Cancel", null)
-                        .show();
-            }
         });
 
-        adapterJobPost.setShowOptionsMenu(true);
-        recyclerViewJobPost.setAdapter(adapterJobPost);
+
+            recyclerViewJobPost.setAdapter(adapterJobPost);
 
         loadServiceTags();
 
@@ -193,7 +184,8 @@ public class EmployerDashboard extends BaseActivity {
         adapterJobPost.notifyDataSetChanged();
         hasMorePages = true;
         isLoading = false;
-        lastCreatedAt = null;
+        nextCursorPrimary = null;
+        nextCursorExpiresAt = null;
         loadJobs();
     }
 
@@ -221,12 +213,12 @@ public class EmployerDashboard extends BaseActivity {
             String token = tokenTask.getResult().getToken();
             String uid = user.getUid();
 
-            GetJobsRequest request = new GetJobsRequest(PAGE_SIZE, lastCreatedAt, null, null, uid, null, null);
+            GetJobsRequest request = new GetJobsRequest(null, nextCursorPrimary, nextCursorExpiresAt, null, null, uid, null, null);
             ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
-            apiService.getJobs(request).enqueue(new Callback<ApiResponse<List<JobModel>>>() {
+            apiService.getJobs(request).enqueue(new Callback<JobListResponse>() {
                 @Override
-                public void onResponse(Call<ApiResponse<List<JobModel>>> call, Response<ApiResponse<List<JobModel>>> response) {
+                public void onResponse(Call<JobListResponse> call, Response<JobListResponse> response) {
                     isLoading = false;
                     if (isRefreshing) {
                         isRefreshing = false;
@@ -235,7 +227,8 @@ public class EmployerDashboard extends BaseActivity {
                     progressBarLoadMore.setVisibility(View.GONE);
 
                     if (response.isSuccessful() && response.body() != null) {
-                        List<JobModel> jobs = response.body().getData();
+                        JobListResponse body = response.body();
+                        List<JobModel> jobs = body.getData();
                         if (jobs == null || jobs.isEmpty()) {
                             hasMorePages = false;
                             if (jobListJobCard.isEmpty()) {
@@ -244,8 +237,11 @@ public class EmployerDashboard extends BaseActivity {
                             }
                             return;
                         }
-                        if (jobs.size() < PAGE_SIZE) hasMorePages = false;
-                        lastCreatedAt = jobs.get(jobs.size() - 1).getCreatedAt();
+                        hasMorePages = body.isHasMore();
+                        if (hasMorePages && body.getNextCursor() != null) {
+                            nextCursorPrimary = body.getNextCursor().getPrimary();
+                            nextCursorExpiresAt = body.getNextCursor().getExpiresAt();
+                        }
                         int insertStart = jobListJobCard.size();
                         for (JobModel job : jobs) {
                             jobListJobCard.add(mapToDisplayModel(job));
@@ -257,7 +253,7 @@ public class EmployerDashboard extends BaseActivity {
                 }
 
                 @Override
-                public void onFailure(Call<ApiResponse<List<JobModel>>> call, Throwable t) {
+                public void onFailure(Call<JobListResponse> call, Throwable t) {
                     isLoading = false;
                     if (isRefreshing) {
                         isRefreshing = false;
@@ -276,7 +272,11 @@ public class EmployerDashboard extends BaseActivity {
 
     private JobPostDashboardModel mapToDisplayModel(JobModel job) {
         String employerName = job.getEmployer() != null ? job.getEmployer().getFullName() : "";
-        String photoUrl = job.getEmployer() != null ? BASE_URL + job.getEmployer().getProfilePhotoUrl() : "";
+        String employerUid = job.getEmployer() != null ? job.getEmployer().getUid() : null;
+        String photoUrl = job.getEmployer() != null ? job.getEmployer().getProfilePhoto() : null;
+        if (employerUid != null && photoUrl != null) {
+            ProfilePhotoCache.getInstance().put(employerUid, photoUrl);
+        }
         JobPostDashboardModel model = new JobPostDashboardModel(
             job.getTitle(),
             employerName,
@@ -286,6 +286,7 @@ public class EmployerDashboard extends BaseActivity {
             getRelativeTime(job.getCreatedAt())
         );
         model.setJobId(job.getId());
+        model.setEmployerUid(employerUid);
         model.setTagIds(job.getTags());
         model.setSalary(job.getSalary());
         model.setDescription(job.getDescription());
