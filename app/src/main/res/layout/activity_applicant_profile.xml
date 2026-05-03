@@ -196,29 +196,6 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/layout_mobile_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="4dp"
-                        android:visibility="gone">
-
-                        <ImageView
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
-                            android:src="@drawable/ic_phone" />
-
-                        <TextView
-                            android:id="@+id/tv_mobile_number"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:textColor="#757575"
-                            android:textSize="13sp" />
-
-                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/layout_status_chips"

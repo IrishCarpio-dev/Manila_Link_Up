@@ -24,17 +24,22 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.models.ApplicationModel;
-import com.manilalinkup.app.models.GetRatingsRequest;
+import com.manilalinkup.app.models.AppliedJobModel;
+import com.manilalinkup.app.models.CompletedJobsResponse;
+import com.manilalinkup.app.models.GetCompletedJobsRequest;
 import com.manilalinkup.app.models.MarkCompleteRequest;
-import com.manilalinkup.app.models.RatingModel;
 import com.manilalinkup.app.models.UpdateApplicationStatusRequest;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.utilities.SessionCache;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,8 +87,6 @@ public class ApplicantProfileActivity extends BaseActivity {
         ImageView ivStar = findViewById(R.id.iv_star);
         TextView tvRating = findViewById(R.id.tv_rating);
         TextView tvLocation = findViewById(R.id.tv_location);
-        LinearLayout layoutMobileNumber = findViewById(R.id.layout_mobile_number);
-        TextView tvMobileNumber = findViewById(R.id.tv_mobile_number);
         LinearLayout layoutStatusChips = findViewById(R.id.layout_status_chips);
         com.google.android.material.chip.Chip chipVerified = findViewById(R.id.chip_verified);
         com.google.android.material.chip.Chip chipOpenForWork = findViewById(R.id.chip_open_for_work);
@@ -116,14 +119,9 @@ public class ApplicantProfileActivity extends BaseActivity {
             setStarTint(ivStar, 0f);
         }
 
-        String mobileNumber = getIntent().getStringExtra("MOBILE_NUMBER");
         boolean isVerified = getIntent().getBooleanExtra("IS_VERIFIED", false);
         boolean isOpenForWork = getIntent().getBooleanExtra("IS_OPEN_FOR_WORK", false);
 
-        if (mobileNumber != null && !mobileNumber.isEmpty()) {
-            tvMobileNumber.setText(mobileNumber);
-            layoutMobileNumber.setVisibility(View.VISIBLE);
-        }
         if (isVerified) chipVerified.setVisibility(View.VISIBLE);
         if (isOpenForWork) chipOpenForWork.setVisibility(View.VISIBLE);
         if (isVerified || isOpenForWork) layoutStatusChips.setVisibility(View.VISIBLE);
@@ -165,7 +163,7 @@ public class ApplicantProfileActivity extends BaseActivity {
         btnRate.setOnClickListener(v -> openRating());
 
         refreshButtons();
-        loadRatings();
+        loadCompletedJobs();
     }
 
     @Override
@@ -307,7 +305,7 @@ public class ApplicantProfileActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void loadRatings() {
+    private void loadCompletedJobs() {
         if (seekerUid == null) return;
         progressRatings.setVisibility(View.VISIBLE);
 
@@ -320,18 +318,18 @@ public class ApplicantProfileActivity extends BaseActivity {
 
         user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
-            api.getRatings(new GetRatingsRequest(seekerUid, null, null))
-                    .enqueue(new Callback<ApiResponse<List<RatingModel>>>() {
+            api.getCompletedJobs(new GetCompletedJobsRequest(seekerUid, null, null))
+                    .enqueue(new Callback<CompletedJobsResponse>() {
                 @Override
-                public void onResponse(Call<ApiResponse<List<RatingModel>>> call, Response<ApiResponse<List<RatingModel>>> response) {
+                public void onResponse(Call<CompletedJobsResponse> call, Response<CompletedJobsResponse> response) {
                     progressRatings.setVisibility(View.GONE);
                     if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
-                        List<RatingModel> ratings = response.body().getData();
-                        if (ratings.isEmpty()) {
+                        List<AppliedJobModel> jobs = response.body().getData();
+                        if (jobs.isEmpty()) {
                             tvNoCompletedJobs.setVisibility(View.VISIBLE);
                         } else {
-                            for (RatingModel rating : ratings) {
-                                addRatingItem(rating);
+                            for (AppliedJobModel job : jobs) {
+                                addCompletedJobItem(job);
                             }
                         }
                     } else {
@@ -340,7 +338,7 @@ public class ApplicantProfileActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onFailure(Call<ApiResponse<List<RatingModel>>> call, Throwable t) {
+                public void onFailure(Call<CompletedJobsResponse> call, Throwable t) {
                     progressRatings.setVisibility(View.GONE);
                     tvNoCompletedJobs.setVisibility(View.VISIBLE);
                 }
@@ -348,24 +346,44 @@ public class ApplicantProfileActivity extends BaseActivity {
         });
     }
 
-    private void addRatingItem(RatingModel rating) {
+    private void addCompletedJobItem(AppliedJobModel application) {
         View item = getLayoutInflater().inflate(R.layout.item_completed_job_rating, containerCompletedJobs, false);
 
         TextView tvTitle = item.findViewById(R.id.tv_completed_job_title);
-        TextView tvScore = item.findViewById(R.id.tv_completed_job_score);
-        TextView tvComment = item.findViewById(R.id.tv_completed_job_comment);
-        ImageView ivStar = item.findViewById(R.id.iv_completed_job_star);
-        DrawableCompat.setTint(DrawableCompat.wrap(ivStar.getDrawable().mutate()), getResources().getColor(R.color.star_yellow));
+        TextView tvDescription = item.findViewById(R.id.tv_completed_job_description);
+        ChipGroup chipGroupTags = item.findViewById(R.id.chip_group_completed_job_tags);
 
-        String title = (rating.getJob() != null && rating.getJob().getTitle() != null)
-                ? rating.getJob().getTitle() : "Completed Job";
-        tvTitle.setText(title);
-        tvScore.setText(String.valueOf(rating.getScore()));
+        com.manilalinkup.app.models.JobModel job = application.getJob();
+        tvTitle.setText(job != null && job.getTitle() != null ? job.getTitle() : "Completed Job");
 
-        String comment = rating.getComment();
-        if (comment != null && !comment.isEmpty()) {
-            tvComment.setText(comment);
-            tvComment.setVisibility(View.VISIBLE);
+        if (job != null && job.getDescription() != null && !job.getDescription().isEmpty()) {
+            tvDescription.setText(job.getDescription());
+            tvDescription.setVisibility(View.VISIBLE);
+        }
+
+        List<String> tags = job != null ? job.getTags() : null;
+        if (tags != null && !tags.isEmpty()) {
+            chipGroupTags.setVisibility(View.VISIBLE);
+            SessionCache.getInstance().ensureServiceTags(new SessionCache.ServiceTagsCallback() {
+                @Override
+                public void onAvailable(List<com.manilalinkup.app.models.ServiceTagModel> serviceTags) {
+                    Map<String, String> labelsById = SessionCache.getInstance().getServiceTagLabelsById();
+                    for (String tagId : tags) {
+                        String label = labelsById.get(tagId);
+                        if (label == null) continue;
+                        Chip chip = new Chip(ApplicantProfileActivity.this);
+                        chip.setText(label);
+                        chip.setChipBackgroundColorResource(R.color.manila_blue);
+                        chip.setTextColor(Color.WHITE);
+                        chip.setCheckable(false);
+                        chip.setClickable(false);
+                        chipGroupTags.addView(chip);
+                    }
+                }
+
+                @Override
+                public void onError() {}
+            });
         }
 
         containerCompletedJobs.addView(item);

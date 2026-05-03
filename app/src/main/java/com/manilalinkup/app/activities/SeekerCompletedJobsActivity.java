@@ -88,7 +88,7 @@ public class SeekerCompletedJobsActivity extends BaseActivity {
         }
         user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
-            api.getCompletedJobs(new GetCompletedJobsRequest(null, null))
+            api.getCompletedJobs(new GetCompletedJobsRequest(null, null, null))
                     .enqueue(new Callback<CompletedJobsResponse>() {
                         @Override
                         public void onResponse(Call<CompletedJobsResponse> call,
