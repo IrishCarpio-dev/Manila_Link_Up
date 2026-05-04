@@ -19,6 +19,7 @@ import com.manilalinkup.app.activities.EmployerViewJobPost;
 
 import android.content.Intent;
 import android.widget.Button;
+import androidx.core.content.ContextCompat;
 
 import java.util.List;
 
@@ -228,8 +229,23 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
 
             public void bind(ArchiveJobModel archiveJobBind) {
                 job_title.setText(archiveJobBind.getJobTitle());
-                statusText.setText(archiveJobBind.getStatusText());
+                String status = archiveJobBind.getStatusText();
+                statusText.setText(status);
                 insightText.setText(archiveJobBind.getInsightText());
+                switch (status) {
+                    case "EXPIRED":
+                        statusText.setBackgroundResource(R.drawable.bg_expired_red_pill);
+                        statusText.setTextColor(android.graphics.Color.parseColor("#B71C1C"));
+                        break;
+                    case "COMPLETED":
+                        statusText.setBackgroundResource(R.drawable.bg_completed_pill);
+                        statusText.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.manila_blue));
+                        break;
+                    default:
+                        statusText.setBackgroundResource(R.drawable.bg_expire_pill);
+                        statusText.setTextColor(android.graphics.Color.parseColor("#E65100"));
+                        break;
+                }
             }
         }
     }
