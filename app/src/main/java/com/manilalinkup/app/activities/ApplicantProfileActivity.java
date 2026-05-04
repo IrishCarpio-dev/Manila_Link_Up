@@ -92,7 +92,6 @@ public class ApplicantProfileActivity extends BaseActivity {
         TextView tvRating = findViewById(R.id.tv_rating);
         TextView tvLocation = findViewById(R.id.tv_location);
         LinearLayout layoutStatusChips = findViewById(R.id.layout_status_chips);
-        com.google.android.material.chip.Chip chipVerified = findViewById(R.id.chip_verified);
         com.google.android.material.chip.Chip chipOpenForWork = findViewById(R.id.chip_open_for_work);
 
         profilePhoto.setImageResource(R.drawable.ic_person_placeholder);
@@ -123,12 +122,10 @@ public class ApplicantProfileActivity extends BaseActivity {
             setStarTint(ivStar, 0f);
         }
 
-        boolean isVerified = getIntent().getBooleanExtra("IS_VERIFIED", false);
         boolean isOpenForWork = getIntent().getBooleanExtra("IS_OPEN_FOR_WORK", false);
 
-        if (isVerified) chipVerified.setVisibility(View.VISIBLE);
         if (isOpenForWork) chipOpenForWork.setVisibility(View.VISIBLE);
-        if (isVerified || isOpenForWork) layoutStatusChips.setVisibility(View.VISIBLE);
+        if (isOpenForWork) layoutStatusChips.setVisibility(View.VISIBLE);
 
         btnHire = findViewById(R.id.btn_hire);
         btnComplete = findViewById(R.id.btn_complete);
