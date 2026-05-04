@@ -42,6 +42,20 @@
         android:layout_centerHorizontal="true"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/tv_pending_verification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_navigation_view_seeker"
+        android:layout_below="@id/text_view_recommendations"
+        android:gravity="center"
+        android:padding="40dp"
+        android:text="Your account is pending verification.\n\nJobs will appear here once an admin approves your documents."
+        android:textAlignment="center"
+        android:textColor="@color/dark_text"
+        android:textSize="15sp"
+        android:visibility="gone" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"

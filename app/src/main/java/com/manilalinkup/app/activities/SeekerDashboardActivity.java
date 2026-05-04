@@ -7,6 +7,7 @@ import android.util.Log;
 import com.manilalinkup.app.utilities.SeekerNavHelper;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -22,15 +23,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
 import com.google.android.material.badge.BadgeDrawable;
 import com.manilalinkup.app.adapters.JobPostDashboardAdapter;
-import com.manilalinkup.app.models.GetJobsRequest;
 import com.manilalinkup.app.models.GetSeekerJobsRequest;
-import com.manilalinkup.app.models.JobListResponse;
 import com.manilalinkup.app.models.UnreadCountResponse;
 import com.manilalinkup.app.models.JobModel;
 import com.manilalinkup.app.models.SeekerJobsResponse;
 import com.manilalinkup.app.models.JobPostDashboardModel;
 import com.manilalinkup.app.models.ServiceTagModel;
-import com.manilalinkup.app.models.UserProfileModel;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.ProfilePhotoCache;
@@ -55,17 +53,14 @@ public class SeekerDashboardActivity extends BaseActivity {
     private ProgressBar progressBarLoadMore;
     private SwipeRefreshLayout swipeRefreshLayout;
     private BottomNavigationView bottomNavigationView;
-
     private ActivityResultLauncher<Intent> jobPostLauncher;
 
     private boolean isLoading = false;
     private boolean isRefreshing = false;
     private boolean hasMorePages = true;
     private boolean isCuratedExhausted = false;
-    private boolean isVerified = false;
     private String lastExpiresAt = null;
     private String lastCreatedAt = null;
-    private String lastStartAfter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,11 +130,6 @@ public class SeekerDashboardActivity extends BaseActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation_view_seeker);
         SeekerNavHelper.setup(this, bottomNavigationView, R.id.nav_home_seeker);
 
-        UserProfileModel profile = SessionCache.getInstance().getUserProfile();
-        isVerified = profile != null
-                && profile.getSeekers() != null
-                && Boolean.TRUE.equals(profile.getSeekers().getVerified());
-
         loadServiceTags();
         loadJobs();
     }
@@ -181,7 +171,6 @@ public class SeekerDashboardActivity extends BaseActivity {
         isLoading = false;
         lastExpiresAt = null;
         lastCreatedAt = null;
-        lastStartAfter = null;
         isCuratedExhausted = false;
         loadJobs();
     }
@@ -210,84 +199,47 @@ public class SeekerDashboardActivity extends BaseActivity {
             String token = tokenTask.getResult().getToken();
             ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
-            if (isVerified) {
-                String mode = isCuratedExhausted ? "all" : "curated";
-                GetSeekerJobsRequest request = new GetSeekerJobsRequest(mode, null, lastExpiresAt, lastCreatedAt);
-                apiService.getSeekerJobs(request).enqueue(new Callback<SeekerJobsResponse>() {
-                    @Override
-                    public void onResponse(Call<SeekerJobsResponse> call, Response<SeekerJobsResponse> response) {
-                        isLoading = false;
-                        if (isRefreshing) { isRefreshing = false; swipeRefreshLayout.setRefreshing(false); }
-                        progressBarLoadMore.setVisibility(View.GONE);
-                        if (response.isSuccessful() && response.body() != null) {
-                            SeekerJobsResponse body = response.body();
-                            List<JobModel> jobs = body.getData();
-                            if (jobs != null && !jobs.isEmpty()) {
-                                int insertStart = jobListJobCard.size();
-                                for (JobModel job : jobs) jobListJobCard.add(mapToDisplayModel(job));
-                                adapterJobPost.notifyItemRangeInserted(insertStart, jobs.size());
-                            }
-                            if (body.isHasMore() && body.getNextCursor() != null) {
-                                lastExpiresAt = body.getNextCursor().getExpiresAt();
-                                lastCreatedAt = body.getNextCursor().getCreatedAt();
-                            } else if (!isCuratedExhausted) {
-                                isCuratedExhausted = true;
-                                lastExpiresAt = null;
-                                lastCreatedAt = null;
-                                hasMorePages = true;
-                                loadJobs();
-                            } else {
-                                hasMorePages = false;
-                            }
-                        } else {
-                            ErrorUtils.showErrorMessage(SeekerDashboardActivity.this, response.errorBody());
+            String mode = isCuratedExhausted ? "all" : "curated";
+            GetSeekerJobsRequest request = new GetSeekerJobsRequest(mode, null, lastExpiresAt, lastCreatedAt);
+            apiService.getSeekerJobs(request).enqueue(new Callback<SeekerJobsResponse>() {
+                @Override
+                public void onResponse(Call<SeekerJobsResponse> call, Response<SeekerJobsResponse> response) {
+                    isLoading = false;
+                    if (isRefreshing) { isRefreshing = false; swipeRefreshLayout.setRefreshing(false); }
+                    progressBarLoadMore.setVisibility(View.GONE);
+                    if (response.isSuccessful() && response.body() != null) {
+                        SeekerJobsResponse body = response.body();
+                        List<JobModel> jobs = body.getData();
+                        if (jobs != null && !jobs.isEmpty()) {
+                            int insertStart = jobListJobCard.size();
+                            for (JobModel job : jobs) jobListJobCard.add(mapToDisplayModel(job));
+                            adapterJobPost.notifyItemRangeInserted(insertStart, jobs.size());
                         }
-                    }
-
-                    @Override
-                    public void onFailure(Call<SeekerJobsResponse> call, Throwable t) {
-                        isLoading = false;
-                        if (isRefreshing) { isRefreshing = false; swipeRefreshLayout.setRefreshing(false); }
-                        progressBarLoadMore.setVisibility(View.GONE);
-                        ErrorUtils.showThrowableError(SeekerDashboardActivity.this, t);
-                    }
-                });
-            } else {
-                GetJobsRequest request = new GetJobsRequest(null, lastStartAfter, lastExpiresAt, null, null, null, null, null);
-                apiService.getJobs(request).enqueue(new Callback<JobListResponse>() {
-                    @Override
-                    public void onResponse(Call<JobListResponse> call, Response<JobListResponse> response) {
-                        isLoading = false;
-                        if (isRefreshing) { isRefreshing = false; swipeRefreshLayout.setRefreshing(false); }
-                        progressBarLoadMore.setVisibility(View.GONE);
-                        if (response.isSuccessful() && response.body() != null) {
-                            JobListResponse body = response.body();
-                            List<JobModel> jobs = body.getData();
-                            if (jobs != null && !jobs.isEmpty()) {
-                                int insertStart = jobListJobCard.size();
-                                for (JobModel job : jobs) jobListJobCard.add(mapToDisplayModel(job));
-                                adapterJobPost.notifyItemRangeInserted(insertStart, jobs.size());
-                            }
-                            if (body.isHasMore() && body.getNextCursor() != null) {
-                                lastStartAfter = body.getNextCursor().getPrimary();
-                                lastExpiresAt = body.getNextCursor().getExpiresAt();
-                            } else {
-                                hasMorePages = false;
-                            }
+                        if (body.isHasMore() && body.getNextCursor() != null) {
+                            lastExpiresAt = body.getNextCursor().getExpiresAt();
+                            lastCreatedAt = body.getNextCursor().getCreatedAt();
+                        } else if (!isCuratedExhausted) {
+                            isCuratedExhausted = true;
+                            lastExpiresAt = null;
+                            lastCreatedAt = null;
+                            hasMorePages = true;
+                            loadJobs();
                         } else {
-                            ErrorUtils.showErrorMessage(SeekerDashboardActivity.this, response.errorBody());
+                            hasMorePages = false;
                         }
+                    } else {
+                        ErrorUtils.showErrorMessage(SeekerDashboardActivity.this, response.errorBody());
                     }
+                }
 
-                    @Override
-                    public void onFailure(Call<JobListResponse> call, Throwable t) {
-                        isLoading = false;
-                        if (isRefreshing) { isRefreshing = false; swipeRefreshLayout.setRefreshing(false); }
-                        progressBarLoadMore.setVisibility(View.GONE);
-                        ErrorUtils.showThrowableError(SeekerDashboardActivity.this, t);
-                    }
-                });
-            }
+                @Override
+                public void onFailure(Call<SeekerJobsResponse> call, Throwable t) {
+                    isLoading = false;
+                    if (isRefreshing) { isRefreshing = false; swipeRefreshLayout.setRefreshing(false); }
+                    progressBarLoadMore.setVisibility(View.GONE);
+                    ErrorUtils.showThrowableError(SeekerDashboardActivity.this, t);
+                }
+            });
         });
     }
 
