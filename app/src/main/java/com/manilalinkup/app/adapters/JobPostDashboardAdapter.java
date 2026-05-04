@@ -21,6 +21,7 @@ import com.manilalinkup.app.R;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboardAdapter.JobPostDashboardViewHolder> {
     public interface OnJobClickListener {
@@ -69,6 +70,8 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
         private TextView job_duration;
         private TextView how_long_job_was_posted;
         private TextView tvStatusBadge;
+        private TextView tvSalary;
+        private ImageView ivMoneyLogo;
         private ChipGroup chipGroupTags;
         public JobPostDashboardViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,6 +82,8 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
             job_duration = itemView.findViewById(R.id.item_card_calendar_placeholder);
             how_long_job_was_posted = itemView.findViewById(R.id.item_card_how_long_job_post_posted_placeholder);
             tvStatusBadge = itemView.findViewById(R.id.tv_status_badge);
+            tvSalary = itemView.findViewById(R.id.tv_salary);
+            ivMoneyLogo = itemView.findViewById(R.id.item_card_money_logo);
             chipGroupTags = itemView.findViewById(R.id.chip_group_job_card_tags);
         }
 
@@ -127,6 +132,18 @@ public class JobPostDashboardAdapter extends RecyclerView.Adapter<JobPostDashboa
 
             if (how_long_job_was_posted != null) {
                 how_long_job_was_posted.setText(jobBind.getHowLongJobIsPosted());
+            }
+
+            if (tvSalary != null) {
+                Double salary = jobBind.getSalary();
+                if (salary != null && salary > 0) {
+                    tvSalary.setText(String.format(Locale.US, "₱%.0f/hr", salary));
+                    tvSalary.setVisibility(View.VISIBLE);
+                    if (ivMoneyLogo != null) ivMoneyLogo.setVisibility(View.VISIBLE);
+                } else {
+                    tvSalary.setVisibility(View.GONE);
+                    if (ivMoneyLogo != null) ivMoneyLogo.setVisibility(View.GONE);
+                }
             }
 
             if (tvStatusBadge != null) {
