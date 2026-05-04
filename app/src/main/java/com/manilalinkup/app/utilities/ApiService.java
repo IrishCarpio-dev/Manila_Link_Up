@@ -23,6 +23,7 @@ import com.manilalinkup.app.models.GetSeekerJobsRequest;
 import com.manilalinkup.app.models.GetChatsRequest;
 import com.manilalinkup.app.models.GetJobsRequest;
 import com.manilalinkup.app.models.JobListResponse;
+import com.manilalinkup.app.models.ChatsResponse;
 import com.manilalinkup.app.models.GetRatingsRequest;
 import com.manilalinkup.app.models.HideChatRequest;
 import com.manilalinkup.app.models.JobModel;
@@ -30,6 +31,7 @@ import com.manilalinkup.app.models.MarkCompleteRequest;
 import com.manilalinkup.app.models.NotificationItemModel;
 import com.manilalinkup.app.models.NotifyChatRequest;
 import com.manilalinkup.app.models.RatingModel;
+import com.manilalinkup.app.models.RatingsResponse;
 import com.manilalinkup.app.models.RegisterDeviceRequest;
 import com.manilalinkup.app.models.SeekerRequest;
 import com.manilalinkup.app.models.SubmitRatingRequest;
@@ -136,7 +138,7 @@ public interface ApiService {
 
     // Chat
     @POST("api/chats/list")
-    Call<ApiResponse<List<ChatListItemModel>>> getChats(@Body GetChatsRequest request);
+    Call<ChatsResponse> getChats(@Body GetChatsRequest request);
 
     @POST("api/chats/hide")
     Call<ResponseBody> hideChat(@Body HideChatRequest request);
@@ -149,7 +151,7 @@ public interface ApiService {
     Call<ApiResponse<RatingModel>> submitRating(@Body SubmitRatingRequest request);
 
     @POST("api/ratings/list")
-    Call<ApiResponse<List<RatingModel>>> getRatings(@Body GetRatingsRequest request);
+    Call<RatingsResponse> getRatings(@Body GetRatingsRequest request);
 
     // Devices (FCM)
     @POST("api/devices/register")
