@@ -269,13 +269,16 @@ public class EmployerViewJobPost extends BaseActivity {
     }
 
     private void updateActionVisibility() {
+        boolean showMarkComplete = currentStatus == 5 && !employerHasCompleted;
+        boolean showRate = currentStatus == 6 && isRateEnabled;
+
         if (btnMarkComplete != null) {
-            btnMarkComplete.setVisibility(currentStatus == 5 && !employerHasCompleted ? View.VISIBLE : View.GONE);
+            btnMarkComplete.setVisibility(showMarkComplete ? View.VISIBLE : View.GONE);
             btnMarkComplete.setOnClickListener(v -> markComplete());
         }
 
         if (btnRate != null) {
-            btnRate.setVisibility(currentStatus == 6 && isRateEnabled ? View.VISIBLE : View.GONE);
+            btnRate.setVisibility(showRate ? View.VISIBLE : View.GONE);
             btnRate.setOnClickListener(v -> openRating());
         }
     }
