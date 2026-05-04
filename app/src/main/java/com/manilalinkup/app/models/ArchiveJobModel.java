@@ -10,6 +10,7 @@ public class ArchiveJobModel {
     String deletedAt;
     String filledAt;
     String expiresAt;
+    Boolean isRateEnabled;
     HiredApplication hiredApplication;
     java.util.List<String> tags;
 
@@ -22,6 +23,23 @@ public class ArchiveJobModel {
     public Double getSalary() { return salary; }
     public String getDuration() { return duration; }
     public java.util.List<String> getTags() { return tags; }
+    public Boolean isRateEnabled() { return isRateEnabled; }
+
+    public String getApplicationId() {
+        return hiredApplication != null ? hiredApplication.getId() : null;
+    }
+    public Integer getApplicationStatus() {
+        return hiredApplication != null ? hiredApplication.getStatus() : null;
+    }
+    public boolean isEmployerCompleted() {
+        return hiredApplication != null && hiredApplication.getEmployerCompletedAt() != null;
+    }
+    public String getSeekerName() {
+        if (hiredApplication == null || hiredApplication.getSeeker() == null) return null;
+        String first = hiredApplication.getSeeker().getFirstName() != null ? hiredApplication.getSeeker().getFirstName() : "";
+        String last = hiredApplication.getSeeker().getLastName() != null ? hiredApplication.getSeeker().getLastName() : "";
+        return (first + " " + last).trim();
+    }
 
     public String getStatusText() {
         if (hiredApplication != null) {

@@ -19,6 +19,7 @@ import com.manilalinkup.app.activities.EmployerViewJobPost;
 
 import android.content.Intent;
 import android.widget.Button;
+import androidx.core.content.ContextCompat;
 
 import java.util.List;
 
@@ -176,6 +177,16 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
                 if (currentJob.getTags() != null) {
                     intent.putStringArrayListExtra("TAG_IDS", new java.util.ArrayList<>(currentJob.getTags()));
                 }
+                if (currentJob.getApplicationId() != null) {
+                    intent.putExtra("APPLICATION_ID", currentJob.getApplicationId());
+                }
+                Integer appStatus = currentJob.getApplicationStatus();
+                if (appStatus != null) {
+                    intent.putExtra("STATUS", appStatus);
+                }
+                intent.putExtra("EMPLOYER_HAS_COMPLETED", currentJob.isEmployerCompleted());
+                intent.putExtra("SEEKER_NAME", currentJob.getSeekerName());
+                intent.putExtra("IS_RATE_ENABLED", Boolean.TRUE.equals(currentJob.isRateEnabled()));
                 intent.putExtra("IS_OWNER", true);
                 intent.putExtra("IS_ARCHIVED", true);
                 v.getContext().startActivity(intent);
@@ -218,8 +229,23 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
 
             public void bind(ArchiveJobModel archiveJobBind) {
                 job_title.setText(archiveJobBind.getJobTitle());
-                statusText.setText(archiveJobBind.getStatusText());
+                String status = archiveJobBind.getStatusText();
+                statusText.setText(status);
                 insightText.setText(archiveJobBind.getInsightText());
+                switch (status) {
+                    case "EXPIRED":
+                        statusText.setBackgroundResource(R.drawable.bg_expired_red_pill);
+                        statusText.setTextColor(android.graphics.Color.parseColor("#B71C1C"));
+                        break;
+                    case "COMPLETED":
+                        statusText.setBackgroundResource(R.drawable.bg_completed_pill);
+                        statusText.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.manila_blue));
+                        break;
+                    default:
+                        statusText.setBackgroundResource(R.drawable.bg_expire_pill);
+                        statusText.setTextColor(android.graphics.Color.parseColor("#E65100"));
+                        break;
+                }
             }
         }
     }

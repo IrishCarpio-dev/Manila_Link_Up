@@ -26,10 +26,15 @@
 
     </com.google.android.material.appbar.MaterialToolbar>
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar">
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -69,7 +74,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Review all feedback to ensure a perfect match."
+                            android:text="All your ratings and reviews in one place."
                             android:textStyle="bold"
                             android:textSize="14sp"
                             android:textColor="#424242"
@@ -79,7 +84,7 @@
                             android:id="@+id/text_view_archive_jobs_description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="&#8226; Evaluate ratings from previous Seeker(s) to gauge reliability.\n&#8226; Read detailed reviews to understand their work ethics and compatibility."
+                            android:text="&#8226; See how others rate your work and reliability.\n&#8226; Read detailed reviews to better understand your standing."
                             android:textSize="14sp"
                             android:lineSpacingExtra="4dp"
                             android:textColor="@color/secondary_text" />
@@ -115,5 +120,6 @@
         </RelativeLayout>
     </ScrollView>
 
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

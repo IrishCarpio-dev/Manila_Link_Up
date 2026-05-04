@@ -274,7 +274,7 @@ public class AppliedSeekerActivity extends BaseActivity {
         String cursor = loadMore ? completedNextCursor : null;
         user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
-            api.getCompletedJobs(new GetCompletedJobsRequest(null, cursor))
+            api.getCompletedJobs(new GetCompletedJobsRequest(null, null, cursor))
                     .enqueue(new Callback<CompletedJobsResponse>() {
                         @Override
                         public void onResponse(Call<CompletedJobsResponse> call,

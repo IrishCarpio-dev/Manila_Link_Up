@@ -65,6 +65,7 @@ public class EmployerViewJobPost extends BaseActivity {
     private boolean employerHasCompleted;
     private boolean isOwner;
     private boolean isArchived;
+    private boolean isRateEnabled;
 
 
     @Override
@@ -80,6 +81,7 @@ public class EmployerViewJobPost extends BaseActivity {
         employerHasCompleted = getIntent().getBooleanExtra("EMPLOYER_HAS_COMPLETED", false);
         isOwner              = getIntent().getBooleanExtra("IS_OWNER", false);
         isArchived           = getIntent().getBooleanExtra("IS_ARCHIVED", false);
+        isRateEnabled        = !getIntent().hasExtra("IS_RATE_ENABLED") || getIntent().getBooleanExtra("IS_RATE_ENABLED", false);
 
         jobTitle              = getIntent().getStringExtra("JOB_TITLE");
         String employerName   = getIntent().getStringExtra("EMPLOYER_NAME");
@@ -273,7 +275,7 @@ public class EmployerViewJobPost extends BaseActivity {
         }
 
         if (btnRate != null) {
-            btnRate.setVisibility(currentStatus == 6 ? View.VISIBLE : View.GONE);
+            btnRate.setVisibility(currentStatus == 6 && isRateEnabled ? View.VISIBLE : View.GONE);
             btnRate.setOnClickListener(v -> openRating());
         }
     }
@@ -296,6 +298,7 @@ public class EmployerViewJobPost extends BaseActivity {
                         ApplicationModel updated = response.body().getData();
                         currentStatus = updated.getStatus() != null ? updated.getStatus() : currentStatus;
                         employerHasCompleted = true;
+                        if (currentStatus == 6) isRateEnabled = true;
                         Toast.makeText(EmployerViewJobPost.this, "Marked as complete!", Toast.LENGTH_SHORT).show();
                         updateActionVisibility();
                     } else {

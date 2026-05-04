@@ -99,12 +99,16 @@ public class EmployerListOfApplicants extends BaseActivity {
         intent.putExtra("STATUS", applicant.getStatus() != null ? applicant.getStatus() : 1);
         intent.putExtra("CHAT_ID", applicant.getChatId());
         intent.putExtra("JOB_TITLE", jobTitle);
+        intent.putExtra("EMPLOYER_HAS_COMPLETED", applicant.isEmployerCompleted());
 
         SeekerProfileModel seeker = applicant.getSeeker();
         if (seeker != null) {
             intent.putExtra("FIRST_NAME", seeker.getFirstName());
             intent.putExtra("LAST_NAME", seeker.getLastName());
             intent.putExtra("LOCATION", seeker.getLocation());
+            intent.putExtra("MOBILE_NUMBER", seeker.getMobileNumber());
+            intent.putExtra("IS_VERIFIED", seeker.getVerified() != null && seeker.getVerified());
+            intent.putExtra("IS_OPEN_FOR_WORK", seeker.getOpenForWork() != null && seeker.getOpenForWork());
             intent.putExtra("RATING_COUNT", seeker.getRatingCount() != null ? seeker.getRatingCount() : 0);
             intent.putExtra("BAYESIAN_AVG", seeker.getBayesianAvg() != null ? seeker.getBayesianAvg() : 0.0);
         }

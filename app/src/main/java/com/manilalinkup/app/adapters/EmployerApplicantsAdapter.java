@@ -53,7 +53,7 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView profilePhoto;
+        ImageView profilePhoto, ivVerified;
         TextView firstName, lastName, location, rating, statusChip;
 
         ViewHolder(@NonNull View itemView) {
@@ -64,6 +64,7 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
             location     = itemView.findViewById(R.id.applicant_location);
             rating       = itemView.findViewById(R.id.applicant_rating);
             statusChip   = itemView.findViewById(R.id.applicant_status_chip);
+            ivVerified   = itemView.findViewById(R.id.iv_verified);
         }
 
         private void setStarTint(TextView tv, float fraction) {
@@ -96,6 +97,8 @@ public class EmployerApplicantsAdapter extends RecyclerView.Adapter<EmployerAppl
                     rating.setText("N/A");
                     setStarTint(rating, 0f);
                 }
+
+                ivVerified.setVisibility(Boolean.TRUE.equals(seeker.getVerified()) ? View.VISIBLE : View.GONE);
 
                 String uid = applicant.getSeekerUid();
                 profilePhoto.setTag(uid);

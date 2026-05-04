@@ -51,7 +51,13 @@ public class RatingsProfileAdapter extends RecyclerView.Adapter<RatingsProfileAd
         }
 
         void bind(RatingModel rating) {
-            ratingMessage.setText(rating.getComment() != null ? rating.getComment() : "");
+            String comment = rating.getComment();
+            if (comment != null && !comment.isEmpty()) {
+                ratingMessage.setVisibility(View.VISIBLE);
+                ratingMessage.setText(comment);
+            } else {
+                ratingMessage.setVisibility(View.GONE);
+            }
             ratingScore.setRating(rating.getScore());
 
             String name = "";

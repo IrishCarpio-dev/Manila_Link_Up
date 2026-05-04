@@ -50,6 +50,7 @@ public class AppliedJobPostActivity extends BaseActivity {
     private String seekerUid;
     private int currentStatus;
     private boolean seekerHasCompleted;
+    private boolean isRateEnabled;
 
 
     @Override
@@ -64,6 +65,7 @@ public class AppliedJobPostActivity extends BaseActivity {
         seekerUid          = getIntent().getStringExtra("SEEKER_UID");
         currentStatus      = getIntent().getIntExtra("STATUS", 1);
         seekerHasCompleted = getIntent().getBooleanExtra("SEEKER_HAS_COMPLETED", false);
+        isRateEnabled      = !getIntent().hasExtra("IS_RATE_ENABLED") || getIntent().getBooleanExtra("IS_RATE_ENABLED", false);
 
         String jobTitle      = getIntent().getStringExtra("JOB_TITLE");
         String location      = getIntent().getStringExtra("LOCATION");
@@ -175,7 +177,7 @@ public class AppliedJobPostActivity extends BaseActivity {
         btnChat.setVisibility((currentStatus == 2 || currentStatus == 5) && chatId != null ? View.VISIBLE : View.GONE);
         btnChat.setOnClickListener(v -> openChat());
 
-        btnRate.setVisibility(currentStatus == 6 ? View.VISIBLE : View.GONE);
+        btnRate.setVisibility(currentStatus == 6 && isRateEnabled ? View.VISIBLE : View.GONE);
         btnRate.setOnClickListener(v -> openRating());
     }
 
@@ -246,6 +248,7 @@ public class AppliedJobPostActivity extends BaseActivity {
                         ApplicationModel updated = response.body().getData();
                         currentStatus = updated.getStatus() != null ? updated.getStatus() : currentStatus;
                         seekerHasCompleted = true;
+                        if (currentStatus == 6) isRateEnabled = true;
                         Toast.makeText(AppliedJobPostActivity.this, "Marked as complete!", Toast.LENGTH_SHORT).show();
                         TextView tvStatusBadge = findViewById(R.id.applied_status_badge);
                         applyStatusBadge(tvStatusBadge, currentStatus);
