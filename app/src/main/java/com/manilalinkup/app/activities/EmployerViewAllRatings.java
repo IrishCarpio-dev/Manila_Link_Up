@@ -6,6 +6,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,6 +29,7 @@ import retrofit2.Response;
 public class EmployerViewAllRatings extends BaseActivity {
 
     private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private EmployerAllRatingsAdapter adapter;
     private final List<RatingModel> ratingsList = new ArrayList<>();
 
@@ -42,6 +44,14 @@ public class EmployerViewAllRatings extends BaseActivity {
         setContentView(R.layout.activity_employer_view_all_ratings);
 
         setupToolbar(R.id.toolbar);
+
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            nextCursor = null;
+            hasMore = false;
+            isLoadingMore = false;
+            loadRatings(null);
+        });
 
         recyclerView = findViewById(R.id.recycler_ratings_views);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -78,6 +88,7 @@ public class EmployerViewAllRatings extends BaseActivity {
                         public void onResponse(Call<RatingsResponse> call,
                                                Response<RatingsResponse> response) {
                             isLoadingMore = false;
+                            swipeRefreshLayout.setRefreshing(false);
                             if (response.isSuccessful() && response.body() != null
                                     && response.body().getData() != null) {
                                 List<RatingModel> newRatings = response.body().getData();
@@ -100,6 +111,7 @@ public class EmployerViewAllRatings extends BaseActivity {
                         @Override
                         public void onFailure(Call<RatingsResponse> call, Throwable t) {
                             isLoadingMore = false;
+                            swipeRefreshLayout.setRefreshing(false);
                             ErrorUtils.showThrowableError(EmployerViewAllRatings.this, t);
                         }
                     });
