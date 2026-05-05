@@ -1,5 +1,6 @@
 package com.manilalinkup.app.adapters;
 
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,11 @@ import com.bumptech.glide.Glide;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.models.RatingModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class EmployerAllRatingsAdapter extends RecyclerView.Adapter<EmployerAllRatingsAdapter.ViewHolder> {
 
@@ -61,7 +66,13 @@ public class EmployerAllRatingsAdapter extends RecyclerView.Adapter<EmployerAllR
             }
         }
 
-        holder.ratingMessage.setText(rating.getComment() != null ? rating.getComment() : "");
+        String comment = rating.getComment();
+        if (comment != null && !comment.isEmpty()) {
+            holder.ratingMessage.setVisibility(View.VISIBLE);
+            holder.ratingMessage.setText(comment);
+        } else {
+            holder.ratingMessage.setVisibility(View.GONE);
+        }
         holder.ratingBar.setRating(rating.getScore());
 
         RatingModel.JobInfo job = rating.getJob();
@@ -69,7 +80,30 @@ public class EmployerAllRatingsAdapter extends RecyclerView.Adapter<EmployerAllR
             holder.jobTitle.setText(job.getTitle() != null ? job.getTitle() : "");
         }
 
-        holder.timestamp.setText(rating.getCreatedAt() != null ? rating.getCreatedAt() : "");
+        holder.timestamp.setText(formatTimestamp(rating.getCreatedAt()));
+    }
+
+    private static String formatTimestamp(String createdAt) {
+        if (createdAt == null || createdAt.isEmpty()) return "";
+        String[] formats = {
+            "yyyy-MM-dd'T'HH:mm:ssXXX",
+            "yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX",
+            "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",
+            "yyyy-MM-dd'T'HH:mm:ss'Z'",
+            "yyyy-MM-dd HH:mm:ss"
+        };
+        for (String format : formats) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
+                Date date = sdf.parse(createdAt);
+                if (date != null) {
+                    return DateUtils.getRelativeTimeSpanString(
+                        date.getTime(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS
+                    ).toString();
+                }
+            } catch (ParseException ignored) {}
+        }
+        return createdAt;
     }
 
     @Override

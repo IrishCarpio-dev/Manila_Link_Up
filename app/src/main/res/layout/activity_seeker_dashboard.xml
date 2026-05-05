@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -23,16 +23,36 @@
         android:id="@+id/card_view_dashboard_top_seeker"
         layout="@layout/layout_dashboard_header" />
 
-    <TextView
-        android:id="@+id/text_view_recommendations"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/layout_header_row"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/card_view_dashboard_top_seeker"
-        android:layout_margin="8dp"
-        android:fontFamily="sans-serif-medium"
-        android:text="Recommendations"
-        android:textColor="@color/dark_text"
-        android:textSize="18sp" />
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp">
+
+        <TextView
+            android:id="@+id/text_view_recommendations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:fontFamily="sans-serif-medium"
+            android:padding="4dp"
+            android:text="Recommendations"
+            android:textColor="@color/dark_text"
+            android:textSize="18sp" />
+
+        <ImageButton
+            android:id="@+id/btn_sort_filter"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Sort and filter"
+            android:src="@drawable/ic_filter" />
+
+    </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/progress_bar_load_more"
@@ -61,7 +81,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/progress_bar_load_more"
-        android:layout_below="@id/text_view_recommendations">
+        android:layout_below="@id/layout_header_row">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_job_posts_dashboard"
@@ -71,6 +91,5 @@
             tools:listitem="@layout/item_job_post_card" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
 </RelativeLayout>

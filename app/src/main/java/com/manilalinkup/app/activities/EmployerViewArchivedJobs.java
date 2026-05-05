@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.adapters.AppliedJobsAdapter;
@@ -34,6 +35,7 @@ public class EmployerViewArchivedJobs extends BaseActivity {
     private LinearLayout emptyState;
     private AppliedJobsAdapter.ArchiveJobAdapter adapter;
     private List<ArchiveJobModel> archiveList;
+    private String currentStatusFilter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,19 @@ public class EmployerViewArchivedJobs extends BaseActivity {
         archiveList = new ArrayList<>();
         adapter = new AppliedJobsAdapter.ArchiveJobAdapter(archiveList);
         recyclerView.setAdapter(adapter);
+
+        ChipGroup chipGroup = findViewById(R.id.chip_group_filter);
+        chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            int checkedId = checkedIds.isEmpty() ? R.id.chip_all : checkedIds.get(0);
+            if (checkedId == R.id.chip_archived) currentStatusFilter = "archived";
+            else if (checkedId == R.id.chip_expired) currentStatusFilter = "expired";
+            else if (checkedId == R.id.chip_completed) currentStatusFilter = "completed";
+            else currentStatusFilter = null;
+            archiveList.clear();
+            adapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(true);
+            loadArchivedJobs();
+        });
 
         swipeRefreshLayout.setRefreshing(true);
         loadArchivedJobs();
@@ -78,7 +93,7 @@ public class EmployerViewArchivedJobs extends BaseActivity {
         }
         user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
-            api.getArchivedJobs(new GetArchivedJobsRequest(null))
+            api.getArchivedJobs(new GetArchivedJobsRequest(null, currentStatusFilter))
                     .enqueue(new Callback<ApiResponse<List<ArchiveJobModel>>>() {
                         @Override
                         public void onResponse(Call<ApiResponse<List<ArchiveJobModel>>> call,

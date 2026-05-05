@@ -19,9 +19,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
 import com.manilalinkup.app.adapters.RatingsProfileAdapter;
-import com.manilalinkup.app.models.ApiResponse;
 import com.manilalinkup.app.models.GetRatingsRequest;
 import com.manilalinkup.app.models.RatingModel;
+import com.manilalinkup.app.models.RatingsResponse;
 import com.manilalinkup.app.models.SeekerProfileModel;
 import com.manilalinkup.app.models.UserProfileModel;
 import com.manilalinkup.app.utilities.ApiService;
@@ -145,10 +145,10 @@ public class SeekerProfileActivity extends BaseActivity {
         user.getIdToken(false).addOnSuccessListener(result -> {
             ApiService api = RetrofitClient.getClient(result.getToken()).create(ApiService.class);
             api.getRatings(new GetRatingsRequest(user.getUid(), null, null))
-                    .enqueue(new Callback<ApiResponse<List<RatingModel>>>() {
+                    .enqueue(new Callback<RatingsResponse>() {
                         @Override
-                        public void onResponse(Call<ApiResponse<List<RatingModel>>> call,
-                                               Response<ApiResponse<List<RatingModel>>> response) {
+                        public void onResponse(Call<RatingsResponse> call,
+                                               Response<RatingsResponse> response) {
                             if (response.isSuccessful() && response.body() != null
                                     && response.body().getData() != null) {
                                 ratingProfileList.clear();
@@ -158,7 +158,7 @@ public class SeekerProfileActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<ApiResponse<List<RatingModel>>> call, Throwable t) {
+                        public void onFailure(Call<RatingsResponse> call, Throwable t) {
                             Toast.makeText(SeekerProfileActivity.this,
                                     "Failed to load ratings", Toast.LENGTH_SHORT).show();
                         }

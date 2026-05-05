@@ -1,11 +1,15 @@
 package com.manilalinkup.app.activities;
 
-
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
-import com.manilalinkup.app.utilities.SeekerNavHelper;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -13,34 +17,41 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import androidx.core.content.ContextCompat;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.manilalinkup.app.R;
-import com.google.android.material.badge.BadgeDrawable;
 import com.manilalinkup.app.adapters.JobPostDashboardAdapter;
 import com.manilalinkup.app.models.GetSeekerJobsRequest;
-import com.manilalinkup.app.models.UnreadCountResponse;
 import com.manilalinkup.app.models.JobModel;
-import com.manilalinkup.app.models.SeekerJobsResponse;
 import com.manilalinkup.app.models.JobPostDashboardModel;
+import com.manilalinkup.app.models.SeekerJobsResponse;
 import com.manilalinkup.app.models.ServiceTagModel;
+import com.manilalinkup.app.models.UnreadCountResponse;
+import com.manilalinkup.app.utilities.AddressAutocompleteHelper;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.ProfilePhotoCache;
 import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.utilities.SeekerNavHelper;
 import com.manilalinkup.app.utilities.SessionCache;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-
+import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,6 +64,7 @@ public class SeekerDashboardActivity extends BaseActivity {
     private ProgressBar progressBarLoadMore;
     private SwipeRefreshLayout swipeRefreshLayout;
     private BottomNavigationView bottomNavigationView;
+    private ImageButton btnSortFilter;
     private ActivityResultLauncher<Intent> jobPostLauncher;
 
     private boolean isLoading = false;
@@ -61,6 +73,13 @@ public class SeekerDashboardActivity extends BaseActivity {
     private boolean isCuratedExhausted = false;
     private String lastExpiresAt = null;
     private String lastCreatedAt = null;
+    private Double lastSalary = null;
+    private Integer lastOffset = null;
+
+    private String currentSortBy = null;
+    private String currentOrder = null;
+    private String filterLocation = null;
+    private List<String> filterTags = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,24 +113,20 @@ public class SeekerDashboardActivity extends BaseActivity {
 
         jobListJobCard = new ArrayList<>();
 
-        adapterJobPost = new JobPostDashboardAdapter(jobListJobCard, false, new JobPostDashboardAdapter.OnJobClickListener() {
-            @Override
-            public void onJobClick(JobPostDashboardModel job) {
-                Intent intent = new Intent(SeekerDashboardActivity.this, SeekerJobPostActivity.class);
-                intent.putExtra("JOB_ID", job.getJobId());
-                intent.putExtra("JOB_TITLE", job.getJobTitle());
-                intent.putExtra("EMPLOYER_NAME", job.getEmployerName());
-                intent.putExtra("LOCATION", job.getJobPostLocation());
-                intent.putExtra("DURATION", job.getJob_duration());
-                intent.putExtra("SALARY", job.getSalary() != null ? job.getSalary() : 0.0);
-                intent.putExtra("DESCRIPTION", job.getDescription());
-                intent.putExtra("EXPIRES_AT", job.getExpiresAt());
-                intent.putExtra("HOW_LONG_POSTED", job.getHowLongJobIsPosted());
-                intent.putExtra("EMPLOYER_PHOTO", job.getEmployerProfilePicture());
-                intent.putStringArrayListExtra("TAG_IDS", new ArrayList<>(job.getTagIds() != null ? job.getTagIds() : new ArrayList<>()));
-                jobPostLauncher.launch(intent);
-            }
-
+        adapterJobPost = new JobPostDashboardAdapter(jobListJobCard, false, job -> {
+            Intent intent = new Intent(SeekerDashboardActivity.this, SeekerJobPostActivity.class);
+            intent.putExtra("JOB_ID", job.getJobId());
+            intent.putExtra("JOB_TITLE", job.getJobTitle());
+            intent.putExtra("EMPLOYER_NAME", job.getEmployerName());
+            intent.putExtra("LOCATION", job.getJobPostLocation());
+            intent.putExtra("DURATION", job.getJob_duration());
+            intent.putExtra("SALARY", job.getSalary() != null ? job.getSalary() : 0.0);
+            intent.putExtra("DESCRIPTION", job.getDescription());
+            intent.putExtra("EXPIRES_AT", job.getExpiresAt());
+            intent.putExtra("HOW_LONG_POSTED", job.getHowLongJobIsPosted());
+            intent.putExtra("EMPLOYER_PHOTO", job.getEmployerProfilePicture());
+            intent.putStringArrayListExtra("TAG_IDS", new ArrayList<>(job.getTagIds() != null ? job.getTagIds() : new ArrayList<>()));
+            jobPostLauncher.launch(intent);
         });
         recyclerViewJobPost.setAdapter(adapterJobPost);
 
@@ -129,6 +144,9 @@ public class SeekerDashboardActivity extends BaseActivity {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view_seeker);
         SeekerNavHelper.setup(this, bottomNavigationView, R.id.nav_home_seeker);
+
+        btnSortFilter = findViewById(R.id.btn_sort_filter);
+        btnSortFilter.setOnClickListener(v -> showFilterDialog());
 
         loadServiceTags();
         loadJobs();
@@ -171,6 +189,8 @@ public class SeekerDashboardActivity extends BaseActivity {
         isLoading = false;
         lastExpiresAt = null;
         lastCreatedAt = null;
+        lastSalary = null;
+        lastOffset = null;
         isCuratedExhausted = false;
         loadJobs();
     }
@@ -188,6 +208,8 @@ public class SeekerDashboardActivity extends BaseActivity {
             return;
         }
 
+        boolean hasCustomQuery = currentSortBy != null || filterTags != null || filterLocation != null;
+
         user.getIdToken(false).addOnCompleteListener(tokenTask -> {
             if (!tokenTask.isSuccessful()) {
                 isLoading = false;
@@ -198,9 +220,7 @@ public class SeekerDashboardActivity extends BaseActivity {
 
             String token = tokenTask.getResult().getToken();
             ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
-
-            String mode = isCuratedExhausted ? "all" : "curated";
-            GetSeekerJobsRequest request = new GetSeekerJobsRequest(mode, null, lastExpiresAt, lastCreatedAt);
+            GetSeekerJobsRequest request = buildRequest(hasCustomQuery);
             apiService.getSeekerJobs(request).enqueue(new Callback<SeekerJobsResponse>() {
                 @Override
                 public void onResponse(Call<SeekerJobsResponse> call, Response<SeekerJobsResponse> response) {
@@ -216,9 +236,8 @@ public class SeekerDashboardActivity extends BaseActivity {
                             adapterJobPost.notifyItemRangeInserted(insertStart, jobs.size());
                         }
                         if (body.isHasMore() && body.getNextCursor() != null) {
-                            lastExpiresAt = body.getNextCursor().getExpiresAt();
-                            lastCreatedAt = body.getNextCursor().getCreatedAt();
-                        } else if (!isCuratedExhausted) {
+                            updateCursors(body.getNextCursor(), hasCustomQuery);
+                        } else if (!hasCustomQuery && !isCuratedExhausted) {
                             isCuratedExhausted = true;
                             lastExpiresAt = null;
                             lastCreatedAt = null;
@@ -241,6 +260,177 @@ public class SeekerDashboardActivity extends BaseActivity {
                 }
             });
         });
+    }
+
+    private GetSeekerJobsRequest buildRequest(boolean hasCustomQuery) {
+        if (!hasCustomQuery) {
+            String mode = isCuratedExhausted ? "all" : "curated";
+            return new GetSeekerJobsRequest(mode, null, lastExpiresAt, lastCreatedAt);
+        }
+
+        GetSeekerJobsRequest request = new GetSeekerJobsRequest(null, null, null, null);
+
+        if (currentSortBy != null) {
+            request.setSortBy(currentSortBy);
+            if (currentOrder != null) request.setOrder(currentOrder);
+        }
+
+        List<String> filterByList = new ArrayList<>();
+        if (filterTags != null && !filterTags.isEmpty()) {
+            filterByList.add("tags");
+            request.setTags(new ArrayList<>(filterTags));
+        }
+        if (filterLocation != null) {
+            filterByList.add("location");
+            request.setLocation(filterLocation);
+        }
+        if (!filterByList.isEmpty()) {
+            request.setFilterBy(filterByList);
+        }
+
+        if ("salary".equals(currentSortBy)) {
+            request.setStartAfterSalary(lastSalary);
+            request.setStartAfterCreatedAt(lastCreatedAt);
+        } else if ("duration".equals(currentSortBy)) {
+            request.setStartAfterOffset(lastOffset);
+        } else {
+            request.setStartAfterCreatedAt(lastCreatedAt);
+        }
+
+        return request;
+    }
+
+    private void updateCursors(SeekerJobsResponse.NextCursor cursor, boolean hasCustomQuery) {
+        if (!hasCustomQuery) {
+            lastExpiresAt = cursor.getExpiresAt();
+            lastCreatedAt = cursor.getCreatedAt();
+        } else if ("salary".equals(currentSortBy)) {
+            lastSalary = cursor.getSalary();
+            lastCreatedAt = cursor.getCreatedAt();
+        } else if ("duration".equals(currentSortBy)) {
+            lastOffset = cursor.getOffset();
+        } else {
+            lastCreatedAt = cursor.getCreatedAt();
+        }
+    }
+
+    private void showFilterDialog() {
+        Map<String, String> tagLabels = SessionCache.getInstance().getServiceTagLabelsById();
+
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_sort_filter, null);
+
+        ChipGroup chipGroupSort = dialogView.findViewById(R.id.chip_group_sort_dialog);
+        Chip chipSortDefault = dialogView.findViewById(R.id.chip_sort_dialog_default);
+        Chip chipSortSalary = dialogView.findViewById(R.id.chip_sort_dialog_salary);
+        Chip chipSortDuration = dialogView.findViewById(R.id.chip_sort_dialog_duration);
+
+        ChipGroup chipGroupOrder = dialogView.findViewById(R.id.chip_group_order);
+        Chip chipOrderAsc = dialogView.findViewById(R.id.chip_order_asc);
+        Chip chipOrderDesc = dialogView.findViewById(R.id.chip_order_desc);
+
+        EditText etLocation = dialogView.findViewById(R.id.et_filter_location);
+        ImageButton btnClearLocation = dialogView.findViewById(R.id.btn_clear_location);
+        ChipGroup chipGroupTags = dialogView.findViewById(R.id.chip_group_filter_tags);
+        Button btnClear = dialogView.findViewById(R.id.btn_filter_clear);
+        Button btnApply = dialogView.findViewById(R.id.btn_filter_apply);
+
+        if ("salary".equals(currentSortBy)) chipSortSalary.setChecked(true);
+        else if ("duration".equals(currentSortBy)) chipSortDuration.setChecked(true);
+        else chipSortDefault.setChecked(true);
+
+        String initialOrder = currentOrder != null ? currentOrder
+                : "duration".equals(currentSortBy) ? "asc" : "desc";
+        if ("asc".equals(initialOrder)) chipOrderAsc.setChecked(true);
+        else chipOrderDesc.setChecked(true);
+
+        chipGroupSort.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            if (checkedIds.isEmpty()) return;
+            boolean isDuration = checkedIds.get(0) == R.id.chip_sort_dialog_duration;
+            if (isDuration) chipOrderAsc.setChecked(true);
+            else chipOrderDesc.setChecked(true);
+        });
+
+        if (filterLocation != null) {
+            etLocation.setText(filterLocation);
+            btnClearLocation.setVisibility(View.VISIBLE);
+        }
+
+        AddressAutocompleteHelper.attachDistrictAutocomplete(etLocation);
+        etLocation.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(Editable s) {
+                btnClearLocation.setVisibility(s.length() > 0 ? View.VISIBLE : View.GONE);
+            }
+        });
+        btnClearLocation.setOnClickListener(v -> etLocation.setText(""));
+
+        if (tagLabels != null) {
+            LinkedHashSet<String> activeTagIds = filterTags != null
+                    ? new LinkedHashSet<>(filterTags)
+                    : new LinkedHashSet<>();
+            for (Map.Entry<String, String> entry : tagLabels.entrySet()) {
+                Chip chip = new Chip(this);
+                chip.setText(entry.getValue());
+                chip.setCheckable(true);
+                chip.setChecked(activeTagIds.contains(entry.getKey()));
+                chip.setTag(entry.getKey());
+                chip.setEnsureMinTouchTargetSize(false);
+                chipGroupTags.addView(chip);
+            }
+        }
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        btnClear.setOnClickListener(v -> {
+            chipSortDefault.setChecked(true);
+            chipOrderDesc.setChecked(true);
+            etLocation.setText("");
+            for (int i = 0; i < chipGroupTags.getChildCount(); i++) {
+                View child = chipGroupTags.getChildAt(i);
+                if (child instanceof Chip) ((Chip) child).setChecked(false);
+            }
+        });
+
+        btnApply.setOnClickListener(v -> {
+            int sortCheckedId = chipGroupSort.getCheckedChipId();
+            if (sortCheckedId == R.id.chip_sort_dialog_salary) currentSortBy = "salary";
+            else if (sortCheckedId == R.id.chip_sort_dialog_duration) currentSortBy = "duration";
+            else currentSortBy = "createdAt";
+
+            int orderCheckedId = chipGroupOrder.getCheckedChipId();
+            if (orderCheckedId == R.id.chip_order_asc) currentOrder = "asc";
+            else currentOrder = "desc";
+
+            String selectedLocation = etLocation.getText().toString().trim();
+            filterLocation = selectedLocation.isEmpty() ? null : selectedLocation;
+
+            List<String> selectedTags = new ArrayList<>();
+            for (int i = 0; i < chipGroupTags.getChildCount(); i++) {
+                View child = chipGroupTags.getChildAt(i);
+                if (child instanceof Chip && ((Chip) child).isChecked()) {
+                    selectedTags.add((String) child.getTag());
+                }
+            }
+            filterTags = selectedTags.isEmpty() ? null : selectedTags;
+
+            dialog.dismiss();
+            updateSortFilterButton();
+            refreshJobs();
+        });
+
+        dialog.show();
+    }
+
+    private void updateSortFilterButton() {
+        boolean nonDefaultSort = "salary".equals(currentSortBy) || "duration".equals(currentSortBy)
+                || "asc".equals(currentOrder);
+        boolean hasActive = nonDefaultSort || filterLocation != null
+                || (filterTags != null && !filterTags.isEmpty());
+        int color = ContextCompat.getColor(this, hasActive ? R.color.manila_blue : R.color.dark_text);
+        btnSortFilter.setColorFilter(color, PorterDuff.Mode.SRC_IN);
     }
 
     private void loadServiceTags() {

@@ -180,6 +180,28 @@
 
                     </LinearLayout>
 
+
+                    <LinearLayout
+                        android:id="@+id/layout_status_chips"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_open_for_work"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Open for Work"
+                            android:textSize="11sp"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:visibility="gone"
+                            app:chipMinHeight="28dp" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
@@ -220,6 +242,28 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginTop="4dp" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_load_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_load_more"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="8dp"
+                        android:text="Load more"
+                        android:textAllCaps="false"
+                        android:textColor="@color/manila_blue"
+                        android:visibility="gone"
+                        app:strokeColor="@color/manila_blue"
+                        app:cornerRadius="12dp" />
 
                     <TextView
                         android:id="@+id/tv_no_completed_jobs"

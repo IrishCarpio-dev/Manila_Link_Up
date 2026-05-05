@@ -16,8 +16,12 @@ public class SeekerJobsResponse {
     public static class NextCursor {
         private String expiresAt;
         private String createdAt;
+        private Double salary;
+        private Integer offset;
 
         public String getExpiresAt() { return expiresAt; }
         public String getCreatedAt() { return createdAt; }
+        public Double getSalary() { return salary; }
+        public Integer getOffset() { return offset; }
     }
 }
