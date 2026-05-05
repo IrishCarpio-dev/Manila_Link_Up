@@ -66,10 +66,31 @@
             tools:text="Binondo, Manila" />
 
         <ImageView
+            android:id="@+id/item_card_money_logo"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignTop="@+id/tv_salary"
+            android:layout_marginTop="3dp"
+            android:src="@drawable/moneybill" />
+
+        <TextView
+            android:id="@+id/tv_salary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_card_location_placeholder"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_toEndOf="@id/item_card_money_logo"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/secondary_text"
+            android:textSize="14sp"
+            tools:text="₱700/hr" />
+
+        <ImageView
             android:id="@+id/item_card_calendar_logo"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_below="@id/item_card_location_logo"
+            android:layout_alignTop="@id/item_card_calendar_placeholder"
             android:layout_marginTop="3dp"
             android:src="@drawable/bxscalendarcheck" />
 
@@ -77,8 +98,9 @@
             android:id="@+id/item_card_calendar_placeholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/item_card_location_placeholder"
+            android:layout_below="@id/tv_salary"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
             android:layout_toEndOf="@id/item_card_calendar_logo"
             android:fontFamily="sans-serif"
             android:textColor="@color/secondary_text"

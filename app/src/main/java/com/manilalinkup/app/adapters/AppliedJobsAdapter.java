@@ -186,7 +186,7 @@ public class AppliedJobsAdapter extends RecyclerView.Adapter<AppliedJobsAdapter.
                 }
                 intent.putExtra("EMPLOYER_HAS_COMPLETED", currentJob.isEmployerCompleted());
                 intent.putExtra("SEEKER_NAME", currentJob.getSeekerName());
-                intent.putExtra("IS_RATE_ENABLED", Boolean.TRUE.equals(currentJob.isRateEnabled()));
+                intent.putExtra("IS_RATE_ENABLED", !Boolean.FALSE.equals(currentJob.isRateEnabled()));
                 intent.putExtra("IS_OWNER", true);
                 intent.putExtra("IS_ARCHIVED", true);
                 v.getContext().startActivity(intent);

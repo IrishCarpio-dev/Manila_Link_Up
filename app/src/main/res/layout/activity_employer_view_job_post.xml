@@ -35,29 +35,26 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@android:color/transparent"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingHorizontal="48dp"
-        android:paddingBottom="8dp"
-        android:weightSum="1">
+        android:paddingBottom="8dp">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_view_applicants"
+            android:id="@+id/btn_rate"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:backgroundTint="@color/manila_blue"
-            android:text="View Applicants"
-            android:textSize="16sp"
             android:layout_marginBottom="8dp"
-            android:textColor="@color/white"
+            android:text="Rate Seeker"
+            android:textAllCaps="false"
+            android:textSize="16sp"
             app:cornerRadius="8dp"
-            app:elevation="8dp" />
+            android:visibility="gone" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_mark_complete"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
             android:backgroundTint="#388E3C"
             android:text="Mark Job Complete"
@@ -68,17 +65,16 @@
             android:visibility="gone" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_rate"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:id="@+id/button_view_applicants"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="Rate Seeker"
-            android:textAllCaps="false"
+            android:backgroundTint="@color/manila_blue"
+            android:text="View Applicants"
             android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/white"
             app:cornerRadius="8dp"
-            android:visibility="gone" />
+            app:elevation="8dp" />
 
     </LinearLayout>
 
