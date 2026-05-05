@@ -25,6 +25,7 @@ public class SeekerSettingsActivity extends BaseActivity {
     private TextView btnChangePassword, tvUserEmail;
     private android.widget.ImageButton btnBack;
     private Switch switchNotifications;
+    private TextView btnJobPreferences;
     private TextView btnHelpCenter, btnTerms, btnAbout;
     private Button logoutButton;
     private FirebaseAuth mAuth;
@@ -65,6 +66,7 @@ public class SeekerSettingsActivity extends BaseActivity {
 
         // Preferences
         switchNotifications = findViewById(R.id.switch_notifications);
+        btnJobPreferences = findViewById(R.id.btn_job_preferences);
 
         // Support & Legal
         btnHelpCenter = findViewById(R.id.btn_help_center);
@@ -126,6 +128,12 @@ public class SeekerSettingsActivity extends BaseActivity {
         });
         switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> {
             showToast("Notifications " + (isChecked ? "Enabled" : "Disabled"));
+        });
+
+        btnJobPreferences.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SeekerJobPreferences.class);
+            intent.putExtra("FROM_SETTINGS", true);
+            startActivity(intent);
         });
 
         btnHelpCenter.setOnClickListener(v -> {

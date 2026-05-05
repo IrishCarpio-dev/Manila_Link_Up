@@ -183,6 +183,7 @@ public class SeekerDashboardActivity extends BaseActivity {
 
     private void refreshJobs() {
         isRefreshing = true;
+        swipeRefreshLayout.setRefreshing(true);
         jobListJobCard.clear();
         adapterJobPost.notifyDataSetChanged();
         hasMorePages = true;

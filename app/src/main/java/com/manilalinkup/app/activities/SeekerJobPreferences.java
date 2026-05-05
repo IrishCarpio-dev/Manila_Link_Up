@@ -7,8 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -46,8 +44,7 @@ import retrofit2.Response;
 import com.manilalinkup.app.R;
 
 public class SeekerJobPreferences extends BaseActivity {
-    private TextInputEditText minSalaryInput, durationAmountInput;
-    private AutoCompleteTextView rateDropdown;
+    private TextInputEditText minSalaryInput;
     private EditText preferredLocationInput;
     private ChipGroup chipGroupServiceTags;
     private TextView tvServiceTagsError, greetingNameText;
@@ -55,6 +52,7 @@ public class SeekerJobPreferences extends BaseActivity {
 
     private final List<ServiceTagModel> serviceTagList = new ArrayList<>();
     private final Set<String> selectedTagIds = new LinkedHashSet<>();
+    private boolean fromSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,36 +61,50 @@ public class SeekerJobPreferences extends BaseActivity {
         setContentView(R.layout.activity_seeker_job_preferences);
 
         minSalaryInput = findViewById(R.id.edit_text_MinSalary);
-        durationAmountInput = findViewById(R.id.edit_text_duration_amount);
-        rateDropdown = findViewById(R.id.auto_complete_rate);
         preferredLocationInput = findViewById(R.id.edit_text_location);
         chipGroupServiceTags = findViewById(R.id.chip_group_service_tags);
         tvServiceTagsError = findViewById(R.id.text_view_service_tags_error);
         greetingNameText = findViewById(R.id.textview_greeting_name_seeker);
         btnSave = findViewById(R.id.button_post_job);
 
+        fromSettings = getIntent().getBooleanExtra("FROM_SETTINGS", false);
+
+        TextView tvGreeting = findViewById(R.id.textview_greeting_seeker);
+        android.widget.LinearLayout layoutHeaderGreeting = findViewById(R.id.layout_header_greeting);
+        android.widget.ImageButton btnBack = findViewById(R.id.btn_back_preferences);
         TextView tvSkip = findViewById(R.id.text_view_skip);
-        tvSkip.setPaintFlags(tvSkip.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        tvSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SeekerJobPreferences.this, AllSetActivity.class);
-                startActivity(intent);
+        if (fromSettings) {
+            tvSkip.setVisibility(View.GONE);
+            tvGreeting.setVisibility(View.GONE);
+            greetingNameText.setText("Update Job Preferences");
+            greetingNameText.setGravity(android.view.Gravity.CENTER);
+            android.widget.FrameLayout.LayoutParams fp = new android.widget.FrameLayout.LayoutParams(
+                    android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                    android.view.Gravity.CENTER_VERTICAL
+            );
+            layoutHeaderGreeting.setLayoutParams(fp);
+            layoutHeaderGreeting.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
+            btnSave.setText("Save");
+            btnBack.setVisibility(View.VISIBLE);
+            btnBack.setOnClickListener(v -> finish());
+        } else {
+            tvSkip.setPaintFlags(tvSkip.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            tvSkip.setOnClickListener(v -> startActivity(new Intent(SeekerJobPreferences.this, AllSetActivity.class)));
+
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (currentUser != null && currentUser.getDisplayName() != null) {
+                greetingNameText.setText(currentUser.getDisplayName());
             }
-        });
-
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null && currentUser.getDisplayName() != null) {
-            greetingNameText.setText(currentUser.getDisplayName());
         }
-
-        String[] durationUnits = {"hour(s)", "day(s)", "week(s)", "month(s)", "year(s)"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, durationUnits);
-        rateDropdown.setAdapter(adapter);
 
         AddressAutocompleteHelper.attachDistrictAutocomplete(preferredLocationInput);
 
-        loadServiceTags();
+        if (fromSettings) {
+            loadExistingPreferences();
+        } else {
+            loadServiceTags();
+        }
 
         btnSave.setOnClickListener(v -> savePreferences());
     }
@@ -203,8 +215,6 @@ public class SeekerJobPreferences extends BaseActivity {
     private void savePreferences() {
         String salaryStr = minSalaryInput.getText() != null ? minSalaryInput.getText().toString().trim() : "";
         String location = preferredLocationInput.getText() != null ? preferredLocationInput.getText().toString().trim() : "";
-        String durationValue = durationAmountInput.getText() != null ? durationAmountInput.getText().toString().trim() : "";
-        String durationUnit = rateDropdown.getText().toString().trim();
 
         tvServiceTagsError.setVisibility(View.GONE);
 
@@ -215,7 +225,7 @@ public class SeekerJobPreferences extends BaseActivity {
             return;
         }
 
-        if (salaryStr.isEmpty() || location.isEmpty() || durationValue.isEmpty() || durationUnit.isEmpty()) {
+        if (salaryStr.isEmpty() || location.isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -237,8 +247,7 @@ public class SeekerJobPreferences extends BaseActivity {
         user.getIdToken(false).addOnCompleteListener(tokenTask -> {
             if(tokenTask.isSuccessful()){
                 String token = tokenTask.getResult().getToken();
-                String duration = durationValue + " " + durationUnit;
-                submitSeekerPreference(token, location, duration, salary);
+                submitSeekerPreference(token, location, salary);
             } else {
                 hideProgress();
                 Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show();
@@ -246,8 +255,60 @@ public class SeekerJobPreferences extends BaseActivity {
         });
     }
 
-    private void submitSeekerPreference(String token, String location, String duration, double salary) {
-        SeekerPreferencesModel preference = new SeekerPreferencesModel(salary, duration, location, new ArrayList<>(selectedTagIds));
+    private void loadExistingPreferences() {
+        showProgress("Loading preferences...");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            hideProgress();
+            loadServiceTags();
+            return;
+        }
+        user.getIdToken(false).addOnCompleteListener(tokenTask -> {
+            if (!tokenTask.isSuccessful()) {
+                hideProgress();
+                loadServiceTags();
+                return;
+            }
+            SessionCache.getInstance().refreshUserProfile(
+                    tokenTask.getResult().getToken(),
+                    new SessionCache.UserProfileCallback() {
+                        @Override
+                        public void onAvailable(com.manilalinkup.app.models.UserProfileModel profile) {
+                            hideProgress();
+                            if (profile.getSeekers() != null) {
+                                SeekerPreferencesModel prefs = profile.getSeekers().getPreferences();
+                                if (prefs != null) preFillPreferences(prefs);
+                            }
+                            loadServiceTags();
+                        }
+                        @Override
+                        public void onError() {
+                            hideProgress();
+                            loadServiceTags();
+                        }
+                    }
+            );
+        });
+    }
+
+    private void preFillPreferences(SeekerPreferencesModel prefs) {
+        if (prefs.getPreferredSalary() != null) {
+            double salary = prefs.getPreferredSalary();
+            String salaryStr = (salary == Math.floor(salary))
+                    ? String.valueOf((int) salary)
+                    : String.valueOf(salary);
+            minSalaryInput.setText(salaryStr);
+        }
+        if (prefs.getPreferredLocation() != null) {
+            preferredLocationInput.setText(prefs.getPreferredLocation());
+        }
+        if (prefs.getTags() != null) {
+            selectedTagIds.addAll(prefs.getTags());
+        }
+    }
+
+    private void submitSeekerPreference(String token, String location, double salary) {
+        SeekerPreferencesModel preference = new SeekerPreferencesModel(salary, location, new ArrayList<>(selectedTagIds));
 
         ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
 
@@ -258,8 +319,12 @@ public class SeekerJobPreferences extends BaseActivity {
                 if (isDestroyed()) return;
                 if (response.isSuccessful()) {
                     Toast.makeText(SeekerJobPreferences.this, "Preferences Saved!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(SeekerJobPreferences.this, AllSetActivity.class));
-                    finish();
+                    if (fromSettings) {
+                        finish();
+                    } else {
+                        startActivity(new Intent(SeekerJobPreferences.this, AllSetActivity.class));
+                        finish();
+                    }
                 } else {
                     ErrorUtils.showErrorMessage(SeekerJobPreferences.this, response.errorBody());
                 }

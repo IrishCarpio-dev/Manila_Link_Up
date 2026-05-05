@@ -1,22 +1,23 @@
 package com.manilalinkup.app.models;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class SeekerPreferencesModel {
+    @SerializedName(value = "preferredSalary", alternate = {"preferred_salary"})
     private Double preferredSalary;
-    private String preferredDuration;
+    @SerializedName(value = "preferredLocation", alternate = {"preferred_location"})
     private String preferredLocation;
-    private List<String> serviceTags;
+    @SerializedName("tags")
+    private List<String> tags;
 
-    public SeekerPreferencesModel(Double preferredSalary, String preferredDuration, String preferredLocation, List<String> serviceTags) {
+    public SeekerPreferencesModel(Double preferredSalary, String preferredLocation, List<String> tags) {
         this.preferredSalary = preferredSalary;
-        this.preferredDuration = preferredDuration;
         this.preferredLocation = preferredLocation;
-        this.serviceTags = serviceTags;
+        this.tags = tags;
     }
 
     public Double getPreferredSalary() { return preferredSalary; }
-    public String getPreferredDuration() { return preferredDuration; }
     public String getPreferredLocation() { return preferredLocation; }
-    public List<String> getServiceTags() { return serviceTags; }
+    public List<String> getTags() { return tags; }
 }

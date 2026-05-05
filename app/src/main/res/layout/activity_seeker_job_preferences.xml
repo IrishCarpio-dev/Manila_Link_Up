@@ -25,7 +25,21 @@
                 android:alpha="0.25"
                 android:src="@drawable/bgheartadjustment" />
 
+            <ImageButton
+                android:id="@+id/btn_back_preferences"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:padding="8dp"
+                android:src="@drawable/ic_back"
+                android:tint="@color/white"
+                android:visibility="gone" />
+
             <LinearLayout
+                android:id="@+id/layout_header_greeting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -33,7 +47,7 @@
 
                 <TextView
                     android:id="@+id/textview_greeting_seeker"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
                     android:text="We are almost there "
@@ -149,85 +163,10 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/text_view_duration_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/min_salary_layout"
-                android:layout_margin="8dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Duration"
-                android:textColor="@color/dark_text"
-                android:textSize="16sp" />
-
-            <LinearLayout
-                android:id="@+id/layout_duration_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_view_duration_label"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_weight="1"
-                    android:hint="e.g. 8"
-                    app:boxBackgroundColor="@color/light_surface"
-                    app:boxCornerRadiusBottomEnd="8dp"
-                    app:boxCornerRadiusBottomStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxCornerRadiusTopStart="8dp"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edit_text_duration_amount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#F0F0F0"
-                        android:inputType="number" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_weight="1"
-                    android:hint="Unit"
-                    app:boxBackgroundColor="@color/light_surface"
-                    app:boxCornerRadiusBottomEnd="8dp"
-                    app:boxCornerRadiusBottomStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxCornerRadiusTopStart="8dp"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp"
-                    app:endIconMode="dropdown_menu">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/auto_complete_rate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#F0F0F0"
-                        android:inputType="none"
-                        android:minHeight="48dp"
-                        android:paddingStart="16dp"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
-            <TextView
                 android:id="@+id/text_view_employer_job_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/layout_duration_row"
+                android:layout_below="@id/min_salary_layout"
                 android:layout_margin="8dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="Preferred Location"
