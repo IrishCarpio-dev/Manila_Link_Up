@@ -194,6 +194,21 @@
                             android:layout_alignParentEnd="true"
                             android:checked="true"/>
                     </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F0F0F0"/>
+
+                    <TextView
+                        android:id="@+id/btn_job_preferences"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="Job Preferences"
+                        android:drawableEnd="@drawable/ic_chevron_right"
+                        android:background="?attr/selectableItemBackground"
+                        android:textColor="?attr/colorOnSurface"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
