@@ -14,6 +14,7 @@ import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.RetrofitClient;
 import com.manilalinkup.app.utilities.SessionCache;
+import com.manilalinkup.app.models.SeekerProfileModel;
 import com.manilalinkup.app.models.UserProfileModel;
 
 import java.util.List;
@@ -68,15 +69,18 @@ public class SplashActivity extends BaseActivity {
                     });
                     if (response.body().getData().getSeekers() != null) {
                         // User is a seeker
-                        Boolean isProfileSet = Optional.ofNullable(response.body().getData().getSeekers().getProfileSet()).orElse(false);
-
-                        if (isProfileSet) {
-                            startActivity(new Intent(SplashActivity.this, SeekerDashboardActivity.class));
-                            finish();
+                        SeekerProfileModel seeker = response.body().getData().getSeekers();
+                        Intent intent;
+                        if (seeker.getRejectedAt() != null) {
+                            intent = new Intent(SplashActivity.this, SeekerVerificationRejectedActivity.class);
+                        } else if (Boolean.TRUE.equals(seeker.getProfileSet())) {
+                            intent = new Intent(SplashActivity.this, SeekerDashboardActivity.class);
                         } else {
-                            startActivity(new Intent(SplashActivity.this, EditSeekerProfileActivity.class));
-                            finish();
+                            intent = new Intent(SplashActivity.this, EditSeekerProfileActivity.class);
                         }
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
                     } else if (response.body().getData().getEmployers() != null) {
                         // User is an employer
                         Boolean isProfileSet = Optional.ofNullable(response.body().getData().getEmployers().getProfileSet()).orElse(false);

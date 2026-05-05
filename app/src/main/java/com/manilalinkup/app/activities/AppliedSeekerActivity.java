@@ -25,10 +25,12 @@ import com.manilalinkup.app.models.AppliedJobsResponse;
 import com.manilalinkup.app.models.CompletedJobsResponse;
 import com.manilalinkup.app.models.GetAppliedJobsRequest;
 import com.manilalinkup.app.models.GetCompletedJobsRequest;
+import com.manilalinkup.app.models.UserProfileModel;
 import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.SeekerNavHelper;
 import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.utilities.SessionCache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -208,7 +210,19 @@ public class AppliedSeekerActivity extends BaseActivity {
         }
     }
 
+    private boolean isSeekerVerified() {
+        UserProfileModel profile = SessionCache.getInstance().getUserProfile();
+        return profile != null
+                && profile.getSeekers() != null
+                && Boolean.TRUE.equals(profile.getSeekers().getVerified());
+    }
+
     private void fetchAppliedJobs(boolean loadMore) {
+        if (!isSeekerVerified()) {
+            swipeRefreshLayout.setRefreshing(false);
+            checkEmptyState(appliedList, emptyState, recyclerView);
+            return;
+        }
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
         if (loadMore) {
@@ -261,6 +275,11 @@ public class AppliedSeekerActivity extends BaseActivity {
     }
 
     private void fetchCompletedJobs(boolean loadMore) {
+        if (!isSeekerVerified()) {
+            completedSwipeRefresh.setRefreshing(false);
+            checkEmptyState(completedList, completedEmptyState, completedRecyclerView);
+            return;
+        }
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
         if (loadMore) {

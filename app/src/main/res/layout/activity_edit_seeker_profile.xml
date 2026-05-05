@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/design_default_color_background"
+    android:background="@color/white"
     android:fillViewport="true"
     android:fitsSystemWindows="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
 
         <include layout="@layout/layout_toolbar" />
 
@@ -96,9 +97,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/image_preview_height"
             android:layout_below="@id/subClearance"
-            android:layout_marginVertical="@dimen/padding_standard"
-            android:layout_marginHorizontal="30dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="@dimen/padding_standard"
             android:scaleType="centerCrop"
             android:visibility="gone" />
 
@@ -154,9 +155,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/image_preview_height"
             android:layout_below="@id/subID"
-            android:layout_marginVertical="@dimen/padding_standard"
-            android:layout_marginHorizontal="30dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="@dimen/padding_standard"
             android:scaleType="centerCrop"
             android:visibility="gone" />
 
@@ -206,11 +207,11 @@
             android:layout_marginTop="@dimen/padding_small"
             android:layout_marginEnd="30dp"
             android:background="#F0F0F0"
-            android:hint="YYYY-MM-DD"
-            android:paddingLeft="12dp"
-            android:focusable="false"
             android:clickable="true"
-            android:inputType="none" />
+            android:focusable="false"
+            android:hint="YYYY-MM-DD"
+            android:inputType="none"
+            android:paddingLeft="12dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/material_button_save"

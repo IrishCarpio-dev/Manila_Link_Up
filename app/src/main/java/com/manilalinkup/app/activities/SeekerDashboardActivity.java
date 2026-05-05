@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -64,7 +65,6 @@ public class SeekerDashboardActivity extends BaseActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private BottomNavigationView bottomNavigationView;
     private ImageButton btnSortFilter;
-
     private ActivityResultLauncher<Intent> jobPostLauncher;
 
     private boolean isLoading = false;
@@ -221,29 +221,20 @@ public class SeekerDashboardActivity extends BaseActivity {
             String token = tokenTask.getResult().getToken();
             ApiService apiService = RetrofitClient.getClient(token).create(ApiService.class);
             GetSeekerJobsRequest request = buildRequest(hasCustomQuery);
-
             apiService.getSeekerJobs(request).enqueue(new Callback<SeekerJobsResponse>() {
                 @Override
                 public void onResponse(Call<SeekerJobsResponse> call, Response<SeekerJobsResponse> response) {
                     isLoading = false;
-                    if (isRefreshing) {
-                        isRefreshing = false;
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
+                    if (isRefreshing) { isRefreshing = false; swipeRefreshLayout.setRefreshing(false); }
                     progressBarLoadMore.setVisibility(View.GONE);
-
                     if (response.isSuccessful() && response.body() != null) {
                         SeekerJobsResponse body = response.body();
                         List<JobModel> jobs = body.getData();
-
                         if (jobs != null && !jobs.isEmpty()) {
                             int insertStart = jobListJobCard.size();
-                            for (JobModel job : jobs) {
-                                jobListJobCard.add(mapToDisplayModel(job));
-                            }
+                            for (JobModel job : jobs) jobListJobCard.add(mapToDisplayModel(job));
                             adapterJobPost.notifyItemRangeInserted(insertStart, jobs.size());
                         }
-
                         if (body.isHasMore() && body.getNextCursor() != null) {
                             updateCursors(body.getNextCursor(), hasCustomQuery);
                         } else if (!hasCustomQuery && !isCuratedExhausted) {
@@ -263,10 +254,7 @@ public class SeekerDashboardActivity extends BaseActivity {
                 @Override
                 public void onFailure(Call<SeekerJobsResponse> call, Throwable t) {
                     isLoading = false;
-                    if (isRefreshing) {
-                        isRefreshing = false;
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
+                    if (isRefreshing) { isRefreshing = false; swipeRefreshLayout.setRefreshing(false); }
                     progressBarLoadMore.setVisibility(View.GONE);
                     ErrorUtils.showThrowableError(SeekerDashboardActivity.this, t);
                 }

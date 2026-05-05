@@ -27,7 +27,9 @@ import com.manilalinkup.app.utilities.ApiService;
 import com.manilalinkup.app.utilities.ErrorUtils;
 import com.manilalinkup.app.utilities.ImageUploadSelection;
 import com.manilalinkup.app.utilities.MultipartRequestBodyHelper;
+import com.manilalinkup.app.models.SeekerProfileModel;
 import com.manilalinkup.app.utilities.RetrofitClient;
+import com.manilalinkup.app.utilities.SessionCache;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -323,8 +325,17 @@ public class EditSeekerProfileActivity extends BaseActivity {
                 hideProgress();
                 if (isDestroyed()) return;
                 if (response.isSuccessful()) {
-                    Toast.makeText(EditSeekerProfileActivity.this, "Profile Setup Complete!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(EditSeekerProfileActivity.this, SeekerJobPreferences.class);
+                    Toast.makeText(EditSeekerProfileActivity.this,
+                        "Your ID and clearance are being reviewed. We'll notify you once approved.",
+                        Toast.LENGTH_LONG).show();
+                    SeekerProfileModel seeker = SessionCache.getInstance().getUserProfile() != null
+                        ? SessionCache.getInstance().getUserProfile().getSeekers() : null;
+                    Intent intent;
+                    if (seeker == null || seeker.getPreferences() == null) {
+                        intent = new Intent(EditSeekerProfileActivity.this, SeekerJobPreferences.class);
+                    } else {
+                        intent = new Intent(EditSeekerProfileActivity.this, SeekerDashboardActivity.class);
+                    }
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
