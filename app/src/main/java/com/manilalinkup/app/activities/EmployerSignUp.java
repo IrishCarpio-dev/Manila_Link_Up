@@ -141,6 +141,9 @@ public class EmployerSignUp extends BaseActivity {
                                                 emailAddressInput,
                                                 mobileNumberInput
                                         );
+                                    } else {
+                                        hideProgress();
+                                        ErrorUtils.showThrowableError(EmployerSignUp.this, tokenTask.getException());
                                     }
                                 });
                             } else {

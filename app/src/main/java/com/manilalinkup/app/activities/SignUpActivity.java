@@ -180,6 +180,9 @@ public class SignUpActivity extends BaseActivity {
                                             sendProfileToLaravel(tokenTask.getResult().getToken(), newUser.getUid(),
                                                     firstnameInput, middleNameInput, lastnameInput, suffixInput,
                                                     emailAddressInput, mobileNumberInput);
+                                        } else {
+                                            hideProgress();
+                                            ErrorUtils.showThrowableError(SignUpActivity.this, tokenTask.getException());
                                         }
                                     });
                                 } else {

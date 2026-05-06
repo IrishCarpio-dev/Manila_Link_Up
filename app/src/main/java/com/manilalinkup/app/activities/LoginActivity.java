@@ -181,6 +181,9 @@ public class LoginActivity extends BaseActivity {
                                                 if (tokenTask.isSuccessful()) {
                                                     String idToken = tokenTask.getResult().getToken();
                                                     checkUserRole(idToken);
+                                                } else {
+                                                    hideProgress();
+                                                    ErrorUtils.showThrowableError(LoginActivity.this, tokenTask.getException());
                                                 }
                                             });
                                         } else {
@@ -239,6 +242,9 @@ public class LoginActivity extends BaseActivity {
                                 if (tokenTask.isSuccessful()) {
                                     String token = tokenTask.getResult().getToken();
                                     checkUserRole(token);
+                                } else {
+                                    hideProgress();
+                                    ErrorUtils.showThrowableError(LoginActivity.this, tokenTask.getException());
                                 }
                             });
                         }

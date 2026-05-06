@@ -145,10 +145,13 @@ public class EditSeekerProfileActivity extends BaseActivity {
 
             FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
             FirebaseUser user = mAuth.getCurrentUser();
-            user.getIdToken(false).addOnCompleteListener(tokenTask -> {
+            user.getIdToken(true).addOnCompleteListener(tokenTask -> {
                 if (tokenTask.isSuccessful()) {
                     String idToken = tokenTask.getResult().getToken();
                     setupProfile(idToken);
+                } else {
+                    hideProgress();
+                    ErrorUtils.showThrowableError(EditSeekerProfileActivity.this, tokenTask.getException());
                 }
             });
         });
