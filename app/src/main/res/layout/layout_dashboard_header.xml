@@ -27,7 +27,7 @@
                 android:id="@+id/textview_greeting_employer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Good morning, "
+                android:text="Hi, "
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 

@@ -18,16 +18,48 @@
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_employer_icons" />
 
-    <include
-        android:id="@+id/card_view_dashboard_top_employer"
-        layout="@layout/layout_dashboard_header" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_notification_header"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        app:cardBackgroundColor="@color/manila_blue">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="145dp"
+                android:layout_height="145dp"
+                android:layout_gravity="end|bottom"
+                android:alpha="0.25"
+                android:src="@drawable/bgheartadjustment" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="24dp">
+
+                <TextView
+                    android:id="@+id/textview_greeting_employer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Notifications"
+                    android:textColor="@color/white"
+                    android:textSize="21sp" />
+
+            </LinearLayout>
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
 
     <ProgressBar
         android:id="@+id/progress_bar_notif"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/bottom_navigation_view"
-        android:layout_below="@id/card_view_dashboard_top_employer"
+        android:layout_below="@id/card_view_notification_header"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="48dp"
         android:indeterminateTint="@color/manila_blue"
@@ -38,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/bottom_navigation_view"
-        android:layout_below="@id/card_view_dashboard_top_employer"
+        android:layout_below="@id/card_view_notification_header"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="64dp"
         android:fontFamily="sans-serif"
@@ -53,7 +85,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation_view"
-        android:layout_below="@id/card_view_dashboard_top_employer"
+        android:layout_below="@id/card_view_notification_header"
         android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_notifications_card">

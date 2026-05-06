@@ -7,8 +7,8 @@ import android.os.Bundle;
 import com.manilalinkup.app.utilities.EmployerNavHelper;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -81,6 +81,7 @@ public class EmployerDashboard extends BaseActivity {
         emptyState = findViewById(R.id.empty_state_layout);
         swipeRefreshLayout.setOnRefreshListener(this::refreshJobs);
         greetingNameText = findViewById(R.id.textview_greeting_name_employer);
+        findViewById(R.id.textview_greeting_employer).setVisibility(View.GONE);
 
         jobListJobCard = new ArrayList<>();
 

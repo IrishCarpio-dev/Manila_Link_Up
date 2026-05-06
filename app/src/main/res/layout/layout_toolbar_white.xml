@@ -4,6 +4,5 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/manila_blue"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    app:navigationIconTint="@color/white" />
+    android:background="@color/white"
+    app:navigationIconTint="@color/dark_text" />
