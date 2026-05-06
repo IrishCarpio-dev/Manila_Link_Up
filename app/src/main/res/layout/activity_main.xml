@@ -7,6 +7,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
+    <include layout="@layout/layout_toolbar_white" />
 
     <LinearLayout
         android:layout_width="match_parent"
