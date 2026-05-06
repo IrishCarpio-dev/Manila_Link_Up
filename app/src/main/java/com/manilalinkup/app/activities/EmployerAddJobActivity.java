@@ -288,15 +288,6 @@ public class EmployerAddJobActivity extends BaseActivity {
     }
 
     private void postJob() {
-        UserProfileModel profile = SessionCache.getInstance().getUserProfile();
-        if (profile == null || profile.getEmployers() == null
-                || !Boolean.TRUE.equals(profile.getEmployers().getVerified())) {
-            Toast.makeText(this,
-                    "You need to be verified before posting a job. Please wait for admin approval.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
         String title = titleInput.getText() != null ? titleInput.getText().toString().trim() : "";
         String location = locationInput.getText() != null ? locationInput.getText().toString().trim() : "";
         String description = descriptionInput.getText() != null ? descriptionInput.getText().toString().trim() : "";

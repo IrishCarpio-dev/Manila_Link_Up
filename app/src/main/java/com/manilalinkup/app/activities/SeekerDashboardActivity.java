@@ -111,6 +111,14 @@ public class SeekerDashboardActivity extends BaseActivity {
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this::refreshJobs);
 
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null && currentUser.getDisplayName() != null) {
+            TextView greetingNameText = findViewById(R.id.textview_greeting_name_employer);
+            String displayName = currentUser.getDisplayName();
+            String firstName = displayName.contains(" ") ? displayName.substring(0, displayName.indexOf(" ")) : displayName;
+            greetingNameText.setText(firstName);
+        }
+
         jobListJobCard = new ArrayList<>();
 
         adapterJobPost = new JobPostDashboardAdapter(jobListJobCard, false, job -> {
